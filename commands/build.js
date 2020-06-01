@@ -7,14 +7,12 @@ module.exports = {
 	execute(message, args, user) {
 		const building = buildingsObject[args[0]];
 		const coordinates = args[1].split(".").map(el => parseInt(el));
-		console.log(building, coordinates);
 
 		// Build function
 		constructBuilding(
 			user,
 			building, coordinates,
 		).then((result) => {
-			console.log("YOO", result);
 			message.channel.send(result.message);
 		});
 	},
