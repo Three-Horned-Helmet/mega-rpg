@@ -1,19 +1,84 @@
 const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGODB_URI);
 
+const { getNewExpValue } = require("./helper");
+
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-  username: String,
-  userId: String,
-  banned: Boolean,
+  account: {
+    username: String,
+    userId: String,
+    banned: Boolean,
+  },
+  maxPop: {
+    type: Number,
+    default: 10,
+  },
   coolDowns: {
     hunt: {
       type: Date,
       default: 0,
     },
   },
+  resources: {
+    gold: {
+      type: Number,
+      default: 100,
+    },
+
+    yew: Number,
+    oak: {
+      type: Number,
+      default: 5,
+    },
+
+    ["Copper Ore"]: {
+      type: Number,
+      default: 5,
+    },
+    ["Iron ore"]: Number,
+
+    ["Bronze bar"]: Number,
+    ["iron bar"]: Number,
+    ["steel bar"]: Number,
+  },
+
+  army: {
+    armory: {
+      helmets: {},
+      chest: {},
+      leggings: {},
+      weapon: {},
+    },
+    units: {
+      archers: {},
+      swordsmen: {},
+    },
+  },
+
+  empire: {
+    type: Array,
+    default: [
+      /* {
+        name: "barracks",
+        position: [1, 2],
+        level: 0,
+      },
+      {
+        name: "mine",
+        position: [0, 3],
+        level: 0,
+        lastCollected: 0,
+        producing: "Ore",
+      }, */
+    ],
+  },
   hero: {
+    level: {
+      type: Number,
+      default: 0,
+    },
     health: {
       type: Number,
       default: 100,
@@ -27,7 +92,7 @@ const userSchema = new Schema({
       default: 3,
     },
     inventory: {
-      smallHealPotion: {
+      ["Small Heal Potion"]: {
         type: Number,
         default: 1,
       },
@@ -36,10 +101,30 @@ const userSchema = new Schema({
       type: Number,
       default: 1,
     },
-    expToNextLevel: {
+    exoToNextRank: {
       type: Number,
       default: 100,
     },
+    rank: {
+      type: Number,
+      default: 0,
+    },
+    armor: {
+      helmets: {},
+      chest: {},
+      leggings: {},
+      weapon: {},
+    },
   },
 });
+
+userSchema.methods.gainExp = function (n) {
+  this.hero.exp += n;
+  if (this.hero.exp >= this.hero.exoToNextRank) {
+    this.hero.exoToNextRank = getNewExpValue(this.hero);
+    this.hero.rank += 1;
+  }
+  this.save();
+};
+
 module.exports = mongoose.model("User", userSchema);
