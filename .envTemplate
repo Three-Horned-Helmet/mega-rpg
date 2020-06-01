@@ -1,0 +1,2 @@
+DISCORD_TOKEN=YOUR_SECRET_TOKEN_HERE
+MONGODB_URI=mongodb://localhost/rpg
