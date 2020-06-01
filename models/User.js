@@ -127,12 +127,12 @@ userSchema.methods.gainExp = function(n) {
 	this.save();
 };
 
-userSchema.methods.buyBuilding = function(building) {
-	for(const resource in building) {
-		this.resources[resource] -= building[resource];
+userSchema.methods.buyBuilding = function(building, buildingCost) {
+	for(const resource in buildingCost) {
+		console.log("MARKUS", this.resources, buildingCost[resource], building);
+		this.resources[resource] -= buildingCost[resource];
 	}
 	this.empire.push(building);
-	console.log("USER RESOURCES", this.resources);
 	return this.save();
 };
 

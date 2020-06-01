@@ -36,7 +36,7 @@ const checkIfBuildIsPossible = async (user, building, coordinates) => {
 	}
 
 	// Constructs building
-	await constructBuilding(user, { ...buildingCost, name: building }, coordinates);
+	await constructBuilding(user, { ...buildingCost, name: building.name }, coordinates);
 
 	return { response: true, message: "success" };
 };
@@ -51,7 +51,7 @@ const constructBuilding = async (user, buildingCost, coordinates) => {
 
 	console.log("BUILDING", building);
 
-	return await user.buyBuilding(building);
+	return await user.buyBuilding(building, buildingCost);
 };
 
 
