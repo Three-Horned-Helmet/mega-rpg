@@ -5,10 +5,12 @@ module.exports = {
 			{
 				gold: 15,
 				oak: 10,
+				level: 0,
 			},
 			{
 				gold: 100,
 				oak: 20,
+				level: 1,
 			},
 		],
 	},

@@ -127,4 +127,14 @@ userSchema.methods.gainExp = function(n) {
 	this.save();
 };
 
+userSchema.methods.removeResource = (resource, value) => {
+	this.resources[resource] -= value;
+	return this.save();
+};
+
+userSchema.methods.addBuilding = (building) => {
+	this.empire.push(building);
+	return this.save();
+};
+
 module.exports = mongoose.model("User", userSchema);
