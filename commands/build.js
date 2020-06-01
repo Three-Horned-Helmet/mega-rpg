@@ -9,16 +9,12 @@ module.exports = {
 		const coordinates = args[1].split(".").map(el => parseInt(el));
 		console.log(building, coordinates);
 
-		const canBeBuilt = constructBuilding.checkIfBuildIsPossible(
+		// Build function
+		constructBuilding.checkIfBuildIsPossible(
 			user,
 			building, coordinates,
-		);
-
-		if(!canBeBuilt.response) {
-			message.channel.send(canBeBuilt.message);
-			return;
-		}
-
-		message.channel.send(`Your username: ${message.author.username}\nYour ID: ${message.author.id}`);
+		).then((result) => {
+			message.channel.send(result.message);
+		});
 	},
 };

@@ -1,6 +1,7 @@
 // Takes a user object, building array, and coordinates array. Returns the resource that is missing from the users resources to build a building
-const checkIfBuildIsPossible = (user, building, coordinates) => {
+const checkIfBuildIsPossible = async (user, building, coordinates) => {
 
+	// Checks if the building- and coordinates command is valid
 	if(!building) {
 		return { response: false, message:"Unknown building command" };
 	}
@@ -8,6 +9,7 @@ const checkIfBuildIsPossible = (user, building, coordinates) => {
 		return { response: false, message:"Please enter two coordinates from 0-9 in this format divided by a punctuation. e.g. !build barracks 1.1 " };
 	}
 
+	// For testing purposes
 	user = { empire: [
 		{ name: "barracks", position: [1, 1], level: 1 },
 	],
@@ -32,14 +34,15 @@ const checkIfBuildIsPossible = (user, building, coordinates) => {
 		if(user.resources[resource] < buildingCost[resource]) return { response: false, message: `You are missing ${buildingCost[resource] - user.resources[resource]} of ${resource}` };
 	}
 
-	constructBuilding(user, buildingCost, coordinates).then(result => {
+	// Constructs building
+	await constructBuilding(user, buildingCost, coordinates).then(result => {
 		console.log(result);
 		return { response: true };
 	});
 };
 
-// Takes a user, a building and coordinates and builds the building if requirements are met
-const constructBuilding = (user, buildingCost, coordinates) => {
+// Takes a user, a building and coordinates and pushes the building to the users Empire array
+const constructBuilding = async (user, buildingCost, coordinates) => {
 	const buildingPromise = [];
 	for(const resource in buildingCost) {
 		// NB: Handle the reject pl0x
@@ -56,7 +59,7 @@ const constructBuilding = (user, buildingCost, coordinates) => {
 
 	buildingPromise.push(user.addBuilding(building));
 
-	return Promise.all(buildingPromise).then(result => result);
+	return await Promise.all(buildingPromise).then(result => result);
 };
 
 

@@ -1,3 +1,5 @@
+// An object of all buildings
+
 module.exports = {
 	barracks:{
 		name: "barracks",
