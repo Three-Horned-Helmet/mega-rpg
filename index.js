@@ -58,7 +58,8 @@ client.on("message", async (message) => {
 	}
 
 	const { author } = message;
-	const userExist = await User.exists({ userId: author.id });
+	console.log(author.id);
+	const userExist = await User.exists({ "account.userId": author.id });
 	let userProfile;
 	if (!userExist) {
 		// creates new user if not exist
@@ -66,8 +67,9 @@ client.on("message", async (message) => {
 	}
 	else {
 		// finds the user if it exist in database
-		userProfile = await User.findOne({ userId: author.id });
+		userProfile = await User.findOne({ "account.userId": author.id });
 	}
+	console.log(userProfile, "userProfile");
 	// executes the command
 	try {
 		command.execute(message, args, userProfile);

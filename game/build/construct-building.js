@@ -10,16 +10,6 @@ const checkIfBuildIsPossible = async (user, building, coordinates) => {
 		return { response: false, message:"Please enter two coordinates from 0-9 in this format divided by a punctuation. e.g. !build barracks 1.1 " };
 	}
 
-	// For testing purposes
-	// user = { empire: [
-	// 	{ name: "barracks", position: [1, 1], level: 1 },
-	// ],
-	// resources: {
-	// 	gold: 20,
-	// 	oak: 30,
-	// } };
-
-
 	// Is the building coordinates taken
 	const usersBuilding = user.empire.find(structure =>
 		structure.position[0] === coordinates[0] && structure.position[1] === coordinates[1],
@@ -48,8 +38,6 @@ const constructBuilding = async (user, buildingCost, coordinates) => {
 		position: coordinates,
 		level: buildingCost.level,
 	};
-
-	console.log("BUILDING", building);
 
 	return await user.buyBuilding(building, buildingCost);
 };

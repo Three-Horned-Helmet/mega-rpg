@@ -129,9 +129,9 @@ userSchema.methods.gainExp = function(n) {
 
 userSchema.methods.buyBuilding = function(building, buildingCost) {
 	for(const resource in buildingCost) {
-		console.log("MARKUS", this.resources, buildingCost[resource], building);
 		this.resources[resource] -= buildingCost[resource];
 	}
+
 	this.empire.push(building);
 	return this.save();
 };
