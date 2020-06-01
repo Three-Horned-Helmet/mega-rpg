@@ -84,9 +84,12 @@ const createNewUser = (user) => {
     console.error("No bots allowed");
     return;
   }
-  const newUser = new User({
+  const account = {
     username: user.username,
     userId: user.id,
+  };
+  const newUser = new User({
+    account,
   });
   return newUser.save();
 };
