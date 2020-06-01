@@ -6,7 +6,7 @@ module.exports = {
 		levels: [
 			{
 				gold: 15,
-				oak: 10,
+				oak: 5,
 				level: 0,
 			},
 			{

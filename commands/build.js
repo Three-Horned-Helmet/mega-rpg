@@ -10,10 +10,11 @@ module.exports = {
 		console.log(building, coordinates);
 
 		// Build function
-		constructBuilding.checkIfBuildIsPossible(
+		constructBuilding(
 			user,
 			building, coordinates,
 		).then((result) => {
+			console.log("YOO", result);
 			message.channel.send(result.message);
 		});
 	},

@@ -5,18 +5,19 @@ const checkIfBuildIsPossible = async (user, building, coordinates) => {
 	if(!building) {
 		return { response: false, message:"Unknown building command" };
 	}
-	else if(coordinates.find(el => el > 9 || el < 0) || coordinates.length !== 1) {
+	else if(coordinates.find(el => el > 9 || el < 0) || coordinates.length !== 2) {
+		console.log(coordinates, coordinates.length !== 2, coordinates.find(el => el > 9 || el < 0));
 		return { response: false, message:"Please enter two coordinates from 0-9 in this format divided by a punctuation. e.g. !build barracks 1.1 " };
 	}
 
 	// For testing purposes
-	user = { empire: [
-		{ name: "barracks", position: [1, 1], level: 1 },
-	],
-	resources: {
-		gold: 20,
-		oak: 30,
-	} };
+	// user = { empire: [
+	// 	{ name: "barracks", position: [1, 1], level: 1 },
+	// ],
+	// resources: {
+	// 	gold: 20,
+	// 	oak: 30,
+	// } };
 
 
 	// Is the building coordinates taken
@@ -35,35 +36,23 @@ const checkIfBuildIsPossible = async (user, building, coordinates) => {
 	}
 
 	// Constructs building
-	await constructBuilding(user, buildingCost, coordinates).then(result => {
-		console.log(result);
-		return { response: true };
-	});
+	await constructBuilding(user, { ...buildingCost, name: building }, coordinates);
+
+	return { response: true, message: "success" };
 };
 
 // Takes a user, a building and coordinates and pushes the building to the users Empire array
 const constructBuilding = async (user, buildingCost, coordinates) => {
-	const buildingPromise = [];
-	for(const resource in buildingCost) {
-		// NB: Handle the reject pl0x
-		buildingPromise.push(new Promise((resolve, reject) => {
-			resolve(user.removeResource(resource, buildingCost[resource]));
-		}));
-	}
-
 	const building = {
 		name: buildingCost.name,
 		position: coordinates,
 		level: buildingCost.level,
 	};
 
-	buildingPromise.push(user.addBuilding(building));
+	console.log("BUILDING", building);
 
-	return await Promise.all(buildingPromise).then(result => result);
+	return await user.buyBuilding(building);
 };
 
 
-module.exports = {
-	constructBuilding,
-	checkIfBuildIsPossible,
-};
+module.exports = checkIfBuildIsPossible;

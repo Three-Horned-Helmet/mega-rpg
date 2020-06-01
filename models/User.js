@@ -127,13 +127,12 @@ userSchema.methods.gainExp = function(n) {
 	this.save();
 };
 
-userSchema.methods.removeResource = (resource, value) => {
-	this.resources[resource] -= value;
-	return this.save();
-};
-
-userSchema.methods.addBuilding = (building) => {
+userSchema.methods.buyBuilding = function(building) {
+	for(const resource in building) {
+		this.resources[resource] -= building[resource];
+	}
 	this.empire.push(building);
+	console.log("USER RESOURCES", this.resources);
 	return this.save();
 };
 
