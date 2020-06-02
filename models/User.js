@@ -157,16 +157,16 @@ userSchema.methods.recruitUnits = function(unit, amount) {
 	return this.save();
 };
 
-userSchema.methods.updateNewMine = function(now) {
-	const mineIndex = this.empire.findIndex(building => building.name === "mine" && !building.lastCollected);
-	if(mineIndex === -1) {
+userSchema.methods.updateNewProduction = function(productionName, product, now) {
+	const foundIndex = this.empire.findIndex(building => building.name === productionName && !building.lastCollected);
+	if(foundIndex === -1) {
 		return;
 	}
-	this.empire[mineIndex].lastCollected = now;
-	this.empire[mineIndex].producing = "copper ore";
+	this.empire[foundIndex].lastCollected = now;
+	this.empire[foundIndex].producing = product;
 
-	this.markModified(`empire.${mineIndex}.lastCollected`);
-	this.markModified(`empire.${mineIndex}.producing`);
+	this.markModified(`empire.${foundIndex}.lastCollected`);
+	this.markModified(`empire.${foundIndex}.producing`);
 
 
 	return this.save();
