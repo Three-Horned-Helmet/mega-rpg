@@ -91,7 +91,34 @@ module.exports = {
 		],
 		execute: async function(user) {
 			// Add the lastCollected and producing to new mine
-			user.updateNewMine(new Date());
+			user.updateNewProduction("mine", "copper", new Date());
+		},
+	},
+	lumbermill:{
+		name: "lumbermill",
+		levels: [
+			{
+				cost: {
+					gold: 50,
+					["copper ore"]: 10,
+				},
+				level: 0,
+				woodAvailable: "oak",
+				productionRate: 5,
+			},
+			{
+				cost: {
+					gold: 150,
+					oak: 30,
+				},
+				level: 1,
+				woodAvailable: "yew",
+				productionRate: 10,
+			},
+		],
+		execute: async function(user) {
+			// Add the lastCollected and producing to new mine
+			user.updateNewProduction("lumbermill", "oak", new Date());
 		},
 	},
 };
