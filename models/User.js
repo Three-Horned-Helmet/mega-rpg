@@ -74,8 +74,8 @@ const userSchema = new Schema({
         name: "mine",
         position: [0, 3],
         level: 0,
-        lastCollected: 0,
-        producing: "Ore",
+        lastCollected: Date,
+        producing: "copper ore",
       }, */
 		],
 	},
@@ -133,8 +133,8 @@ userSchema.methods.gainExp = function(n) {
 };
 
 userSchema.methods.buyBuilding = function(building, buildingCost) {
-	for(const resource in buildingCost) {
-		this.resources[resource] -= buildingCost[resource];
+	for(const resource in buildingCost.cost) {
+		this.resources[resource] -= buildingCost.cost[resource];
 	}
 
 	this.empire = this.empire.filter(structure => !(structure.position[0] === building.position[0] && structure.position[1] === building.position[1]));
@@ -152,8 +152,22 @@ userSchema.methods.recruitUnits = function(unit, amount) {
 		this.resources[resource] -= unit.cost[resource] * amount;
 	}
 
-	console.log(typeof this.army.units[unit.requirement.building][unit.name], typeof amount);
 	this.army.units[unit.requirement.building][unit.name] ? this.army.units[unit.requirement.building][unit.name] += amount : 0 + amount;
+
+	return this.save();
+};
+
+userSchema.methods.updateNewMine = function(now) {
+	const mineIndex = this.empire.findIndex(building => building.name === "mine" && !building.lastCollected);
+	if(mineIndex === -1) {
+		return;
+	}
+	this.empire[mineIndex].lastCollected = now;
+	this.empire[mineIndex].producing = "copper ore";
+
+	this.markModified(`empire.${mineIndex}.lastCollected`);
+	this.markModified(`empire.${mineIndex}.producing`);
+
 
 	return this.save();
 };
