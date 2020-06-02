@@ -27,7 +27,7 @@ const checkIfPossibleToRecruit = (user, unit, amount) =>{
 
 	// Sufficient resources?
 	for(const resource in unit.cost) {
-		if(!(user.resources[resource] > unit.cost[resource] * amount)) {
+		if(!(user.resources[resource] >= unit.cost[resource] * amount)) {
 			return {
 				response: false,
 				message: `You are missing ${user.resources[resource] ? user.resources[resource] - unit.cost[resource] * amount : unit.cost[resource] * amount} of ${resource}` };

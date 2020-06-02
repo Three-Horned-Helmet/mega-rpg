@@ -24,7 +24,7 @@ const checkIfBuildIsPossible = (user, building, coordinates) => {
 	if(!buildingCost) return { response: false, message:"You have already reached max level" };
 
 	for(const resource in buildingCost.cost) {
-		if(!(user.resources[resource] > buildingCost.cost[resource])) {
+		if(!(user.resources[resource] >= buildingCost.cost[resource])) {
 			return {
 				response: false,
 				message: `You are missing ${user.resources[resource] ? buildingCost.cost[resource] - user.resources[resource] : buildingCost.cost[resource]} of ${resource}` };
