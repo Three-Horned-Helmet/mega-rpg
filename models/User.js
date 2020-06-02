@@ -52,8 +52,13 @@ const userSchema = new Schema({
 			weapon: {},
 		},
 		units: {
-			archers: {},
-			swordsmen: {},
+			archery: {},
+			barracks: {
+				peasant: {
+					type: Number,
+					default: 5,
+				},
+			},
 		},
 	},
 
@@ -133,6 +138,17 @@ userSchema.methods.buyBuilding = function(building, buildingCost) {
 	}
 
 	this.empire.push(building);
+	return this.save();
+};
+
+userSchema.methods.recruitUnits = function(unit, amount) {
+	for(const resource in unit.cost) {
+		this.resources[resource] -= unit.cost[resource] * amount;
+	}
+
+	console.log(typeof this.army.units[unit.requirement.building][unit.name], typeof amount);
+	this.army.units[unit.requirement.building][unit.name] += amount;
+
 	return this.save();
 };
 

@@ -8,9 +8,11 @@ module.exports = {
 		if(args.length === 0) return message.channel.send("You need to apply arguments");
 
 		const unit = args.slice(0, args.length - 1).join(" ");
-		const amount = args[args.length - 1];
+		const amount = Math.floor(args[args.length - 1]);
 
-		const response = recruitUnits(user, unit, amount);
-		message.channel.send(response);
+
+		recruitUnits(user, unit, amount).then((response) => {
+			message.channel.send(response);
+		});
 	},
 };

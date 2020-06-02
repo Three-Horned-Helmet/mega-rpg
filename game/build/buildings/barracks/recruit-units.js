@@ -1,26 +1,29 @@
 const barracksUnits = require("./barracks-units");
 
-const recruitUnits = (user, unit, amount) => {
+const recruitUnits = async (user, unit, amount) => {
 	unit = barracksUnits[unit];
 
 	const canBeRecuited = checkIfPossibleToRecruit(user, unit, amount);
 	if(!canBeRecuited.response) return canBeRecuited.message;
 
+	console.log("CAN BE RECRUITED", canBeRecuited);
+	await user.recruitUnits(unit, amount);
 	return canBeRecuited.message;
 };
 
 const checkIfPossibleToRecruit = (user, unit, amount) =>{
-	// Is there any unit at all, or was it an invalid arg?
-	if(!unit) return { response: false, message: "invalid unit name" };
+	// Is there any unit at all or invalid number, or was it an invalid arg?
+	if(!unit || amount < 1) return { response: false, message: "invalid unit name or amount" };
 
 	// Is barracks on sufficient level?
-	console.log(unit);
 	const { building:reqBuilding, level:reqLevel } = unit.requirement;
 	if(!user.empire.find(building => building.name === reqBuilding && building.level >= reqLevel)) return { response: false, message: `Your barracks needs to be level ${reqLevel}` };
 
 	// Check if you are population capped
-	const currentPop = Object.values(Object.values(user.army.units)).reduce((accUnit, curUnit) => accUnit + curUnit);
-	if(user.maxPop < currentPop + amount) return { response: false, message: `You need ${currentPop - user.maxPop} more population` };
+	const popFromBuildings = Object.values(user.army.units.toJSON()).map(unitBuilding => Object.values(unitBuilding).reduce((accUnit, curUnit) => {return accUnit + curUnit;}, 0));
+	const currentPop = popFromBuildings.reduce((accUnit, curUnit) => accUnit + curUnit);
+	if(user.maxPop < currentPop + amount) return { response: false, message: `You need ${currentPop + amount - user.maxPop} more population` };
+
 
 	// Sufficient resources?
 	for(const resource in unit.cost) {
