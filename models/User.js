@@ -33,7 +33,7 @@ const userSchema = new Schema({
 			default: 5,
 		},
 
-		["copper Ore"]: {
+		["copper ore"]: {
 			type: Number,
 			default: 5,
 		},
