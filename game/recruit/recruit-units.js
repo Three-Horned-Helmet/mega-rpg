@@ -5,7 +5,7 @@ const recruitUnits = async (user, unit, amount) => {
 
 	const canBeRecuited = checkIfPossibleToRecruit(user, unit, amount);
 	if(!canBeRecuited.response) return canBeRecuited.message;
-
+	console.log("HELLO??? ", canBeRecuited);
 	await user.recruitUnits(unit, amount);
 	return canBeRecuited.message;
 };
@@ -26,7 +26,11 @@ const checkIfPossibleToRecruit = (user, unit, amount) =>{
 
 	// Sufficient resources?
 	for(const resource in unit.cost) {
-		if(user.resources[resource] < unit.cost[resource] * amount) return { response: false, message: `You are missing ${user.resources[resource] - unit.cost[resource]} of ${resource}` };
+		if(!(user.resources[resource] > unit.cost[resource] * amount)) {
+			return {
+				response: false,
+				message: `You are missing ${user.resources[resource] ? user.resources[resource] - unit.cost[resource] : unit.cost[resource]} of ${resource}` };
+		}
 	}
 
 	return { response: true, message: "success" };

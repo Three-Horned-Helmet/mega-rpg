@@ -153,7 +153,7 @@ userSchema.methods.recruitUnits = function(unit, amount) {
 	}
 
 	console.log(typeof this.army.units[unit.requirement.building][unit.name], typeof amount);
-	this.army.units[unit.requirement.building][unit.name] += amount;
+	this.army.units[unit.requirement.building][unit.name] ? this.army.units[unit.requirement.building][unit.name] += amount : 0 + amount;
 
 	return this.save();
 };
