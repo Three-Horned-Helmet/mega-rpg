@@ -152,7 +152,6 @@ userSchema.methods.recruitUnits = function(unit, amount) {
 		this.resources[resource] -= unit.cost[resource] * amount;
 	}
 
-	console.log(typeof this.army.units[unit.requirement.building][unit.name], typeof amount);
 	this.army.units[unit.requirement.building][unit.name] += amount;
 
 	return this.save();
