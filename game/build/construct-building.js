@@ -45,6 +45,8 @@ const constructBuilding = async (user, building, coordinates) => {
 
 	await user.buyBuilding(newBuilding, buildingCost);
 
+	if(building.execute) await building.execute(user);
+
 	return { response: true, message: "success" };
 };
 

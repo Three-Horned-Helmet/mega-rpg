@@ -132,7 +132,13 @@ userSchema.methods.buyBuilding = function(building, buildingCost) {
 		this.resources[resource] -= buildingCost[resource];
 	}
 
+	this.empire = this.empire.filter(structure => !(structure.position[0] === building.position[0] && structure.position[1] === building.position[1]));
 	this.empire.push(building);
+	return this.save();
+};
+
+userSchema.methods.updateHousePop = function(newPop) {
+	this.maxPop = newPop;
 	return this.save();
 };
 
