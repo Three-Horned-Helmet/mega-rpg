@@ -11,7 +11,7 @@ module.exports = {
 
 
 		recruitUnits(user, unit, amount).then((response) => {
-			message.channel.send(response);
+			message.channel.send(`<@${message.author.id}>: ${response}`);
 		});
 	},
 };

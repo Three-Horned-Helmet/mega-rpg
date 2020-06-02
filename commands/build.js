@@ -13,8 +13,8 @@ module.exports = {
 		constructBuilding(
 			user,
 			building, coordinates,
-		).then((result) => {
-			message.channel.send(result.message);
+		).then((response) => {
+			message.channel.send(`<@${message.author.id}>: ${response.message}`);
 		});
 
 		// Add !build help command to see the structures you can build
