@@ -1,4 +1,5 @@
-// An object of all buildings
+// An object of all buildings. If you want to be able to build another structure,
+// add it here and it will work
 
 module.exports = {
 	barracks:{

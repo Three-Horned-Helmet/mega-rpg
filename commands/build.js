@@ -6,7 +6,7 @@ module.exports = {
 	description: "Build a structure.",
 	execute(message, args, user) {
 		const building = buildingsObject[args[0]];
-		const coordinates = args[1].split(".").map(el => parseInt(el));
+		const coordinates = args[1].split(".").map(cord => parseInt(cord));
 
 		// Build function
 		constructBuilding(
@@ -15,5 +15,7 @@ module.exports = {
 		).then((result) => {
 			message.channel.send(result.message);
 		});
+
+		// Add !build help command to see the structures you can build
 	},
 };
