@@ -1,12 +1,11 @@
-const barracksUnits = require("./barracks-units");
+const allUnits = require("./all-units");
 
 const recruitUnits = async (user, unit, amount) => {
-	unit = barracksUnits[unit];
+	unit = allUnits[unit];
 
 	const canBeRecuited = checkIfPossibleToRecruit(user, unit, amount);
 	if(!canBeRecuited.response) return canBeRecuited.message;
 
-	console.log("CAN BE RECRUITED", canBeRecuited);
 	await user.recruitUnits(unit, amount);
 	return canBeRecuited.message;
 };

@@ -1,10 +1,9 @@
-const recruitUnits = require("../game/build/buildings/barracks/recruit-units");
+const recruitUnits = require("../game/recruit/recruit-units");
 
 module.exports = {
 	name: "recruit",
 	description: "recruit commands.",
 	execute(message, args, user) {
-		console.log("AARRG", args);
 		if(args.length === 0) return message.channel.send("You need to apply arguments");
 
 		const unit = args.slice(0, args.length - 1).join(" ");
