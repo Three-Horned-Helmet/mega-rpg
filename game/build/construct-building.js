@@ -18,11 +18,15 @@ const checkIfBuildIsPossible = (user, building, coordinates) => {
 		return { response: false, message:`The position is occupied by ${usersBuilding.name}` };
 	}
 
-	// Check for resources
-	const buildingCost = building.levels[usersBuilding ? usersBuilding.level : 0];
+	// Check for resources and max level
+	const buildingCost = building.levels[usersBuilding ? usersBuilding.level + 1 : 0];
+
+	if(!buildingCost) return { response: false, message:"You have already reached max level" };
+
 	for(const resource in buildingCost) {
 		if(user.resources[resource] < buildingCost[resource]) return { response: false, message: `You are missing ${buildingCost[resource] - user.resources[resource]} of ${resource}` };
 	}
+
 
 	return { response: true, message: "success", buildingCost };
 };
@@ -31,8 +35,8 @@ const checkIfBuildIsPossible = (user, building, coordinates) => {
 const constructBuilding = async (user, building, coordinates) => {
 	const responseBuild = checkIfBuildIsPossible(user, building, coordinates);
 	if(!responseBuild.response) return responseBuild;
-	const { buildingCost } = responseBuild;
 
+	const { buildingCost } = responseBuild;
 	const newBuilding = {
 		name: building.name,
 		position: coordinates,
