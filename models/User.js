@@ -57,12 +57,34 @@ const userSchema = new Schema({
 			weapon: {},
 		},
 		units: {
-			archery: {},
+			archery: {
+				huntsman: {
+					type: Number,
+					default: 0,
+				},
+				archer: {
+					type: Number,
+					default: 0,
+				},
+				ranger: {
+					type: Number,
+					default: 0,
+				},
+			},
 			barracks: {
 				peasant: {
 					type: Number,
 					default: 5,
 				},
+				militia: {
+					type: Number,
+					default: 0,
+				},
+				guardsman: {
+					type: Number,
+					default: 0,
+				},
+
 			},
 		},
 	},
@@ -157,7 +179,8 @@ userSchema.methods.recruitUnits = function(unit, amount) {
 		this.resources[resource] -= unit.cost[resource] * amount;
 	}
 
-	this.army.units[unit.requirement.building][unit.name] ? this.army.units[unit.requirement.building][unit.name] += amount : 0 + amount;
+	this.army.units[unit.requirement.building][unit.name] += amount;
+	// this.markModified(`army.units.${unit.requirement.building}.${unit.name}`);
 
 	return this.save();
 };
