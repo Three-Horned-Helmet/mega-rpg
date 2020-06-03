@@ -16,15 +16,15 @@ const prettifyUser = (message, user) => {
   const heroEquipment = `🧢 Helmet: ${hero.armor.helmet}\n\n⚜️ Chest: ${hero.armor.chest}\n\n🦵 Leggings: ${hero.armor.leggings}\n\n🗡 Weapon: ${hero.armor.weapon}`
 
   const totalSoldiers = getAllSoldiers(user.army.units)
-  const armyAttack = Math.floor(Math.random() * (totalSoldiers + 1) * 1000) // todo, fix this
-  const armyDefense = Math.floor(Math.random() * (totalSoldiers + 1) * 1000) // todo, fix this
+  const armyAttack = Math.floor(Math.random() * (totalSoldiers + 1) * 20) // todo, fix this
+  const armyDefense = Math.floor(Math.random() * (totalSoldiers + 1) * 20) // todo, fix this
 
   const armyValue = `👮‍♀️ Soldiers: ${totalSoldiers}\n\n⚔ AT: ${armyAttack}\n\n🛡 DEF: ${armyDefense}`
 
   const inventoryValue = `💰 Gold: ${user.resources.gold}\n\n🧪 Small Potion: ${hero.inventory['Small Heal Potion']}\n\n💉 Large Potion: ${hero.inventory['Large Heal Potion']}`
 
-  const pvpRank = Math.floor(Math.random() * 10) // todo, fix this
-  const totalRank = Math.floor(Math.random() * 10) // todo, fix this
+  const pvpRank = Math.floor(Math.random() * 10) + 1 // todo, fix this
+  const totalRank = Math.floor(Math.random() * 10) + 1 // todo, fix this
 
   // inside a command, event listener, etc.
   const embedUser = new Discord.MessageEmbed()
