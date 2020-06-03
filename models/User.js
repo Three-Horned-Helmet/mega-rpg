@@ -29,10 +29,13 @@ const userSchema = new Schema({
 			default: 100,
 		},
 
-		yew: Number,
 		oak: {
 			type: Number,
 			default: 5,
+		},
+		yew: {
+			type: Number,
+			default: 0,
 		},
 
 		["copper ore"]: {
@@ -182,9 +185,9 @@ userSchema.methods.collectResource = async function(collectBuildings, now) {
 				const { producing, lastCollected:lastCol, level, name } = building;
 				// checks how many minutes it has been since last collected
 				const lastCollected = Math.floor((now.getTime() - lastCol.getTime()) / 60000);
-				const produced = lastCollected / buildingsObject[name].levels[level].productionRate;
+				const produced = Math.floor(lastCollected / buildingsObject[name].levels[level].productionRate);
 
-				this.resources[producing] += produced;
+				this.resources[producing] = this.resources[producing] ? this.resources[producing] + produced : produced;
 				totalCollected[producing] = totalCollected[producing] ? totalCollected[producing] + produced : produced;
 				building.lastCollected = now;
 				this.markModified(`empire.${i}.lastCollected`);
