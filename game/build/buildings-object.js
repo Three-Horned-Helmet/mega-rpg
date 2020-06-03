@@ -121,4 +121,35 @@ module.exports = {
 			user.updateNewProduction("lumbermill", "oak", new Date());
 		},
 	},
+	archery:{
+		name: "archery",
+		levels: [
+			{
+				cost: {
+					gold: 15,
+					oak: 10,
+				},
+				level: 0,
+			},
+			{
+				cost: {
+					gold: 100,
+					yew: 20,
+					["bronze bar"]: 20,
+					["iron bar"]: 20,
+				},
+				level: 1,
+			},
+			{
+				cost: {
+					gold: 200,
+					yew: 50,
+					["bronze bar"]: 20,
+					["iron bar"]: 20,
+					["steel bar"]: 50,
+				},
+				level: 2,
+			},
+		],
+	},
 };
