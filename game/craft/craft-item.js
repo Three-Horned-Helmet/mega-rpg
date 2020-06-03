@@ -8,7 +8,8 @@ const craftItem = (user, item, amount) => {
 };
 
 const checkIfPossibleToCraft = (user, item, amount) => {
-
+	// Is there any item at all or invalid number, or was it an invalid arg?
+	if(!item || amount < 1) return { response: false, message: "invalid item name or amount" };
 };
 
 module.exports = craftItem;
