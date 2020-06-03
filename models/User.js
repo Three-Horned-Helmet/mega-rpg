@@ -177,16 +177,20 @@ userSchema.methods.updateNewProduction = function(productionName, product, now) 
 	return this.save();
 };
 
+// Takes an array of strings of the buildings you want to collect (mine, lumbermill, etc) and the
+// new Date() and collects the resources from these buildings
 userSchema.methods.collectResource = async function(collectBuildings, now) {
 	const totalCollected = {};
+
 	collectBuildings.forEach(collect => {
 		this.empire.forEach((building, i) => {
 			if(building.name === collect) {
 				const { producing, lastCollected:lastCol, level, name } = building;
-				// checks how many minutes it has been since last collected
+				// checks how many minutes it has been since last collected, and calculates produced value
 				const lastCollected = Math.floor((now.getTime() - lastCol.getTime()) / 60000);
 				const produced = Math.floor(lastCollected / buildingsObject[name].levels[level].productionRate);
 
+				// Updates the building in this.empire
 				this.resources[producing] = this.resources[producing] ? this.resources[producing] + produced : produced;
 				totalCollected[producing] = totalCollected[producing] ? totalCollected[producing] + produced : produced;
 				building.lastCollected = now;

@@ -2,10 +2,13 @@ const collectResources = async (user, collect) => {
 	const canBeCollected = checkIfPossibleToCollect(user, collect);
 	if(!canBeCollected.response) return canBeCollected.message;
 
+	// Update this is a new building can be collected (add the new bulding to the array)
 	const toBeCollected = collect === "all" ? ["mine", "lumbermill"] : [collect];
 
+	// Adds it to db
 	const totalCollected = await user.collectResource(toBeCollected, new Date());
 
+	// Creates a return message
 	let message = "";
 
 	for(const resource in totalCollected) {
