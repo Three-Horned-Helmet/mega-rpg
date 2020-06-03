@@ -10,7 +10,7 @@ module.exports = {
 		},
 		stats: {
 			hp: 10,
-			atk: 3,
+			at: 3,
 		},
 	},
 	militia: {
@@ -25,7 +25,7 @@ module.exports = {
 		},
 		stats: {
 			hp: 50,
-			atk: 10,
+			at: 10,
 		},
 	},
 	guardsman: {
@@ -40,7 +40,7 @@ module.exports = {
 		},
 		stats: {
 			hp: 150,
-			atk: 20,
+			at: 20,
 		},
 	},
 };

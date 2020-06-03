@@ -20,8 +20,11 @@ const checkIfPossibleToRecruit = (user, unit, amount) =>{
 	if(!user.empire.find(building => building.name === reqBuilding && building.level >= reqLevel)) return { response: false, message: `Your barracks needs to be level ${reqLevel}` };
 
 	// Check if you are population capped
-	const popFromBuildings = Object.values(user.army.units.toJSON()).map(unitBuilding => Object.values(unitBuilding).reduce((accUnit, curUnit) => {return accUnit + curUnit;}, 0));
-	const currentPop = popFromBuildings.reduce((accUnit, curUnit) => accUnit + curUnit);
+	const currentPop = Object.values(user.army.units.toJSON())
+		.map(unitBuilding => Object.values(unitBuilding)
+			.reduce((accUnit, curUnit) => {return accUnit + curUnit;}, 0))
+		.reduce((accUnit, curUnit) => accUnit + curUnit);
+
 	if(user.maxPop < currentPop + amount) return { response: false, message: `You need ${currentPop + amount - user.maxPop} more population` };
 
 
