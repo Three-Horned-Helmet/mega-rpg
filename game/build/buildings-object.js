@@ -89,7 +89,8 @@ module.exports = {
 		],
 		execute: async function(user) {
 			// Increases the max population
-			const farms = user.empire.filter(building => building.name === this.name).sort((a, b) => b.level - a.level);
+			const farms = user.empire.filter(building => building.name === this.name)
+				.sort((a, b) => b.level - a.level);
 			let newPop = 0;
 			newPop += this.levels[farms[0].level].popIncrease;
 			newPop += farms.slice(1).reduce((acc, cur) => {
@@ -107,7 +108,7 @@ module.exports = {
 					gold: 50,
 				},
 				level: 0,
-				oreAvailable: "copper ore",
+				produce: "copper ore",
 				productionRate: 5,
 			},
 			{
@@ -116,7 +117,7 @@ module.exports = {
 					["bronze bar"]: 20,
 				},
 				level: 1,
-				oreAvailable: "iron ore",
+				produce: "iron ore",
 				productionRate: 10,
 			},
 		],
@@ -134,7 +135,7 @@ module.exports = {
 					["copper ore"]: 10,
 				},
 				level: 0,
-				woodAvailable: "oak",
+				produce: "oak",
 				productionRate: 5,
 			},
 			{
@@ -143,7 +144,7 @@ module.exports = {
 					oak: 30,
 				},
 				level: 1,
-				woodAvailable: "yew",
+				produce: "yew",
 				productionRate: 10,
 			},
 		],
