@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 
 const prettifyUser = (message, user) => {
-  console.log(message, 'message', user, "user!!!");
+
 
   const sideColor = "#45b6fe";
   const patreonSupporter = determineSupporterTitle(user.account.patreon);
@@ -78,7 +78,7 @@ const getAllSoldiers = (units) => {
       }
     })
   })
-  console.log(result)
+
   return result
 
 }
