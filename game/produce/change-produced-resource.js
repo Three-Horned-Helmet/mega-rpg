@@ -1,7 +1,7 @@
 const buildingObject = require("../build/buildings-object");
 
 const changeProducedResource = async (user, resource) => {
-    	// Finds the required building to profuce that resource
+	// Finds the required building to profuce that resource
 	let buildingReqLevel = null;
 	const buildingReq = Object.keys(buildingObject).find((buildKey) => {
 
@@ -18,6 +18,16 @@ const changeProducedResource = async (user, resource) => {
 	const canBeProduced = checkIfPossibleToProduce(user, resource, buildingReq, buildingReqLevel);
 	if(!canBeProduced.response) return canBeProduced.message;
 
+	// Collects the resouce and changes the buildings production
+	const totalCollected = await user.collectResource([buildingReq], new Date(), resource);
+	// Creates a return message
+	let message = "";
+
+	for(const collectedResource in totalCollected) {
+		message += `${totalCollected[collectedResource]} ${collectedResource}, `;
+	}
+
+	return `You have collected: ${message} and the ${buildingReq}s have now been set to produce ${resource}`;
 };
 
 const checkIfPossibleToProduce = (user, resource, buildingReq, buildingReqLevel) => {
