@@ -121,4 +121,35 @@ module.exports = {
 			user.updateNewProduction("lumbermill", "oak", new Date());
 		},
 	},
+	forge:{
+		name: "forge",
+		levels: [
+			{
+				cost: {
+					gold: 15,
+					oak: 5,
+					["copper ore"]: 5,
+				},
+				level: 0,
+			},
+			{
+				cost: {
+					gold: 100,
+					oak: 20,
+					["bronze bar"]: 20,
+				},
+				level: 1,
+			},
+			{
+				cost: {
+					gold: 200,
+					oak: 50,
+					yew: 30,
+					["bronze bar"]: 40,
+					["iron bar"]: 40,
+				},
+				level: 2,
+			},
+		],
+	},
 };

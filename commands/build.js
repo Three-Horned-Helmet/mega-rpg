@@ -14,7 +14,7 @@ module.exports = {
 			user,
 			building, coordinates,
 		).then((response) => {
-			message.channel.send(`<@${message.author.id}>: ${response.message}`);
+			message.channel.send(`<@${message.author.id}>: ${response}`);
 		});
 
 		// Add !build help command to see the structures you can build
