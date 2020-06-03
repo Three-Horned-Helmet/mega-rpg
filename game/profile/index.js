@@ -71,8 +71,8 @@ const determineSupporterTitle = (subscription) => {
 // cleanCode.com
 const getAllSoldiers = (units) => {
   let result = 0
-  Object.keys(units).forEach(u => {
-    Object.values(units[u]).forEach(n => {
+  Object.keys(units).forEach(b => {
+    Object.values(units[b]).forEach(n => {
       if (typeof n === 'number') {
         result += n
       }
