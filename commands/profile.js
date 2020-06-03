@@ -21,7 +21,7 @@ module.exports = {
     } else {
       dbUser = user;
     }
-    const prettifiedUser = prettifyUser(dbUser);
+    const prettifiedUser = prettifyUser(message, dbUser);
     message.channel.send(prettifiedUser);
   },
 };

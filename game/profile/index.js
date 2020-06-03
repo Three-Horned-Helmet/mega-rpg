@@ -1,56 +1,59 @@
 const Discord = require("discord.js");
 
-const prettifyUser = (user) => {
+const prettifyUser = (message, user) => {
   console.log(message, 'message', user, "user!!!");
 
-  const backgroundColor = "#abc021";
+  const sideColor = "#45b6fe";
   const patreonSupporter = determineSupporterTitle(user.account.patreon);
 
   const patreonUrl = "https://www.patreon.org";
   const username = `${user.account.username}'s profile`;
+
+  const { hero } = user
+  const heroRank = hero.level
+  const heroValue = `❤️ HP: ${hero.health}\n\n⚔ AT: ${hero.attack}\n\n🛡 DEF: ${hero.defense}\n\n🔅 XP: ${hero.currentExp}/${hero.expToNextRank}`
+
+  const heroEquipment = `🧢 Helmet: ${hero.armor.helmet}\n\n⚜️ Chest: ${hero.armor.chest}\n\n🦵 Leggings: ${hero.armor.leggings}\n\n🗡 Weapon: ${hero.armor.weapon}`
+
+  const totalSoldiers = getAllSoldiers(user.army.units)
+  const armyAttack = Math.floor(Math.random() * (totalSoldiers + 1) * 1000) // todo, fix this
+  const armyDefense = Math.floor(Math.random() * (totalSoldiers + 1) * 1000) // todo, fix this
+
+  const armyValue = `👮‍♀️ Soldiers: ${totalSoldiers}\n\n⚔ AT: ${armyAttack}\n\n🛡 DEF: ${armyDefense}`
+
+  const inventoryValue = `💰Gold: ${user.resources.gold}\n\n🧪 Small Potion: ${hero.inventory['Small Heal Potion']}\n\n💉 Large Potion: ${hero.inventory['Large Heal Potion']}`
+
+  const pvpRank = Math.floor(Math.random() * 10) // todo, fix this
+  const totalRank = Math.floor(Math.random() * 10) // todo, fix this
 
   // inside a command, event listener, etc.
   const embedUser = new Discord.MessageEmbed()
     .setTitle(patreonSupporter)
     .setURL(patreonUrl)
     .setAuthor(username)
-    .setColor("#abc021")
+    .setColor(sideColor)
     .addFields(
-      /*   { name: "\u200B", value: "\u200B" }, */
       {
-        name: "Hero",
+        name: `Hero(${heroRank})`,
         value:
-          "❤️ HP: 25\n\n⚔ AT: 10\n\n🛡 DEF: 40\n\n📚 XP:10/100\n\n🔸 Rank: 2",
+          heroValue,
         inline: true,
       },
       {
         name: "Hero equipment",
-        value:
-          "🧢 Helmet: Wizards hat\n\n⚜️ Chest: Tshirt\n\n🦵 Leggings: Long socks\n\n🗡 Weapon: Rusty dagger",
+        value: heroEquipment,
         inline: true,
       },
       { name: "\u200B", value: "\u200B" },
       {
         name: "Army",
-        value: "👮‍♀️ Soldiers: 40\n\n⚔ AT: 2000\n\n🛡 DEF: 1200",
+        value: armyValue,
         inline: true,
       },
-      { name: "Resources", value: "💰Gold: 69\n\n🧪 Small Potion: 1\n\n🥤 Large Potion: 0", inline: true }
+      { name: "Inventory", value: inventoryValue, inline: true }
     )
-    .setFooter("PVP: #1 ~~~ Total: #4");
-  /* .setDescription("Some description here") */
-  /* .setThumbnail("https://i.imgur.com/wSTFkRM.png") */
 
-  /* .addField("Hero")
-    .addField("XP: 10 / 100")
-    .addField("Level: Grassy Fields")
-    .addField("Rank: 4"); */
-  /* .addField("Inline field title", "Some value here", true) */
-  /* .setImage("https://i.imgur.com/wSTFkRM.png") */
-  /*
-    
-    */
-
+    .setFooter(`PVP: #${pvpRank} ~~~ Total: #${totalRank}`);
   return embedUser;
 };
 
@@ -64,5 +67,20 @@ const determineSupporterTitle = (subscription) => {
   const result = subscription ? titles[subscription] : "Casual player";
   return result;
 };
+
+// cleanCode.com
+const getAllSoldiers = (units) => {
+  let result = 0
+  Object.keys(units).forEach(u => {
+    Object.values(units[u]).forEach(n => {
+      if (typeof n === 'number') {
+        result += n
+      }
+    })
+  })
+  console.log(result)
+  return result
+
+}
 
 module.exports = { prettifyUser };
