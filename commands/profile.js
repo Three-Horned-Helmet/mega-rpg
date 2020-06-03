@@ -6,7 +6,6 @@ module.exports = {
   aliases: ["p"],
   description: "Display info about a user.",
   async execute(message, args, user) {
-
     let dbUser;
     let userIdFromArgs = null
     if (args.length) {

@@ -6,7 +6,7 @@ const prettifyUser = (message, user) => {
   const sideColor = "#45b6fe";
   const patreonSupporter = determineSupporterTitle(user.account.patreon);
 
-  const patreonUrl = "https://www.patreon.org";
+  const patreonUrl = "https://www.patreon.com";
   const username = `${user.account.username}'s profile`;
 
   const { hero } = user
