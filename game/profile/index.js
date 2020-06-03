@@ -21,7 +21,7 @@ const prettifyUser = (message, user) => {
 
   const armyValue = `👮‍♀️ Soldiers: ${totalSoldiers}\n\n⚔ AT: ${armyAttack}\n\n🛡 DEF: ${armyDefense}`
 
-  const inventoryValue = `💰Gold: ${user.resources.gold}\n\n🧪 Small Potion: ${hero.inventory['Small Heal Potion']}\n\n💉 Large Potion: ${hero.inventory['Large Heal Potion']}`
+  const inventoryValue = `💰 Gold: ${user.resources.gold}\n\n🧪 Small Potion: ${hero.inventory['Small Heal Potion']}\n\n💉 Large Potion: ${hero.inventory['Large Heal Potion']}`
 
   const pvpRank = Math.floor(Math.random() * 10) // todo, fix this
   const totalRank = Math.floor(Math.random() * 10) // todo, fix this
@@ -34,7 +34,7 @@ const prettifyUser = (message, user) => {
     .setColor(sideColor)
     .addFields(
       {
-        name: `Hero(${heroRank})`,
+        name: `Hero (${heroRank})`,
         value:
           heroValue,
         inline: true,
