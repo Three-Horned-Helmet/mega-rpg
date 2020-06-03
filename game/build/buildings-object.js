@@ -76,7 +76,7 @@ module.exports = {
 					gold: 50,
 				},
 				level: 0,
-				oreAvailable: "copper",
+				oreAvailable: "copper ore",
 				productionRate: 5,
 			},
 			{
@@ -85,13 +85,13 @@ module.exports = {
 					["bronze bar"]: 20,
 				},
 				level: 1,
-				oreAvailable: "iron",
+				oreAvailable: "iron ore",
 				productionRate: 10,
 			},
 		],
 		execute: async function(user) {
 			// Add the lastCollected and producing to new mine
-			user.updateNewProduction("mine", "copper", new Date());
+			user.updateNewProduction("mine", "copper ore", new Date());
 		},
 	},
 	lumbermill:{
