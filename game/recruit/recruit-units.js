@@ -17,7 +17,9 @@ const checkIfPossibleToRecruit = (user, unit, amount) =>{
 
 	// Is barracks on sufficient level?
 	const { building:reqBuilding, level:reqLevel } = unit.requirement;
-	if(!user.empire.find(building => building.name === reqBuilding && building.level >= reqLevel)) return { response: false, message: `Your barracks needs to be level ${reqLevel}` };
+	if(!user.empire.find(building => building.name === reqBuilding && building.level >= reqLevel)) {
+		return { response: false, message: `Your ${reqBuilding} needs to be level ${reqLevel}` };
+	}
 
 	// Check if you are population capped
 	const currentPop = Object.values(user.army.units.toJSON())
