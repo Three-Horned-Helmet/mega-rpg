@@ -5,6 +5,8 @@ const { getNewExpValue } = require("./helper");
 
 const { Schema } = mongoose;
 
+const buildingsObject = require("../game/build/buildings-object");
+
 const userSchema = new Schema({
 	account: {
 		username: String,
@@ -170,6 +172,31 @@ userSchema.methods.updateNewProduction = function(productionName, product, now) 
 
 
 	return this.save();
+};
+
+userSchema.methods.collectResource = async function(collectBuildings, now) {
+	const totalCollected = {};
+	collectBuildings.forEach(collect => {
+		this.empire.forEach((building, i) => {
+			if(building.name === collect) {
+				const { producing, lastCollected:lastCol, level, name } = building;
+				// checks how many minutes it has been since last collected
+				const lastCollected = Math.floor((now.getTime() - lastCol.getTime()) / 60000);
+				const produced = lastCollected / buildingsObject[name].levels[level].productionRate;
+
+				this.resources[producing] += produced;
+				totalCollected[producing] = totalCollected[producing] ? totalCollected[producing] + produced : produced;
+				building.lastCollected = now;
+				this.markModified(`empire.${i}.lastCollected`);
+			}
+		});
+	});
+
+	console.log("collect", collectBuildings);
+
+	await this.save();
+
+	return totalCollected;
 };
 
 module.exports = mongoose.model("User", userSchema);

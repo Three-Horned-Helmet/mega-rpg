@@ -1,20 +1,30 @@
-const collectResources = (user, collect) => {
+const collectResources = async (user, collect) => {
 	const canBeCollected = checkIfPossibleToCollect(user, collect);
 	if(!canBeCollected.response) return canBeCollected.message;
 
+	const toBeCollected = collect === "all" ? ["mine", "lumbermill"] : [collect];
 
+	const totalCollected = await user.collectResource(toBeCollected, new Date());
+
+	let message = "";
+
+	for(const resource in totalCollected) {
+		message += `${totalCollected[resource]} ${resource}, `;
+	}
+
+	return `You have collected ${message}`;
 };
 
 const checkIfPossibleToCollect = (user, collect) => {
 	// Check if arguments are allowed
-	if(!(collect === "mine" || collect === "lumbermill" || collect === "all")) {
+	if(!["mine", "lumbermill", "all"].includes(collect)) {
 		return {
 			response: false,
 			message: "invalid arguments" };
 	}
 
 	// Check if you have mine or lumbermill
-	if(!user.empire.find(building => building.name === collect)) {
+	if(!user.empire.find(building => building.name === collect || collect === "all")) {
 		return {
 			response: false,
 			message: `You have no ${collect}s`,
