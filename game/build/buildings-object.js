@@ -163,6 +163,7 @@ module.exports = {
 					["copper ore"]: 5,
 				},
 				level: 0,
+				craftables: ["bronze bar"],
 			},
 			{
 				cost: {
@@ -171,6 +172,7 @@ module.exports = {
 					["bronze bar"]: 20,
 				},
 				level: 1,
+				craftables: ["iron bar"],
 			},
 			{
 				cost: {
@@ -181,6 +183,45 @@ module.exports = {
 					["iron bar"]: 40,
 				},
 				level: 2,
+				craftables: ["steel bar"],
+			},
+		],
+	},
+	blacksmith:{
+		name: "blacksmith",
+		levels: [
+			{
+				cost: {
+					gold: 30,
+					oak: 5,
+					["bronze bar"]: 20,
+				},
+				level: 0,
+				craftables: ["bronze sword", "bronze arrow", "oak shortbow",
+					"bronze helmet", "bronze platemail", "bronze leggings"],
+			},
+			{
+				cost: {
+					gold: 100,
+					yew: 20,
+					["iron bar"]: 40,
+				},
+				level: 1,
+				craftables: ["iron sword", "iron arrow", "yew shortbow",
+					"iron helmet", "iron platemail", "iron leggings"],
+			},
+			{
+				cost: {
+					gold: 200,
+					oak: 50,
+					yew: 30,
+					["bronze bar"]: 40,
+					["iron bar"]: 40,
+					["steel bar"]: 40,
+				},
+				level: 2,
+				craftables: ["steel sword", "steel arrow", "northern shortbow",
+					"steel helmet", "steel platemail", "steel leggings"],
 			},
 		],
 	},

@@ -231,6 +231,8 @@ userSchema.methods.collectResource = async function (collectBuildings, now, reso
         totalCollected[producing] = totalCollected[producing] ? totalCollected[producing] + produced : produced;
         building.lastCollected = now;
         this.markModified(`empire.${i}.lastCollected`);
+
+        // Changes the resource produced
         if (resource) {
           building.producing = resource;
           this.markModified(`empire.${i}.producing`);

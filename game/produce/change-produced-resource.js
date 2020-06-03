@@ -13,13 +13,13 @@ const changeProducedResource = async (user, resource) => {
 		});
 	});
 
-	console.log(buildingReq, buildingReqLevel);
-
+	// Check if it can be produced
 	const canBeProduced = checkIfPossibleToProduce(user, resource, buildingReq, buildingReqLevel);
 	if(!canBeProduced.response) return canBeProduced.message;
 
 	// Collects the resouce and changes the buildings production
 	const totalCollected = await user.collectResource([buildingReq], new Date(), resource);
+
 	// Creates a return message
 	let message = "";
 
