@@ -6,8 +6,8 @@ module.exports = {
 	description: "Build a structure.",
 	execute(message, args, user) {
 		if (args.length === 0) return message.channel.send("You need an argument");
-		const building = buildingsObject[args[0]];
-		const coordinates = args[1].split(".").map(cord => parseInt(cord));
+		const building = buildingsObject[args.slice(0, args.length - 1).join(" ")];
+		const coordinates = args[args.length - 1].split(".").map(cord => parseInt(cord));
 
 		// Build function
 		constructBuilding(

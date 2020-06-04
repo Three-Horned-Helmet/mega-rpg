@@ -225,4 +225,28 @@ module.exports = {
 			},
 		],
 	},
+	["artifact blacksmith"]:{
+		name: "artifact blacksmith",
+		levels: [
+			{
+				cost: {
+					gold: 150,
+					oak: 50,
+					["bronze bar"]: 30,
+				},
+				level: 0,
+			},
+			{
+				cost: {
+					gold: 500,
+					yew: 150,
+					oak: 150,
+					["bronze bar"]: 50,
+					["iron bar"]: 50,
+					["steel bar"]: 30,
+				},
+				level: 1,
+			},
+		],
+	},
 };
