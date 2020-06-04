@@ -3,7 +3,7 @@ module.exports = {
 		name: "huntsman",
 		cost: {
 			gold: 10,
-			oak: 5,
+			 ["oak wood"]: 5,
 		},
 		requirement: {
 			building: "archery",
@@ -18,7 +18,7 @@ module.exports = {
 		name: "archer",
 		cost: {
 			gold: 30,
-			yew: 7,
+			["yew wood"]: 7,
 		},
 		requirement: {
 			building: "archery",
@@ -33,8 +33,8 @@ module.exports = {
 		name: "ranger",
 		cost: {
 			gold: 50,
-			yew: 10,
-			oak: 10,
+			["yew wood"]: 10,
+			 ["oak wood"]: 10,
 		},
 		requirement: {
 			building: "archery",

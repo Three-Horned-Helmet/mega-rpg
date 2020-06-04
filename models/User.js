@@ -37,11 +37,11 @@ const userSchema = new Schema({
 			default: 100,
 		},
 
-		oak: {
+		 ["oak wood"]: {
 			type: Number,
 			default: 5,
 		},
-		yew: {
+		["yew wood"]: {
 			type: Number,
 			default: 0,
 		},
@@ -235,9 +235,18 @@ userSchema.methods.collectResource = async function(collectBuildings, now, resou
 			if(building.name === collect) {
 				const { producing, lastCollected:lastCol, level, name } = building;
 				// checks how many minutes it has been since last collected, and calculates produced value
-				const lastCollected = Math.floor((now.getTime() - lastCol.getTime()) / 60000);
-				const produced = Math.floor(lastCollected / buildingsObject[name]
+				const lastCollected = (now - lastCol) / 60000;
+				let produced = Math.floor(lastCollected * buildingsObject[name]
 					.levels[level].productionRate);
+
+				// If collect was called before you have any at all (prevent the reset of collect)
+				if(!produced) {
+					return totalCollected[producing] = totalCollected[producing] ?
+						totalCollected[producing] + produced : produced;
+				}
+
+				// Max 100 resources is collectable at a time
+				if(produced > 100) produced = 100;
 
 				// Updates the building in this.empire
 				this.resources[producing] = this.resources[producing] ?
