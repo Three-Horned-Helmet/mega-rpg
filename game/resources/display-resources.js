@@ -12,34 +12,37 @@ const displayResources = (user) => {
 
 	const bars = getProductionResourceValue(user, "forge");
 
+	const fields = [
+		{
+			name: "Gold",
+			value:
+              `:moneybag: ${user.resources.gold}`,
+		},
+		{
+			name: ":axe: Wood",
+			value:
+              lumber,
+			inline: true,
+		},
+		{
+			name: ":pick: Ores",
+			value:
+              ores,
+			inline: true,
+		},
+		{
+			name: ":fire: Bars",
+			value:
+              bars,
+			inline: true,
+		},
+	];
 
 	const embedResources = new Discord.MessageEmbed()
 		.setTitle(username)
 		.setColor(sideColor)
 		.addFields(
-			{
-				name: "gold",
-				value:
-                  `:moneybag: ${user.resources.gold}`,
-			},
-			{
-				name: ":axe: Wood",
-				value:
-                  lumber,
-				inline: true,
-			},
-			{
-				name: ":pick: Ores",
-				value:
-                  ores,
-				inline: true,
-			},
-			{
-				name: ":fire: Bars",
-				value:
-                  bars,
-				inline: true,
-			},
+			...fields,
 		);
 
 	// .setFooter(`PVP: #${pvpRank} ~~~ Total: #${totalRank}`);
@@ -57,6 +60,9 @@ const getProductionResourceValue = (user, resource) => {
 		}
 	});
 
+	if(!message) {
+		message = ":cry: no resources";
+	}
 	return message;
 };
 

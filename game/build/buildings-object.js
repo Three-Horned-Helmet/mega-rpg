@@ -109,7 +109,7 @@ module.exports = {
 				},
 				level: 0,
 				produce: "copper ore",
-				productionRate: 5,
+				productionRate: 1,
 			},
 			{
 				cost: {
@@ -118,7 +118,7 @@ module.exports = {
 				},
 				level: 1,
 				produce: "iron ore",
-				productionRate: 10,
+				productionRate: 2,
 			},
 		],
 		execute: async function(user) {
@@ -136,7 +136,7 @@ module.exports = {
 				},
 				level: 0,
 				produce: "oak wood",
-				productionRate: 5,
+				productionRate: 1,
 			},
 			{
 				cost: {
@@ -145,7 +145,7 @@ module.exports = {
 				},
 				level: 1,
 				produce: "yew wood",
-				productionRate: 10,
+				productionRate: 2,
 			},
 		],
 		execute: async function(user) {
