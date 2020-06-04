@@ -168,7 +168,7 @@ module.exports = {
 			{
 				cost: {
 					gold: 100,
-					 ["oak wood"]: 20,
+					["oak wood"]: 20,
 					["bronze bar"]: 20,
 				},
 				level: 1,

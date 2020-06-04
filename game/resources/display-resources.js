@@ -53,7 +53,6 @@ const getProductionResourceValue = (user, resource) => {
 	const resources = buildingsObject[resource].levels.map(lvl => lvl.produce ?
 		lvl.produce : lvl.craftables).flat();
 	let message = "";
-	console.log(resources);
 	resources.forEach(res => {
 		if(user.resources[res]) {
 			message += `${icons[res]} ${Math.floor(user.resources[res])} ${res.split(" ")[0]} \n`;
