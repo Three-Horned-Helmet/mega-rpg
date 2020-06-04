@@ -11,7 +11,15 @@ const userSchema = new Schema({
 	account: {
 		username: String,
 		userId: String,
-		banned: Boolean,
+		banned: {
+			type: Boolean,
+			default: false,
+		},
+		patreon: {
+			type: String,
+			enum: ["", "Bronze", "Silver", "Gold", "Platinum"],
+			default: "",
+		},
 	},
 	maxPop: {
 		type: Number,
@@ -43,7 +51,6 @@ const userSchema = new Schema({
 			default: 5,
 		},
 		["iron ore"]: Number,
-
 		["bronze bar"]: Number,
 		["iron bar"]: Number,
 		["steel bar"]: Number,
@@ -96,7 +103,6 @@ const userSchema = new Schema({
 					type: Number,
 					default: 0,
 				},
-
 			},
 		},
 	},
@@ -104,18 +110,7 @@ const userSchema = new Schema({
 	empire: {
 		type: Array,
 		default: [
-			/* {
-        name: "barracks",
-        position: [1, 2],
-        level: 0,
-      },
-      {
-        name: "mine",
-        position: [0, 3],
-        level: 0,
-        lastCollected: Date,
-        producing: "copper ore",
-      }, */
+
 		],
 	},
 	hero: {
@@ -140,12 +135,16 @@ const userSchema = new Schema({
 				type: Number,
 				default: 1,
 			},
+			["Large Heal Potion"]: {
+				type: Number,
+				default: 0,
+			},
 		},
 		currentExp: {
 			type: Number,
 			default: 1,
 		},
-		exoToNextRank: {
+		expToNextRank: {
 			type: Number,
 			default: 100,
 		},
@@ -154,25 +153,37 @@ const userSchema = new Schema({
 			default: 0,
 		},
 		armor: {
-			helmet: {},
-			chest: {},
-			legging: {},
-			weapon: {},
+			helmet: {
+				type: String,
+				default: "[NONE]",
+			},
+			chest: {
+				type: String,
+				default: "[NONE]",
+			},
+			leggings: {
+				type: String,
+				default: "[NONE]",
+			},
+			weapon: {
+				type: String,
+				default: "[NONE]",
+			},
 		},
 	},
 });
 
 userSchema.methods.gainExp = function(n) {
 	this.hero.exp += n;
-	if (this.hero.exp >= this.hero.exoToNextRank) {
-		this.hero.exoToNextRank = getNewExpValue(this.hero);
+	if (this.hero.exp >= this.hero.expToNextRank) {
+		this.hero.expToNextRank = getNewExpValue(this.hero);
 		this.hero.rank += 1;
 	}
 	this.save();
 };
 
 userSchema.methods.buyBuilding = function(building, buildingCost) {
-	for(const resource in buildingCost.cost) {
+	for (const resource in buildingCost.cost) {
 		this.resources[resource] -= buildingCost.cost[resource];
 	}
 
@@ -187,7 +198,7 @@ userSchema.methods.updateHousePop = function(newPop) {
 };
 
 userSchema.methods.recruitUnits = function(unit, amount) {
-	for(const resource in unit.cost) {
+	for (const resource in unit.cost) {
 		this.resources[resource] -= unit.cost[resource] * amount;
 	}
 
@@ -199,7 +210,7 @@ userSchema.methods.recruitUnits = function(unit, amount) {
 
 userSchema.methods.updateNewProduction = function(productionName, product, now) {
 	const foundIndex = this.empire.findIndex(building => building.name === productionName && !building.lastCollected);
-	if(foundIndex === -1) {
+	if (foundIndex === -1) {
 		return;
 	}
 	this.empire[foundIndex].lastCollected = now;

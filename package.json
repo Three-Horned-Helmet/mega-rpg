@@ -4,15 +4,19 @@
   "description": "rpg game for the discord platform",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "make test",
     "start": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chai": "^4.2.0",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
     "eslint": "^7.1.0",
     "mongoose": "^5.9.16"
+  },
+  "devDependencies": {
+    "mocha": "^7.2.0"
   }
 }

@@ -1,3 +1,4 @@
 DISCORD_TOKEN=YOUR_SECRET_TOKEN_HERE
-MONGODB_URI=mongodb://localhost/rpg
+MONGODB_URI=mongodb://localhost/megarpg
+TEST_MONGODB_URI=mongodb://localhost/megarpg-test
 PREFIX=YOUR_PREFIX_HERE
