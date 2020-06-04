@@ -22,14 +22,14 @@ const constructBuilding = async (user, building, coordinates) => {
 const checkIfBuildIsPossible = (user, building, coordinates) => {
 
 	// Checks if the building- and coordinates command is valid
-	if(!building) {
-		return { response: false, message:"Unknown building command" };
-	}
-	else if(coordinates.find(cord => cord > 3 || cord < 0) || coordinates.length !== 2) {
+	if(coordinates.find(cord => cord > 3 || cord < 0) || coordinates.length !== 2) {
 		return {
 			response: false,
 			message:"Please enter two coordinates between 0-3 divided by a punctuation, e.g: !build barracks 1.1 ",
 		};
+	}
+	else if(!building) {
+		return { response: false, message:"Unknown building command" };
 	}
 
 	// Is the building coordinates taken

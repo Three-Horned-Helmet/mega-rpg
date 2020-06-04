@@ -9,7 +9,7 @@ module.exports = {
 			oak: 10,
 		},
 		requirement: {
-			building: "artifact blacksmith",
+			building: "armorer",
 			level: 0,
 		},
 		stats: {
@@ -26,7 +26,7 @@ module.exports = {
 			yew: 25,
 		},
 		requirement: {
-			building: "artifact blacksmith",
+			building: "armorer",
 			level: 0,
 		},
 		stats: {
@@ -43,7 +43,7 @@ module.exports = {
 			oak: 60,
 		},
 		requirement: {
-			building: "artifact blacksmith",
+			building: "armorer",
 			level: 0,
 		},
 		stats: {
@@ -60,7 +60,7 @@ module.exports = {
 			["steel bar"]: 15,
 		},
 		requirement: {
-			building: "artifact blacksmith",
+			building: "armorer",
 			level: 0,
 		},
 		stats: {
@@ -76,7 +76,7 @@ module.exports = {
 			oak: 25,
 		},
 		requirement: {
-			building: "artifact blacksmith",
+			building: "armorer",
 			level: 0,
 		},
 		stats: {
@@ -93,7 +93,7 @@ module.exports = {
 			yew: 15,
 		},
 		requirement: {
-			building: "artifact blacksmith",
+			building: "armorer",
 			level: 0,
 		},
 		stats: {
@@ -110,7 +110,7 @@ module.exports = {
 			yew: 10,
 		},
 		requirement: {
-			building: "artifact blacksmith",
+			building: "armorer",
 			level: 0,
 		},
 		stats: {
@@ -125,7 +125,7 @@ module.exports = {
 			oak: 50,
 		},
 		requirement: {
-			building: "artifact blacksmith",
+			building: "armorer",
 			level: 0,
 		},
 		stats: {
@@ -142,7 +142,7 @@ module.exports = {
 			["steel bar"]: 10,
 		},
 		requirement: {
-			building: "artifact blacksmith",
+			building: "armorer",
 			level: 0,
 		},
 		stats: {
@@ -162,7 +162,7 @@ module.exports = {
 			yew: 20,
 		},
 		requirement: {
-			building: "artifact blacksmith",
+			building: "armorer",
 			level: 0,
 		},
 		stats: {
@@ -178,7 +178,7 @@ module.exports = {
 			yew: 100,
 		},
 		requirement: {
-			building: "artifact blacksmith",
+			building: "armorer",
 			level: 0,
 		},
 		stats: {
@@ -195,7 +195,7 @@ module.exports = {
 			oak: 80,
 		},
 		requirement: {
-			building: "artifact blacksmith",
+			building: "armorer",
 			level: 0,
 		},
 		stats: {
@@ -213,7 +213,7 @@ module.exports = {
 			["iron bar"]: 50,
 		},
 		requirement: {
-			building: "artifact blacksmith",
+			building: "armorer",
 			level: 0,
 		},
 		stats: {
@@ -231,7 +231,7 @@ module.exports = {
 			yew: 25,
 		},
 		requirement: {
-			building: "artifact blacksmith",
+			building: "armorer",
 			level: 0,
 		},
 		stats: {
@@ -249,7 +249,7 @@ module.exports = {
 			yew: 60,
 		},
 		requirement: {
-			building: "artifact blacksmith",
+			building: "armorer",
 			level: 0,
 		},
 		stats: {
@@ -267,7 +267,7 @@ module.exports = {
 			yew: 50,
 		},
 		requirement: {
-			building: "artifact blacksmith",
+			building: "armorer",
 			level: 0,
 		},
 		stats: {
@@ -283,7 +283,7 @@ module.exports = {
 			yew: 40,
 		},
 		requirement: {
-			building: "artifact blacksmith",
+			building: "armorer",
 			level: 0,
 		},
 		stats: {
@@ -301,7 +301,7 @@ module.exports = {
 			yew: 80,
 		},
 		requirement: {
-			building: "artifact blacksmith",
+			building: "armorer",
 			level: 0,
 		},
 		stats: {
