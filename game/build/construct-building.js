@@ -25,10 +25,10 @@ const checkIfBuildIsPossible = (user, building, coordinates) => {
 	if(!building) {
 		return { response: false, message:"Unknown building command" };
 	}
-	else if(coordinates.find(cord => cord > 9 || cord < 0) || coordinates.length !== 2) {
+	else if(coordinates.find(cord => cord > 3 || cord < 0) || coordinates.length !== 2) {
 		return {
 			response: false,
-			message:"Please enter two coordinates between 0-9 divided by a punctuation, e.g: !build barracks 1.1 ",
+			message:"Please enter two coordinates between 0-3 divided by a punctuation, e.g: !build barracks 1.1 ",
 		};
 	}
 
