@@ -2,7 +2,7 @@
 // add it here and it will work
 
 module.exports = {
-	barracks:{
+	barracks: {
 		name: "barracks",
 		levels: [
 			{
@@ -28,7 +28,7 @@ module.exports = {
 			},
 		],
 	},
-	archery:{
+	archery: {
 		name: "archery",
 		levels: [
 			{
@@ -59,7 +59,7 @@ module.exports = {
 			},
 		],
 	},
-	farm:{
+	farm: {
 		name: "farm",
 		levels: [
 			{
@@ -100,7 +100,7 @@ module.exports = {
 			user.updateHousePop(newPop);
 		},
 	},
-	mine:{
+	mine: {
 		name: "mine",
 		levels: [
 			{
@@ -126,7 +126,7 @@ module.exports = {
 			user.updateNewProduction("mine", "copper ore", new Date());
 		},
 	},
-	lumbermill:{
+	lumbermill: {
 		name: "lumbermill",
 		levels: [
 			{
@@ -153,7 +153,7 @@ module.exports = {
 			user.updateNewProduction("lumbermill", "oak", new Date());
 		},
 	},
-	forge:{
+	forge: {
 		name: "forge",
 		levels: [
 			{
@@ -187,7 +187,7 @@ module.exports = {
 			},
 		],
 	},
-	blacksmith:{
+	blacksmith: {
 		name: "blacksmith",
 		levels: [
 			{
@@ -225,8 +225,8 @@ module.exports = {
 			},
 		],
 	},
-	["artifact blacksmith"]:{
-		name: "artifact blacksmith",
+	["armorer"]: {
+		name: "armorer",
 		levels: [
 			{
 				cost: {
