@@ -197,7 +197,7 @@ module.exports = {
 					["bronze bar"]: 20,
 				},
 				level: 0,
-				craftables: ["bronze sword", "bronze arrow", "oak shortbow",
+				craftables: ["bronze sword", "oak shortbow",
 					"bronze helmet", "bronze platemail", "bronze leggings"],
 			},
 			{
@@ -207,7 +207,7 @@ module.exports = {
 					["iron bar"]: 40,
 				},
 				level: 1,
-				craftables: ["iron sword", "iron arrow", "yew shortbow",
+				craftables: ["iron sword", "yew shortbow",
 					"iron helmet", "iron platemail", "iron leggings"],
 			},
 			{
@@ -220,7 +220,7 @@ module.exports = {
 					["steel bar"]: 40,
 				},
 				level: 2,
-				craftables: ["steel sword", "steel arrow", "northern shortbow",
+				craftables: ["steel sword", "northern shortbow",
 					"steel helmet", "steel platemail", "steel leggings"],
 			},
 		],

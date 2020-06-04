@@ -11,7 +11,7 @@ module.exports = {
 		},
 		stats: {
 			hp: 13,
-			atk: 9,
+			at: 9,
 		},
 	},
 	archer: {
@@ -26,7 +26,7 @@ module.exports = {
 		},
 		stats: {
 			hp: 30,
-			atk: 25,
+			at: 25,
 		},
 	},
 	ranger: {
@@ -42,7 +42,7 @@ module.exports = {
 		},
 		stats: {
 			hp: 75,
-			atk: 80,
+			at: 80,
 		},
 	},
 };
