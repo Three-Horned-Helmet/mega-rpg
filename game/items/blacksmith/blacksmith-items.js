@@ -20,7 +20,7 @@ module.exports = {
 		typeSequence: ["army", "armory", "weapon"],
 		cost: {
 			gold: 5,
-			oak: 5,
+			["oak wood"]: 5,
 		},
 		requirement: {
 			building: "blacksmith",
@@ -97,7 +97,7 @@ module.exports = {
 		typeSequence: ["army", "armory", "weapon"],
 		cost: {
 			gold: 30,
-			["yew"]: 10,
+			["yew wood"]: 10,
 		},
 		requirement: {
 			building: "blacksmith",
@@ -174,8 +174,8 @@ module.exports = {
 		typeSequence: ["army", "armory", "weapon"],
 		cost: {
 			gold: 60,
-			yew: 15,
-			oak: 15,
+			["yew wood"]: 15,
+			 ["oak wood"]: 15,
 		},
 		requirement: {
 			building: "blacksmith",

@@ -6,7 +6,7 @@ module.exports = {
 		cost: {
 			gold: 150,
 			["bronze bar"]: 20,
-			oak: 10,
+			 ["oak wood"]: 10,
 		},
 		requirement: {
 			building: "armorer",
@@ -23,7 +23,7 @@ module.exports = {
 			gold: 400,
 			["bronze bar"]: 40,
 			["iron bar"]: 40,
-			yew: 25,
+			["yew wood"]: 25,
 		},
 		requirement: {
 			building: "armorer",
@@ -39,8 +39,8 @@ module.exports = {
 		cost: {
 			gold: 350,
 			["iron bar"]: 10,
-			yew: 60,
-			oak: 60,
+			["yew wood"]: 60,
+			 ["oak wood"]: 60,
 		},
 		requirement: {
 			building: "armorer",
@@ -55,8 +55,8 @@ module.exports = {
 		typeSequence: ["army", "armory", "weapon"],
 		cost: {
 			gold: 550,
-			oak: 100,
-			yew: 100,
+			 ["oak wood"]: 100,
+			["yew wood"]: 100,
 			["steel bar"]: 15,
 		},
 		requirement: {
@@ -73,7 +73,7 @@ module.exports = {
 		cost: {
 			gold: 200,
 			["bronze bar"]: 30,
-			oak: 25,
+			 ["oak wood"]: 25,
 		},
 		requirement: {
 			building: "armorer",
@@ -90,7 +90,7 @@ module.exports = {
 			gold: 150,
 			["bronze bar"]: 20,
 			["iron bar"]: 20,
-			yew: 15,
+			["yew wood"]: 15,
 		},
 		requirement: {
 			building: "armorer",
@@ -107,7 +107,7 @@ module.exports = {
 			gold: 400,
 			["bronze bar"]: 40,
 			["iron bar"]: 40,
-			yew: 10,
+			["yew wood"]: 10,
 		},
 		requirement: {
 			building: "armorer",
@@ -122,7 +122,7 @@ module.exports = {
 		typeSequence: ["army", "armory", "legging"],
 		cost: {
 			gold: 120,
-			oak: 50,
+			 ["oak wood"]: 50,
 		},
 		requirement: {
 			building: "armorer",
@@ -137,8 +137,8 @@ module.exports = {
 		typeSequence: ["army", "armory", "legging"],
 		cost: {
 			gold: 360,
-			oak: 80,
-			yew: 80,
+			 ["oak wood"]: 80,
+			["yew wood"]: 80,
 			["steel bar"]: 10,
 		},
 		requirement: {
@@ -159,7 +159,7 @@ module.exports = {
 			["bronze bar"]: 50,
 			["iron bar"]: 50,
 			["steel bar"]: 20,
-			yew: 20,
+			["yew wood"]: 20,
 		},
 		requirement: {
 			building: "armorer",
@@ -175,7 +175,7 @@ module.exports = {
 		cost: {
 			gold: 800,
 			["steel bar"]: 200,
-			yew: 100,
+			["yew wood"]: 100,
 		},
 		requirement: {
 			building: "armorer",
@@ -191,8 +191,8 @@ module.exports = {
 		cost: {
 			gold: 350,
 			["steel bar"]: 10,
-			yew: 80,
-			oak: 80,
+			["yew wood"]: 80,
+			 ["oak wood"]: 80,
 		},
 		requirement: {
 			building: "armorer",
@@ -207,8 +207,8 @@ module.exports = {
 		typeSequence: ["army", "armory", "weapon"],
 		cost: {
 			gold: 1000,
-			oak: 200,
-			yew: 200,
+			 ["oak wood"]: 200,
+			["yew wood"]: 200,
 			["steel bar"]: 50,
 			["iron bar"]: 50,
 		},
@@ -227,8 +227,8 @@ module.exports = {
 			gold: 350,
 			["iron bar"]: 30,
 			["steel bar"]: 30,
-			oak: 25,
-			yew: 25,
+			 ["oak wood"]: 25,
+			["yew wood"]: 25,
 		},
 		requirement: {
 			building: "armorer",
@@ -245,8 +245,8 @@ module.exports = {
 			gold: 150,
 			["bronze bar"]: 60,
 			["iron bar"]: 60,
-			oak: 60,
-			yew: 60,
+			 ["oak wood"]: 60,
+			["yew wood"]: 60,
 		},
 		requirement: {
 			building: "armorer",
@@ -264,7 +264,7 @@ module.exports = {
 			["bronze bar"]: 100,
 			["iron bar"]: 100,
 			["steel bar"]: 120,
-			yew: 50,
+			["yew wood"]: 50,
 		},
 		requirement: {
 			building: "armorer",
@@ -279,8 +279,8 @@ module.exports = {
 		typeSequence: ["army", "armory", "legging"],
 		cost: {
 			gold: 360,
-			oak: 40,
-			yew: 40,
+			 ["oak wood"]: 40,
+			["yew wood"]: 40,
 		},
 		requirement: {
 			building: "armorer",
@@ -298,7 +298,7 @@ module.exports = {
 			["bronze bar"]: 200,
 			["iron bar"]: 50,
 			["steel bar"]: 150,
-			yew: 80,
+			["yew wood"]: 80,
 		},
 		requirement: {
 			building: "armorer",

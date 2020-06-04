@@ -37,11 +37,11 @@ const userSchema = new Schema({
 			default: 100,
 		},
 
-		oak: {
+		 ["oak wood"]: {
 			type: Number,
 			default: 5,
 		},
-		yew: {
+		["yew wood"]: {
 			type: Number,
 			default: 0,
 		},
