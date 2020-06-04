@@ -6,6 +6,6 @@ module.exports = {
 	async execute(message, args, user) {
 		const gridImage = await createGridCanvas(user);
 
-		message.channel.send("Your city", gridImage);
+		message.channel.send(`<@${message.author.id}>'s Empire:`, gridImage);
 	},
 };

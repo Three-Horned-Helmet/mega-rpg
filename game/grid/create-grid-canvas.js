@@ -19,9 +19,10 @@ const createGridCanvas = async (user) => {
 			// Wait for Canvas to load the image
 			try{
 				// check if file exists
-				if (fs.existsSync(`./assets/building-images/${building.name.replace(" ", "-")}.png`)) {
+				const imgUrl = `./assets/building-images/${building.name.replace(" ", "-")}-level-${building.level}.png`;
+				if (fs.existsSync(imgUrl)) {
 					return resolve(
-						Canvas.loadImage(`./assets/building-images/${building.name.replace(" ", "-")}.png`),
+						Canvas.loadImage(imgUrl),
 					);
 				}
 				else {
