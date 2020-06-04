@@ -5,6 +5,11 @@ const craftItem = async (user, item, amount) => {
 
 	const canBeCrafted = checkIfPossibleToCraft(user, item, amount);
 	if(!canBeCrafted.response) return canBeCrafted.message;
+
+	// Save to user
+	await user.craftItem(item, amount);
+
+	return `You successfully crafted ${amount} ${item.name}${amount === 1 ? "" : "s"}`;
 };
 
 const checkIfPossibleToCraft = (user, item, amount) => {

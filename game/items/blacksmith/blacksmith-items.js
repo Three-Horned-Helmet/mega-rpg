@@ -2,6 +2,7 @@ module.exports = {
 	// Bronze
 	["bronze sword"]: {
 		name: "bronze sword",
+		typeSequence: ["army", "armory", "weapon"],
 		cost: {
 			gold: 5,
 			["bronze bar"]: 2,
@@ -16,6 +17,7 @@ module.exports = {
 	},
 	["oak shortbow"]: {
 		name: "oak shortbow",
+		typeSequence: ["army", "armory", "weapon"],
 		cost: {
 			gold: 5,
 			oak: 5,
@@ -30,6 +32,7 @@ module.exports = {
 	},
 	["bronze helmet"]: {
 		name: "bronze helmet",
+		typeSequence: ["army", "armory", "helmet"],
 		cost: {
 			gold: 4,
 			["bronze bar"]: 1,
@@ -44,6 +47,7 @@ module.exports = {
 	},
 	["bronze platemail"]: {
 		name: "bronze platemail",
+		typeSequence: ["army", "armory", "chest"],
 		cost: {
 			gold: 10,
 			["bronze bar"]: 2,
@@ -58,6 +62,7 @@ module.exports = {
 	},
 	["bronze leggings"]: {
 		name: "bronze leggings",
+		typeSequence: ["army", "armory", "legging"],
 		cost: {
 			gold: 5,
 			["bronze bar"]: 1,
@@ -74,6 +79,7 @@ module.exports = {
 	// Iron
 	["iron sword"]: {
 		name: "iron sword",
+		typeSequence: ["army", "armory", "weapon"],
 		cost: {
 			gold: 30,
 			["iron bar"]: 5,
@@ -88,6 +94,7 @@ module.exports = {
 	},
 	["yew shortbow"]: {
 		name: "yew shortbow",
+		typeSequence: ["army", "armory", "weapon"],
 		cost: {
 			gold: 30,
 			["yew"]: 10,
@@ -102,6 +109,7 @@ module.exports = {
 	},
 	["iron helmet"]: {
 		name: "iron helmet",
+		typeSequence: ["army", "armory", "helmet"],
 		cost: {
 			gold: 13,
 			["iron bar"]: 2,
@@ -116,6 +124,7 @@ module.exports = {
 	},
 	["iron platemail"]: {
 		name: "iron platemail",
+		typeSequence: ["army", "armory", "chest"],
 		cost: {
 			gold: 15,
 			["iron bar"]: 3,
@@ -130,6 +139,7 @@ module.exports = {
 	},
 	["iron leggings"]: {
 		name: "iron leggings",
+		typeSequence: ["army", "armory", "legging"],
 		cost: {
 			gold: 15,
 			["iron bar"]: 2,
@@ -146,6 +156,7 @@ module.exports = {
 	// Steel
 	["steel sword"]: {
 		name: "steel sword",
+		typeSequence: ["army", "armory", "weapon"],
 		cost: {
 			gold: 60,
 			["steel bar"]: 7,
@@ -160,6 +171,7 @@ module.exports = {
 	},
 	["northern shortbow"]: {
 		name: "northern shortbow",
+		typeSequence: ["army", "armory", "weapon"],
 		cost: {
 			gold: 60,
 			yew: 15,
@@ -175,6 +187,7 @@ module.exports = {
 	},
 	["steel helmet"]: {
 		name: "steel helmet",
+		typeSequence: ["army", "armory", "helmet"],
 		cost: {
 			gold: 20,
 			["steel bar"]: 3,
@@ -189,6 +202,7 @@ module.exports = {
 	},
 	["steel platemail"]: {
 		name: "steel platemail",
+		typeSequence: ["army", "armory", "chest"],
 		cost: {
 			gold: 30,
 			["steel bar"]: 5,
@@ -203,6 +217,7 @@ module.exports = {
 	},
 	["steel leggings"]: {
 		name: "steel leggings",
+		typeSequence: ["army", "armory", "legging"],
 		cost: {
 			gold: 20,
 			["steel bar"]: 2,

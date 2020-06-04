@@ -51,10 +51,22 @@ const userSchema = new Schema({
 
 	army: {
 		armory: {
-			helmets: {},
-			chest: {},
-			leggings: {},
-			weapon: {},
+			helmet: {
+				type: Object,
+				default: {},
+			},
+			chest: {
+				type: Object,
+				default: {},
+			},
+			legging: {
+				type: Object,
+				default: {},
+			},
+			weapon: {
+				type: Object,
+				default: {},
+			},
 		},
 		units: {
 			archery: {
@@ -142,9 +154,9 @@ const userSchema = new Schema({
 			default: 0,
 		},
 		armor: {
-			helmets: {},
+			helmet: {},
 			chest: {},
-			leggings: {},
+			legging: {},
 			weapon: {},
 		},
 	},
@@ -213,11 +225,14 @@ userSchema.methods.collectResource = async function(collectBuildings, now, resou
 				const { producing, lastCollected:lastCol, level, name } = building;
 				// checks how many minutes it has been since last collected, and calculates produced value
 				const lastCollected = Math.floor((now.getTime() - lastCol.getTime()) / 60000);
-				const produced = Math.floor(lastCollected / buildingsObject[name].levels[level].productionRate);
+				const produced = Math.floor(lastCollected / buildingsObject[name]
+					.levels[level].productionRate);
 
 				// Updates the building in this.empire
-				this.resources[producing] = this.resources[producing] ? this.resources[producing] + produced : produced;
-				totalCollected[producing] = totalCollected[producing] ? totalCollected[producing] + produced : produced;
+				this.resources[producing] = this.resources[producing] ?
+					this.resources[producing] + produced : produced;
+				totalCollected[producing] = totalCollected[producing] ?
+					totalCollected[producing] + produced : produced;
 				building.lastCollected = now;
 				this.markModified(`empire.${i}.lastCollected`);
 
@@ -234,5 +249,28 @@ userSchema.methods.collectResource = async function(collectBuildings, now, resou
 
 	return totalCollected;
 };
+
+userSchema.methods.craftItem = function(item, amount) {
+	// Resource cost
+	for(const resource in item.cost) {
+		this.resources[resource] -= item.cost[resource] * amount;
+	}
+
+	// Add item to user
+	let itemType;
+	let markModifiedString = "";
+	item.typeSequence.forEach(type => {
+		itemType = itemType ? itemType[type] : this[type];
+		markModifiedString += type + ".";
+	});
+
+	itemType[item.name] = typeof itemType[item.name] === "number" ?
+		itemType[item.name] + amount : amount;
+
+	this.markModified(`${markModifiedString}${item.name}`);
+
+	return this.save();
+};
+
 
 module.exports = mongoose.model("User", userSchema);
