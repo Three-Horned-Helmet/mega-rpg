@@ -13,7 +13,8 @@ Obama (2020)
 1. Install [NodeJS](https://nodejs.org/en/download/).
 2. Install [MongoDB Community](https://docs.mongodb.com/manual/installation/#mongodb-community-edition-installation-tutorials).
 3. [Clone](https://github.com/Three-Horned-Helmet/mega-rpg.git) the project from github OR run: `$ git clone https://github.com/Three-Horned-Helmet/mega-rpg.git`
-4. To start the project run command: `$ npm start`
+4. `$ mongod`
+5. `$ npm start`
 
 ---
 

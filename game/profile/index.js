@@ -53,6 +53,7 @@ const prettifyUser = (message, user) => {
 		)
 
 		.setFooter(`PVP: #${pvpRank} ~~~ Total: #${totalRank}`);
+
 	return embedUser;
 };
 
