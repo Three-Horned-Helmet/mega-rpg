@@ -12,7 +12,7 @@ const createGridCanvas = async (user) => {
 	// Wait for Canvas to load the image
 	const buildingImages = user.empire.map(building => {
 		const { name, level } = building;
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			// Add reject error handling pl0x
 			try{
 				// check if file exists
@@ -29,7 +29,7 @@ const createGridCanvas = async (user) => {
 				}
 			}
 			catch {
-				console.log(`Image does not exist, ${building}`);
+				console.error(`Image does not exist, ${building}`);
 			}
 		});
 	});

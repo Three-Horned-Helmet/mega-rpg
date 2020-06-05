@@ -38,11 +38,11 @@ const userSchema = new Schema({
 			default: 100,
 		},
 
-		oak: {
+		["oak wood"]: {
 			type: Number,
 			default: 5,
 		},
-		yew: {
+		["yew wood"]: {
 			type: Number,
 			default: 0,
 		},
@@ -274,9 +274,18 @@ userSchema.methods.collectResource = async function(collectBuildings, now, resou
 			if(building.name === collect) {
 				const { producing, lastCollected:lastCol, level, name } = building;
 				// checks how many minutes it has been since last collected, and calculates produced value
-				const lastCollected = Math.floor((now.getTime() - lastCol.getTime()) / 60000);
-				const produced = Math.floor(lastCollected / buildingsObject[name]
+				const lastCollected = (now - lastCol) / 60000;
+				let produced = Math.floor(lastCollected * buildingsObject[name]
 					.levels[level].productionRate);
+
+				// If collect was called before you have any at all (prevent the reset of collect)
+				if(!produced) {
+					return totalCollected[producing] = totalCollected[producing] ?
+						totalCollected[producing] + produced : produced;
+				}
+
+				// Max 100 resources is collectable at a time
+				if(produced > 100) produced = 100;
 
 				// Updates the building in this.empire
 				this.resources[producing] = this.resources[producing] ?
@@ -318,6 +327,35 @@ userSchema.methods.craftItem = function(item, amount) {
 		itemType[item.name] + amount : amount;
 
 	this.markModified(`${markModifiedString}${item.name}`);
+
+	return this.save();
+};
+
+userSchema.methods.equipItem = function(item, currentItem) {
+	// Added hero equipment bonus (equipment is better worn by heroes)
+	const heroEquipmentBonus = 2;
+	const itemType = item.typeSequence[item.typeSequence.length - 1];
+
+	// Remove and Add item to hero armor and armory
+	this.army.armory[itemType][item.name] -= 1;
+	this.hero.armor[itemType] = item.name;
+
+	// Remove old stats and add new item stats to hero
+	if(currentItem) {
+		// Add old item to armory
+		this.army.armory[itemType][currentItem.name] += 1;
+
+		for(const stat in currentItem.stats) {
+			this.hero[stat] -= currentItem.stats[stat] * heroEquipmentBonus;
+		}
+	}
+
+	for(const stat in item.stats) {
+		this.hero[stat] += item.stats[stat] * heroEquipmentBonus;
+	}
+
+	this.markModified(`army.armory.${itemType}.${item.name}`);
+	this.markModified(`hero.armor.${itemType}`);
 
 	return this.save();
 };

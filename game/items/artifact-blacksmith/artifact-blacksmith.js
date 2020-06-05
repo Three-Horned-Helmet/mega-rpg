@@ -6,14 +6,14 @@ module.exports = {
 		cost: {
 			gold: 150,
 			["bronze bar"]: 20,
-			oak: 10,
+			["oak wood"]: 10,
 		},
 		requirement: {
 			building: "armorer",
 			level: 0,
 		},
 		stats: {
-			at: 60,
+			attack: 60,
 		},
 	},
 	["black granite mace"]: {
@@ -23,14 +23,14 @@ module.exports = {
 			gold: 400,
 			["bronze bar"]: 40,
 			["iron bar"]: 40,
-			yew: 25,
+			["yew wood"]: 25,
 		},
 		requirement: {
 			building: "armorer",
 			level: 0,
 		},
 		stats: {
-			at: 220,
+			attack: 220,
 		},
 	},
 	["viking longbow"]: {
@@ -39,15 +39,15 @@ module.exports = {
 		cost: {
 			gold: 350,
 			["iron bar"]: 10,
-			yew: 60,
-			oak: 60,
+			["yew wood"]: 60,
+			["oak wood"]: 60,
 		},
 		requirement: {
 			building: "armorer",
 			level: 0,
 		},
 		stats: {
-			at: 200,
+			attack: 200,
 		},
 	},
 	["imbued shortbow"]: {
@@ -55,8 +55,8 @@ module.exports = {
 		typeSequence: ["army", "armory", "weapon"],
 		cost: {
 			gold: 550,
-			oak: 100,
-			yew: 100,
+			["oak wood"]: 100,
+			["yew wood"]: 100,
 			["steel bar"]: 15,
 		},
 		requirement: {
@@ -64,7 +64,7 @@ module.exports = {
 			level: 0,
 		},
 		stats: {
-			at: 270,
+			attack: 270,
 		},
 	},
 	["viking helmet"]: {
@@ -73,14 +73,14 @@ module.exports = {
 		cost: {
 			gold: 200,
 			["bronze bar"]: 30,
-			oak: 25,
+			["oak wood"]: 25,
 		},
 		requirement: {
 			building: "armorer",
 			level: 0,
 		},
 		stats: {
-			hp: 80,
+			health: 80,
 		},
 	},
 	["dwarven chainbody"]: {
@@ -90,14 +90,14 @@ module.exports = {
 			gold: 150,
 			["bronze bar"]: 20,
 			["iron bar"]: 20,
-			yew: 15,
+			["yew wood"]: 15,
 		},
 		requirement: {
 			building: "armorer",
 			level: 0,
 		},
 		stats: {
-			hp: 90,
+			health: 90,
 		},
 	},
 	["kings platemail"]: {
@@ -107,14 +107,14 @@ module.exports = {
 			gold: 400,
 			["bronze bar"]: 40,
 			["iron bar"]: 40,
-			yew: 10,
+			["yew wood"]: 10,
 		},
 		requirement: {
 			building: "armorer",
 			level: 0,
 		},
 		stats: {
-			hp: 180,
+			health: 180,
 		},
 	},
 	["scottish leggings"]: {
@@ -122,14 +122,14 @@ module.exports = {
 		typeSequence: ["army", "armory", "legging"],
 		cost: {
 			gold: 120,
-			oak: 50,
+			["oak wood"]: 50,
 		},
 		requirement: {
 			building: "armorer",
 			level: 0,
 		},
 		stats: {
-			hp: 60,
+			health: 60,
 		},
 	},
 	["leggings of the dawn"]: {
@@ -137,8 +137,8 @@ module.exports = {
 		typeSequence: ["army", "armory", "legging"],
 		cost: {
 			gold: 360,
-			oak: 80,
-			yew: 80,
+			["oak wood"]: 80,
+			["yew wood"]: 80,
 			["steel bar"]: 10,
 		},
 		requirement: {
@@ -146,7 +146,7 @@ module.exports = {
 			level: 0,
 		},
 		stats: {
-			hp: 165,
+			health: 165,
 		},
 	},
 
@@ -159,14 +159,14 @@ module.exports = {
 			["bronze bar"]: 50,
 			["iron bar"]: 50,
 			["steel bar"]: 20,
-			yew: 20,
+			["yew wood"]: 20,
 		},
 		requirement: {
 			building: "armorer",
 			level: 0,
 		},
 		stats: {
-			at: 280,
+			attack: 280,
 		},
 	},
 	["greatsword of the spring"]: {
@@ -175,14 +175,14 @@ module.exports = {
 		cost: {
 			gold: 800,
 			["steel bar"]: 200,
-			yew: 100,
+			["yew wood"]: 100,
 		},
 		requirement: {
 			building: "armorer",
 			level: 0,
 		},
 		stats: {
-			at: 350,
+			attack: 350,
 		},
 	},
 	["fallen rangers longbow"]: {
@@ -191,15 +191,15 @@ module.exports = {
 		cost: {
 			gold: 350,
 			["steel bar"]: 10,
-			yew: 80,
-			oak: 80,
+			["yew wood"]: 80,
+			["oak wood"]: 80,
 		},
 		requirement: {
 			building: "armorer",
 			level: 0,
 		},
 		stats: {
-			at: 245,
+			attack: 245,
 		},
 	},
 	["futuristic composite bow"]: {
@@ -207,8 +207,8 @@ module.exports = {
 		typeSequence: ["army", "armory", "weapon"],
 		cost: {
 			gold: 1000,
-			oak: 200,
-			yew: 200,
+			["oak wood"]: 200,
+			["yew wood"]: 200,
 			["steel bar"]: 50,
 			["iron bar"]: 50,
 		},
@@ -217,7 +217,7 @@ module.exports = {
 			level: 0,
 		},
 		stats: {
-			at: 375,
+			attack: 375,
 		},
 	},
 	["three horned helmet"]: {
@@ -227,15 +227,15 @@ module.exports = {
 			gold: 350,
 			["iron bar"]: 30,
 			["steel bar"]: 30,
-			oak: 25,
-			yew: 25,
+			["oak wood"]: 25,
+			["yew wood"]: 25,
 		},
 		requirement: {
 			building: "armorer",
 			level: 0,
 		},
 		stats: {
-			hp: 145,
+			health: 145,
 		},
 	},
 	["arcanisters hat"]: {
@@ -245,15 +245,15 @@ module.exports = {
 			gold: 150,
 			["bronze bar"]: 60,
 			["iron bar"]: 60,
-			oak: 60,
-			yew: 60,
+			["oak wood"]: 60,
+			["yew wood"]: 60,
 		},
 		requirement: {
 			building: "armorer",
 			level: 0,
 		},
 		stats: {
-			hp: 200,
+			health: 200,
 		},
 	},
 	["gold bordered platebody"]: {
@@ -264,14 +264,14 @@ module.exports = {
 			["bronze bar"]: 100,
 			["iron bar"]: 100,
 			["steel bar"]: 120,
-			yew: 50,
+			["yew wood"]: 50,
 		},
 		requirement: {
 			building: "armorer",
 			level: 0,
 		},
 		stats: {
-			hp: 300,
+			health: 300,
 		},
 	},
 	["assassins pants"]: {
@@ -279,15 +279,15 @@ module.exports = {
 		typeSequence: ["army", "armory", "legging"],
 		cost: {
 			gold: 360,
-			oak: 40,
-			yew: 40,
+			["oak wood"]: 40,
+			["yew wood"]: 40,
 		},
 		requirement: {
 			building: "armorer",
 			level: 0,
 		},
 		stats: {
-			hp: 130,
+			health: 130,
 		},
 	},
 	["jeweled embraced heavy leggings"]: {
@@ -298,14 +298,14 @@ module.exports = {
 			["bronze bar"]: 200,
 			["iron bar"]: 50,
 			["steel bar"]: 150,
-			yew: 80,
+			["yew wood"]: 80,
 		},
 		requirement: {
 			building: "armorer",
 			level: 0,
 		},
 		stats: {
-			hp: 270,
+			health: 270,
 		},
 	},
 };

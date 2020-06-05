@@ -3,46 +3,46 @@ module.exports = {
 		name: "huntsman",
 		cost: {
 			gold: 10,
-			oak: 5,
+			["oak wood"]: 5,
 		},
 		requirement: {
 			building: "archery",
 			level: 0,
 		},
 		stats: {
-			hp: 13,
-			at: 9,
+			health: 13,
+			attack: 9,
 		},
 	},
 	archer: {
 		name: "archer",
 		cost: {
 			gold: 30,
-			yew: 7,
+			["yew wood"]: 7,
 		},
 		requirement: {
 			building: "archery",
 			level: 1,
 		},
 		stats: {
-			hp: 30,
-			at: 25,
+			health: 30,
+			attack: 25,
 		},
 	},
 	ranger: {
 		name: "ranger",
 		cost: {
 			gold: 50,
-			yew: 10,
-			oak: 10,
+			["yew wood"]: 10,
+			["oak wood"]: 10,
 		},
 		requirement: {
 			building: "archery",
 			level: 2,
 		},
 		stats: {
-			hp: 75,
-			at: 80,
+			health: 75,
+			attack: 80,
 		},
 	},
 };

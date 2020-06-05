@@ -12,7 +12,7 @@ module.exports = {
 			level: 0,
 		},
 		stats: {
-			at: 15,
+			attack: 15,
 		},
 	},
 	["oak shortbow"]: {
@@ -20,14 +20,14 @@ module.exports = {
 		typeSequence: ["army", "armory", "weapon"],
 		cost: {
 			gold: 5,
-			oak: 5,
+			["oak wood"]: 5,
 		},
 		requirement: {
 			building: "blacksmith",
 			level: 0,
 		},
 		stats: {
-			at: 20,
+			attack: 20,
 		},
 	},
 	["bronze helmet"]: {
@@ -42,7 +42,7 @@ module.exports = {
 			level: 0,
 		},
 		stats: {
-			hp: 8,
+			health: 8,
 		},
 	},
 	["bronze platemail"]: {
@@ -57,7 +57,7 @@ module.exports = {
 			level: 0,
 		},
 		stats: {
-			hp: 15,
+			health: 15,
 		},
 	},
 	["bronze leggings"]: {
@@ -72,7 +72,7 @@ module.exports = {
 			level: 0,
 		},
 		stats: {
-			hp: 10,
+			health: 10,
 		},
 	},
 
@@ -89,7 +89,7 @@ module.exports = {
 			level: 1,
 		},
 		stats: {
-			at: 35,
+			attack: 35,
 		},
 	},
 	["yew shortbow"]: {
@@ -97,14 +97,14 @@ module.exports = {
 		typeSequence: ["army", "armory", "weapon"],
 		cost: {
 			gold: 30,
-			["yew"]: 10,
+			["yew wood"]: 10,
 		},
 		requirement: {
 			building: "blacksmith",
 			level: 1,
 		},
 		stats: {
-			at: 43,
+			attack: 43,
 		},
 	},
 	["iron helmet"]: {
@@ -119,7 +119,7 @@ module.exports = {
 			level: 1,
 		},
 		stats: {
-			hp: 15,
+			health: 15,
 		},
 	},
 	["iron platemail"]: {
@@ -134,7 +134,7 @@ module.exports = {
 			level: 1,
 		},
 		stats: {
-			hp: 22,
+			health: 22,
 		},
 	},
 	["iron leggings"]: {
@@ -149,7 +149,7 @@ module.exports = {
 			level: 1,
 		},
 		stats: {
-			hp: 17,
+			health: 17,
 		},
 	},
 
@@ -166,7 +166,7 @@ module.exports = {
 			level: 2,
 		},
 		stats: {
-			at: 50,
+			attack: 50,
 		},
 	},
 	["northern shortbow"]: {
@@ -174,15 +174,15 @@ module.exports = {
 		typeSequence: ["army", "armory", "weapon"],
 		cost: {
 			gold: 60,
-			yew: 15,
-			oak: 15,
+			["yew wood"]: 15,
+			["oak wood"]: 15,
 		},
 		requirement: {
 			building: "blacksmith",
 			level: 2,
 		},
 		stats: {
-			at: 60,
+			attack: 60,
 		},
 	},
 	["steel helmet"]: {
@@ -197,7 +197,7 @@ module.exports = {
 			level: 2,
 		},
 		stats: {
-			hp: 25,
+			health: 25,
 		},
 	},
 	["steel platemail"]: {
@@ -212,7 +212,7 @@ module.exports = {
 			level: 2,
 		},
 		stats: {
-			hp: 35,
+			health: 35,
 		},
 	},
 	["steel leggings"]: {
@@ -227,7 +227,7 @@ module.exports = {
 			level: 2,
 		},
 		stats: {
-			hp: 23,
+			health: 23,
 		},
 	},
 };

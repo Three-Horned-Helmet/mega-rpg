@@ -8,21 +8,21 @@ module.exports = {
 			{
 				cost: {
 					gold: 15,
-					oak: 5,
+					 ["oak wood"]: 5,
 				},
 				level: 0,
 			},
 			{
 				cost: {
 					gold: 100,
-					oak: 20,
+					 ["oak wood"]: 20,
 				},
 				level: 1,
 			},
 			{
 				cost: {
 					gold: 200,
-					yew: 20,
+					["yew wood"]: 20,
 				},
 				level: 2,
 			},
@@ -34,14 +34,14 @@ module.exports = {
 			{
 				cost: {
 					gold: 15,
-					oak: 10,
+					 ["oak wood"]: 10,
 				},
 				level: 0,
 			},
 			{
 				cost: {
 					gold: 100,
-					yew: 20,
+					["yew wood"]: 20,
 					["bronze bar"]: 20,
 					["iron bar"]: 20,
 				},
@@ -50,7 +50,7 @@ module.exports = {
 			{
 				cost: {
 					gold: 200,
-					yew: 50,
+					["yew wood"]: 50,
 					["bronze bar"]: 20,
 					["iron bar"]: 20,
 					["steel bar"]: 50,
@@ -65,7 +65,7 @@ module.exports = {
 			{
 				cost: {
 					gold: 15,
-					oak: 5,
+					 ["oak wood"]: 5,
 				},
 				level: 0,
 				popIncrease: 200,
@@ -73,7 +73,7 @@ module.exports = {
 			{
 				cost: {
 					gold: 100,
-					oak: 20,
+					 ["oak wood"]: 20,
 				},
 				level: 1,
 				popIncrease: 300,
@@ -81,7 +81,7 @@ module.exports = {
 			{
 				cost: {
 					gold: 200,
-					oak: 30,
+					 ["oak wood"]: 30,
 				},
 				level: 2,
 				popIncrease: 300,
@@ -109,7 +109,7 @@ module.exports = {
 				},
 				level: 0,
 				produce: "copper ore",
-				productionRate: 5,
+				productionRate: 1,
 			},
 			{
 				cost: {
@@ -118,7 +118,7 @@ module.exports = {
 				},
 				level: 1,
 				produce: "iron ore",
-				productionRate: 10,
+				productionRate: 2,
 			},
 		],
 		execute: async function(user) {
@@ -135,22 +135,22 @@ module.exports = {
 					["copper ore"]: 10,
 				},
 				level: 0,
-				produce: "oak",
-				productionRate: 5,
+				produce: "oak wood",
+				productionRate: 1,
 			},
 			{
 				cost: {
 					gold: 150,
-					oak: 30,
+					 ["oak wood"]: 30,
 				},
 				level: 1,
-				produce: "yew",
-				productionRate: 10,
+				produce: "yew wood",
+				productionRate: 2,
 			},
 		],
 		execute: async function(user) {
 			// Add the lastCollected and producing to new mine
-			user.updateNewProduction("lumbermill", "oak", new Date());
+			user.updateNewProduction("lumbermill", "oak wood", new Date());
 		},
 	},
 	forge: {
@@ -159,7 +159,7 @@ module.exports = {
 			{
 				cost: {
 					gold: 15,
-					oak: 5,
+					 ["oak wood"]: 5,
 					["copper ore"]: 5,
 				},
 				level: 0,
@@ -168,7 +168,7 @@ module.exports = {
 			{
 				cost: {
 					gold: 100,
-					oak: 20,
+					["oak wood"]: 20,
 					["bronze bar"]: 20,
 				},
 				level: 1,
@@ -177,8 +177,8 @@ module.exports = {
 			{
 				cost: {
 					gold: 200,
-					oak: 50,
-					yew: 30,
+					 ["oak wood"]: 50,
+					["yew wood"]: 30,
 					["bronze bar"]: 40,
 					["iron bar"]: 40,
 				},
@@ -193,7 +193,7 @@ module.exports = {
 			{
 				cost: {
 					gold: 30,
-					oak: 5,
+					 ["oak wood"]: 5,
 					["bronze bar"]: 20,
 				},
 				level: 0,
@@ -203,7 +203,7 @@ module.exports = {
 			{
 				cost: {
 					gold: 100,
-					yew: 20,
+					["yew wood"]: 20,
 					["iron bar"]: 40,
 				},
 				level: 1,
@@ -213,8 +213,8 @@ module.exports = {
 			{
 				cost: {
 					gold: 200,
-					oak: 50,
-					yew: 30,
+					 ["oak wood"]: 50,
+					["yew wood"]: 30,
 					["bronze bar"]: 40,
 					["iron bar"]: 40,
 					["steel bar"]: 40,
@@ -231,7 +231,7 @@ module.exports = {
 			{
 				cost: {
 					gold: 150,
-					oak: 50,
+					 ["oak wood"]: 50,
 					["bronze bar"]: 30,
 				},
 				level: 0,
@@ -239,8 +239,8 @@ module.exports = {
 			{
 				cost: {
 					gold: 500,
-					yew: 150,
-					oak: 150,
+					["yew wood"]: 150,
+					 ["oak wood"]: 150,
 					["bronze bar"]: 50,
 					["iron bar"]: 50,
 					["steel bar"]: 30,
