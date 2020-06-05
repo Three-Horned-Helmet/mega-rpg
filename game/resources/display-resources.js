@@ -12,7 +12,7 @@ const displayResources = (user) => {
 
 	const bars = getProductionResourceValue(user, "forge");
 
-	const fields = [
+	const fields = [
 		{
 			name: "Gold",
 			value:
