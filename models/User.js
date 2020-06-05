@@ -378,9 +378,7 @@ userSchema.methods.gainExp = async function(exp, newExpToNextLevel, statGains) {
 
 	this.markModified("hero.currentExp");
 
-	const updatedUser = await this.save();
-
-	return { updatedUser, levelUp: newExpToNextLevel ? true : false };
+	return this.save();
 };
 
 

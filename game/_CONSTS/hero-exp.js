@@ -29,7 +29,7 @@ const heroStatIncreaseOnLevel = [
 
 // A function that adds the exp to the hero and checks if he gains a new level
 // Returns the updated user (updatedUser) and a bolean (levelUp) if the hero gained a level or not
-const gainHeroExp = async (user, exp) => {
+const gainHeroExp = async (user, exp, message) => {
 	if(typeof exp !== "number") {
 		console.error("Exp needs to be a number");
 		return;
@@ -42,14 +42,37 @@ const gainHeroExp = async (user, exp) => {
 	// Check if level up
 	let levelUp = false;
 	let statGains = false;
-	if(user.hero.currentExp + exp >= user.hero.expToNextRank) {
-		levelUp = heroExpToNextLevel[user.hero.level];
-		statGains = heroStatIncreaseOnLevel[user.hero.level];
+	const { currentExp, expToNextRank, level } = user.hero;
+	if(
+		currentExp + exp >= expToNextRank &&
+        heroExpToNextLevel.length >= level &&
+        heroStatIncreaseOnLevel.length >= level
+	) {
+		console.log("LEVEL UP");
+		levelUp = heroExpToNextLevel[level + 1];
+		statGains = heroStatIncreaseOnLevel[level + 1];
 	}
 
-	const response = await user.gainExp(exp, levelUp, statGains);
+	console.log("ADTER", levelUp, statGains);
+	const updatedUser = await user.gainExp(exp, levelUp, statGains);
 
-	return response;
+	// Send a congrats level up message
+	if(levelUp) {
+		try{
+			let statMessage = "";
+			for(const stat in statGains) {
+				statMessage += `${statGains[stat]} ${stat}, `;
+			}
+			message.channel.send(
+				`<@${message.author.id}>: Congratulations your hero just reached level ${updatedUser.hero.level} and gained ${statMessage}your next level is in ${heroExpToNextLevel[level + 1] - currentExp}`,
+			);
+		}
+		catch{
+			console.error("Was not able to send new hero level message");
+		}
+	}
+
+	return { updatedUser, levelUp: levelUp ? true : false };
 };
 
 
