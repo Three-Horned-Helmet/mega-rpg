@@ -19,4 +19,9 @@ module.exports = {
 	["helmet"]: ":helmet_with_cross:",
 	["chest"]: ":womans_clothes:",
 	["legging"]: ":jeans:",
+
+	// Stats
+	["health"]: ":heart:",
+	["attack"]: ":crossed_swords:",
+	["defense"]: ":shield:",
 };
