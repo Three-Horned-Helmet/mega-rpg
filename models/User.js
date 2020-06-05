@@ -360,5 +360,28 @@ userSchema.methods.equipItem = function(item, currentItem) {
 	return this.save();
 };
 
+// NB: I think I can remove the markModified (or atleast only have it for hero?)
+userSchema.methods.gainExp = async function(exp, newExpToNextLevel, statGains) {
+	this.hero.currentExp += exp;
+	if(newExpToNextLevel) {
+		this.hero.expToNextRank = newExpToNextLevel;
+		this.hero.level += 1;
+
+		// Stat gains for new level
+		for(const stat in statGains) {
+			this.hero[stat] += statGains[stat];
+			this.markModified(`hero.${stat}`);
+		}
+
+		this.markModified("hero.expToNextRank");
+	}
+
+	this.markModified("hero.currentExp");
+
+	const updatedUser = await this.save();
+
+	return { updatedUser, levelUp: newExpToNextLevel ? true : false };
+};
+
 
 module.exports = mongoose.model("User", userSchema);
