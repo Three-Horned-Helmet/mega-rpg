@@ -294,18 +294,19 @@ userSchema.methods.craftItem = function(item, amount) {
 
 userSchema.methods.equipItem = function(item, currentItem) {
 	const itemType = item.typeSequence[item.typeSequence.length - 1];
-	console.log(item, currentItem);
 
-	// Remove the item for the armory. Adds current equipment back to armory
+	// Remove and Add item to hero armor and armory
 	this.army.armory[itemType][item.name] -= 1;
-	this.army.armory[itemType][currentItem.name] += 1;
-
-	// Add item to hero armor
 	this.hero.armor[itemType] = item.name;
 
 	// Remove old stats and add new item stats to hero
-	for(const stat in currentItem.stats) {
-		this.hero[stat] -= currentItem.stats[stat];
+	if(currentItem) {
+		// Add old item to armory
+		this.army.armory[itemType][currentItem.name] += 1;
+
+		for(const stat in currentItem.stats) {
+			this.hero[stat] -= currentItem.stats[stat];
+		}
 	}
 
 	for(const stat in item.stats) {
