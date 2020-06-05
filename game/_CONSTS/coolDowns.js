@@ -1,29 +1,55 @@
 const Discord = require("discord.js");
 
 // in miliseconds
+// alphabetical
 const cooldowns = {
-	explore: (1000 * 30),
+	dailyPrice:(1000 * 60 * 60 * 24),
+	dungeon:(1000 * 60 * 60 * 12),
+	explore: (1000 * 45),
+	fish:(1000 * 30),
+	hunt:(1000 * 60 * 2),
+	miniboss:(1000 * 60 * 60 * 12),
+	raid:(1000 * 60 * 3),
 };
 
-const onCooldown = (actionType, previousTime, user)=>{
-	if (!actionType || !previousTime || !user) {
+
+/*
+// function that could and should be used where ever there is need for cooldown
+// returns a object:
+{
+	response: BOOL,
+	timeLeftInSec, STRING eg "42"
+	timeLeftInMs, STRING eg "42069"
+	timeLeftFormatted, STRING eg "12h 49m 02s"
+	message: STRING eg "hunt is on cooldown! 42 seconds remaining until you can perform hunt",
+	embed: OBJECT Discord formatted response (pretty af)
+}
+*/
+const onCooldown = (actionType, user)=>{
+	if (!actionType || !user) {
 		console.error("Missing arguments ");
-		return;
+		return null;
 	}
 	if (!Object.keys(cooldowns).includes(actionType)) {
 		console.error(`Cooldown for ${actionType} has not been configured`);
-		return;
+		return null;
 	}
+	const previousTime = user.cooldowns[actionType];
 	const now = new Date();
 	const timePassed = Math.abs(previousTime - now);
 
 	if (timePassed < cooldowns[actionType]) {
-		const timeLeft = Math.ceil((cooldowns[actionType] - timePassed) / 1000);
+		const timeLeftInMs = Math.ceil((cooldowns[actionType] - timePassed));
+		const timeLeftInSec = (timeLeftInMs / 1000);
+		const timeLeftFormatted = msToHumanTime(timeLeftInMs);
+
 		return {
 			response:true,
-			timeLeft,
-			message: `${actionType} is on cooldown! ${timeLeft} seconds remaining until you can perform ${actionType}`,
-			embed: generateSingleCdEmbed(timeLeft, user),
+			timeLeftInSec,
+			timeLeftInMs,
+			timeLeftFormatted,
+			message: `${actionType} is on cooldown! ${timeLeftInSec} seconds remaining until you can perform ${actionType}`,
+			embed: generateSingleCdEmbed(timeLeftInMs, user),
 		};
 	}
 	return {
@@ -32,12 +58,14 @@ const onCooldown = (actionType, previousTime, user)=>{
 
 };
 
-const generateSingleCdEmbed = (timeLeft, user) =>{
-	// todo: format time so > 60 seconds turns 1m 00s
-	// todo: maybe add actiontype to embed
+// generates a discord embed for when the user tries to perform an action that is in cooldown
+const generateSingleCdEmbed = (timeLeftInMs, user) =>{
+	const timeLeftSentence = timeLeftInMs > 60000 ?
+		`You can't use this command. Cooldown is ${msToHumanTime(timeLeftInMs)}`
+		: `You can't use this command for ${Math.ceil(timeLeftInMs / 1000)} seconds`;
+
 	const sideColor = "#45b6fe";
 	const cardTitle = "Cooldown";
-	const timeLeftSentence = `You can't use this command for ${timeLeft} seconds`;
 	const patreonInformation = user.account.patreon ?
 		"Your cooldown is lowered due to your Patreon support"
 		: "If you don't want to wait this much, you can help the bot in our [Patreon](https://www.patreon.com), donators get some ingame benefits!";
@@ -54,10 +82,45 @@ const generateSingleCdEmbed = (timeLeft, user) =>{
 	return cooldownEmbed;
 };
 
-// todo, create a cooldown command that returns all active cooldowns
-/* const generateAllCdEmbed = ()=>{
-	return;
-}; */
+// generates a discord embed with all the active cooldowns a user have
+const generateAllCdEmbed = (user)=>{
+	const { username } = user.account;
+	const cooldownNames = Object.keys(cooldowns);
+	const allOnCoolDowns = cooldownNames.map(c=>{
+		const info = onCooldown(c, user);
+		return info.response ? info.timeLeftInMs : false;
+	});
+
+	const status = allOnCoolDowns
+		.map((c, i)=>{
+			const formattedName = `${"`"} ${cooldownNames[i][0].toUpperCase() + cooldownNames[i].slice(1)} ${"`"}`;
+			if (!c) {
+				return `✅ ~-~ ${formattedName}`;
+			}
+			return `🕘 ~-~ ${formattedName} **(${msToHumanTime(c)})**`;
+		});
+
+	const sideColor = "#45b6fe";
+	const allCooldownsEmbed = new Discord.MessageEmbed()
+		.setTitle(`${username}'s cooldowns`)
+		.setColor(sideColor)
+		.addFields(
+			{
+				name: "Current status",
+				value: status,
+				inline: false,
+			},
+		);
+	return allCooldownsEmbed;
+};
+
+const msToHumanTime = (ms)=>{
+	const humanTime = new Date(ms).toISOString().slice(11, 19).split(":");
+	["h ", "m ", "s"].forEach((t, i)=>{
+		humanTime[i] += t;
+	});
+	return humanTime.join("");
+};
 
 
-module.exports = { onCooldown };
+module.exports = { onCooldown, generateSingleCdEmbed, generateAllCdEmbed };

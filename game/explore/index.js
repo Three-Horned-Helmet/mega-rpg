@@ -6,8 +6,7 @@ const { getLocationIcon, getPlaceIcon } = require("../_CONSTS/icons");
 // needed: a battlefunction
 
 const handleExplore = (user) => {
-	const lastUsed = user.cooldowns.explore;
-	const cd = onCooldown("explore", lastUsed, user);
+	const cd = onCooldown("explore", user);
 	if (cd.response) {
 		return cd.embed;
 	}
