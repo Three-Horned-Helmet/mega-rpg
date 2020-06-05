@@ -293,6 +293,8 @@ userSchema.methods.craftItem = function(item, amount) {
 };
 
 userSchema.methods.equipItem = function(item, currentItem) {
+	// Added hero equipment bonus (equipment is better worn by heroes)
+	const heroEquipmentBonus = 2;
 	const itemType = item.typeSequence[item.typeSequence.length - 1];
 
 	// Remove and Add item to hero armor and armory
@@ -305,12 +307,12 @@ userSchema.methods.equipItem = function(item, currentItem) {
 		this.army.armory[itemType][currentItem.name] += 1;
 
 		for(const stat in currentItem.stats) {
-			this.hero[stat] -= currentItem.stats[stat];
+			this.hero[stat] -= currentItem.stats[stat] * heroEquipmentBonus;
 		}
 	}
 
 	for(const stat in item.stats) {
-		this.hero[stat] += item.stats[stat];
+		this.hero[stat] += item.stats[stat] * heroEquipmentBonus;
 	}
 
 	this.markModified(`army.armory.${itemType}.${item.name}`);
