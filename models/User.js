@@ -37,7 +37,7 @@ const userSchema = new Schema({
 			default: 100,
 		},
 
-		 ["oak wood"]: {
+		["oak wood"]: {
 			type: Number,
 			default: 5,
 		},
@@ -288,6 +288,32 @@ userSchema.methods.craftItem = function(item, amount) {
 		itemType[item.name] + amount : amount;
 
 	this.markModified(`${markModifiedString}${item.name}`);
+
+	return this.save();
+};
+
+userSchema.methods.equipItem = function(item, currentItem) {
+	const itemType = item.typeSequence[item.typeSequence.length - 1];
+	console.log(item, currentItem);
+
+	// Remove the item for the armory. Adds current equipment back to armory
+	this.army.armory[itemType][item.name] -= 1;
+	this.army.armory[itemType][currentItem.name] += 1;
+
+	// Add item to hero armor
+	this.hero.armor[itemType] = item.name;
+
+	// Remove old stats and add new item stats to hero
+	for(const stat in currentItem.stats) {
+		this.hero[stat] -= currentItem.stats[stat];
+	}
+
+	for(const stat in item.stats) {
+		this.hero[stat] += item.stats[stat];
+	}
+
+	this.markModified(`army.armory.${itemType}.${item.name}`);
+	this.markModified(`hero.armor.${itemType}`);
 
 	return this.save();
 };

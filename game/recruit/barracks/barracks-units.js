@@ -9,8 +9,8 @@ module.exports = {
 			level: 0,
 		},
 		stats: {
-			hp: 10,
-			at: 3,
+			health: 10,
+			attack: 3,
 		},
 	},
 	militia: {
@@ -24,8 +24,8 @@ module.exports = {
 			level: 1,
 		},
 		stats: {
-			hp: 50,
-			at: 10,
+			health: 50,
+			attack: 10,
 		},
 	},
 	guardsman: {
@@ -39,8 +39,8 @@ module.exports = {
 			level: 2,
 		},
 		stats: {
-			hp: 150,
-			at: 20,
+			health: 150,
+			attack: 20,
 		},
 	},
 };
