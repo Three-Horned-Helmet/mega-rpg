@@ -14,14 +14,18 @@ const cooldowns = {
 
 
 /*
-// function that could and should be used where ever there is need for cooldown
-// returns a object:
+function that could and should be used where ever there is need for cooldown
+see game/explore/index.js for usage
+
+@@@ PARAM : actionType - eg: "explore"
+@@@ PARAM : user - usermodel from mongodb
+returns a object:
 {
 	response: BOOL,
-	timeLeftInSec, STRING eg "42"
-	timeLeftInMs, STRING eg "42069"
-	timeLeftFormatted, STRING eg "12h 49m 02s"
-	message: STRING eg "hunt is on cooldown! 42 seconds remaining until you can perform hunt",
+	timeLeftInSec, STRING eg: "42"
+	timeLeftInMs, STRING eg: "42069"
+	timeLeftFormatted, STRING eg: "12h 49m 02s"
+	message: STRING eg: "hunt is on cooldown! 42 seconds remaining until you can perform hunt",
 	embed: OBJECT Discord formatted response (pretty af)
 }
 */
