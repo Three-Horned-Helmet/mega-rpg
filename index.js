@@ -65,7 +65,7 @@ client.on("message", async (message) => {
 	}
 	catch (err) {
 		console.error("error: ", err);
-		message.reply("Something went wrong creating the user");
+		message.reply("Something went wrong finding the user in the database");
 	}
 
 	if (!userProfile) {
