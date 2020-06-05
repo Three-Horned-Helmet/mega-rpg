@@ -25,10 +25,11 @@ const userSchema = new Schema({
 		type: Number,
 		default: 10,
 	},
-	coolDowns: {
-		hunt: {
-			type: Date,
-			default: 0,
+	cooldowns: {
+		explore: {
+			// this will lead to two hour diff from node and mongo cluster (not wanted behaviour)
+			type:Date,
+			default:new Date(),
 		},
 	},
 	resources: {
@@ -107,6 +108,31 @@ const userSchema = new Schema({
 		},
 	},
 
+	world:{
+		currentLocation: {
+			type: String,
+			default: "Grassy Plains",
+			enum:["Grassy Plains", "Misty Mountains"],
+		},
+
+		locations: {
+			"Grassy Plains": {
+				available: {
+					type: Boolean,
+					default: true,
+				},
+				explored: [String],
+			},
+			/* "Mist Mountains": {
+				available: {
+					type: Boolean,
+					default: false,
+				},
+				explored: [String],
+			}, */
+		},
+	},
+
 	empire: {
 		type: Array,
 		default: [
@@ -178,6 +204,19 @@ userSchema.methods.gainExp = function(n) {
 	if (this.hero.exp >= this.hero.expToNextRank) {
 		this.hero.expToNextRank = getNewExpValue(this.hero);
 		this.hero.rank += 1;
+	}
+	this.save();
+};
+
+userSchema.methods.setNewCooldown = function(type, now) {
+	this.cooldowns[type] = now;
+	this.save();
+};
+
+userSchema.methods.handleExplore = function(now, currentLocation, place) {
+	this.cooldowns.explore = now;
+	if (!this.world.locations[currentLocation].explored.includes(place)) {
+		this.world.locations[currentLocation].explored.push(place);
 	}
 	this.save();
 };
