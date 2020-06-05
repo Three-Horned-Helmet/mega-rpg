@@ -10,35 +10,34 @@ const displayArmy = (user) => {
 	const username = `${user.account.username}'s army`;
 	const sideColor = "#9c2200";
 
-	const army = createMessage(user.army.units);
-	const armory = createMessage(user.army.armory);
+	const { totalStats, unitStats, heroStats } = calculateStats(user);
+
+	const totalStatsField = {
+		name: "Total Stats",
+		value: addObjectToMessage(totalStats),
+		inline: true,
+	};
+
 	const armoryHeader = {
 		name: "Armory",
 		value: "-----------------------------------------------------------------",
 	};
+	const army = createMessage(user.army.units);
+	const armory = createMessage(user.army.armory);
+	const unitStatsField = {
+		name: "Unit Stats",
+		value: addObjectToMessage(unitStats),
+		inline: true,
+	};
 
-	const heroItems = createMessage(user.hero);
 	const heroHeader = {
 		name: "Hero",
 		value: "-----------------------------------------------------------------",
 	};
-
-	const allStats = calculateStats(user);
-	const totalStatsField = {
-		name: "Total Stats",
-		value: addObjectToMessage(allStats.totalStats),
-		inline: true,
-	};
-
+	const heroItems = createMessage(user.hero);
 	const heroStatsField = {
 		name: "Hero Stats",
-		value: addObjectToMessage(allStats.heroStats),
-		inline: true,
-	};
-
-	const unitStatsField = {
-		name: "Unit Stats",
-		value: addObjectToMessage(allStats.unitStats),
+		value: addObjectToMessage(heroStats),
 		inline: true,
 	};
 
@@ -57,21 +56,21 @@ const displayArmy = (user) => {
 	return embedArmy;
 };
 
-const createMessage = (thing) =>{
+const createMessage = (mainCategory) =>{
 	const messageArray = [];
 
-	for(const key in thing) {
+	for(const category in mainCategory) {
 		let message = "";
 
-		Object.keys(thing[key]).forEach(el =>{
-			if(thing[key][el] && !el.startsWith("$")) {
-				message += `${el.capitalize()}: ${thing[key][el]} \n`;
+		Object.keys(mainCategory[category]).forEach(subCategory =>{
+			if(mainCategory[category][subCategory] && !subCategory.startsWith("$")) {
+				message += `${subCategory.capitalize()}: ${mainCategory[category][subCategory]} \n`;
 			}
 		});
 
 		if(message) {
 			messageArray.push({
-				name: `${icons[key]} ${key.capitalize()}`,
+				name: `${icons[category]} ${category.capitalize()}`,
 				value: message,
 				inline: true,
 			});
