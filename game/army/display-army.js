@@ -8,10 +8,20 @@ String.prototype.capitalize = function() {
 
 const displayArmy = (user) => {
 	const username = `${user.account.username}'s army`;
-	const sideColor = "#45b6fe";
+	const sideColor = "#9c2200";
 
 	const army = createMessage(user.army.units);
 	const armory = createMessage(user.army.armory);
+	const armoryHeader = {
+		name: "Armory",
+		value: "-----------------------------------------------------------------",
+	};
+
+	const heroItems = createMessage(user.hero);
+	const heroHeader = {
+		name: "Hero",
+		value: "-----------------------------------------------------------------",
+	};
 
 	const allStats = calculateStats(user);
 	const totalStatsField = {
@@ -38,8 +48,11 @@ const displayArmy = (user) => {
 		.setTitle(username)
 		.setColor(sideColor)
 		.addFields(
-			totalStatsField, heroStatsField, unitStatsField, emptySpace, ...army, ...armory,
+			totalStatsField, heroStatsField, unitStatsField, emptySpace,
+			armoryHeader, ...army, ...armory,
+			emptySpace, heroHeader, ...heroItems,
 		);
+
 
 	return embedArmy;
 };

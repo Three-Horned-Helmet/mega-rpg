@@ -24,4 +24,8 @@ module.exports = {
 	["health"]: ":heart:",
 	["attack"]: ":crossed_swords:",
 	["defense"]: ":shield:",
+
+	// Hero
+	["armor"]: ":martial_arts_uniform:",
+	["inventory"]: ":school_satchel:",
 };
