@@ -1,4 +1,4 @@
-const { generateAllCdEmbed } = require("../game/_CONSTS/coolDowns");
+const { generateAllCdEmbed } = require("../game/_CONSTS/cooldowns");
 
 module.exports = {
 	name: "cooldown",
