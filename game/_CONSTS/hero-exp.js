@@ -48,12 +48,10 @@ const gainHeroExp = async (user, exp, message) => {
         heroExpToNextLevel.length >= level &&
         heroStatIncreaseOnLevel.length >= level
 	) {
-		console.log("LEVEL UP");
 		levelUp = heroExpToNextLevel[level + 1];
 		statGains = heroStatIncreaseOnLevel[level + 1];
 	}
 
-	console.log("ADTER", levelUp, statGains);
 	const updatedUser = await user.gainExp(exp, levelUp, statGains);
 
 	// Send a congrats level up message
