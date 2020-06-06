@@ -1,6 +1,8 @@
+services:
+- mongodb
 language: node_js
 node_js: 
-- lts/*
+- 12/*
 cache: npm
 
 install:
@@ -8,6 +10,3 @@ install:
 
 script:
     - npm test
-
-services:
-- mongodb
