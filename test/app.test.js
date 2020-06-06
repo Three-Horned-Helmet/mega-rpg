@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 require("dotenv").config();
 const mongoose = require("mongoose");
 const User = require("../models/User");
@@ -27,8 +29,9 @@ describe("test suite", () => {
 		await User.deleteMany();
 	});
 	describe("database helper function", ()=>{
+
 		it("Should be able to create a user", async ()=> {
-		 const account = {
+			const account = {
 				username: "Beate Bueskytter",
 				userId: "285744285944333194",
 			};
@@ -38,15 +41,15 @@ describe("test suite", () => {
 			expect(testUser.account.userId).to.equal("285744285944333194");
 		});
 		it("Should be able to create several users and find them in database", async ()=> {
-	   const users = [];
-	   for (let i = 0; i < 5; i++) {
-		   users.push(createTestUser());
-	   }
-	   const allUsers = await Promise.all(users);
-	   const dbResult = await User.find({});
+			const users = [];
+			for (let i = 0; i < 5; i++) {
+				users.push(createTestUser());
+			}
+			const allUsers = await Promise.all(users);
+			const dbResult = await User.find({});
 
-	   expect(allUsers.length).to.equal(5);
-	   expect(dbResult.length).to.equal(5);
+			expect(allUsers.length).to.equal(5);
+			expect(dbResult.length).to.equal(5);
 		});
 		it("Should mock a discord message object", async ()=>{
 			try {

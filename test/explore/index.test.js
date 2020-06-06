@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 const { expect } = require("chai");
 const User = require("../../models/User");
 const exploreCommand = require("../../commands/explore");

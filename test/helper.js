@@ -1,7 +1,7 @@
 const User = require("../models/User");
 
 const rndmId = () => {
-	return Math.floor(Math.random() * 888888888888888888) + 100000000000000000 + "";
+	return Math.floor(Math.random() * 1000000000) + "";
 };
 
 const isRequired = () => { throw new Error("param is required"); };
