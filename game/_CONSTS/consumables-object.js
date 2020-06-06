@@ -14,7 +14,6 @@ const consumablesObject = {
 		name: "Large Heal Potion",
 		healingValue: 300,
 		execute: async (user, item) =>{
-			console.log("HEALING VALUE ", item.healingValue);
 			// Does the user have the item
 			if(!(user.hero.inventory[item.name] > 0)) return `You have no ${item.name} in your inventory`;
 
