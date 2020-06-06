@@ -1,8 +1,8 @@
 # MEGA RPG
 
----
-
 [![Build Status](https://travis-ci.org/Three-Horned-Helmet/mega-rpg.svg?branch=master)](https://travis-ci.org/Three-Horned-Helmet/mega-rpg)
+
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/4d263688effd49c2b04dae98b985e1db)](https://www.codacy.com/gh/Three-Horned-Helmet/mega-rpg?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Three-Horned-Helmet/mega-rpg&amp;utm_campaign=Badge_Grade)
 
 ---
 
