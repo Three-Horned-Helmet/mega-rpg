@@ -1,5 +1,7 @@
+require("dotenv").config();
+
 const mongoose = require("mongoose");
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true });
 
 const { getNewExpValue } = require("./helper");
 
@@ -27,9 +29,8 @@ const userSchema = new Schema({
 	},
 	cooldowns: {
 		explore: {
-			// this will lead to two hour diff from node and mongo cluster (not wanted behaviour)
 			type:Date,
-			default:new Date(),
+			default:0,
 		},
 	},
 	resources: {
@@ -218,7 +219,7 @@ userSchema.methods.handleExplore = function(now, currentLocation, place) {
 	if (!this.world.locations[currentLocation].explored.includes(place)) {
 		this.world.locations[currentLocation].explored.push(place);
 	}
-	this.save();
+	this.update();
 };
 
 userSchema.methods.buyBuilding = function(building, buildingCost) {

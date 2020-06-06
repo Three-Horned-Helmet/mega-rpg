@@ -5,7 +5,7 @@ const Discord = require("discord.js");
 const User = require("./models/User");
 
 const token = process.env.DISCORD_TOKEN;
-const prefix = process.env.PREFIX;
+const prefix = process.env.DISCORD_PREFIX;
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
