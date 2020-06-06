@@ -369,7 +369,6 @@ userSchema.methods.unitLoss = function(lossPercentage) {
 	Object.values(this.army.units).forEach(unitBuilding => {
 		Object.keys(unitBuilding).forEach(unit => {
 			if(typeof unitBuilding[unit] === "number") {
-				console.log(unitBuilding[unit], lossPercentage);
 				unitBuilding[unit] = Math.floor(unitBuilding[unit] * lossPercentage);
 				this.markModified(`army.units.${unitBuilding}.${unit}`);
 			}
@@ -382,5 +381,17 @@ userSchema.methods.unitLoss = function(lossPercentage) {
 	return this.save();
 };
 
+// Takes a number, and heals the hero for that much hp
+userSchema.methods.healHero = function(heal, item) {
+	this.hero.currentHealth += heal;
+	if(this.hero.currentHealth > this.hero.health) this.hero.currentHealth = this.hero.health;
+
+	if(item) {
+		this.hero.inventory[item.name] -= 1;
+		this.markModified(`hero.inventory.${item.name}`);
+	}
+
+	return this.save();
+};
 
 module.exports = mongoose.model("User", userSchema);

@@ -10,8 +10,6 @@ const pvpFullArmy = async (user, opp) => {
 	const { totalStats: oppStats } = calculateStats(opp);
 	const { health: oppHp, attack: oppAt } = oppStats;
 
-	console.log("MARKUS", oppStats, userStats);
-
 	const losses = (userHp + userAt) - (oppHp + oppAt);
 
 	// Determine winner
@@ -20,15 +18,16 @@ const pvpFullArmy = async (user, opp) => {
 
 	// User won
 	if(losses > 0) {
-		const lossPercentage = ((userHp + userAt) - (oppHp + oppAt)) / (userHp + userAt);
-		console.log("LOSS PER", lossPercentage);
+		let lossPercentage = ((userHp + userAt) - (oppHp + oppAt)) / (userHp + userAt);
+		if(!lossPercentage) lossPercentage = 0;
 		winner = await user.unitLoss(lossPercentage);
 		loser = await opp.unitLoss(0);
 
 	}
 	// Opponent won
 	else {
-		const lossPercentage = ((oppHp + oppAt) - (userHp + userAt)) / (oppHp + oppAt);
+		let lossPercentage = ((oppHp + oppAt) - (userHp + userAt)) / (oppHp + oppAt);
+		if(!lossPercentage) lossPercentage = 0;
 		winner = await opp.unitLoss(lossPercentage);
 		loser = await user.unitLoss(0);
 	}
