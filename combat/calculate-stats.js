@@ -16,9 +16,8 @@ const calculateStats = (user) => {
 		Object.keys(unitType).forEach(unit =>{
 			if(!unit.startsWith("$")) {
 				const { stats } = allUnits[unit];
-
 				for(const stat in stats) {
-					unitStats[stat] = unitStats[stat] ? unitStats[stat] + stats[stat] : stats[stat];
+					unitStats[stat] = unitStats[stat] && unitStats[stat] !== 0 ? (unitStats[stat] + stats[stat] * unitType[unit]) : stats[stat] * unitType[unit];
 				}
 
 				totalUnits += unitType[unit];
@@ -39,31 +38,31 @@ const calculateStats = (user) => {
 		allSlotItems.sort((a, b) => sortHelper(b) - sortHelper(a));
 
 		// Add the stats of up to the amount of units that you have (e.g. 60 units can onlyuse 60 helmets)
-		allSlotItems.every((item) => {
+		allSlotItems.forEach((item) => {
+			if(slotsTaken >= totalUnits) return false;
+
 			const iQuantity = armory[slot][item.name];
 			const iToAdd = totalUnits - slotsTaken - iQuantity;
+			const itemAdded = iToAdd < 0 ? totalUnits - slotsTaken : iQuantity;
 
 			for(const stat in item.stats) {
-				unitStats[stat] += item.stats[stat] * (iToAdd < 0 ? totalUnits - slotsTaken : iQuantity);
+				unitStats[stat] += item.stats[stat] * itemAdded;
 			}
 
-			slotsTaken += iToAdd;
-
-			if(slotsTaken >= totalUnits) return false;
-			return true;
+			slotsTaken += itemAdded;
 		});
 	}
 
 	// Add hero
-	const { health, attack } = user.hero;
+	const { currentHealth, health, attack } = user.hero;
 
 	heroStats["health"] = heroStats["health"] ? heroStats["health"] + health : health;
-	heroStats["attack"] = heroStats["attack"] ? heroStats["attack"] + attack : attack;
+	heroStats["currentHealth"] = heroStats["currentHealth"] ? heroStats["currentHealth"] + currentHealth : currentHealth;
+	heroStats["attack"] = Math.floor((heroStats["attack"] ? heroStats["attack"] + attack : attack) * (currentHealth / health));
 
 	// Add Total Stats
-	for(const stat in unitStats) {
-		totalStats[stat] = unitStats[stat] + heroStats[stat];
-	}
+	totalStats["health"] = unitStats["health"] + heroStats["currentHealth"];
+	totalStats["attack"] = unitStats["attack"] + heroStats["attack"];
 
 	return {
 		totalStats,

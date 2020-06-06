@@ -149,6 +149,10 @@ const userSchema = new Schema({
 			type: Number,
 			default: 100,
 		},
+		currentHealth: {
+			type: Number,
+			default: 100,
+		},
 		attack: {
 			type: Number,
 			default: 5,
@@ -361,6 +365,35 @@ userSchema.methods.equipItem = function(item, currentItem) {
 	return this.save();
 };
 
+userSchema.methods.unitLoss = function(lossPercentage) {
+	// Kill off unit depending on the lossPercentage
+	Object.values(this.army.units).forEach(unitBuilding => {
+		Object.keys(unitBuilding).forEach(unit => {
+			if(typeof unitBuilding[unit] === "number") {
+				unitBuilding[unit] = Math.floor(unitBuilding[unit] * lossPercentage);
+				this.markModified(`army.units.${unitBuilding}.${unit}`);
+			}
+		});
+	});
+
+	// Remove hp from your hero depending on the loss percentage
+	this.hero.currentHealth = Math.floor(this.hero.currentHealth * lossPercentage);
+
+	return this.save();
+};
+
+// Takes a number, and heals the hero for that much hp
+userSchema.methods.healHero = function(heal, item) {
+	this.hero.currentHealth += heal;
+	if(this.hero.currentHealth > this.hero.health) this.hero.currentHealth = this.hero.health;
+
+	if(item) {
+		this.hero.inventory[item.name] -= 1;
+		this.markModified(`hero.inventory.${item.name}`);
+	}
+
+	return this.save();
+};
 // NB: I think I can remove the markModified (or atleast only have it for hero?)
 userSchema.methods.gainExp = async function(exp, newExpToNextLevel, statGains) {
 	this.hero.currentExp += exp;
