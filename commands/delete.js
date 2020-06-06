@@ -8,7 +8,7 @@ module.exports = {
 			.then(result => {
 				message.channel.send(`${message.author.username} deleted -- deleteCount: ${result.deletedCount} `);
 			}).catch(e =>{
-				console.log("error: ", e);
+				console.error("error: ", e);
 				message.channel.send("Could not delete");
 			});
 	},

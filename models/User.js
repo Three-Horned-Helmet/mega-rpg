@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGODB_URI);
 
@@ -27,9 +29,8 @@ const userSchema = new Schema({
 	},
 	cooldowns: {
 		explore: {
-			// this will lead to two hour diff from node and mongo cluster (not wanted behaviour)
 			type:Date,
-			default:new Date(),
+			default:0,
 		},
 	},
 	resources: {
