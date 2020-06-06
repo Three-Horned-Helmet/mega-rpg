@@ -7,7 +7,7 @@ const rndmId = () => {
 const isRequired = () => { throw new Error("param is required"); };
 
 // to create a customized testuser:
-// const testUser = await createTestUser({ resource:gold:20000 })
+// const testUser = await createTestUser({ resource:{gold:20000} })
 
 const createTestUser = ({
 	// default values
