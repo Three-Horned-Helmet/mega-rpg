@@ -84,7 +84,14 @@ const addObjectToMessage = (obj) => {
 	let message = "";
 
 	for(const key in obj) {
-		message += `${icons[key]} ${key.capitalize()}: ${obj[key]} \n`;
+		if(key !== "currentHealth") {
+			if(obj.currentHealth && key === "health") {
+				message += `${icons[key]} ${key.capitalize()}: ${obj.currentHealth}/${obj[key]} \n`;
+			}
+			else {
+				message += `${icons[key]} ${key.capitalize()}: ${obj[key]} \n`;
+			}
+		}
 	}
 
 	return message;

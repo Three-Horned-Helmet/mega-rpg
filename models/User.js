@@ -148,6 +148,10 @@ const userSchema = new Schema({
 			type: Number,
 			default: 100,
 		},
+		currentHealth: {
+			type: Number,
+			default: 100,
+		},
 		attack: {
 			type: Number,
 			default: 5,

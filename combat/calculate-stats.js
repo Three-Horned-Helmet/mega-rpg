@@ -55,9 +55,10 @@ const calculateStats = (user) => {
 	}
 
 	// Add hero
-	const { health, attack } = user.hero;
+	const { currentHealth, health, attack } = user.hero;
 
 	heroStats["health"] = heroStats["health"] ? heroStats["health"] + health : health;
+	heroStats["currentHealth"] = heroStats["currentHealth"] ? heroStats["currentHealth"] + currentHealth : currentHealth;
 	heroStats["attack"] = heroStats["attack"] ? heroStats["attack"] + attack : attack;
 
 	// Add Total Stats
