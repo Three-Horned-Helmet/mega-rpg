@@ -10,7 +10,7 @@ const mongodbUri = process.env.TEST_MONGODB_URI;
 
 describe("test suite", () => {
 	before("connect", (done)=> {
-		mongoose.connect(mongodbUri);
+		mongoose.connect(mongodbUri, { useUnifiedTopology: true, useNewUrlParser: true });
 		mongoose.connection
 			.once("open", () => {
 				User.deleteMany().then((result)=>{
