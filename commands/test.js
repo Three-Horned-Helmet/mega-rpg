@@ -1,4 +1,4 @@
-const { pveFullArmy, pvpFullArmy } = require("../combat/combat");
+const { pvpFullArmy } = require("../combat/combat");
 const User = require("../models/User");
 
 module.exports = {
