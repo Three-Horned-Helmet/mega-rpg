@@ -364,5 +364,23 @@ userSchema.methods.equipItem = function(item, currentItem) {
 	return this.save();
 };
 
+userSchema.methods.unitLoss = function(lossPercentage) {
+	// Kill off unit depending on the lossPercentage
+	Object.values(this.army.units).forEach(unitBuilding => {
+		Object.keys(unitBuilding).forEach(unit => {
+			if(typeof unitBuilding[unit] === "number") {
+				console.log(unitBuilding[unit], lossPercentage);
+				unitBuilding[unit] = Math.floor(unitBuilding[unit] * lossPercentage);
+				this.markModified(`army.units.${unitBuilding}.${unit}`);
+			}
+		});
+	});
+
+	// Remove hp from your hero depending on the loss percentage
+	this.hero.currentHealth = Math.floor(this.hero.currentHealth * lossPercentage);
+
+	return this.save();
+};
+
 
 module.exports = mongoose.model("User", userSchema);

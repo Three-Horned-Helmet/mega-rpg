@@ -16,15 +16,16 @@ const calculateStats = (user) => {
 		Object.keys(unitType).forEach(unit =>{
 			if(!unit.startsWith("$")) {
 				const { stats } = allUnits[unit];
-
 				for(const stat in stats) {
-					unitStats[stat] = unitStats[stat] ? unitStats[stat] + stats[stat] : stats[stat];
+					unitStats[stat] = unitStats[stat] && unitStats[stat] !== 0 ? (unitStats[stat] + stats[stat] * unitType[unit]) : stats[stat] * unitType[unit];
 				}
 
 				totalUnits += unitType[unit];
 			}
 		});
 	});
+
+	console.log("STSTATSSST", JSON.parse(JSON.stringify(unitStats)), totalUnits);
 
 	// Add the stats from the items
 	for(const slot in armory.toJSON()) {
@@ -40,6 +41,8 @@ const calculateStats = (user) => {
 
 		// Add the stats of up to the amount of units that you have (e.g. 60 units can onlyuse 60 helmets)
 		allSlotItems.every((item) => {
+			if(slotsTaken >= totalUnits) return false;
+
 			const iQuantity = armory[slot][item.name];
 			const iToAdd = totalUnits - slotsTaken - iQuantity;
 
@@ -49,7 +52,6 @@ const calculateStats = (user) => {
 
 			slotsTaken += iToAdd;
 
-			if(slotsTaken >= totalUnits) return false;
 			return true;
 		});
 	}
@@ -59,13 +61,13 @@ const calculateStats = (user) => {
 
 	heroStats["health"] = heroStats["health"] ? heroStats["health"] + health : health;
 	heroStats["currentHealth"] = heroStats["currentHealth"] ? heroStats["currentHealth"] + currentHealth : currentHealth;
-	heroStats["attack"] = heroStats["attack"] ? heroStats["attack"] + attack : attack;
+	heroStats["attack"] = Math.floor((heroStats["attack"] ? heroStats["attack"] + attack : attack) * (currentHealth / health));
 
 	// Add Total Stats
-	for(const stat in unitStats) {
-		totalStats[stat] = unitStats[stat] + heroStats[stat];
-	}
+	totalStats["health"] = unitStats["health"] + heroStats["currentHealth"];
+	totalStats["attack"] = unitStats["attack"] + heroStats["attack"];
 
+	console.log(totalStats, unitStats, heroStats);
 	return {
 		totalStats,
 		unitStats,
