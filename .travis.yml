@@ -1,6 +1,5 @@
 before_script:
     - sleep 15
-    - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
 services:
     - mongodb
 language: node_js
@@ -9,5 +8,7 @@ node_js:
 cache: npm
 install:
     - npm ci
+    - mongod --dbpath=data/db &
+    - sleep 3
 script:
     - npm test
