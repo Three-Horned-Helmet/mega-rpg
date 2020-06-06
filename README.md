@@ -1,5 +1,7 @@
 # MEGA RPG
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9afe407b74484f6681bf4c1016095ac4)](https://app.codacy.com/gh/Three-Horned-Helmet/mega-rpg?utm_source=github.com&utm_medium=referral&utm_content=Three-Horned-Helmet/mega-rpg&utm_campaign=Badge_Grade_Dashboard)
+
 ---
 
 Obama (2020)
