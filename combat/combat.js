@@ -1,7 +1,7 @@
 const calculateStats = require("./calculate-stats");
 
-const pveFullArmy = (user, npc) => {
-};
+// const pveFullArmy = (user, npc) => {
+// };
 
 // user vs opponent duel with full army (units + hero), returns an object with the winner and loser
 const pvpFullArmy = async (user, opp) => {
