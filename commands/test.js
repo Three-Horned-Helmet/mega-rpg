@@ -1,5 +1,5 @@
-const { pveHero, pveFullArmy, pvpFullArmy } = require("../combat/combat");
-const User = require("../models/User");
+const { pveHero } = require("../combat/combat");
+// const User = require("../models/User");
 
 module.exports = {
 	name: "test",
