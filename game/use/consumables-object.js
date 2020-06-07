@@ -2,13 +2,15 @@ const consumablesObject = {
 	["Small Heal Potion"]: {
 		name: "Small Heal Potion",
 		healingValue: 100,
+		price: 10,
 		execute: async (user, item) =>{
 			return await useHealingPotion(user, item);
 		},
 	},
 	["Large Heal Potion"]: {
 		name: "Large Heal Potion",
-		healingValue: 300,
+		healingValue: 400,
+		price: 37,
 		execute: async (user, item) =>{
 			return await useHealingPotion(user, item);
 		},
@@ -24,4 +26,4 @@ const useHealingPotion = async (user, item) =>{
 	return `You drank a ${item.name} and your hero has ${updatedUser.hero.currentHealth}/${updatedUser.hero.health} hp left`;
 };
 
-module.exports = { consumablesObject };
+module.exports = consumablesObject;

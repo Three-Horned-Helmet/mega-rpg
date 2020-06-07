@@ -30,7 +30,7 @@ const checkIfPossibleToCollect = (user, collect) => {
 	if(!user.empire.find(building => building.name === collect || collect === "all")) {
 		return {
 			response: false,
-			message: `You have no ${collect}s`,
+			message: `You have no ${collect === "alls" ? "production buildings" : collect}s`,
 		};
 	}
 
