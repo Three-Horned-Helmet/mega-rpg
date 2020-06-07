@@ -31,10 +31,6 @@
       "property"
     ],
     "handle-callback-err": "off",
-    "indent": [
-      "error",
-      "tab"
-    ],
     "max-nested-callbacks": [
       "error",
       {
