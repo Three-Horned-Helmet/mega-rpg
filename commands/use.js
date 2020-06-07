@@ -1,4 +1,4 @@
-const { consumablesObject } = require("../game/_CONSTS/consumables-object");
+const { consumablesObject } = require("../game/use/consumables-object");
 
 module.exports = {
 	name: "use",
