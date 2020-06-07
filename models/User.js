@@ -388,8 +388,8 @@ userSchema.methods.healHero = function(heal, item) {
 	if(this.hero.currentHealth > this.hero.health) this.hero.currentHealth = this.hero.health;
 
 	if(item) {
-		this.hero.inventory[item.name] -= 1;
-		this.markModified(`hero.inventory.${item.name}`);
+		this.hero.inventory[item] -= 1;
+		this.markModified("hero.inventory");
 	}
 
 	return this.save();

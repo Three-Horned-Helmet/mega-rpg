@@ -1,7 +1,6 @@
 require("dotenv").config();
 const fs = require("fs");
 const Discord = require("discord.js");
-
 const User = require("./models/User");
 
 const token = process.env.DISCORD_TOKEN;
@@ -28,7 +27,6 @@ client.once("ready", () => {
 client.on("message", async (message) => {
 	// doesn't have correct prefix or is bot
 	if (!message.content.startsWith(prefix) || message.author.bot) return;
-
 	// splits the argument to an array eg '!duel @hawkmaster' => ['!','duel','@hawkmaster']
 	const args = message.content.slice(prefix.length).split(/ +/);
 	// removes prefix and sets to lowercase
