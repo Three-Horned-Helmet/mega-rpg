@@ -39,14 +39,10 @@ const exploreArea = (user, places, currentLocation, now)=>{
 	const placeNames = Object.keys(places);
 	const newlyExploredPlaceName = placeNames[Math.floor(Math.random() * placeNames.length)];
 	const previouslyExploredPlaces = user.world.locations[currentLocation].explored;
-	let msg = "";
+	const msg = previouslyExploredPlaces.includes(newlyExploredPlaceName) ?
+		generateFailExploreMessage(currentLocation)
+		: generateSuccessExploreMessage(currentLocation, newlyExploredPlaceName);
 
-	if (previouslyExploredPlaces.includes(newlyExploredPlaceName)) {
-		msg += generateFailExploreMessage(currentLocation);
-	}
-	else {
-		msg += generateSuccessExploreMessage(currentLocation, newlyExploredPlaceName);
-	}
 
 	user.handleExplore(now, currentLocation, newlyExploredPlaceName);
 	return msg;

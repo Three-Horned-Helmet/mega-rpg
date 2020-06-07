@@ -28,7 +28,7 @@ describe("test suite", () => {
 	beforeEach("beforeEach, cleaning db", async ()=>{
 		await User.deleteMany();
 	});
-	describe("database helper function", ()=>{
+	describe("database helper functions", ()=>{
 
 		it("Should be able to create a user", async ()=> {
 			const account = {
@@ -52,12 +52,7 @@ describe("test suite", () => {
 			expect(dbResult.length).to.equal(5);
 		});
 		it("Should mock a discord message object", async ()=>{
-			try {
-				await generateDiscordMessage();
-			}
-			catch (err) {
-				expect(err.toString()).to.equal("Error: param is required");
-			}
+
 			const account = {
 				username: "Cathrine Capsemaker",
 				userId: Math.floor(Math.random() * 100) + 1 + "",
@@ -68,7 +63,9 @@ describe("test suite", () => {
 			expect(successMessage.author.userId).to.equal(account.userId);
 			expect(successMessage.reply("Hey!")).to.equal("Hey!");
 			expect(successMessage.channel.send("Bye!")).to.equal("Bye!");
-
+		});
+		it("Should throw when mocking a discord message without params", ()=>{
+			expect(()=>generateDiscordMessage()).to.throw();
 		});
 	});
 });
