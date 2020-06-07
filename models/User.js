@@ -223,7 +223,7 @@ userSchema.methods.handleExplore = function(now, currentLocation, place) {
 	if (!this.world.locations[currentLocation].explored.includes(place)) {
 		this.world.locations[currentLocation].explored.push(place);
 	}
-	this.update();
+	this.save();
 };
 
 userSchema.methods.buyBuilding = function(building, buildingCost) {
