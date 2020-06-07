@@ -420,5 +420,14 @@ userSchema.methods.gainExp = async function(exp, newExpToNextLevel, statGains) {
 	return this.save();
 };
 
+userSchema.methods.buyItem = async function(item) {
+	this.resources.gold -= item.price;
+
+	this.hero.inventory[item.name] += 1;
+
+	this.markModified("hero.inventory");
+
+	return this.save();
+};
 
 module.exports = mongoose.model("User", userSchema);

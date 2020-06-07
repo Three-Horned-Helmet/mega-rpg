@@ -39,7 +39,7 @@ const checkIfPossibleToRecruit = (user, unit, amount) =>{
 		}
 	}
 
-	return { response: true, message: "success" };
+	return { response: true, message: `You successfully recruited ${amount} ${unit}` };
 };
 
 module.exports = recruitUnits;
