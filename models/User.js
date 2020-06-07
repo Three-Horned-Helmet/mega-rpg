@@ -394,6 +394,11 @@ userSchema.methods.unitLoss = function(lossPercentage) {
 	return this.save();
 };
 
+userSchema.methods.heroHpLoss = function(lossPercentage) {
+	this.hero.currentHealth = Math.floor(this.hero.currentHealth * lossPercentage);
+	return this.save();
+};
+
 // Takes a number, and heals the hero for that much hp
 userSchema.methods.healHero = function(heal, item) {
 	this.hero.currentHealth += heal;
