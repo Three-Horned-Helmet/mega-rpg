@@ -1,7 +1,6 @@
 const { onCooldown } = require("../_CONSTS/cooldowns");
 
 const handleFish = async (user) => {
-    console.log("handlefish function!");
     const { explored } = user.world.locations["Grassy Plains"];
     const { currentLocation } = user.world;
     const onCooldownInfo = onCooldown("fish", user);
