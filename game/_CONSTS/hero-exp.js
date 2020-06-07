@@ -30,7 +30,7 @@ const heroStatIncreaseOnLevel = [
 // A function that adds the exp to the hero and checks if he gains a new level
 // Returns the updated user (updatedUser) and a bolean (levelUp) if the hero gained a level or not
 const gainHeroExp = async (user, exp, message) => {
-	if(typeof exp !== "number") {
+	if(typeof exp !== "number" || isNaN(exp)) {
 		console.error("Exp needs to be a number");
 		return;
 	}

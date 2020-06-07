@@ -36,6 +36,10 @@ const userSchema = new Schema({
 			type:Date,
 			default:0,
 		},
+		duel:{
+			type: Date,
+			default: 0,
+		},
 	},
 	resources: {
 		gold: {
@@ -208,13 +212,18 @@ const userSchema = new Schema({
 	},
 });
 
-userSchema.methods.gainExp = function(n) {
-	this.hero.exp += n;
-	if (this.hero.exp >= this.hero.expToNextRank) {
-		this.hero.expToNextRank = getNewExpValue(this.hero);
-		this.hero.rank += 1;
-	}
-	this.save();
+// userSchema.methods.gainExp = function(n) {
+// 	this.hero.exp += n;
+// 	if (this.hero.exp >= this.hero.expToNextRank) {
+// 		this.hero.expToNextRank = getNewExpValue(this.hero);
+// 		this.hero.rank += 1;
+// 	}
+// 	this.save();
+// };
+
+userSchema.methods.gainResource = function(resource, quantity) {
+	this.resources[resource] += quantity;
+	return this.save();
 };
 
 userSchema.methods.setNewCooldown = function(type, now) {
@@ -340,13 +349,13 @@ userSchema.methods.craftItem = function(item, amount) {
 	return this.save();
 };
 
-userSchema.methods.handleFishResult = function(goldresult,now){
+userSchema.methods.handleFishResult = function(goldresult, now) {
 	this.cooldowns.fish = now;
-	if(goldresult > 0){
+	if(goldresult > 0) {
 		this.resources.gold += goldresult;
 	}
 	return this.save();
-}
+};
 
 userSchema.methods.equipItem = function(item, currentItem) {
 	// Added hero equipment bonus (equipment is better worn by heroes)
@@ -411,6 +420,7 @@ userSchema.methods.healHero = function(heal, item) {
 
 	return this.save();
 };
+
 // NB: I think I can remove the markModified (or atleast only have it for hero?)
 userSchema.methods.gainExp = async function(exp, newExpToNextLevel, statGains) {
 	this.hero.currentExp += exp;

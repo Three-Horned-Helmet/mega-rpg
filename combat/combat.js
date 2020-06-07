@@ -70,5 +70,26 @@ const pvpFullArmy = async (user, opp) => {
 	return { winner, loser };
 };
 
+// user vs opponent duel with full army (units + hero), returns an object with the winner and loser
+const duelFullArmy = (user, opp) => {
+	// Get player stats and add modifier
+	const { totalStats:userStats } = calculateStats(user);
+	const uModifier = (1 - Math.random() / 2); // Combat modifier
+	const userHp = userStats.health * uModifier;
+	const userAt = userStats.attack * uModifier;
 
-module.exports = { pveFullArmy, pveHero, pvpFullArmy };
+	const { totalStats: oppStats } = calculateStats(opp);
+	const oModifier = (1 - Math.random() / 2);
+	const oppHp = oppStats.health * oModifier;
+	const oppAt = oppStats.attack * oModifier;
+
+	const losses = Math.floor((userHp + userAt) - (oppHp + oppAt));
+
+	// Determine winner
+	const win = losses > 0 ? true : false;
+
+	return { win, losses: Math.abs(losses), uModifier, oModifier };
+};
+
+
+module.exports = { pveFullArmy, pveHero, pvpFullArmy, duelFullArmy };
