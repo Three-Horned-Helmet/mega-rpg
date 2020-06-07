@@ -3,13 +3,16 @@ const consumeObj = require("../use/consumables-object");
 // Runs functions depending on the given args
 const handleBuyCommand = async (args, user) =>{
 	if(args.length === 0) {
-		return displayShop(user);
+		const message = displayShop(user);
+		return message;
 	}
 
 	const joinedArg = args.map(a => a.charAt(0).toUpperCase() + a.slice(1).toLowerCase()).join(" ");
 	const item = consumeObj[joinedArg];
 
-	return await buyItem(user, item);
+	const message = await buyItem(user, item);
+
+	return message;
 };
 
 // Show all items in the shop and their price

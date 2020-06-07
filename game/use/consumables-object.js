@@ -3,6 +3,10 @@ const consumablesObject = {
 		name: "Small Heal Potion",
 		healingValue: 100,
 		price: 10,
+		requirement: {
+			building: "shop",
+			level: 0,
+		},
 		execute: async (user, item) =>{
 			return await useHealingPotion(user, item);
 		},
@@ -11,6 +15,10 @@ const consumablesObject = {
 		name: "Large Heal Potion",
 		healingValue: 400,
 		price: 37,
+		requirement: {
+			building: "shop",
+			level: 1,
+		},
 		execute: async (user, item) =>{
 			return await useHealingPotion(user, item);
 		},

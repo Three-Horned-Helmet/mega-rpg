@@ -249,4 +249,24 @@ module.exports = {
 			},
 		],
 	},
+	shop: {
+		name: "shop",
+		levels: [
+			{
+				cost: {
+					gold: 30,
+					["copper ore"]: 3,
+				},
+				level: 0,
+			},
+			{
+				cost: {
+					gold: 200,
+					["yew wood"]: 20,
+					["iron bar"]: 20,
+				},
+				level: 1,
+			},
+		],
+	},
 };
