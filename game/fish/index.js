@@ -21,6 +21,8 @@ const handleFish = async (user) => {
     let goldResult = 0;
     const fish = ["Cod", "Trout", "Swordfish"];
     let fishResult = "";
+    
+    let result = ""
 
     if (randomNumber > chance) {
         // 'Swordfish'
@@ -30,11 +32,13 @@ const handleFish = async (user) => {
         // 0-50
         goldResult = Math.floor(multiplier * 20 + (Math.random() * 10));
 
-        return `you caught a ${fishResult} and sold it for ${goldResult} gold`;
+        result = `you caught a ${fishResult} and sold it for ${goldResult} gold`;
+    } else {
+    result = generateFailFishSentence()
     }
     user.handleFishResult(goldResult, now);
 
-    return generateFailFishSentence();
+    return result
 };
 
 const generateFailFishSentence = () => {
