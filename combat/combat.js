@@ -36,4 +36,4 @@ const pvpFullArmy = async (user, opp) => {
 };
 
 
-module.exports = { pveFullArmy, pvpFullArmy };
+module.exports = { pvpFullArmy };
