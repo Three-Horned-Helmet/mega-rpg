@@ -1,10 +1,31 @@
 const calculateStats = require("./calculate-stats");
 
-const pveFullArmy = async (user, npc) => {
-	const { totalStats: userStats } = calculateStats(user);
+// Takes the user and the npc and battles the npc with only the hero at a 50-100% modifier
+// Returns win (bolean), lossPercentage (1 = 100% loss of hero hp), and the combat modifier
+const pveHero = async (user, npc) => {
+	const { heroStats } = calculateStats(user);
 	const combatModifier = (1 - Math.random() / 2);
-	const userHp = userStats.health * combatModifier;
-	const userAt = userStats.attack * combatModifier;
+	const userHp = heroStats.currentHealth * combatModifier;
+	const userAt = heroStats.attack * combatModifier;
+	const { health: oppHp, attack: oppAt } = npc.stats;
+
+	const losses = (userHp + userAt) - (oppHp + oppAt);
+	const win = losses > 0 ? true : false;
+	let lossPercentage = ((userHp + userAt) - (oppHp + oppAt)) / (userHp + userAt);
+	lossPercentage = lossPercentage < 0 ? 0 : lossPercentage;
+
+	await user.heroHpLoss(lossPercentage);
+
+	return { win, lossPercentage: 1 - lossPercentage, combatModifier };
+};
+
+// Takes the user and the npc and battles the npc with the full army at a 50-100% modifier
+// Returns win (bolean), lossPercentage (1 = 100% loss of units), and the combat modifier
+const pveFullArmy = async (user, npc) => {
+	const { totalStats } = calculateStats(user);
+	const combatModifier = (1 - Math.random() / 2);
+	const userHp = totalStats.health * combatModifier;
+	const userAt = totalStats.attack * combatModifier;
 	const { health: oppHp, attack: oppAt } = npc.stats;
 
 	const losses = (userHp + userAt) - (oppHp + oppAt);
@@ -14,7 +35,7 @@ const pveFullArmy = async (user, npc) => {
 
 	await user.unitLoss(lossPercentage);
 
-	return { win, lossPercentage, combatModifier };
+	return { win, lossPercentage: 1 - lossPercentage, combatModifier };
 };
 
 // user vs opponent duel with full army (units + hero), returns an object with the winner and loser
@@ -50,4 +71,4 @@ const pvpFullArmy = async (user, opp) => {
 };
 
 
-module.exports = { pveFullArmy, pvpFullArmy };
+module.exports = { pveFullArmy, pveHero, pvpFullArmy };
