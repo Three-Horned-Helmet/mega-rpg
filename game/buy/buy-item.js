@@ -20,8 +20,10 @@ const displayShop = (user) =>{
 	let message = "";
 
 	Object.values(consumeObj).forEach(item =>{
-		console.log(item);
-		message += `${item.name}: ${item.price}g\n`;
+		const { building, level } = item.requirement;
+		if(user.empire.find(b => b.name === building && b.level >= level)) {
+			message += `${item.name}: ${item.price}g\n`;
+		}
 	});
 
 	return message;
@@ -29,17 +31,35 @@ const displayShop = (user) =>{
 
 // Checks if the user can afford the item and then proceeds to buy it
 const buyItem = async (user, item) =>{
-	if(!item) return "The consumable does not exists";
 
-	// User has sufficient gold?
-	if(user.resources.gold < item.cost) {
-		return `Can not afford: ${item.name} costs ${item.price} gold and you only have ${user.resources.gold} gold`;
-	}
+	const canBeBought = checkIfPossibleToBuy(user, item);
+	if(!canBeBought.response) return canBeBought.message;
 
 	await user.buyItem(item);
 
 	return `You bought a ${item.name}`;
 };
 
+const checkIfPossibleToBuy = (user, item) => {
+	if(!item) return { response: false, message: "The consumable does not exists" };
+	const { requirement, name, price } = item;
+	const { building, level } = requirement;
+	const { resources, empire } = user;
+
+	// User has sufficient gold?
+	if(resources.gold < price) {
+		return {
+			response: false,
+			message: `Can not afford: ${name} costs ${price} gold and you only have ${resources.gold} gold`,
+		};
+	}
+
+	// User has high enough shop level?
+	if(!empire.find(b => b.name === building && b.level >= level)) {
+		return { response: false, message: `You need shop level ${level} to buy ${name}` };
+	}
+
+	return { response: true };
+};
 
 module.exports = { displayShop, handleBuyCommand };
