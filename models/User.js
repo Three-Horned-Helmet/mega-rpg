@@ -32,6 +32,10 @@ const userSchema = new Schema({
 			type:Date,
 			default:0,
 		},
+		fish:{
+			type:Date,
+			default:0,
+		},
 	},
 	resources: {
 		gold: {
@@ -335,6 +339,14 @@ userSchema.methods.craftItem = function(item, amount) {
 
 	return this.save();
 };
+
+userSchema.methods.handleFishResult = function(goldresult,now){
+	this.cooldowns.fish = now;
+	if(goldresult > 0){
+		this.resources.gold += goldresult;
+	}
+	return this.save();
+}
 
 userSchema.methods.equipItem = function(item, currentItem) {
 	// Added hero equipment bonus (equipment is better worn by heroes)
