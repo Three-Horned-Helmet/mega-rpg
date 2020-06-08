@@ -12,13 +12,11 @@ const handleDaily = async (user) => {
     const lastClaimLessThanTwoDays = user.cooldowns.dailyPrice + 1000 * 60 * 60 * 48 >= now;
 
     let consecutiveDay = user.consecutivePrices.dailyPrice;
-    console.log(consecutiveDay, "consecutiveDay");
 
     if (lastClaimLessThanTwoDays) {
         consecutiveDay = 0;
     }
     if (consecutiveDay >= 4) {
-        console.log("more than 4");
         consecutiveDay = 4;
     }
 
