@@ -9,9 +9,9 @@ const duelPlayer = async (user, opponent, msg) =>{
 
    await user.setNewCooldown("duel", new Date());
 
-   const battleResult = duelFullArmy(user, opponent);
+   const { win, losses, uModifier, oModifier } = duelFullArmy(user, opponent);
 
-   if(battleResult.win) {
+   if(win) {
         const { totalStats:oppStats } = calculateStats(opponent);
         const { totalStats: userStats } = calculateStats(user);
         const gainsModifier = (oppStats.health + oppStats.attack) / (userStats.health + userStats.attack);
@@ -23,7 +23,7 @@ const duelPlayer = async (user, opponent, msg) =>{
             await user.gainResource("gold", goldGain);
         }
 
-        return `You won the duel against ${opponent.account.username} and gained ${expGain} exp and ${goldGain} gold!`;
+        return `You battled with your modifier of ${Math.abs(uModifier)} vs ${opponent.account.username}'s modifier of ${Math.abs(oModifier)} and won with a difference of ${losses} units. You won the duel against ${opponent.account.username} and gained ${expGain} exp and ${goldGain} gold!`;
    }
    return `You lost the duel against ${opponent.account.username}`;
 };

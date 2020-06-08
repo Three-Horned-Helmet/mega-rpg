@@ -1,6 +1,4 @@
-const { onCooldown } = require("../_CONSTS/cooldowns");
 const { duelFullArmy } = require("../../combat/combat");
-const calculateStats = require("../../combat/calculate-stats");
 const { gainHeroExp } = require("../_CONSTS/hero-exp");
 const artifactItems = require("../items/artifact-blacksmith/artifact-blacksmith");
 
