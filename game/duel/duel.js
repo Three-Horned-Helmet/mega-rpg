@@ -7,11 +7,13 @@ const duelPlayer = async (user, opponent, msg) =>{
    const { response, message } = checkIfDuelIsPossible(user, opponent);
    if(!response) return message;
 
+   await user.setNewCooldown("duel", new Date());
+
    const battleResult = duelFullArmy(user, opponent);
 
    if(battleResult.win) {
         const { totalStats:oppStats } = calculateStats(opponent);
-        const{ totalStats: userStats } = calculateStats(user);
+        const { totalStats: userStats } = calculateStats(user);
         const gainsModifier = (oppStats.health + oppStats.attack) / (userStats.health + userStats.attack);
         const expGain = Math.floor(Math.random() * 20 * gainsModifier);
         const goldGain = Math.floor(Math.random() * 10 * gainsModifier);
@@ -36,7 +38,7 @@ const checkIfDuelIsPossible = (user, opponent) =>{
 
     const cd = onCooldown("duel", user);
 	if (cd.response) {
-		return { response: false, message: cd.embed };
+		return { response: false, message: cd };
     }
 
     return { response: true };

@@ -228,7 +228,7 @@ userSchema.methods.gainResource = function(resource, quantity) {
 
 userSchema.methods.setNewCooldown = function(type, now) {
 	this.cooldowns[type] = now;
-	this.save();
+	return this.save();
 };
 
 userSchema.methods.handleExplore = function(now, currentLocation, place) {
@@ -448,6 +448,28 @@ userSchema.methods.buyItem = async function(item) {
 	this.hero.inventory[item.name] += 1;
 
 	this.markModified("hero.inventory");
+
+	return this.save();
+};
+
+// csType: String, now: new Date,
+// Loot: Array of objects with a key sequence to what it being gained and the amount
+userSchema.methods.pvpHandler = async function(cdType, now, loot) {
+	this.cooldowns[cdType] = now;
+
+	loot.forEach(l => {
+		let lootType;
+		let markModifiedString = "";
+		l.keySequence.forEach((key, i) => {
+			if(i >= l.length - 1) {
+				return lootType += l.quantity;
+			}
+			lootType = lootType ? lootType[key] : this[key];
+			markModifiedString += key + ".";
+		});
+
+		this.markModified(`${markModifiedString}`);
+	});
 
 	return this.save();
 };

@@ -11,6 +11,6 @@ module.exports = {
 
         const response = await duelPlayer(user, opponent, message);
 
-		message.channel.send(`<@${message.author.id}>: ${response}`);
+		response.embed ? message.channel.send(response.embed) : message.channel.send(`<@${message.author.id}>: ${response}`);
 	},
 };
