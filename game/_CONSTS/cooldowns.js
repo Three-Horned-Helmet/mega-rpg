@@ -11,7 +11,7 @@ const cooldowns = {
 	hunt:(1000 * 60 * 2),
 	miniboss:(1000 * 60 * 60 * 12),
 	raid:(1000 * 60 * 3),
-	weeklyPrice:(1000 * 60 * 60 * 24 * 14),
+	weeklyPrice:(1000 * 60 * 60 * 24 * 7),
 };
 
 
