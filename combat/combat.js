@@ -74,7 +74,8 @@ const pvpFullArmy = async (user, opp) => {
 const duelFullArmy = (user, opp) => {
 	// Get player stats and add modifier
 	const { totalStats:userStats } = calculateStats(user);
-	const uModifier = (1 - Math.random() / 2); // Combat modifier
+	// Combat modifier
+	const uModifier = (1 - Math.random() / 2); 
 	const userHp = userStats.health * uModifier;
 	const userAt = userStats.attack * uModifier;
 
