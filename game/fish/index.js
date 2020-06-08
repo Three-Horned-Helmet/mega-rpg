@@ -5,14 +5,13 @@ const handleFish = async (user) => {
     const { currentLocation } = user.world;
     const onCooldownInfo = onCooldown("fish", user);
 
-    const now = new Date();
     if (onCooldownInfo.response) {
         return onCooldownInfo.embed;
     }
     if (!explored.includes("River")) {
         return `You have not explored any rivers yet in ${currentLocation}`;
     }
-
+    const now = new Date();
 
     const randomNumber = Math.random();
     const chance = 0.5;
@@ -20,8 +19,8 @@ const handleFish = async (user) => {
     let goldResult = 0;
     const fish = ["Cod", "Trout", "Swordfish"];
     let fishResult = "";
-    
-    let result = ""
+
+    let result = "";
 
     if (randomNumber > chance) {
         // 'Swordfish'
@@ -32,12 +31,13 @@ const handleFish = async (user) => {
         goldResult = Math.floor(multiplier * 20 + (Math.random() * 10));
 
         result = `you caught a ${fishResult} and sold it for ${goldResult} gold`;
-    } else {
-    result = generateFailFishSentence()
+    }
+ else {
+    result = generateFailFishSentence();
     }
     user.handleFishResult(goldResult, now);
 
-    return result
+    return result;
 };
 
 const generateFailFishSentence = () => {
