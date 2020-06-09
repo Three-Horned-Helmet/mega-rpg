@@ -5,7 +5,6 @@ const artifactItems = require("../items/artifact-blacksmith/artifact-blacksmith"
 const stakePlayer = async (user, opponent, msg) =>{
    const { response, message } = checkIfStakeIsPossible(user, opponent);
    if(!response) return message;
-
    return `You lost the duel against ${opponent.account.username}`;
 };
 

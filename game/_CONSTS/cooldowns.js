@@ -4,7 +4,7 @@ const Discord = require("discord.js");
 // alphabetical
 const cooldowns = {
 	dailyPrice:(1000 * 60 * 60 * 24),
-	duel: (1000 * 60 * 2),
+	duel: (1000),
 	dungeon:(1000 * 60 * 60 * 12),
 	explore: (1000 * 45),
 	fish:(1000 * 30),

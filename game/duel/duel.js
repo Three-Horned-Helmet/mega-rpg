@@ -2,6 +2,7 @@ const { onCooldown } = require("../_CONSTS/cooldowns");
 const { duelFullArmy } = require("../../combat/combat");
 const calculateStats = require("../../combat/calculate-stats");
 const { gainHeroExp } = require("../_CONSTS/hero-exp");
+const duelEmbed = require("./duel-embed");
 
 const duelPlayer = async (user, opponent, msg) =>{
    const { response, message } = checkIfDuelIsPossible(user, opponent);
@@ -9,23 +10,23 @@ const duelPlayer = async (user, opponent, msg) =>{
 
    await user.setNewCooldown("duel", new Date());
 
-   const { win, losses, uModifier, oModifier } = duelFullArmy(user, opponent);
+   const battleStats = duelFullArmy(user, opponent);
 
-   if(win) {
-        const { totalStats:oppStats } = calculateStats(opponent);
-        const { totalStats: userStats } = calculateStats(user);
-        const gainsModifier = (oppStats.health + oppStats.attack) / (userStats.health + userStats.attack);
-        const expGain = Math.floor(Math.random() * 20 * gainsModifier);
-        const goldGain = Math.floor(Math.random() * 10 * gainsModifier);
+   const { totalStats:oppStats } = calculateStats(opponent);
+   const { totalStats: userStats } = calculateStats(user);
+   battleStats.oppStats = oppStats;
+   battleStats.userStats = userStats;
 
-        if(gainsModifier) {
-            await gainHeroExp(user, expGain, msg);
-            await user.gainResource("gold", goldGain);
-        }
+   const gainsModifier = (oppStats.health + oppStats.attack) / (userStats.health + userStats.attack);
+   const expGain = Math.floor(Math.random() * 20 * gainsModifier);
+   const goldGain = Math.floor(Math.random() * 10 * gainsModifier);
 
-        return `You battled with your modifier of ${Math.abs(uModifier)} vs ${opponent.account.username}'s modifier of ${Math.abs(oModifier)} and won with a difference of ${losses} units. You won the duel against ${opponent.account.username} and gained ${expGain} exp and ${goldGain} gold!`;
+   if(gainsModifier) {
+       await gainHeroExp(battleStats.win ? user : opponent, expGain, msg);
+       battleStats.win ? await user.gainResource("gold", goldGain) : await opponent.gainResource("gold", goldGain);
    }
-   return `You lost the duel against ${opponent.account.username}`;
+
+   return { embed: duelEmbed(user, opponent, battleStats, goldGain, expGain) };
 };
 
 const checkIfDuelIsPossible = (user, opponent) =>{
