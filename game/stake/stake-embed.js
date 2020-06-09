@@ -1,21 +1,24 @@
 const Discord = require("discord.js");
 const icons = require("../../icons/icons");
+const allItems = require("../items/all-items");
 
 const stakeEmbed = (winner, loser, battleStats, exp, item) => {
 	const { username } = winner.account;
-	const { username: oppUsername } = loser.account;
-	const title = `${username} battled against ${oppUsername} and won **${item.split(" ").map(i => i.capitalize()).join(" ")}**!`;
+    const { username: oppUsername } = loser.account;
+    const itemName = item.split(" ").map(i => i.capitalize()).join(" ");
+
+	const title = `${username} battled against ${oppUsername} and won **${itemName}**!`;
     const sideColor = "#9c2200";
     const { win, winMargin, uModifier, oModifier, winnerStats, loserStats } = battleStats;
 
 	const fields = [
 		{
 			name: `**${win ? username : oppUsername}** won the duel with a margin of ${Math.abs(winMargin)} units`,
-			value: `And won ${item.split(" ").map(i => i.capitalize()).join(" ")} and the hero earned ${exp} exp`,
+			value: `And won ${itemName} and the hero earned ${exp} exp`,
 		},
 		{
-			name: "\u200B",
-			value: "\u200B",
+			name: itemName + ":",
+			value: statsMessage(allItems[item].stats),
         },
         {
 			name: "\u200B",
@@ -64,7 +67,7 @@ const stakeEmbed = (winner, loser, battleStats, exp, item) => {
         },
 	];
 
-	const embedDuel = new Discord.MessageEmbed()
+	const embedStake = new Discord.MessageEmbed()
 		.setTitle(title)
 		.setColor(sideColor)
 		.addFields(
@@ -72,7 +75,7 @@ const stakeEmbed = (winner, loser, battleStats, exp, item) => {
 		);
 
 	// .setFooter(`PVP: #${pvpRank} ~~~ Total: #${totalRank}`);
-	return embedDuel;
+	return embedStake;
 };
 
 const statsMessage = (stats) => {
