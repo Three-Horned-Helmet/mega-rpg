@@ -2,18 +2,24 @@ const { duelFullArmy } = require("../../combat/combat");
 const { gainHeroExp, removeHeroExp } = require("../_CONSTS/hero-exp");
 const artifactItems = require("../items/artifact-blacksmith/artifact-blacksmith");
 const calculateStats = require("../../combat/calculate-stats");
+const stakeEmbed = require("./stake-embed");
 
 const stakePlayer = async (user, opponent, stakedItems, msg) =>{
    const { response, message } = checkIfStakeIsPossible(user, opponent, stakedItems);
    if(!response) return message;
 
-    const { win, winMargin, uModifier, oModifier } = duelFullArmy(user, opponent);
+    const battleStats = duelFullArmy(user, opponent);
+    const { win, winMargin } = battleStats;
 
     // Set the winner and loser and remove the unit lost
     const winner = win ? user : opponent;
     const loser = win ? opponent : user;
 
     const { totalStats } = calculateStats(winner);
+    const { totalStats: loserStats } = calculateStats(loser);
+    battleStats.winnerStats = totalStats;
+    battleStats.loserStats = loserStats;
+
     const totalValue = Object.values(totalStats).reduce((acc, cur) => acc + cur);
     const winnerUnitLoss = 1 - ((totalValue - winMargin) / totalValue) * 0.2;
 
@@ -36,8 +42,8 @@ const stakePlayer = async (user, opponent, stakedItems, msg) =>{
     await gainHeroExp(winner, expWon, msg);
     await removeHeroExp(loser, expWon, msg);
 
-
-   return `${winner.account.username} won the battle with modifiers of ${uModifier} and ${oModifier}. The item won is ${capitalize(wonItem)} and exp won is ${expWon}`;
+    return stakeEmbed(winner, loser, battleStats, expWon, wonItem);
+  // return `${winner.account.username} won the battle with modifiers of ${uModifier} and ${oModifier}. The item won is ${capitalize(wonItem)} and exp won is ${expWon}`;
 };
 
 const checkIfStakeIsPossible = (user, opponent, stakedItems) =>{
