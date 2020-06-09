@@ -3,7 +3,7 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true });
 
-const { getNewExpValue } = require("./helper");
+// const { getNewExpValue } = require("./helper");
 
 const { Schema } = mongoose;
 
@@ -28,6 +28,14 @@ const userSchema = new Schema({
 		default: 10,
 	},
 	cooldowns: {
+		duel:{
+			type: Date,
+			default: 0,
+		},
+		dailyPrice:{
+			type:Date,
+			default:0,
+		},
 		explore: {
 			type:Date,
 			default:0,
@@ -36,9 +44,9 @@ const userSchema = new Schema({
 			type:Date,
 			default:0,
 		},
-		duel:{
-			type: Date,
-			default: 0,
+		weeklyPrice:{
+			type:Date,
+			default:0,
 		},
 	},
 	resources: {
@@ -208,6 +216,16 @@ const userSchema = new Schema({
 				type: String,
 				default: "[NONE]",
 			},
+		},
+	},
+	consecutivePrices:{
+		dailyPrice: {
+			type: Number,
+			default: 0,
+		},
+		weeklyPrice:{
+			type: Number,
+			default: 0,
 		},
 	},
 });
@@ -476,6 +494,18 @@ userSchema.methods.buyItem = async function(item) {
 
 	return this.save();
 };
+
+userSchema.methods.handleConsecutive = function(resources, consecutive, now, cyclus) {
+
+	this.cooldowns[cyclus] = now;
+	this.consecutivePrices[cyclus] = consecutive;
+
+	Object.keys(resources).forEach(r=>{
+		this.resources[r] += resources[r];
+	});
+	return this.save();
+};
+
 
 // csType: String, now: new Date,
 // Loot: Array of objects with a key sequence to what it being gained and the amount
