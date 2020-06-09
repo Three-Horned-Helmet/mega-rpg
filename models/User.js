@@ -380,7 +380,7 @@ userSchema.methods.equipItem = function(item, currentItem) {
 		this.hero[stat] += item.stats[stat] * heroEquipmentBonus;
 	}
 
-	this.markModified(`army.armory.${itemType}.${item.name}`);
+	this.markModified(`army.armory.${itemType}`);
 	this.markModified(`hero.armor.${itemType}`);
 
 	return this.save();

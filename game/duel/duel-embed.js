@@ -2,14 +2,15 @@ const Discord = require("discord.js");
 const icons = require("../../icons/icons");
 
 const duelEmbed = (user, opponent, battleStats, exp, gold) => {
-	const username = `${user.account.username} dueled ${opponent.account.username}`;
+	const { username } = user.account;
+	const { username: oppUsername } = opponent.account;
+	const title = `${username} dueled ${oppUsername}`;
     const sideColor = "#45b6fe";
     const { win, losses, uModifier, oModifier, userStats, oppStats } = battleStats;
 
 	const fields = [
 		{
-			name: `**${win ? user.account.username :
-				opponent.account.username}** won the duel with a margin of ${Math.abs(losses)} units`,
+			name: `**${win ? username : oppUsername}** won the duel with a margin of ${Math.abs(losses)} units`,
 			value: `And won ${gold} gold and the hero earned ${exp} exp`,
 		},
 		{
@@ -17,13 +18,13 @@ const duelEmbed = (user, opponent, battleStats, exp, gold) => {
 			value: "\u200B",
         },
         {
-			name: `__${user.account.username}:__`,
-			value: "Stats",
+			name: "\u200B",
+			value: `\`\`\`fix\n${username}:\n\`\`\``,
             inline:true,
         },
         {
-			name: `__${opponent.account.username}:__`,
-			value: "Stats",
+			name: "\u200B",
+			value: `\`\`\`fix\n${oppUsername}:\n\`\`\``,
             inline:true,
 		},
 		{
@@ -64,7 +65,7 @@ const duelEmbed = (user, opponent, battleStats, exp, gold) => {
 	];
 
 	const embedDuel = new Discord.MessageEmbed()
-		.setTitle(username)
+		.setTitle(title)
 		.setColor(sideColor)
 		.addFields(
 			...fields,

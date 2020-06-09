@@ -1,5 +1,6 @@
 const User = require("../models/User");
-const stakePlayer = require("../game/stake/stake");
+const { stakePlayer, getStakes, checkIfStakeIsPossible } = require("../game/stake/stake");
+const stakeInvite = require("../game/stake/stake-invite");
 
 module.exports = {
 	name: "stake",
@@ -7,10 +8,42 @@ module.exports = {
 	async execute(message, args, user) {
         if(args.length === 0) return message.channel.send("You need to apply arguments");
         const opponentUserId = args[0].slice(3, args[0].length - 1);
-        const opponent = await User.findOne({ "account.userId":  opponentUserId });
+		const opponent = await User.findOne({ "account.userId":  opponentUserId });
 
-        const response = await stakePlayer(user, opponent, message);
+		const answer = checkIfStakeIsPossible(user, opponent);
 
-		response.embed ? message.channel.send(response.embed) : message.channel.send(`<@${message.author.id}>: ${response}`);
+		if(!answer.response) return message.channel.send(answer.message);
+
+		const stakedItems = [getStakes(user), getStakes(opponent)];
+
+		message.channel.send(stakeInvite(user, opponent, stakedItems)).then(async (msg) => {
+			// await msg.react("✅");
+
+			const filter = (reaction, reactUser) => {
+				if(["✅"].includes(reaction.emoji.name) && reactUser.id === user.account.userId) {
+					return true;
+				}
+		};
+
+		msg.awaitReactions(filter, { max: 1, time: 1000 * 60 * 1, errors: ["time"] })
+	.then(async (collected) => {
+		const reaction = collected.first();
+
+		if (reaction.emoji.name === "✅") {
+			msg.reply(`${opponent.account.username} accepted the duel`);
+			const updatedUser = await User.findOne({ "account.userId": user.account.userId });
+			const updatedOpponent = await User.findOne({ "account.userId": opponent.account.userId });
+			const stakeResults = await stakePlayer(updatedUser, updatedOpponent, stakedItems.join());
+
+			console.log(stakeResults);
+			return message.channel.send(stakeResults);
+		}
+	})
+	.catch(() => {
+		msg.reply("Stake declined");
+	});
+		});
+
 	},
+
 };
