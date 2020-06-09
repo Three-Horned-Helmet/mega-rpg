@@ -26,4 +26,4 @@
 
 ### Support
 
-Support our bot on [Patreon](https://www.patreon.com) and receive ingame benefits.
+Support our bot on [Patreon](https://www.patreon.com/megarpg) and receive ingame benefits.
