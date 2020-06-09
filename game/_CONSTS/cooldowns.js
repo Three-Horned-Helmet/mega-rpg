@@ -11,6 +11,7 @@ const cooldowns = {
 	hunt:(1000 * 60 * 2),
 	miniboss:(1000 * 60 * 60 * 12),
 	raid:(1000 * 60 * 3),
+	weeklyPrice:(1000 * 60 * 60 * 24 * 7),
 };
 
 
@@ -41,10 +42,17 @@ const onCooldown = (actionType, user)=>{
 	}
 	const previousTime = user.cooldowns[actionType];
 	const now = new Date();
+
+	let cooldown = cooldowns[actionType];
+
+	const patreonType = user.account.patreon;
+	const patreonBonus = patreonType ? (cooldown * 0.15) : 0;
+
+	cooldown -= patreonBonus;
 	const timePassed = Math.abs(previousTime - now);
 
-	if (timePassed < cooldowns[actionType]) {
-		const timeLeftInMs = Math.ceil((cooldowns[actionType] - timePassed));
+	if (timePassed < cooldown) {
+		const timeLeftInMs = Math.ceil((cooldown - timePassed));
 		const timeLeftInSec = (timeLeftInMs / 1000);
 		const timeLeftFormatted = msToHumanTime(timeLeftInMs);
 
@@ -120,6 +128,11 @@ const generateAllCdEmbed = (user)=>{
 };
 
 const msToHumanTime = (ms)=>{
+	const oneDayInMs = 8.64e+7;
+	if (ms >= oneDayInMs) {
+		const days = Math.round(ms / oneDayInMs);
+		return `${days} days`;
+	}
 	const humanTime = new Date(ms).toISOString().slice(11, 19).split(":");
 	["h ", "m ", "s"].forEach((t, i)=>{
 		humanTime[i] += t;

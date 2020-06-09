@@ -34,8 +34,7 @@ const prettifyUser = (message, user) => {
 		.addFields(
 			{
 				name: `Hero (${heroRank})`,
-				value:
-          heroValue,
+				value: heroValue,
 				inline: true,
 			},
 			{
