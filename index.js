@@ -97,3 +97,8 @@ const createNewUser = (user) => {
 	});
 	return newUser.save();
 };
+
+// Move somewhere else?
+String.prototype.capitalize = function() {
+	return this.charAt(0).toUpperCase() + this.slice(1);
+};
