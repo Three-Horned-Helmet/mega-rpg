@@ -212,15 +212,6 @@ const userSchema = new Schema({
 	},
 });
 
-// userSchema.methods.gainExp = function(n) {
-// 	this.hero.exp += n;
-// 	if (this.hero.exp >= this.hero.expToNextRank) {
-// 		this.hero.expToNextRank = getNewExpValue(this.hero);
-// 		this.hero.rank += 1;
-// 	}
-// 	this.save();
-// };
-
 userSchema.methods.gainResource = function(resource, quantity) {
 	this.resources[resource] += quantity;
 	return this.save();
@@ -455,6 +446,24 @@ userSchema.methods.gainExp = async function(exp, newExpToNextLevel, statGains) {
 	}
 
 	this.markModified("hero.currentExp");
+
+	return this.save();
+};
+
+userSchema.methods.removeExp = async function(exp, newExpToNextLevel, statRemoval) {
+	this.hero.currentExp -= exp;
+	if(this.hero.currentExp < 0) this.hero.currentExp = 0;
+
+	if(newExpToNextLevel) {
+		this.hero.expToNextRank = newExpToNextLevel;
+		this.hero.level -= 1;
+
+		// Stat gains for new level
+		for(const stat in statRemoval) {
+			this.hero[stat] -= statRemoval[stat];
+		}
+
+	}
 
 	return this.save();
 };
