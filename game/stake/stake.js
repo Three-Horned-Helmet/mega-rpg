@@ -1,5 +1,5 @@
 const { duelFullArmy } = require("../../combat/combat");
-const { gainHeroExp } = require("../_CONSTS/hero-exp");
+const { gainHeroExp, removeHeroExp } = require("../_CONSTS/hero-exp");
 const artifactItems = require("../items/artifact-blacksmith/artifact-blacksmith");
 const calculateStats = require("../../combat/calculate-stats");
 
@@ -17,7 +17,6 @@ const stakePlayer = async (user, opponent, stakedItems, msg) =>{
     const totalValue = Object.values(totalStats).reduce((acc, cur) => acc + cur);
     const winnerUnitLoss = 1 - ((totalValue - winMargin) / totalValue) * 0.2;
 
-    console.log("WINNER UNIT LOSS", winnerUnitLoss);
     await winner.unitLoss(winnerUnitLoss);
     await loser.unitLoss(0.8);
 
@@ -28,22 +27,20 @@ const stakePlayer = async (user, opponent, stakedItems, msg) =>{
 
         const wonItem = loserItems[Math.floor(Math.random() * loserItems.length)];
 
-        console.log(wonItem, artifactItems[wonItem], loserItems);
         await loser.removeItem(artifactItems[wonItem], true);
         await winner.addItem(artifactItems[wonItem], 1);
 
     // Determine exp won
     const expWon = Math.floor(opponent.hero.currentExp * 0.2);
 
-    await gainHeroExp(user, expWon, msg);
-    // ADD REMOVEHEROEXP HERE!!
+    await gainHeroExp(winner, expWon, msg);
+    await removeHeroExp(loser, expWon, msg);
 
 
    return `${winner.account.username} won the battle with modifiers of ${uModifier} and ${oModifier}. The item won is ${capitalize(wonItem)} and exp won is ${expWon}`;
 };
 
 const checkIfStakeIsPossible = (user, opponent, stakedItems) =>{
-    console.log("STAKED ITEMS", stakedItems);
     if(!opponent) {
         return {
             response: false,
@@ -51,7 +48,7 @@ const checkIfStakeIsPossible = (user, opponent, stakedItems) =>{
         };
     }
     const { username } = user.account;
-    const { oppUsername } = opponent.account;
+    const { username:oppUsername } = opponent.account;
 
     // Check if both user and opponent have an artifact item equiped
     const doesOwnArtifact = [];
@@ -69,13 +66,12 @@ const checkIfStakeIsPossible = (user, opponent, stakedItems) =>{
         const doesNotOwnArtifact = [username, oppUsername].filter(u => !doesOwnArtifact.includes(u));
         return {
             response: false,
-            message:`It is not allowed to change equipment while waiting for stake to be accepted. These items are missing: ${
+            message:`${doesNotOwnArtifact.length === 1 ? "This player" : "These players"} does not have any artifact items equiped on their hero, which is required to stake other players: ${
                 doesNotOwnArtifact.join(", ")
             }`,
         };
     }
 
-    console.log("SECOND STAKE", stakedItems);
 
     // Check if a player has changed out his artifacts between the challenge and the battle start
     if(stakedItems && stakedItems.length > 0) {

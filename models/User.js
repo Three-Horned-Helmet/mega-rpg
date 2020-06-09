@@ -200,7 +200,7 @@ const userSchema = new Schema({
 				type: String,
 				default: "[NONE]",
 			},
-			leggings: {
+			legging: {
 				type: String,
 				default: "[NONE]",
 			},
@@ -349,7 +349,7 @@ userSchema.methods.removeItem = function(item, hero) {
 		const itemType = item.typeSequence[item.typeSequence.length - 1];
 		this.hero.armor[itemType] = "[NONE]";
 
-		this.markModified(`hero.armor.${itemType}`);
+		this.markModified("hero.armor");
 	}
 
 	return this.save();
@@ -398,7 +398,6 @@ userSchema.methods.unitLoss = function(lossPercentage) {
 	Object.values(this.army.units).forEach(unitBuilding => {
 		Object.keys(unitBuilding).forEach(unit => {
 			if(typeof unitBuilding[unit] === "number") {
-				console.log("LOSS PER", lossPercentage, unitBuilding, unit, unitBuilding[unit]);
 				unitBuilding[unit] = Math.floor(unitBuilding[unit] * lossPercentage);
 				this.markModified(`army.units.${unitBuilding}.${unit}`);
 			}

@@ -35,7 +35,6 @@ module.exports = {
 			const updatedOpponent = await User.findOne({ "account.userId": opponent.account.userId });
 			const stakeResults = await stakePlayer(updatedUser, updatedOpponent, stakedItems.flat(), message);
 
-			console.log("STAKE RESULTS", stakeResults);
 			return message.channel.send(stakeResults);
 		}
 	})
