@@ -1,12 +1,45 @@
 const { duelFullArmy } = require("../../combat/combat");
 const { gainHeroExp } = require("../_CONSTS/hero-exp");
 const artifactItems = require("../items/artifact-blacksmith/artifact-blacksmith");
+const calculateStats = require("../../combat/calculate-stats");
 
-const stakePlayer = async (user, opponent, stakedItems) =>{
+const stakePlayer = async (user, opponent, stakedItems, msg) =>{
    const { response, message } = checkIfStakeIsPossible(user, opponent, stakedItems);
    if(!response) return message;
 
-   return `You lost the duel against ${opponent.account.username}`;
+    const { win, winMargin, uModifier, oModifier } = duelFullArmy(user, opponent);
+
+    // Set the winner and loser and remove the unit lost
+    const winner = win ? user : opponent;
+    const loser = win ? opponent : user;
+
+    const { totalStats } = calculateStats(winner);
+    const totalValue = Object.values(totalStats).reduce((acc, cur) => acc + cur);
+    const winnerUnitLoss = 1 - ((totalValue - winMargin) / totalValue) * 0.2;
+
+    console.log("WINNER UNIT LOSS", winnerUnitLoss);
+    await winner.unitLoss(winnerUnitLoss);
+    await loser.unitLoss(0.8);
+
+    // Determine item won
+    const loserItems = Object.values(opponent.hero.armor).map(item => {
+            return artifactItems[item] ? item : false;
+        }).filter(item => item);
+
+        const wonItem = loserItems[Math.floor(Math.random() * loserItems.length)];
+
+        console.log(wonItem, artifactItems[wonItem], loserItems);
+        await loser.removeItem(artifactItems[wonItem], true);
+        await winner.addItem(artifactItems[wonItem], 1);
+
+    // Determine exp won
+    const expWon = Math.floor(opponent.hero.currentExp * 0.2);
+
+    await gainHeroExp(user, expWon, msg);
+    // ADD REMOVEHEROEXP HERE!!
+
+
+   return `${winner.account.username} won the battle with modifiers of ${uModifier} and ${oModifier}. The item won is ${capitalize(wonItem)} and exp won is ${expWon}`;
 };
 
 const checkIfStakeIsPossible = (user, opponent, stakedItems) =>{
@@ -43,6 +76,8 @@ const checkIfStakeIsPossible = (user, opponent, stakedItems) =>{
     }
 
     console.log("SECOND STAKE", stakedItems);
+
+    // Check if a player has changed out his artifacts between the challenge and the battle start
     if(stakedItems && stakedItems.length > 0) {
         return {
             response: false,

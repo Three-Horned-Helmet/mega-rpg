@@ -327,10 +327,12 @@ userSchema.methods.collectResource = async function(collectBuildings, now, resou
 	return totalCollected;
 };
 
-userSchema.methods.craftItem = function(item, amount) {
-	// Resource cost
-	for(const resource in item.cost) {
-		this.resources[resource] -= item.cost[resource] * amount;
+userSchema.methods.addItem = function(item, amount, craft) {
+	if(craft) {
+		// Resource cost
+		for(const resource in item.cost) {
+			this.resources[resource] -= item.cost[resource] * amount;
+		}
 	}
 
 	// Add item to user
@@ -345,6 +347,19 @@ userSchema.methods.craftItem = function(item, amount) {
 		itemType[item.name] + amount : amount;
 
 	this.markModified(`${markModifiedString}${item.name}`);
+
+	return this.save();
+};
+
+// Removes the item (if hero => remove it from hero, else from armory)
+userSchema.methods.removeItem = function(item, hero) {
+	// Removes the item from the hero
+	if(hero) {
+		const itemType = item.typeSequence[item.typeSequence.length - 1];
+		this.hero.armor[itemType] = "[NONE]";
+
+		this.markModified(`hero.armor.${itemType}`);
+	}
 
 	return this.save();
 };
@@ -386,11 +401,13 @@ userSchema.methods.equipItem = function(item, currentItem) {
 	return this.save();
 };
 
+// lossPercentage: 0.9 => 10% units loss
 userSchema.methods.unitLoss = function(lossPercentage) {
 	// Kill off unit depending on the lossPercentage
 	Object.values(this.army.units).forEach(unitBuilding => {
 		Object.keys(unitBuilding).forEach(unit => {
 			if(typeof unitBuilding[unit] === "number") {
+				console.log("LOSS PER", lossPercentage, unitBuilding, unit, unitBuilding[unit]);
 				unitBuilding[unit] = Math.floor(unitBuilding[unit] * lossPercentage);
 				this.markModified(`army.units.${unitBuilding}.${unit}`);
 			}

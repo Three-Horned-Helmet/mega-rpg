@@ -6,11 +6,11 @@ const duelEmbed = (user, opponent, battleStats, exp, gold) => {
 	const { username: oppUsername } = opponent.account;
 	const title = `${username} dueled ${oppUsername}`;
     const sideColor = "#45b6fe";
-    const { win, losses, uModifier, oModifier, userStats, oppStats } = battleStats;
+    const { win, winMargin, uModifier, oModifier, userStats, oppStats } = battleStats;
 
 	const fields = [
 		{
-			name: `**${win ? username : oppUsername}** won the duel with a margin of ${Math.abs(losses)} units`,
+			name: `**${win ? username : oppUsername}** won the duel with a margin of ${Math.abs(winMargin)} units`,
 			value: `And won ${gold} gold and the hero earned ${exp} exp`,
 		},
 		{

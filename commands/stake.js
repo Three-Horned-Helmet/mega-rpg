@@ -17,7 +17,7 @@ module.exports = {
 		const stakedItems = [getStakes(user), getStakes(opponent)];
 
 		message.channel.send(stakeInvite(user, opponent, stakedItems)).then(async (msg) => {
-			// await msg.react("✅");
+			await msg.react("✅");
 
 			const filter = (reaction, reactUser) => {
 				if(["✅"].includes(reaction.emoji.name) && reactUser.id === user.account.userId) {
@@ -33,13 +33,14 @@ module.exports = {
 			msg.reply(`${opponent.account.username} accepted the duel`);
 			const updatedUser = await User.findOne({ "account.userId": user.account.userId });
 			const updatedOpponent = await User.findOne({ "account.userId": opponent.account.userId });
-			const stakeResults = await stakePlayer(updatedUser, updatedOpponent, stakedItems.join());
+			const stakeResults = await stakePlayer(updatedUser, updatedOpponent, stakedItems.flat(), message);
 
-			console.log(stakeResults);
+			console.log("STAKE RESULTS", stakeResults);
 			return message.channel.send(stakeResults);
 		}
 	})
-	.catch(() => {
+	.catch((error) => {
+		console.error(error);
 		msg.reply("Stake declined");
 	});
 		});
