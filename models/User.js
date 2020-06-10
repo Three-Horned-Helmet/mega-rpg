@@ -236,6 +236,14 @@ userSchema.methods.gainResource = function(resource, quantity) {
 	return this.save();
 };
 
+userSchema.methods.gainManyResources = function(obj) {
+	Object.keys(obj).forEach(r=>{
+		this.resources[r] += obj[r];
+	});
+	return this.save();
+};
+
+
 userSchema.methods.setNewCooldown = function(type, now) {
 	this.cooldowns[type] = now;
 	return this.save();
@@ -285,7 +293,6 @@ userSchema.methods.updateNewProduction = function(productionName, product, now) 
 
 	this.markModified(`empire.${foundIndex}.lastCollected`);
 	this.markModified(`empire.${foundIndex}.producing`);
-
 
 	return this.save();
 };
@@ -530,35 +537,15 @@ userSchema.methods.pvpHandler = async function(cdType, now, loot) {
 	return this.save();
 };
 
-userSchema.methods.handlePveFullArmy = function(raidResult, now, type) {
-	this.cooldowns[type] = now;
-
-	// Kill off unit depending on the lossPercentage
-	Object.values(this.army.units).forEach(unitBuilding => {
-		Object.keys(unitBuilding).forEach(unit => {
-			if(typeof unitBuilding[unit] === "number") {
-				unitBuilding[unit] = Math.floor(unitBuilding[unit] * raidResult.lossPercentage);
-				this.markModified(`army.units.${unitBuilding}.${unit}`);
-			}
-		});
-	});
-
-	// Remove hp from your hero depending on the loss percentage
-	this.hero.currentHealth = Math.floor(this.hero.currentHealth * raidResult.lossPercentage);
-
-	if (raidResult.levelUp) {
+//
+userSchema.methods.alternativeGainXp = async function(xp) {
+	this.hero.currentExp += xp;
+	if (this.hero.currentExp >= this.hero.expToNextRank) {
 		this.hero.rank += 1;
 		this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
 	}
-
-	if (raidResult.winner) {
-		Object.keys(raidResult.resourceReward).forEach(r=>{
-			this.resources[r] += raidResult.resourceReward[r];
-		});
-	}
-	this.hero.currentExp += raidResult.expReward;
-
-	this.save();
+	return this.save();
 };
+
 
 module.exports = mongoose.model("User", userSchema);

@@ -87,8 +87,14 @@ const handleRaid = async (user, place = null) => {
 
  // saves to database
  const now = new Date();
+await user.setNewCooldown("raid", now);
+await user.unitLoss(raidResult.lossPercentage);
+await user.alternativeGainXp(raidResult.expReward);
 
- await user.handlePveFullArmy(raidResult, now, "raid");
+if (raidResult.winner) {
+    await user.gainManyResources(raidResult.resourceReward);
+}
+
 
 // generates a Discord embed
     const raidEmbed = generateEmbedPveFullArmy(user, placeInfo, raidResult);
