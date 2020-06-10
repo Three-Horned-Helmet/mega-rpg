@@ -2,6 +2,7 @@ require("dotenv").config();
 const fs = require("fs");
 const Discord = require("discord.js");
 const User = require("./models/User");
+const shortcuts = require("./shortcuts/shortcuts");
 
 const token = process.env.DISCORD_TOKEN;
 const prefix = process.env.DISCORD_PREFIX;
@@ -55,6 +56,12 @@ client.on("message", async (message) => {
 		return message.channel.send(reply);
 	}
 
+	// Goes through the args and checks if any of them are shortcuts
+	const updatedArgs = args.map(a => {
+		if(shortcuts[command.name]) return shortcuts[command.name][a] ? shortcuts[command.name][a] : a;
+		return a;
+	});
+
 	const { author } = message;
 	let userProfile;
 
@@ -73,7 +80,7 @@ client.on("message", async (message) => {
 
 	// executes the command
 	try {
-		command.execute(message, args, userProfile);
+		command.execute(message, updatedArgs, userProfile);
 	}
 	catch (error) {
 		console.error(error);
