@@ -4,7 +4,7 @@ const availableBuilds = require("../game/build/show-available-builds");
 
 module.exports = {
 	name: "build",
-	description: "Build a structure.",
+	description: "Build or upgrade a structure.",
 	shortcuts: {
 		ba: "barracks",
 		ar: "archery",
@@ -19,6 +19,14 @@ module.exports = {
 	execute(message, args, user) {
 		if (args.length === 0) return message.channel.send(availableBuilds(user));
 		const building = buildingsObject[args.slice(0, args.length - 1).join(" ")] || buildingsObject[args.slice(0, args.length).join(" ")];
+
+		if(args[args.length - 1] === "-u") {
+			const usersBuildings = user.empire.filter(b => b.name === building.name).sort((a, b) => a.level - b.level);
+			if(usersBuildings.length > 0) {
+				args[args.length - 1] = usersBuildings[0].position.join(".");
+			}
+		}
+
 		const coordinates = args[args.length - 1].split(".").map(cord => parseInt(cord));
 
 		// Build function

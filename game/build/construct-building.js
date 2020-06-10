@@ -1,10 +1,9 @@
 // Takes a user, a building and coordinates and pushes the building to the users Empire array
 const constructBuilding = async (user, building, coordinates) => {
-	if(isNaN(coordinates)) {
+	if(!coordinates[0] && coordinates[0] !== 0) {
 		coordinates = findAvailableSpot(user);
-		if(!coordinates) return { response: false, message: "There's no available spots in your empire" };
+		if(!coordinates) return "There's no available spots in your empire" ;
 	}
-
 
 	const { response, message, buildingCost } = checkIfBuildIsPossible(user, building, coordinates);
 	if(!response) return message;
@@ -26,6 +25,13 @@ const constructBuilding = async (user, building, coordinates) => {
 // Takes a user object, building array, and coordinates array.
 // Returns the resource that is missing from the users resources to build a building
 const checkIfBuildIsPossible = (user, building, coordinates) => {
+	// Is this actually needed?
+	if(coordinates.find(el => !el) || !coordinates) {
+		return {
+			response: false,
+			message: "You have one or more faulty coordinate",
+		};
+	}
 
 	// Checks if the building- and coordinates command is valid
 	if(coordinates.find(cord => cord > 3 || cord < 0) || coordinates.length !== 2) {
