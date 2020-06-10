@@ -18,7 +18,7 @@ module.exports = {
 	},
 	execute(message, args, user) {
 		if (args.length === 0) return message.channel.send(availableBuilds(user));
-		const building = buildingsObject[args.slice(0, args.length - 1).join(" ")];
+		const building = buildingsObject[args.slice(0, args.length - 1).join(" ")] || buildingsObject[args.slice(0, args.length).join(" ")];
 		const coordinates = args[args.length - 1].split(".").map(cord => parseInt(cord));
 
 		// Build function

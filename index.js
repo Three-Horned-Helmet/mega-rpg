@@ -58,6 +58,7 @@ client.on("message", async (message) => {
 	// Goes through the args and checks if any of them are shortcuts
 	const { shortcuts } = command;
 	const updatedArgs = shortcuts ? args.map(a => shortcuts[a] || a) : args;
+	// Display shortcuts command here!!
 
 	const { author } = message;
 	let userProfile;

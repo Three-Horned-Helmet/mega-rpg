@@ -1,5 +1,11 @@
 // Takes a user, a building and coordinates and pushes the building to the users Empire array
 const constructBuilding = async (user, building, coordinates) => {
+	if(isNaN(coordinates)) {
+		coordinates = findAvailableSpot(user);
+		if(!coordinates) return { response: false, message: "There's no available spots in your empire" };
+	}
+
+
 	const { response, message, buildingCost } = checkIfBuildIsPossible(user, building, coordinates);
 	if(!response) return message;
 
@@ -59,6 +65,18 @@ const checkIfBuildIsPossible = (user, building, coordinates) => {
 	}
 
 	return { response: true, buildingCost };
+};
+
+const findAvailableSpot = (user) => {
+	for(let y = 0; y < 4; y++) {
+		for(let x = 0; x < 4; x++) {
+			if(!user.empire.find(b => b.position[0] === x && b.position[1] === y)) {
+				return [x, y];
+			}
+		}
+	}
+
+	return false;
 };
 
 module.exports = constructBuilding;
