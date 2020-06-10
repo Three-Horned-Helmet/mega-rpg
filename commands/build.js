@@ -5,6 +5,17 @@ const availableBuilds = require("../game/build/show-available-builds");
 module.exports = {
 	name: "build",
 	description: "Build a structure.",
+	shortcuts: {
+		ba: "barracks",
+		ar: "archery",
+		fa: "farm",
+		mi: "mine",
+		lu: "lumbermill",
+		fo: "forge",
+		bl: "blacksmith",
+		arm: "armorer",
+		sh: "shop",
+	},
 	execute(message, args, user) {
 		if (args.length === 0) return message.channel.send(availableBuilds(user));
 		const building = buildingsObject[args.slice(0, args.length - 1).join(" ")];
