@@ -55,6 +55,10 @@ client.on("message", async (message) => {
 		return message.channel.send(reply);
 	}
 
+	// Goes through the args and checks if any of them are shortcuts
+	const { shortcuts } = command;
+	const updatedArgs = shortcuts ? args.map(a => shortcuts[a] || a) : args;
+
 	const { author } = message;
 	let userProfile;
 
@@ -73,7 +77,7 @@ client.on("message", async (message) => {
 
 	// executes the command
 	try {
-		command.execute(message, args, userProfile);
+		command.execute(message, updatedArgs, userProfile);
 	}
 	catch (error) {
 		console.error(error);
@@ -96,4 +100,9 @@ const createNewUser = (user) => {
 		account,
 	});
 	return newUser.save();
+};
+
+// Move somewhere else?
+String.prototype.capitalize = function() {
+	return this.charAt(0).toUpperCase() + this.slice(1);
 };

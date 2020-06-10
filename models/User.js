@@ -210,7 +210,7 @@ const userSchema = new Schema({
 				type: String,
 				default: "[NONE]",
 			},
-			leggings: {
+			legging: {
 				type: String,
 				default: "[NONE]",
 			},
@@ -338,10 +338,12 @@ userSchema.methods.collectResource = async function(collectBuildings, now, resou
 	return totalCollected;
 };
 
-userSchema.methods.craftItem = function(item, amount) {
-	// Resource cost
-	for(const resource in item.cost) {
-		this.resources[resource] -= item.cost[resource] * amount;
+userSchema.methods.addItem = function(item, amount, craft) {
+	if(craft) {
+		// Resource cost
+		for(const resource in item.cost) {
+			this.resources[resource] -= item.cost[resource] * amount;
+		}
 	}
 
 	// Add item to user
@@ -356,6 +358,19 @@ userSchema.methods.craftItem = function(item, amount) {
 		itemType[item.name] + amount : amount;
 
 	this.markModified(`${markModifiedString}${item.name}`);
+
+	return this.save();
+};
+
+// Removes the item (if hero => remove it from hero, else from armory)
+userSchema.methods.removeItem = function(item, hero) {
+	// Removes the item from the hero
+	if(hero) {
+		const itemType = item.typeSequence[item.typeSequence.length - 1];
+		this.hero.armor[itemType] = "[NONE]";
+
+		this.markModified("hero.armor");
+	}
 
 	return this.save();
 };
@@ -391,12 +406,13 @@ userSchema.methods.equipItem = function(item, currentItem) {
 		this.hero[stat] += item.stats[stat] * heroEquipmentBonus;
 	}
 
-	this.markModified(`army.armory.${itemType}.${item.name}`);
+	this.markModified(`army.armory.${itemType}`);
 	this.markModified(`hero.armor.${itemType}`);
 
 	return this.save();
 };
 
+// lossPercentage: 0.9 => 10% units loss
 userSchema.methods.unitLoss = function(lossPercentage) {
 	// Kill off unit depending on the lossPercentage
 	Object.values(this.army.units).forEach(unitBuilding => {
@@ -449,6 +465,24 @@ userSchema.methods.gainExp = async function(exp, newExpToNextLevel, statGains) {
 	}
 
 	this.markModified("hero.currentExp");
+
+	return this.save();
+};
+
+userSchema.methods.removeExp = async function(exp, newExpToNextLevel, statRemoval) {
+	this.hero.currentExp -= exp;
+	if(this.hero.currentExp < 0) this.hero.currentExp = 0;
+
+	if(newExpToNextLevel) {
+		this.hero.expToNextRank = newExpToNextLevel;
+		this.hero.level -= 1;
+
+		// Stat gains for new level
+		for(const stat in statRemoval) {
+			this.hero[stat] -= statRemoval[stat];
+		}
+
+	}
 
 	return this.save();
 };

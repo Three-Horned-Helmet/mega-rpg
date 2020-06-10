@@ -2,10 +2,6 @@ const Discord = require("discord.js");
 const icons = require("../../icons/icons");
 const calculateStats = require("../../combat/calculate-stats");
 
-String.prototype.capitalize = function() {
-	return this.charAt(0).toUpperCase() + this.slice(1);
-};
-
 const displayArmy = (user) => {
 	const username = `${user.account.username}'s army`;
 	const sideColor = "#9c2200";

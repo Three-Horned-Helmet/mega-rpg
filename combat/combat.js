@@ -90,12 +90,12 @@ const duelFullArmy = (user, opp) => {
 	const oppHp = oppStats.health * oModifier;
 	const oppAt = oppStats.attack * oModifier;
 
-	const losses = Math.floor((userHp + userAt) - (oppHp + oppAt));
+	const winMargin = Math.floor((userHp + userAt) - (oppHp + oppAt));
 
 	// Determine winner
-	const win = losses > 0 ? true : false;
+	const win = winMargin > 0;
 
-	return { win, losses: Math.abs(losses), uModifier, oModifier };
+	return { win, winMargin: Math.abs(winMargin), uModifier, oModifier };
 };
 
 

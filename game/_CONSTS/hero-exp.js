@@ -62,7 +62,7 @@ const gainHeroExp = async (user, exp, message) => {
 				statMessage += `${statGains[stat]} ${stat}, `;
 			}
 			message.channel.send(
-				`<@${message.author.id}>: Congratulations your hero just reached level ${updatedUser.hero.level} and gained ${statMessage}your next level is in ${heroExpToNextLevel[level + 1] - currentExp}`,
+				`<@${user.account.userId}>: Congratulations your hero just reached level ${updatedUser.hero.level} and gained ${statMessage}your next level is in ${heroExpToNextLevel[level + 1] - currentExp} exp`,
 			);
 		}
 		catch{
@@ -73,5 +73,49 @@ const gainHeroExp = async (user, exp, message) => {
 	return { updatedUser, levelUp: levelUp ? true : false };
 };
 
+// A function that removes the exp to the hero and checks if he lost a new level
+// Returns the updated user (updatedUser) and a bolean (levelRemoved) if the hero lost a level or not
+const removeHeroExp = async (user, exp, message) => {
+	if(typeof exp !== "number" || isNaN(exp)) {
+		console.error("Exp needs to be a number");
+		return;
+	}
+	else if(exp <= 0) {
+		console.error("Exp needs to be higher than zero");
+		return;
+	}
 
-module.exports = { gainHeroExp };
+	// Check if level down
+	let levelDown = false;
+	let statRemoved = false;
+	const { currentExp, level } = user.hero;
+	if(
+		currentExp - exp < heroExpToNextLevel[level - 1] ? heroExpToNextLevel[level - 1] : 0
+	) {
+		levelDown = heroExpToNextLevel[level];
+		statRemoved = heroStatIncreaseOnLevel[level];
+	}
+
+	const updatedUser = await user.removeExp(exp, levelDown, statRemoved);
+
+	// Send a level down message
+	if(levelDown) {
+		try{
+			let statMessage = "";
+			for(const stat in statRemoved) {
+				statMessage += `${statRemoved[stat]} ${stat}, `;
+			}
+			message.channel.send(
+				`<@${user.account.userId}>: Your hero lost a level in the battle and is now level ${updatedUser.hero.level} and lost stats: ${statMessage}`,
+			);
+		}
+		catch{
+			console.error("Was not able to send new hero level message");
+		}
+	}
+
+	return { updatedUser, levelDown: levelDown ? true : false };
+};
+
+
+module.exports = { gainHeroExp, removeHeroExp };
