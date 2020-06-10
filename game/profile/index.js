@@ -10,7 +10,7 @@ const prettifyUser = (message, user) => {
 	const username = `${user.account.username}'s profile`;
 
 	const { hero } = user;
-	const heroRank = hero.level;
+	const heroRank = hero.rank;
 	const heroValue = `❤️ HP: ${hero.health}\n\n⚔ AT: ${hero.attack}\n\n🛡 DEF: ${hero.defense}\n\n🔅 XP: ${hero.currentExp}/${hero.expToNextRank}`;
 
 	const heroEquipment = `🧢 Helmet: ${hero.armor.helmet}\n\n⚜️ Chest: ${hero.armor.chest}\n\n🦵 Leggings: ${hero.armor.leggings}\n\n🗡 Weapon: ${hero.armor.weapon}`;

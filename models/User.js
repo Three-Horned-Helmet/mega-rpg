@@ -3,11 +3,10 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true });
 
-// const { getNewExpValue } = require("./helper");
-
 const { Schema } = mongoose;
 
 const buildingsObject = require("../game/build/buildings-object");
+const { heroExpToNextLevel } = require("../game/_CONSTS/hero-exp");
 
 const userSchema = new Schema({
 	account: {
@@ -21,6 +20,10 @@ const userSchema = new Schema({
 			type: String,
 			enum: ["", "Bronze", "Silver", "Gold", "Platinum"],
 			default: "",
+		},
+		testAccount:{
+			type: Boolean,
+			default: false,
 		},
 	},
 	maxPop: {
@@ -41,6 +44,10 @@ const userSchema = new Schema({
 			default:0,
 		},
 		fish:{
+			type:Date,
+			default:0,
+		},
+		raid:{
 			type:Date,
 			default:0,
 		},
@@ -152,15 +159,9 @@ const userSchema = new Schema({
 
 	empire: {
 		type: Array,
-		default: [
-
-		],
+		default: [],
 	},
 	hero: {
-		level: {
-			type: Number,
-			default: 0,
-		},
 		health: {
 			type: Number,
 			default: 100,
@@ -235,6 +236,14 @@ userSchema.methods.gainResource = function(resource, quantity) {
 	return this.save();
 };
 
+userSchema.methods.gainManyResources = function(obj) {
+	Object.keys(obj).forEach(r=>{
+		this.resources[r] += obj[r];
+	});
+	return this.save();
+};
+
+
 userSchema.methods.setNewCooldown = function(type, now) {
 	this.cooldowns[type] = now;
 	return this.save();
@@ -284,7 +293,6 @@ userSchema.methods.updateNewProduction = function(productionName, product, now) 
 
 	this.markModified(`empire.${foundIndex}.lastCollected`);
 	this.markModified(`empire.${foundIndex}.producing`);
-
 
 	return this.save();
 };
@@ -447,11 +455,11 @@ userSchema.methods.healHero = function(heal, item) {
 };
 
 // NB: I think I can remove the markModified (or atleast only have it for hero?)
-userSchema.methods.gainExp = async function(exp, newExpToNextLevel, statGains) {
+userSchema.methods.gainExp = async function(exp, newExpToNextRank, statGains) {
 	this.hero.currentExp += exp;
-	if(newExpToNextLevel) {
-		this.hero.expToNextRank = newExpToNextLevel;
-		this.hero.level += 1;
+	if(newExpToNextRank) {
+		this.hero.expToNextRank = newExpToNextRank;
+		this.hero.rank += 1;
 
 		// Stat gains for new level
 		for(const stat in statGains) {
@@ -467,13 +475,13 @@ userSchema.methods.gainExp = async function(exp, newExpToNextLevel, statGains) {
 	return this.save();
 };
 
-userSchema.methods.removeExp = async function(exp, newExpToNextLevel, statRemoval) {
+userSchema.methods.removeExp = async function(exp, newExpToNextRank, statRemoval) {
 	this.hero.currentExp -= exp;
 	if(this.hero.currentExp < 0) this.hero.currentExp = 0;
 
-	if(newExpToNextLevel) {
-		this.hero.expToNextRank = newExpToNextLevel;
-		this.hero.level -= 1;
+	if(newExpToNextRank) {
+		this.hero.expToNextRank = newExpToNextRank;
+		this.hero.rank -= 1;
 
 		// Stat gains for new level
 		for(const stat in statRemoval) {
@@ -528,5 +536,16 @@ userSchema.methods.pvpHandler = async function(cdType, now, loot) {
 
 	return this.save();
 };
+
+//
+userSchema.methods.alternativeGainXp = async function(xp) {
+	this.hero.currentExp += xp;
+	if (this.hero.currentExp >= this.hero.expToNextRank) {
+		this.hero.rank += 1;
+		this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
+	}
+	return this.save();
+};
+
 
 module.exports = mongoose.model("User", userSchema);

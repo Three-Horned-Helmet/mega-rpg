@@ -8,9 +8,9 @@ const cooldowns = {
 	dungeon:(1000 * 60 * 60 * 12),
 	explore: (1000 * 45),
 	fish:(1000 * 30),
-	hunt:(1000 * 60 * 2),
+	hunt:(1000 * 45),
 	miniboss:(1000 * 60 * 60 * 12),
-	raid:(1000 * 60 * 3),
+	raid:(1000 * 60 * 2),
 	weeklyPrice:(1000 * 60 * 60 * 24 * 7),
 };
 

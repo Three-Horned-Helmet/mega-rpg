@@ -62,7 +62,7 @@ const gainHeroExp = async (user, exp, message) => {
 				statMessage += `${statGains[stat]} ${stat}, `;
 			}
 			message.channel.send(
-				`<@${user.account.userId}>: Congratulations your hero just reached level ${updatedUser.hero.level} and gained ${statMessage}your next level is in ${heroExpToNextLevel[level + 1] - currentExp} exp`,
+				`<@${user.account.userId}>: Congratulations your hero just reached level ${updatedUser.hero.rank} and gained ${statMessage}your next level is in ${heroExpToNextLevel[level + 1] - currentExp} exp`,
 			);
 		}
 		catch{
@@ -106,7 +106,7 @@ const removeHeroExp = async (user, exp, message) => {
 				statMessage += `${statRemoved[stat]} ${stat}, `;
 			}
 			message.channel.send(
-				`<@${user.account.userId}>: Your hero lost a level in the battle and is now level ${updatedUser.hero.level} and lost stats: ${statMessage}`,
+				`<@${user.account.userId}>: Your hero lost a level in the battle and is now level ${updatedUser.hero.rank} and lost stats: ${statMessage}`,
 			);
 		}
 		catch{
@@ -118,4 +118,4 @@ const removeHeroExp = async (user, exp, message) => {
 };
 
 
-module.exports = { gainHeroExp, removeHeroExp };
+module.exports = { gainHeroExp, removeHeroExp, heroExpToNextLevel };
