@@ -4,6 +4,8 @@ const stakeInvite = require("../game/stake/stake-invite");
 
 module.exports = {
 	name: "stake",
+	usage: "@player",
+	args: true,
 	description: "Duel other players with stakes. The loser loses a % of the hero exp and an armorer item, while the winner gets the exp and item",
 	async execute(message, args, user) {
         if(args.length === 0) return message.channel.send("You need to apply arguments");
