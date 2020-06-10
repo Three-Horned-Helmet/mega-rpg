@@ -47,7 +47,7 @@ const checkIfPossibleToProduce = (user, resource, buildingReq, buildingReqLevel)
 	if(!userBuilding) {
 		return {
 			response: false,
-			message: `You need ${buildingReq} level ${buildingReqLevel}, but only have ${userBuilding.name} level ${userBuilding.level}`,
+			message: `You need ${buildingReq} level ${buildingReqLevel}`,
 		};
 	}
 

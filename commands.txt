@@ -1,0 +1,45 @@
+Army:
+!army => Returns all owned units, equipment, hero and total army strength (including inventory)
+
+Build:
+!build => Returns all available buildings and their prices
+!build "buildingName" => Builds the building on any open spots on the grid (!build farm)
+!build "buildingName" -u => Upgrades the lowest level of the building (!build farm -u)
+!build "buildingName" "coords" => Builds the building on the coordinates (2 numbers seperated by .). Upgrades the building if the coords are taken (!build farm 1.1)
+
+Buy:
+!buy => Returns all available items in your shop
+!buy "itemName" => Buys the item from the shop (!buy small heal potion)
+
+Collect:
+!collect => Collects all collectable resources
+!collect "building" => Collects the resources from these specific buildings (!collect mine)
+
+Craft:
+!craft "item" "amount" => Crafts the x amount of the specified item (!craft bronze sword 5)
+
+Duel:
+!duel "@user" => Duels the user in a friendly full army battle without losses (!duel @SpinningSiri)
+
+Equip:
+!equip "itemName" => Equips your hero with the specified item (!equip bronze sword)
+
+Grid:
+!grid => Returns the grid that has all the users buildings displayed (!grid)
+
+Produce:
+!produce "resource" => Collects the resource type and starts producing the specified resource (!produce yew wood)
+
+Recruit:
+!recruit => Returns all available units that can be recruited and all their prices and stats
+!recruit "unitName" => Recruits 1 of the specified unit (!recruit archer)
+!recruit "unitName" "amount" => Recruits the specified amount of the unit (!recruit archer 5)
+
+Resources:
+!resources => Returns all your resources (!resources)
+
+Stake:
+!stake "@player" => Stakes another player that must accept the challenge. Loser loses an aritfact item and 20% hero exp, winner gets it. (!stake @SpinningSiri)
+
+Use:
+!use "itemName" => Uses the specified item (consumable). (!use small heal potion)

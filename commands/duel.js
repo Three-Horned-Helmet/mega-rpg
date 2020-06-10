@@ -3,6 +3,8 @@ const duelPlayer = require("../game/duel/duel");
 
 module.exports = {
 	name: "duel",
+	usage: "@player",
+	args: true,
 	description: "Duel other players",
 	async execute(message, args, user) {
         if(args.length === 0) return message.channel.send("You need to apply arguments");
