@@ -8,7 +8,6 @@ const handleBuyCommand = async (args, user) =>{
 	}
 
 	const joinedArg = args.map(a => a.charAt(0).toUpperCase() + a.slice(1).toLowerCase()).join(" ");
-	console.log(joinedArg, "OINED");
 	const item = consumeObj[joinedArg];
 
 	const message = await buyItem(user, item);
