@@ -2,7 +2,6 @@ require("dotenv").config();
 const fs = require("fs");
 const Discord = require("discord.js");
 const User = require("./models/User");
-const shortcuts = require("./shortcuts/shortcuts");
 
 const token = process.env.DISCORD_TOKEN;
 const prefix = process.env.DISCORD_PREFIX;
@@ -57,10 +56,8 @@ client.on("message", async (message) => {
 	}
 
 	// Goes through the args and checks if any of them are shortcuts
-	const updatedArgs = args.map(a => {
-		if(shortcuts[command.name]) return shortcuts[command.name][a] ? shortcuts[command.name][a] : a;
-		return a;
-	});
+	const { shortcuts } = command;
+	const updatedArgs = shortcuts ? args.map(a => shortcuts[a] || a) : args;
 
 	const { author } = message;
 	let userProfile;
