@@ -3,6 +3,10 @@ const consumablesObject = require("../game/use/consumables-object");
 module.exports = {
 	name: "use",
 	description: "Use any consumables like healing potions from your inventory (!army).",
+	shortcuts: {
+		shp: "small heal potion",
+		lhp: "large heal potion",
+	},
 	async execute(message, args, user) {
 		if(args.length === 0) {
 			return message.channel.send(`<@${message.author.id}>: What item do you want to use`);
