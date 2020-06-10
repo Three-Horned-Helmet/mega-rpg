@@ -21,7 +21,7 @@ const pveHero = async (user, npc) => {
 
 // Takes the user and the npc and battles the npc with the full army at a 50-100% modifier
 // Returns win (bolean), lossPercentage (1 = 100% loss of units), and the combat modifier
-const pveFullArmy = async (user, npc) => {
+const calculatePveFullArmyResult = async (user, npc) => {
 	const { totalStats } = calculateStats(user);
 	const combatModifier = (1 - Math.random() / 2);
 	const userHp = totalStats.health * combatModifier;
@@ -33,9 +33,15 @@ const pveFullArmy = async (user, npc) => {
 	let lossPercentage = ((userHp + userAt) - (oppHp + oppAt)) / (userHp + userAt);
 	lossPercentage = lossPercentage < 0 ? 0 : lossPercentage;
 
-	await user.unitLoss(lossPercentage);
+	const calculatedReward = Object.keys(npc.rewards).reduce((acc, cur)=>{
+		const randomReward = Math.floor(Math.random() * npc.rewards[cur] + (npc.rewards[cur] / 2));
+		acc[cur] = randomReward;
+		return acc;
+	}, {});
 
-	return { win, lossPercentage: 1 - lossPercentage, combatModifier };
+	// await user.unitLoss(lossPercentage);
+
+	return { win, lossPercentage: 1 - lossPercentage, combatModifier, calculatedReward };
 };
 
 // user vs opponent duel with full army (units + hero), returns an object with the winner and loser
@@ -75,7 +81,7 @@ const duelFullArmy = (user, opp) => {
 	// Get player stats and add modifier
 	const { totalStats:userStats } = calculateStats(user);
 	// Combat modifier
-	const uModifier = (1 - Math.random() / 2); 
+	const uModifier = (1 - Math.random() / 2);
 	const userHp = userStats.health * uModifier;
 	const userAt = userStats.attack * uModifier;
 
@@ -93,4 +99,4 @@ const duelFullArmy = (user, opp) => {
 };
 
 
-module.exports = { pveFullArmy, pveHero, pvpFullArmy, duelFullArmy };
+module.exports = { calculatePveFullArmyResult, pveHero, pvpFullArmy, duelFullArmy };

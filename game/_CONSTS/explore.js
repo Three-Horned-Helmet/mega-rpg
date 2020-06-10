@@ -22,37 +22,71 @@ const worldLocations = {
 			"Bandit Camp": {
 				name: "Bandit Camp",
 				type: "raid",
-				difficulty: 5,
+				stats:{
+					attack: 3,
+					health:20,
+				},
+				rewards:{
+					gold: 1000,
+				},
 			},
 			"Fishing village": {
 				name: "Fishing village",
 				type: "raid",
-				difficulty: 3,
+				stats:{
+					attack: 2,
+					health:40,
+				},
+				rewards:{
+					gold: 500,
+					"oak wood": 100,
+					"yak wood": 50,
+				},
 			},
 			"Collapsed Mine": {
 				name: "Collapsed Mine",
 				type: "raid",
-				difficulty: 2,
+				stats:{
+					attack: 2,
+					health:20,
+				},
+				rewards:{
+					gold: 100,
+					"copper ore": 200,
+					"iron ore": 150,
+				},
 			},
 			Forest: {
 				name: "Forest",
 				type: "hunt",
-				difficulty: 1,
+				stats:{
+					attack: 5,
+					health:5,
+				},
 			},
 			Cave: {
 				name: "Cave",
 				type: "hunt",
-				difficulty: 2,
+				stats:{
+					attack: 5,
+					health:5,
+				},
 			},
 			"Bandidos de la Grande": {
 				name: "Bandidos de la Grande",
 				type: "miniboss",
-				difficulty: 18,
+				stats:{
+					attack: 5,
+					health:5,
+				},
 			},
 			"Bandit's Castle": {
 				name: "Bandit's Castle",
 				type: "dungeon",
-				difficulty: 30,
+				stats:{
+					attack: 5,
+					health:5,
+				},
 			},
 			River: {
 				name: "River",

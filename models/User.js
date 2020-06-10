@@ -3,8 +3,6 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true });
 
-// const { getNewExpValue } = require("./helper");
-
 const { Schema } = mongoose;
 
 const buildingsObject = require("../game/build/buildings-object");
@@ -21,6 +19,10 @@ const userSchema = new Schema({
 			type: String,
 			enum: ["", "Bronze", "Silver", "Gold", "Platinum"],
 			default: "",
+		},
+		testAccount:{
+			type: Boolean,
+			default: false,
 		},
 	},
 	maxPop: {
@@ -229,15 +231,6 @@ const userSchema = new Schema({
 		},
 	},
 });
-
-// userSchema.methods.gainExp = function(n) {
-// 	this.hero.exp += n;
-// 	if (this.hero.exp >= this.hero.expToNextRank) {
-// 		this.hero.expToNextRank = getNewExpValue(this.hero);
-// 		this.hero.rank += 1;
-// 	}
-// 	this.save();
-// };
 
 userSchema.methods.gainResource = function(resource, quantity) {
 	this.resources[resource] += quantity;
