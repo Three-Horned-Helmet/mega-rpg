@@ -21,7 +21,7 @@ const pveHero = async (user, npc) => {
 
 // Takes the user and the npc and battles the npc with the full army at a 50-100% modifier
 // Returns win (bolean), lossPercentage (1 = 100% loss of units), and the combat modifier
-const calculatePveFullArmyResult = async (user, npc) => {
+const calculatePveFullArmyResult = (user, npc) => {
 	const { totalStats } = calculateStats(user);
 	const combatModifier = (1 - Math.random() / 2);
 	const userHp = totalStats.health * combatModifier;
@@ -29,19 +29,38 @@ const calculatePveFullArmyResult = async (user, npc) => {
 	const { health: oppHp, attack: oppAt } = npc.stats;
 
 	const losses = (userHp + userAt) - (oppHp + oppAt);
-	const win = losses > 0 ? true : false;
+	const win = losses > 0;
 	let lossPercentage = ((userHp + userAt) - (oppHp + oppAt)) / (userHp + userAt);
 	lossPercentage = lossPercentage < 0 ? 0 : lossPercentage;
 
-	const calculatedReward = Object.keys(npc.rewards).reduce((acc, cur)=>{
-		const randomReward = Math.floor(Math.random() * npc.rewards[cur] + (npc.rewards[cur] / 2));
+	const pveResult = {
+		combatModifier,
+		expReward: 0,
+		levelUp:false,
+		lossPercentage: 1 - lossPercentage,
+		resourceReward:{},
+		win,
+	};
+
+	// generates a random reward number
+	if (win) {
+		pveResult.resourceReward = Object.keys(npc.rewards).reduce((acc, cur)=>{
+		const randomReward = Math.ceil(Math.random() * npc.rewards[cur] + (npc.rewards[cur] / 2));
 		acc[cur] = randomReward;
 		return acc;
 	}, {});
+	pveResult.expReward = Math.ceil(Math.random() * (npc.stats.attack + npc.stats.health));
+}
+ else {
+	pveResult.expReward = Math.ceil(Math.random() * 5);
+}
 
+// checks if hero has leveld up
+if (pveResult.expReward + user.hero.currentExp >= user.hero.expToNextRank) {
+	pveResult.levelUp = true;
+}
 	// await user.unitLoss(lossPercentage);
-
-	return { win, lossPercentage: 1 - lossPercentage, combatModifier, calculatedReward };
+	return pveResult;
 };
 
 // user vs opponent duel with full army (units + hero), returns an object with the winner and loser

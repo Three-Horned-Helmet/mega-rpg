@@ -6,6 +6,7 @@ mongoose.connect(process.env.MONGODB_URI, { useUnifiedTopology: true, useNewUrlP
 const { Schema } = mongoose;
 
 const buildingsObject = require("../game/build/buildings-object");
+const { heroExpToNextLevel } = require("../game/_CONSTS/hero-exp");
 
 const userSchema = new Schema({
 	account: {
@@ -43,6 +44,10 @@ const userSchema = new Schema({
 			default:0,
 		},
 		fish:{
+			type:Date,
+			default:0,
+		},
+		raid:{
 			type:Date,
 			default:0,
 		},
@@ -154,15 +159,9 @@ const userSchema = new Schema({
 
 	empire: {
 		type: Array,
-		default: [
-
-		],
+		default: [],
 	},
 	hero: {
-		level: {
-			type: Number,
-			default: 0,
-		},
 		health: {
 			type: Number,
 			default: 100,
@@ -449,11 +448,11 @@ userSchema.methods.healHero = function(heal, item) {
 };
 
 // NB: I think I can remove the markModified (or atleast only have it for hero?)
-userSchema.methods.gainExp = async function(exp, newExpToNextLevel, statGains) {
+userSchema.methods.gainExp = async function(exp, newExpToNextRank, statGains) {
 	this.hero.currentExp += exp;
-	if(newExpToNextLevel) {
-		this.hero.expToNextRank = newExpToNextLevel;
-		this.hero.level += 1;
+	if(newExpToNextRank) {
+		this.hero.expToNextRank = newExpToNextRank;
+		this.hero.rank += 1;
 
 		// Stat gains for new level
 		for(const stat in statGains) {
@@ -469,13 +468,13 @@ userSchema.methods.gainExp = async function(exp, newExpToNextLevel, statGains) {
 	return this.save();
 };
 
-userSchema.methods.removeExp = async function(exp, newExpToNextLevel, statRemoval) {
+userSchema.methods.removeExp = async function(exp, newExpToNextRank, statRemoval) {
 	this.hero.currentExp -= exp;
 	if(this.hero.currentExp < 0) this.hero.currentExp = 0;
 
-	if(newExpToNextLevel) {
-		this.hero.expToNextRank = newExpToNextLevel;
-		this.hero.level -= 1;
+	if(newExpToNextRank) {
+		this.hero.expToNextRank = newExpToNextRank;
+		this.hero.rank -= 1;
 
 		// Stat gains for new level
 		for(const stat in statRemoval) {
@@ -529,6 +528,37 @@ userSchema.methods.pvpHandler = async function(cdType, now, loot) {
 	});
 
 	return this.save();
+};
+
+userSchema.methods.handlePveFullArmy = function(raidResult, now, type) {
+	this.cooldowns[type] = now;
+
+	// Kill off unit depending on the lossPercentage
+	Object.values(this.army.units).forEach(unitBuilding => {
+		Object.keys(unitBuilding).forEach(unit => {
+			if(typeof unitBuilding[unit] === "number") {
+				unitBuilding[unit] = Math.floor(unitBuilding[unit] * raidResult.lossPercentage);
+				this.markModified(`army.units.${unitBuilding}.${unit}`);
+			}
+		});
+	});
+
+	// Remove hp from your hero depending on the loss percentage
+	this.hero.currentHealth = Math.floor(this.hero.currentHealth * raidResult.lossPercentage);
+
+	if (raidResult.levelUp) {
+		this.hero.rank += 1;
+		this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
+	}
+
+	if (raidResult.winner) {
+		Object.keys(raidResult.resourceReward).forEach(r=>{
+			this.resources[r] += raidResult.resourceReward[r];
+		});
+	}
+	this.hero.currentExp += raidResult.expReward;
+
+	this.save();
 };
 
 module.exports = mongoose.model("User", userSchema);

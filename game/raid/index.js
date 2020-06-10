@@ -1,7 +1,7 @@
 const { onCooldown } = require("../_CONSTS/cooldowns");
 const { worldLocations } = require("../_CONSTS/explore");
 const { getLocationIcon } = require("../_CONSTS/icons");
-const { pveFullArmy } = require("../../combat/combat");
+const { calculatePveFullArmyResult } = require("../../combat/combat");
 const { generateEmbedPveFullArmy } = require("../../combat/pveEmedGenerator");
 
 const handleRaid = async (user, place = null) => {
@@ -10,6 +10,11 @@ const handleRaid = async (user, place = null) => {
     const cooldownInfo = onCooldown("raid", user);
     if (cooldownInfo.response) {
         return cooldownInfo.embed;
+    }
+
+    // checks for too low hp
+    if (user.hero.health < 5) {
+        return `Your hero's health is too low (**${user.hero.health}**)`;
     }
 
     const { currentLocation } = user.world;
@@ -78,14 +83,17 @@ const handleRaid = async (user, place = null) => {
 }
 
     // calculates result
- const raidResult = await pveFullArmy(user, placeInfo);
+ const raidResult = calculatePveFullArmyResult(user, placeInfo);
+
  // saves to database
- await user.handlePveFullArmy(raidResult);
- // generates an mbed
- const raidEmbed = generateEmbedPveFullArmy(user, placeInfo, raidResult);
+ const now = new Date();
 
+ await user.handlePveFullArmy(raidResult, now, "raid");
 
- return raidResult;
+// generates a Discord embed
+    const raidEmbed = generateEmbedPveFullArmy(user, placeInfo, raidResult);
+
+ return raidEmbed;
 
 };
 

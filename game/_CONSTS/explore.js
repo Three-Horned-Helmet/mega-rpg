@@ -2,20 +2,34 @@ const worldLocations = {
 	"Grassy Plains": {
 		description: "1st world. Here you can find all the noobs, such as yourself",
 		randomEvents: {
-			"Bandit Camp": {
+			"Highlanders": {
 				name: "Highlanders",
 				type: "raid",
-				difficulty: 5,
+				stats:{
+					attack: 30,
+					health:10,
+				},
+				rewards:{
+					gold: 100,
+				},
 			},
 			Wolves: {
 				name: "Wolves",
 				type: "raid",
-				difficulty: 3,
+				stats:{
+					attack: 15,
+					health:5,
+				},
+				rewards:{
+					gold: 50,
+				},
 			},
 			Chest: {
 				name: "Bandit Camp",
 				type: "luck",
-				difficulty: 1,
+				rewards:{
+					gold: 1000,
+				},
 			},
 		},
 		places:{
@@ -23,7 +37,7 @@ const worldLocations = {
 				name: "Bandit Camp",
 				type: "raid",
 				stats:{
-					attack: 3,
+					attack: 30,
 					health:20,
 				},
 				rewards:{
@@ -34,20 +48,20 @@ const worldLocations = {
 				name: "Fishing village",
 				type: "raid",
 				stats:{
-					attack: 2,
-					health:40,
+					attack: 10,
+					health:30,
 				},
 				rewards:{
 					gold: 500,
 					"oak wood": 100,
-					"yak wood": 50,
+					"yew wood": 50,
 				},
 			},
 			"Collapsed Mine": {
 				name: "Collapsed Mine",
 				type: "raid",
 				stats:{
-					attack: 2,
+					attack: 20,
 					health:20,
 				},
 				rewards:{
