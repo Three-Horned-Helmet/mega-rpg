@@ -1,6 +1,6 @@
 module.exports = {
 	// Resources
-	["gold"]: ":moneybag",
+	["gold"]: ":moneybag:",
 
 	["oak wood"]: ":evergreen_tree:",
 	["yew wood"]: ":deciduous_tree:",
