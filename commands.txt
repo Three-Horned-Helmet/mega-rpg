@@ -1,0 +1,17 @@
+Build:
+!build => Returns all available buildings and their prices
+!build "buildingName" => Builds the building on any open spots on the grid (!build farm)
+!build "buildingName" -u => Upgrades the lowest level of the building (!build farm -u)
+!build "buildingName" "coords" => Builds the building on the coordinates (2 numbers seperated by .). Upgrades the building if the coords are taken (!build farm 1.1)
+
+Recruit:
+!recruit => Returns all available units that can be recruited and all their prices and stats
+!recruit "unitName" => Recruits 1 of the specified unit (!recruit archer)
+!recruit "unitName" "amount" => Recruits the specified amount of the unit (!recruit archer 5)
+
+Army:
+!army => Returns all owned units, equipment, hero and total army strength (including inventory)
+
+Buy:
+!buy => Returns all available items in your shop
+!buy "itemName" => Buys the item from the shop (!buy small heal potion)
