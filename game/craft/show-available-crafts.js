@@ -5,7 +5,12 @@ const allItems = require("../items/all-items");
 const craftsEmbed = (user) => {
     const title = `${user.account.username}'s available crafts:`;
     const sideColor = "#45b6fe";
-    const fields = Object.values(allItems).map(item => {
+
+    const fields = Object.values(allItems).filter(item => {
+        const { building, level } = item.requirement;
+        return user.empire.find(b => b.name === building && b.level >= level);
+    }).map(item => {
+        console.log("ITEM", item);
         return addCraftsField(item);
    });
 
@@ -40,7 +45,7 @@ const addCraftsField = (item) => {
 
     const field = {
         name: name.capitalize(),
-        value: `${typeSequence[typeSequence.length - 1].capitalize()} \n ${objectMessage(stats)} \n ${objectMessage(cost)}`,
+        value: `${typeSequence[typeSequence.length - 1].capitalize()} \n ${objectMessage(stats)} ${objectMessage(stats) ? "\n" : ""} ${objectMessage(cost)}`,
         inline: true,
     };
 
