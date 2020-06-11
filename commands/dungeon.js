@@ -1,4 +1,4 @@
-// const { handleDungeon } = require("../game/miniboss");
+/* const { handleDungeon } = require("../game/dungeon");
 
 module.exports = {
 	name: "dungeon",
@@ -7,4 +7,4 @@ module.exports = {
 		// const result = handleDungeon(user);
 		return message.channel.send("This feature has not yet been activated!");
 	},
-};
+}; */
