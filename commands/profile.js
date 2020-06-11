@@ -24,7 +24,7 @@ module.exports = {
 			dbUser = user;
 		}
 
-		const prettifiedUser = prettifyUser(message, dbUser);
+		const prettifiedUser = await prettifyUser(message, dbUser);
 		message.channel.send(prettifiedUser);
 	},
 };

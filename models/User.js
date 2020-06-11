@@ -16,6 +16,10 @@ const userSchema = new Schema({
 			type: Boolean,
 			default: false,
 		},
+		testUser:{
+			type: Boolean,
+			default: false,
+		},
 		patreon: {
 			type: String,
 			enum: ["", "Bronze", "Silver", "Gold", "Platinum"],
@@ -44,6 +48,10 @@ const userSchema = new Schema({
 			default:0,
 		},
 		fish:{
+			type:Date,
+			default:0,
+		},
+		hunt:{
 			type:Date,
 			default:0,
 		},
@@ -431,13 +439,32 @@ userSchema.methods.unitLoss = function(lossPercentage) {
 	});
 
 	// Remove hp from your hero depending on the loss percentage
-	this.hero.currentHealth = Math.floor(this.hero.currentHealth * lossPercentage);
+	this.hero.currentHealth = this.hero.currentHealth - Math.floor(this.hero.currentHealth * lossPercentage);
 
+	// if the hero died
+	if (this.hero.currentHealth <= 0 && this.hero.rank > 0) {
+		this.hero.rank -= 1;
+		this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
+	}
+	// failsafe to ensure that hero doesn't have negative hp
+
+	if (this.hero.currentHealth < 0) {
+		this.hero.currentHealth = 0;
+	}
 	return this.save();
 };
 
 userSchema.methods.heroHpLoss = function(lossPercentage) {
-	this.hero.currentHealth = Math.floor(this.hero.currentHealth * lossPercentage);
+	this.hero.currentHealth = this.hero.currentHealth - Math.floor(this.hero.currentHealth * lossPercentage);
+	// if the hero died
+	if (this.hero.currentHealth <= 0 && this.hero.rank > 0) {
+			this.hero.rank -= 1;
+			this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
+	}
+	// failsafe to ensure that hero doesn't have negative hp
+	if (this.hero.currentHealth < 0) {
+		this.hero.currentHealth = 0;
+	}
 	return this.save();
 };
 
