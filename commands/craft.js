@@ -9,9 +9,8 @@ module.exports = {
 	execute(message, args, user) {
 		if(args.length === 0) return message.channel.send(displayCrafts(user));
 
-		const item = args.slice(0, args.length - 1).join(" ");
-		const amount = Math.floor(args[args.length - 1]);
-
+		const item = Math.floor(args[args.length - 1]) ? args.slice(0, args.length - 1).join(" ") : args.slice(0, args.length).join(" ");
+		const amount = Math.floor(args[args.length - 1]) || 1;
 
 		craftItem(user, item, amount).then((response) => {
 			message.channel.send(`<@${message.author.id}>: ${response}`);
