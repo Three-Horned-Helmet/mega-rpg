@@ -65,7 +65,7 @@ const produceMessage = (prod) => {
     let message = "";
 
     prod.forEach(p => {
-        message += ` ${icons[p.produce]} ${p.produce}\n`;
+        message += ` ${icons[p.produce]} ${p.produce.capitalize()}\n`;
     });
 
     return message;
