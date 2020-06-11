@@ -86,4 +86,4 @@ const duelFullArmy = (user, opp) => {
 };
 
 
-module.exports = { calculatePveFullArmyResult, pveHero, pvpFullArmy, duelFullArmy };
+module.exports = { calculatePveFullArmyResult, pveHero, duelFullArmy };
