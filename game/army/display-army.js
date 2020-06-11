@@ -60,7 +60,8 @@ const createMessage = (mainCategory) =>{
 
 		Object.keys(mainCategory[category]).forEach(subCategory =>{
 			if(mainCategory[category][subCategory] && !subCategory.startsWith("$")) {
-				message += `${subCategory.capitalize()}: ${mainCategory[category][subCategory]} \n`;
+				const iValue = mainCategory[category][subCategory];
+				message += `${subCategory.capitalize()}: ${typeof iValue === "string" ? iValue.capitalize() : iValue} \n`;
 			}
 		});
 
