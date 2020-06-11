@@ -28,7 +28,7 @@ const checkIfPossibleToCraft = (user, item, amount) => {
 			return {
 				response: false,
 				message: `You are missing ${user.resources[resource] ?
-					user.resources[resource] - item.cost[resource] * amount :
+					item.cost[resource] * amount - user.resources[resource] :
 					item.cost[resource] * amount} of ${resource}`,
 			};
 		}

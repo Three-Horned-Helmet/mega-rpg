@@ -35,7 +35,7 @@ const checkIfPossibleToRecruit = (user, unit, amount) =>{
 		if(!(user.resources[resource] >= unit.cost[resource] * amount)) {
 			return {
 				response: false,
-				message: `You are missing ${user.resources[resource] ? user.resources[resource] - unit.cost[resource] * amount : unit.cost[resource] * amount} of ${resource}` };
+				message: `You are missing ${user.resources[resource] ? unit.cost[resource] * amount - user.resources[resource] : unit.cost[resource] * amount} of ${resource}` };
 		}
 	}
 
