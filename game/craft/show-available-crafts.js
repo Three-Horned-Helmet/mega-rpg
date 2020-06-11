@@ -10,7 +10,6 @@ const craftsEmbed = (user) => {
         const { building, level } = item.requirement;
         return user.empire.find(b => b.name === building && b.level >= level);
     }).map(item => {
-        console.log("ITEM", item);
         return addCraftsField(item);
    });
 
