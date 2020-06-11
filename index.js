@@ -58,7 +58,16 @@ client.on("message", async (message) => {
 	// Goes through the args and checks if any of them are shortcuts
 	const { shortcuts } = command;
 	const updatedArgs = shortcuts ? args.map(a => shortcuts[a] || a).map(a => a.match(/\s/g) ? a.split(" ") : a).flat() : args;
-	// Display shortcuts command here!!
+
+	if(args[0] === "shortcuts") {
+		if(shortcuts) {
+			const msg = Object.keys(shortcuts).map(shortcut => `**${shortcut}**: ${shortcuts[shortcut]}\n`);
+			return message.author.send(`__The shortcuts for '${command.name}' is:__\n\n${msg.join("\n")}`);
+		}
+		else {
+			return message.author.send(`There are no shortcuts for '${command.name}'.`);
+		}
+	}
 
 	const { author } = message;
 	let userProfile;
