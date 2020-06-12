@@ -1,45 +1,62 @@
-Army:
+**__BUILDINGS:__**
+Archery: Used to recruit archers
+Armorer: Used for crafting high end expensive equipment primarily used by your hero
+Barracks: Used to recruit foot soilders
+Blacksmith: Used for crafting of cheap weaponry in high quantities for your army
+Forge: Used for crafting of metal bars like Bronze Bar and Iron Bar
+House: Increases your max population
+Lumbermill: Used for production of wood like Oak Wood
+Mine: Used for production of ores like Copper ores
+Shop: Used to buy consumables like healing potions for your hero
+
+
+**__COMMANDS:__**
+__Army:__
 !army => Returns all owned units, equipment, hero and total army strength (including inventory)
 
-Build:
+__Build:__
 !build => Returns all available buildings and their prices
 !build "buildingName" => Builds the building on any open spots on the grid (!build farm)
 !build "buildingName" -u => Upgrades the lowest level of the building (!build farm -u)
 !build "buildingName" "coords" => Builds the building on the coordinates (2 numbers seperated by .). Upgrades the building if the coords are taken (!build farm 1.1)
 
-Buy:
+__Buy:__
 !buy => Returns all available items in your shop
 !buy "itemName" => Buys the item from the shop (!buy small heal potion)
 
-Collect:
+__Collect:__
 !collect => Collects all collectable resources
 !collect "building" => Collects the resources from these specific buildings (!collect mine)
 
-Craft:
+__Craft:__
+!craft => Returns all available items that you can craft and their costs
+!craft "item" => Crafts 1 of the specified item (!craft bronze sword)
 !craft "item" "amount" => Crafts the x amount of the specified item (!craft bronze sword 5)
 
-Duel:
+__Duel:__
 !duel "@user" => Duels the user in a friendly full army battle without losses (!duel @SpinningSiri)
 
-Equip:
+__Equip:__
+!equip => Returns all available equipment and their stats that you have in your armory
 !equip "itemName" => Equips your hero with the specified item (!equip bronze sword)
 
-Grid:
+__Grid:__
 !grid => Returns the grid that has all the users buildings displayed (!grid)
 
-Produce:
+__Produce:__
+!produce => Returns the available resources that you are able to produce
 !produce "resource" => Collects the resource type and starts producing the specified resource (!produce yew wood)
 
-Recruit:
+__Recruit:__
 !recruit => Returns all available units that can be recruited and all their prices and stats
 !recruit "unitName" => Recruits 1 of the specified unit (!recruit archer)
 !recruit "unitName" "amount" => Recruits the specified amount of the unit (!recruit archer 5)
 
-Resources:
+__Resources:__
 !resources => Returns all your resources (!resources)
 
-Stake:
+__Stake:__
 !stake "@player" => Stakes another player that must accept the challenge. Loser loses an aritfact item and 20% hero exp, winner gets it. (!stake @SpinningSiri)
 
-Use:
+__Use:__
 !use "itemName" => Uses the specified item (consumable). (!use small heal potion)
