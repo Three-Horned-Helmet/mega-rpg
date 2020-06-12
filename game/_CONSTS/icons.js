@@ -10,7 +10,7 @@ const getPlaceIcon = (type) => {
 	const lexicon = {
 		raid: "🦹‍♂️",
 		hunt: "🐸",
-		miniboss: "🧿",
+		miniboss: "🧟",
 		fishing: "🐡",
 		dungeon: "🗺",
 	};

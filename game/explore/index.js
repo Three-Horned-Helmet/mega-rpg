@@ -12,12 +12,12 @@ const handleExplore = (user) => {
 	}
 	const { currentLocation } = user.world;
 
-	const chanceForRandomEvent = 0.1;
+	const chanceForRandomEvent = 0.05;
 	const randomNumber = Math.random();
 
 	const now = new Date();
 
-	// triggers randomevent 1:10
+	// triggers randomevent 5%
 	if (chanceForRandomEvent > randomNumber) {
 		const { randomEvents } = worldLocations[currentLocation];
 		user.setNewCooldown("explore", now);
@@ -32,7 +32,7 @@ const handleExplore = (user) => {
 const handleRandomEvent = (randomEvents) => {
 	const randomEventNames = Object.keys(randomEvents);
 	const randomEvent = randomEventNames[Math.floor(Math.random() * randomEventNames.length)];
-	return `randomEvent triggered --> ${randomEvent}`;
+	return `randomEvent triggered --> ${randomEvent} - not yet done`;
 };
 
 const exploreArea = (user, places, currentLocation, now)=>{
