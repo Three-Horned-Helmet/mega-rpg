@@ -1,10 +1,10 @@
- const { minibossStartAllowed } = require("../game/miniboss");
+ /* const { minibossStartAllowed } = require("../game/miniboss"); */
 
 module.exports = {
 	name: "miniboss",
 	description: "Let's the player attack a miniboss",
-	async execute(message, args, user) {
-
+	async execute(message) {
+// add (args, user)
 
 		// validate
 		/* const disallowed = minibossStartAllowed(user);
@@ -25,6 +25,7 @@ module.exports = {
 
 		const collector = invitation.createReactionCollector(filter, { time: 1000 * 5, errors: ["time"] });
 		collector.on("collect", (result, rUser) => {
+			console.log(result, rUser);
 			// checks if bot
 
 			// collector.stop()
