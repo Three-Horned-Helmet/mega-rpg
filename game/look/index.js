@@ -19,6 +19,14 @@ const getWorld = (user) => {
 
 	const sideColor = "#45b6fe";
 	const username = `${user.account.username}`;
+	const legend = new Set();
+
+	Object.keys(worldLocations[currentLocation].places).map(p=>{
+		const type = worldLocations[currentLocation].places[p].type;
+		legend.add(`${getPlaceIcon(type)}: ${type} - `);
+	});
+	const footerFriendlyLegend = Array.from(legend).join("");
+	console.log(footerFriendlyLegend);
 
 	const embedUser = new Discord.MessageEmbed()
 		.setTitle(`${username}'s world`)
@@ -35,7 +43,8 @@ const getWorld = (user) => {
 				value: exploredPlacesWithIcons,
 				inline: false,
 			},
-		);
+		)
+		.setFooter(`Legend:\n ${footerFriendlyLegend}`);
 	return embedUser;
 };
 
