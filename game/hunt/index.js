@@ -13,7 +13,7 @@ const handleHunt = async (user, place = null) => {
     }
 
     // checks for too low hp
-    if (user.hero.currentHealth < 5) {
+    if (user.hero.currentHealth < user.hero.health * 0.05) {
         return `Your hero's health is too low (**${user.hero.currentHealth}**)`;
     }
 

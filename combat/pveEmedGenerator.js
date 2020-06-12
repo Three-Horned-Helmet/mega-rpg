@@ -217,7 +217,7 @@ function generateArmyCasultyString(percentage = "All") {
 
 function generateHeroCasulty(hp, placeName) {
     const strings = [
-        `Your hero fell and twisted his ankle while running into battle losing **${hp}h**p`,
+        `Your hero fell and twisted his ankle while running into battle losing **${hp}**hp`,
         `Your hero fell off your horse losing **${hp}**hp`,
         `An orc attacked your hero in the **${placeName}** causing your hero to lose **${hp}**hp`,
         `The **${placeName}** put up a fight and caused your hero to lose **${hp}**hp`,
