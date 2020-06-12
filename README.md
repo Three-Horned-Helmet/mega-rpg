@@ -12,14 +12,15 @@
 2. Install [MongoDB Community](https://docs.mongodb.com/manual/installation/#mongodb-community-edition-installation-tutorials).
 3. [Clone](https://github.com/Three-Horned-Helmet/mega-rpg.git) the project from github OR run: `$ git clone https://github.com/Three-Horned-Helmet/mega-rpg.git`
 4. `$ npm install`
-5. `$ mongod`
-6. `$ npm start`
+5. Create a `.env` file in root of the project and set the environmental values according to the `.envTemplate` file. This file should be held secret and not shared on Github or any other platform. A personal Discord Token can be obtained from [Discord Developer](https://discord.com/developers/applications). The `DISCORD_PREFIX` value represent what your bot should listen to. Eg `DISCORD_PREFIX=!` will listen to any commands that starts with `!` ==> `!profile` will return the profile of whoever wrote the command.
+6. `$ mongod`
+7. `$ npm start`
 
 ---
 
 ## Run tests
 
-1. `$ npm install`
+1. Install the project by following the steps over
 2. `$ npm test`
 
 ---
