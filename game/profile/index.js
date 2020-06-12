@@ -51,7 +51,7 @@ const prettifyUser = async (message, user) => {
 			{ name: "Inventory", value: inventoryValue, inline: true },
 		)
 
-		.setFooter(`PVP: ${pvpRank} ~~~ Total: #${totalRank}`);
+		.setFooter(`Ranking: PVP: ${pvpRank} ~~~ Total: #${totalRank}`);
 
 	return embedUser;
 };
