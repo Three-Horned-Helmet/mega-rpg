@@ -9,5 +9,7 @@ module.exports = {
             const toSend = data.substring(i, Math.min(data.length, i + 2000));
             message.author.send(toSend);
         }
+		message.reply("I've sent you a DM with more info about the game!");
+
 	},
 };
