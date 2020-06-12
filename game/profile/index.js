@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
+const { determineSupporterTitle, getAllSoldiers, getPlayerPosition } = require("./helper");
 
-const prettifyUser = (message, user) => {
-
+const prettifyUser = async (message, user) => {
 
 	const sideColor = "#45b6fe";
 	const patreonSupporter = determineSupporterTitle(user.account.patreon);
@@ -11,9 +11,9 @@ const prettifyUser = (message, user) => {
 
 	const { hero } = user;
 	const heroRank = hero.rank;
-	const heroValue = `❤️ HP: ${hero.health}\n\n⚔ AT: ${hero.attack}\n\n🛡 DEF: ${hero.defense}\n\n🔅 XP: ${hero.currentExp}/${hero.expToNextRank}`;
+	const heroValue = `❤️ HP: ${hero.currentHealth}/${hero.health}\n\n⚔ AT: ${hero.attack}\n\n🛡 DEF: ${hero.defense}\n\n🔅 XP: ${hero.currentExp}/${hero.expToNextRank}`;
 
-	const heroEquipment = `🧢 Helmet: ${hero.armor.helmet}\n\n⚜️ Chest: ${hero.armor.chest}\n\n🦵 Leggings: ${hero.armor.leggings}\n\n🗡 Weapon: ${hero.armor.weapon}`;
+	const heroEquipment = `🧢 Helmet: ${hero.armor.helmet}\n\n⚜️ Chest: ${hero.armor.chest}\n\n🦵 Leggings: ${hero.armor.legging}\n\n🗡 Weapon: ${hero.armor.weapon}`;
 
 	const totalSoldiers = getAllSoldiers(user.army.units);
 	const armyAttack = Math.floor(Math.random() * (totalSoldiers + 1) * 20); // todo, fix this
@@ -23,8 +23,8 @@ const prettifyUser = (message, user) => {
 
 	const inventoryValue = `💰 Gold: ${user.resources.gold}\n\n🧪 Small Potion: ${hero.inventory["Small Heal Potion"]}\n\n💉 Large Potion: ${hero.inventory["Large Heal Potion"]}`;
 
-	const pvpRank = Math.floor(Math.random() * 10) + 1; // todo, fix this
-	const totalRank = Math.floor(Math.random() * 10) + 1; // todo, fix this
+	const pvpRank = "provisional"; // todo, fix this
+	const totalRank = await getPlayerPosition(message.author.id);
 
 	const embedUser = new Discord.MessageEmbed()
 		.setTitle(patreonSupporter)
@@ -38,7 +38,7 @@ const prettifyUser = (message, user) => {
 				inline: true,
 			},
 			{
-				name: "Hero equipment",
+				name: "Hero Armor Equipped",
 				value: heroEquipment,
 				inline: true,
 			},
@@ -51,35 +51,9 @@ const prettifyUser = (message, user) => {
 			{ name: "Inventory", value: inventoryValue, inline: true },
 		)
 
-		.setFooter(`PVP: #${pvpRank} ~~~ Total: #${totalRank}`);
+		.setFooter(`PVP: ${pvpRank} ~~~ Total: #${totalRank}`);
 
 	return embedUser;
-};
-
-const determineSupporterTitle = (subscription) => {
-	const titles = {
-		Bronze: "🎗 Supporter 🎗",
-		Silver: "🎖 Supporter 🎖",
-		Gold: "👑 Ultra Supporter 👑",
-		Platinum: "💎 Epic Supporter 💎",
-	};
-	const result = subscription ? titles[subscription] : "Casual player";
-	return result;
-};
-
-// cleanCode.com
-const getAllSoldiers = (units) => {
-	let result = 0;
-	Object.keys(units).forEach(b => {
-		Object.values(units[b]).forEach(n => {
-			if (typeof n === "number") {
-				result += n;
-			}
-		});
-	});
-
-	return result;
-
 };
 
 module.exports = { prettifyUser };
