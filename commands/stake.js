@@ -22,7 +22,7 @@ module.exports = {
 			await msg.react("✅");
 
 			const filter = (reaction, reactUser) => {
-				if(["✅"].includes(reaction.emoji.name) && reactUser.id === user.account.userId) {
+				if(["✅"].includes(reaction.emoji.name) && reactUser.id === opponent.account.userId) {
 					return true;
 				}
 		};
@@ -42,7 +42,7 @@ module.exports = {
 	})
 	.catch((error) => {
 		console.error(error);
-		msg.reply("Stake declined");
+		msg.reply(`Stake declined between ${user.account.username} and ${opponent.account.username}`);
 	});
 		});
 
