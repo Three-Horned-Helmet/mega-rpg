@@ -6,13 +6,17 @@ mongoose.connect(process.env.MONGODB_URI, { useUnifiedTopology: true, useNewUrlP
 const { Schema } = mongoose;
 
 const buildingsObject = require("../game/build/buildings-object");
-const { heroExpToNextLevel } = require("../game/_CONSTS/hero-exp");
+const { heroExpToNextLevel, heroStatIncreaseOnLevel } = require("../game/_CONSTS/hero-exp");
 
 const userSchema = new Schema({
 	account: {
 		username: String,
 		userId: String,
 		banned: {
+			type: Boolean,
+			default: false,
+		},
+		testUser:{
 			type: Boolean,
 			default: false,
 		},
@@ -44,6 +48,10 @@ const userSchema = new Schema({
 			default:0,
 		},
 		fish:{
+			type:Date,
+			default:0,
+		},
+		hunt:{
 			type:Date,
 			default:0,
 		},
@@ -431,13 +439,32 @@ userSchema.methods.unitLoss = function(lossPercentage) {
 	});
 
 	// Remove hp from your hero depending on the loss percentage
-	this.hero.currentHealth = Math.floor(this.hero.currentHealth * lossPercentage);
+	this.hero.currentHealth = this.hero.currentHealth - Math.floor(this.hero.currentHealth * lossPercentage);
+
+	// if the hero dies
+	if (this.hero.currentHealth <= 0 && this.hero.rank > 0) {
+		Object.keys(heroStatIncreaseOnLevel[this.hero.rank]).forEach(s=>{
+			this.hero[s] -= heroStatIncreaseOnLevel[this.hero.rank][s];
+		});
+		this.hero.rank -= 1;
+		this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
+		this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] || 50;
+	}
 
 	return this.save();
 };
 
 userSchema.methods.heroHpLoss = function(lossPercentage) {
-	this.hero.currentHealth = Math.floor(this.hero.currentHealth * lossPercentage);
+	this.hero.currentHealth = this.hero.currentHealth - Math.floor(this.hero.currentHealth * lossPercentage);
+	// if the hero dies
+	if (this.hero.currentHealth <= 0 && this.hero.rank > 0) {
+		Object.keys(heroStatIncreaseOnLevel[this.hero.rank]).forEach(s=>{
+			this.hero[s] -= heroStatIncreaseOnLevel[this.hero.rank][s];
+		});
+		this.hero.rank -= 1;
+			this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
+			this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] || 50;
+	}
 	return this.save();
 };
 
@@ -538,11 +565,16 @@ userSchema.methods.pvpHandler = async function(cdType, now, loot) {
 };
 
 //
-userSchema.methods.alternativeGainXp = async function(xp) {
-	this.hero.currentExp += xp;
+userSchema.methods.alternativeGainXp = async function(xp = 0) {
+	if (xp) {
+		this.hero.currentExp += xp;
+	}
 	if (this.hero.currentExp >= this.hero.expToNextRank) {
 		this.hero.rank += 1;
 		this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
+				Object.keys(heroStatIncreaseOnLevel[this.hero.rank]).forEach(s=>{
+					this.hero[s] += heroStatIncreaseOnLevel[this.hero.rank][s];
+				});
 	}
 	return this.save();
 };

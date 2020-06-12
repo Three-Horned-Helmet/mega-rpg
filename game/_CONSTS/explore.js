@@ -77,13 +77,19 @@ const worldLocations = {
 					attack: 5,
 					health:5,
 				},
+				rewards:{
+					gold: 1000,
+				},
 			},
 			Cave: {
 				name: "Cave",
 				type: "hunt",
 				stats:{
-					attack: 5,
-					health:5,
+					attack: 2,
+					health:2,
+				},
+				rewards:{
+					gold: 500,
 				},
 			},
 			"Bandidos de la Grande": {

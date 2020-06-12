@@ -118,4 +118,4 @@ const removeHeroExp = async (user, exp, message) => {
 };
 
 
-module.exports = { gainHeroExp, removeHeroExp, heroExpToNextLevel };
+module.exports = { gainHeroExp, heroStatIncreaseOnLevel, removeHeroExp, heroExpToNextLevel };

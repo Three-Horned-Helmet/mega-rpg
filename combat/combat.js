@@ -1,8 +1,9 @@
 const calculateStats = require("./calculate-stats");
+// todo, 0 exp if dead
 
 // Takes the user and the npc and battles the npc with only the hero at a 50-100% modifier
 // Returns win (bolean), lossPercentage (1 = 100% loss of hero hp), and the combat modifier
-const pveHero = async (user, npc) => {
+const calculatePveHero = (user, npc) => {
 	const { heroStats } = calculateStats(user);
 	const combatModifier = (1 - Math.random() / 2);
 	const userHp = heroStats.currentHealth * combatModifier;
@@ -10,13 +11,42 @@ const pveHero = async (user, npc) => {
 	const { health: oppHp, attack: oppAt } = npc.stats;
 
 	const losses = (userHp + userAt) - (oppHp + oppAt);
-	const win = losses > 0 ? true : false;
+	const win = losses > 0;
 	let lossPercentage = ((userHp + userAt) - (oppHp + oppAt)) / (userHp + userAt);
 	lossPercentage = lossPercentage < 0 ? 0 : lossPercentage;
 
-	await user.heroHpLoss(lossPercentage);
+	const pveResult = {
+		combatModifier,
+		expReward: 0,
+		levelUp:false,
+		heroDemote:false,
+		lossPercentage: 1 - lossPercentage,
+		resourceReward:{},
+		win,
+	};
 
-	return { win, lossPercentage: 1 - lossPercentage, combatModifier };
+	if (win) {
+		pveResult.resourceReward = Object.keys(npc.rewards).reduce((acc, cur)=>{
+		const randomReward = Math.ceil(Math.random() * npc.rewards[cur] + (npc.rewards[cur] / 2));
+		acc[cur] = randomReward;
+		return acc;
+	}, {});
+	pveResult.expReward = Math.ceil(Math.random() * (npc.stats.attack + npc.stats.health));
+}
+ else {
+	pveResult.expReward = Math.ceil(Math.random() * 5);
+	if (user.hero.rank > 0 && lossPercentage === 0) {
+		pveResult.levelUp = false;
+		pveResult.expReward = 0;
+		pveResult.heroDemote = true;
+	}
+}
+
+// checks if hero has leveld up
+if (pveResult.expReward + user.hero.currentExp >= user.hero.expToNextRank) {
+	pveResult.levelUp = true;
+}
+	return pveResult ;
 };
 
 // Takes the user and the npc and battles the npc with the full army at a 50-100% modifier
@@ -37,6 +67,7 @@ const calculatePveFullArmyResult = (user, npc) => {
 		combatModifier,
 		expReward: 0,
 		levelUp:false,
+		heroDemote:false,
 		lossPercentage: 1 - lossPercentage,
 		resourceReward:{},
 		win,
@@ -52,14 +83,18 @@ const calculatePveFullArmyResult = (user, npc) => {
 	pveResult.expReward = Math.ceil(Math.random() * (npc.stats.attack + npc.stats.health));
 }
  else {
-	pveResult.expReward = Math.ceil(Math.random() * 5);
+	pveResult.expReward = Math.ceil(Math.random() * 10);
+	if (user.hero.rank > 0 && lossPercentage === 0) {
+		pveResult.levelUp = false;
+		pveResult.expReward = 0;
+		pveResult.heroDemote = true;
+	}
 }
 
 // checks if hero has leveld up
 if (pveResult.expReward + user.hero.currentExp >= user.hero.expToNextRank) {
 	pveResult.levelUp = true;
 }
-	// await user.unitLoss(lossPercentage);
 	return pveResult;
 };
 
@@ -86,4 +121,4 @@ const duelFullArmy = (user, opp) => {
 };
 
 
-module.exports = { calculatePveFullArmyResult, pveHero, duelFullArmy };
+module.exports = { calculatePveFullArmyResult, calculatePveHero, duelFullArmy };

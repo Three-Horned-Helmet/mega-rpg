@@ -1,13 +1,13 @@
 const { onCooldown } = require("../_CONSTS/cooldowns");
 const { worldLocations } = require("../_CONSTS/explore");
 const { getLocationIcon } = require("../_CONSTS/icons");
-const { calculatePveFullArmyResult } = require("../../combat/combat");
-const { generateEmbedPveFullArmy } = require("../../combat/pveEmedGenerator");
+const { calculatePveHero } = require("../../combat/combat");
+const { generateEmbedPveHero } = require("../../combat/pveEmedGenerator");
 
-const handleRaid = async (user, place = null) => {
+const handleHunt = async (user, place = null) => {
 
     // checks for cooldown
-    const cooldownInfo = onCooldown("raid", user);
+    const cooldownInfo = onCooldown("hunt", user);
     if (cooldownInfo.response) {
         return cooldownInfo.embed;
     }
@@ -22,36 +22,35 @@ const handleRaid = async (user, place = null) => {
     const locationIcon = getLocationIcon(currentLocation);
 
     const userExploredPlaces = user.world.locations[currentLocation].explored;
-    const userExploredRaidPlaces = userExploredPlaces
+    const userExploredHuntPlaces = userExploredPlaces
     .filter(p=>{
-        return placesInCurrentWorld[p].type === "raid";
+        return placesInCurrentWorld[p].type === "hunt";
     })
     .map(p=>{
         return p.replace(/\s/g, "").toLowerCase();
     });
 
-    // checks if user has explored any raidable place in current location
-    if (!userExploredRaidPlaces.length) {
-        return `You have not explored any place to raid in ${locationIcon} ${currentLocation}, try \`!explore\` to find a place to raid`;
+    // checks if user has explored any huntable places in current location
+    if (!userExploredHuntPlaces.length) {
+        return `You have not explored any place to hunt in ${locationIcon} ${currentLocation}, try \`!explore\` to find a place to hunt`;
     }
 
-
-     const userExploredNotRaidPlaces = userExploredPlaces
+     const userExploredNotHuntPlaces = userExploredPlaces
      .filter(p=>{
-        return placesInCurrentWorld[p].type !== "raid";
+        return placesInCurrentWorld[p].type !== "hunt";
     })
      .map(p=>{
         return p.replace(/\s/g, "").toLowerCase();
     });
 
-    // if user tries to raid a place that is not raidable
-    if (userExploredNotRaidPlaces.includes(place)) {
-        return "This place cannot be raided";
+    // if user tries to hunt a place that is not huntable
+    if (userExploredNotHuntPlaces.includes(place)) {
+        return "This place cannot be hunted";
     }
 
     let placeInfo;
 
-    // if user wants to raid a specific place
+    // if user wants to hunt a specific place
     if (place) {
         placeInfo = Object.values(placesInCurrentWorld).find(p=>{
         const friendlyFormat = p.name.replace(/\s/g, "").toLowerCase();
@@ -64,17 +63,17 @@ const handleRaid = async (user, place = null) => {
     });
 }
  else {
-     // if user doesn't provide a specific place to raid, the user will be given a random place
+     // if user doesn't provide a specific place to hunt, the user will be given a random place
 
     const listOfPlaces = Object.values(placesInCurrentWorld).filter(p=>{
         const friendlyFormat = p.name.replace(/\s/g, "").toLowerCase();
-        return userExploredRaidPlaces.includes(friendlyFormat);
+        return userExploredHuntPlaces.includes(friendlyFormat);
     });
     placeInfo = listOfPlaces[Math.floor(Math.random() * listOfPlaces.length)];
 
  }
 
- // if user tries to raid that doesn't exist
+ // if user tries to hunt that doesn't exist
  if (!placeInfo) {
      if (place.length > 10) {
          place = `${place.slice(0, 10)}[...]`;
@@ -83,22 +82,23 @@ const handleRaid = async (user, place = null) => {
 }
 
     // calculates result
- const raidResult = calculatePveFullArmyResult(user, placeInfo);
+ const huntResult = calculatePveHero(user, placeInfo);
 
  // saves to database
  const now = new Date();
-await user.setNewCooldown("raid", now);
-await user.unitLoss(raidResult.lossPercentage);
-await user.alternativeGainXp(raidResult.expReward);
+await user.setNewCooldown("hunt", now);
+await user.heroHpLoss(huntResult.lossPercentage);
+await user.alternativeGainXp(huntResult.expReward);
 
-if (raidResult.winner) {
-    await user.gainManyResources(raidResult.resourceReward);
+if (huntResult.winner) {
+    await user.gainManyResources(huntResult.resourceReward);
 }
 
 // generates a Discord embed
-    const raidEmbed = generateEmbedPveFullArmy(user, placeInfo, raidResult);
- return raidEmbed;
+    const huntEmbed = generateEmbedPveHero(user, placeInfo, huntResult);
+
+ return huntEmbed;
 
 };
 
-module.exports = { handleRaid };
+module.exports = { handleHunt };
