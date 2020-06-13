@@ -90,7 +90,7 @@ await user.setNewCooldown("hunt", now);
 await user.heroHpLoss(huntResult.lossPercentage);
 await user.alternativeGainXp(huntResult.expReward);
 
-if (huntResult.winner) {
+if (huntResult.win) {
     await user.gainManyResources(huntResult.resourceReward);
 }
 
