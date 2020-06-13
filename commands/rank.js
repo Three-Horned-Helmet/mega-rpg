@@ -13,7 +13,7 @@ module.exports = {
 
         const formatted = top5.map((p, i)=>{
             const first = i === 0 ? "💎" : "";
-            return `#${i + 1}: ${first}${p.account.username}${first} --- herolvl: ${p.hero.rank} - ${p.hero.currentExp} XP`;
+            return `\`#${i + 1}: ${first}${p.account.username}${first} --- hero lvl: ${p.hero.rank} - ${p.hero.currentExp} XP\``;
         });
 
 		return message.channel.send(formatted);

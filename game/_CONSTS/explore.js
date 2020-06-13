@@ -78,7 +78,7 @@ const worldLocations = {
 					health:5,
 				},
 				rewards:{
-					gold: 1000,
+					gold: 40,
 				},
 			},
 			Cave: {
@@ -89,7 +89,7 @@ const worldLocations = {
 					health:2,
 				},
 				rewards:{
-					gold: 500,
+					gold: 100,
 				},
 			},
 			"Bandidos de la Grande": {
@@ -110,7 +110,7 @@ const worldLocations = {
 			},
 			River: {
 				name: "River",
-				type: "fishing",
+				type: "fish",
 				difficulty: 1,
 			},
 		},

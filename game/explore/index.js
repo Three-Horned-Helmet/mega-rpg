@@ -41,7 +41,7 @@ const exploreArea = (user, places, currentLocation, now)=>{
 	const previouslyExploredPlaces = user.world.locations[currentLocation].explored;
 	const msg = previouslyExploredPlaces.includes(newlyExploredPlaceName) ?
 		generateFailExploreMessage(currentLocation)
-		: generateSuccessExploreMessage(currentLocation, newlyExploredPlaceName);
+		: generateSuccessExploreMessage(currentLocation, newlyExploredPlaceName, user.hero.rank);
 
 
 	user.handleExplore(now, currentLocation, newlyExploredPlaceName);
@@ -64,11 +64,11 @@ const generateFailExploreMessage = (currentLocation) => {
 	const response = responses[Math.floor(Math.random() * responses.length)];
 	return response;
 };
-const generateSuccessExploreMessage = (currentLocation, place) => {
+const generateSuccessExploreMessage = (currentLocation, place, heroRank) => {
 	const worldIcon = getLocationIcon(currentLocation);
 	const placeType = worldLocations[currentLocation].places[place].type;
 	const placeIcon = getPlaceIcon(placeType);
-	const responses = [
+	const strings = [
 		`You went onto a new path and found a ${placeIcon} **${place}**`,
 		`You explored for hours and upon your return you found a ${placeIcon} **${place}** behind your empire`,
 		`You saw a small elf and decided to follow it, the elf lead you to a ${placeIcon} **${place}** `,
@@ -76,6 +76,9 @@ const generateSuccessExploreMessage = (currentLocation, place) => {
 		`As you travel through the land of ${worldIcon} ${currentLocation}, you find a ${placeIcon} **${place}**`,
 		`You can't belive your eyes, you have just encountered a ${placeIcon} **${place}**`,
 	];
-	const response = responses[Math.floor(Math.random() * responses.length)];
+	let response = `${strings[Math.floor(Math.random() * strings.length)]}`;
+	if (heroRank < 2) {
+		response += ` ~~~ type \`!${placeType}\` to interact`;
+	}
 	return response;
 };

@@ -11,7 +11,7 @@ const getPlaceIcon = (type) => {
 		raid: "🦹‍♂️",
 		hunt: "🐸",
 		miniboss: "🧟",
-		fishing: "🐡",
+		fish: "🐡",
 		dungeon: "🗺",
 	};
 

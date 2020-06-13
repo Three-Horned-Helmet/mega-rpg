@@ -26,7 +26,6 @@ const getWorld = (user) => {
 		legend.add(`${getPlaceIcon(type)}: ${type} - `);
 	});
 	const footerFriendlyLegend = Array.from(legend).join("");
-	console.log(footerFriendlyLegend);
 
 	const embedUser = new Discord.MessageEmbed()
 		.setTitle(`${username}'s world`)

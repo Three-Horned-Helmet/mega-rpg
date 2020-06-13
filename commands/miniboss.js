@@ -13,6 +13,8 @@ module.exports = {
 			return disallowed;
 		} */
 
+		// create event
+
 		// create invitation
 		// send invitation
 
@@ -31,13 +33,12 @@ module.exports = {
 			// collector.stop()
 });
 		collector.on("end", collected => {
-	const reactions = collected.first();
-	// grab all users
+
+	// console.log(reactions, "reactions");
+
 	// perform miniboss event
 	// save to db
 	// send back result
-
-	console.log(reactions.users);
 			message.channel.send(`This function is not yet done. ${collected.size} people clicked the icon..`);
 });
 

@@ -7,6 +7,7 @@ const { Schema } = mongoose;
 
 const buildingsObject = require("../game/build/buildings-object");
 const { heroExpToNextLevel, heroStatIncreaseOnLevel } = require("../game/_CONSTS/hero-exp");
+const { statistics, cooldowns } = require("./userValues/default");
 
 const userSchema = new Schema({
 	account: {
@@ -34,36 +35,8 @@ const userSchema = new Schema({
 		type: Number,
 		default: 10,
 	},
-	cooldowns: {
-		duel:{
-			type: Date,
-			default: 0,
-		},
-		dailyPrice:{
-			type:Date,
-			default:0,
-		},
-		explore: {
-			type:Date,
-			default:0,
-		},
-		fish:{
-			type:Date,
-			default:0,
-		},
-		hunt:{
-			type:Date,
-			default:0,
-		},
-		raid:{
-			type:Date,
-			default:0,
-		},
-		weeklyPrice:{
-			type:Date,
-			default:0,
-		},
-	},
+	// object too big, moved to ./uservalues/default
+	cooldowns,
 	resources: {
 		gold: {
 			type: Number,
@@ -237,7 +210,14 @@ const userSchema = new Schema({
 			default: 0,
 		},
 	},
-});
+	// object too big, moved to ./uservalues/default
+	statistics,
+}, {
+    timestamps: {
+      createdAt: "createdAt",
+      updatedAt: "updatedAt",
+    },
+  });
 
 userSchema.methods.gainResource = function(resource, quantity) {
 	this.resources[resource] += quantity;
