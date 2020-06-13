@@ -90,8 +90,7 @@ const handleRaid = async (user, place = null) => {
 await user.setNewCooldown("raid", now);
 await user.unitLoss(raidResult.lossPercentage);
 await user.alternativeGainXp(raidResult.expReward);
-
-if (raidResult.winner) {
+if (raidResult.win) {
     await user.gainManyResources(raidResult.resourceReward);
 }
 
