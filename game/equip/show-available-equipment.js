@@ -13,7 +13,7 @@ const equipmentEmbed = (user) => {
     if(fields.length === 0) {
         fields.push({
             name: "You dont have any equipment in your inventory. You can craft some if you have a blacksmith or armorer",
-            value: "Try `!build blacksmith` followed by `!craft bronze sword` to get started",
+            value: "Try `!build blacksmith` followed by `!craft bronze sword` to get started. You can then equip the bronze sword with `!equip bronze sword`",
         });
     }
 

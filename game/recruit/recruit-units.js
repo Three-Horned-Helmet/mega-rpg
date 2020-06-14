@@ -27,7 +27,12 @@ const checkIfPossibleToRecruit = (user, unit, amount) =>{
 			.reduce((accUnit, curUnit) => {return accUnit + curUnit;}, 0))
 		.reduce((accUnit, curUnit) => accUnit + curUnit);
 
-	if(user.maxPop < currentPop + amount) return { response: false, message: `You need ${currentPop + amount - user.maxPop} more population` };
+	if(user.maxPop < currentPop + amount) {
+		return {
+			response: false,
+			message: `You need ${currentPop + amount - user.maxPop} more population by building or upgrading your farms. Try \`!build farm\` to get more population.`,
+		};
+	}
 
 
 	// Sufficient resources?

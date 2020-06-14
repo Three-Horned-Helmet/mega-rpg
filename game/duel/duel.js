@@ -34,7 +34,7 @@ const checkIfDuelIsPossible = (user, opponent) =>{
     if(!opponent) {
         return {
             response: false,
-            message: "Invalid opponent to duel",
+            message: "Invalid opponent to duel. Usage `!duel @player`. Remember the '@' before the name of the player.",
         };
     }
 

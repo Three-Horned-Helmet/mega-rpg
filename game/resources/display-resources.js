@@ -14,24 +14,24 @@ const displayResources = (user) => {
 
 	const fields = [
 		{
-			name: "Gold",
+			name: "Gold (raid/hunt/fish/duel)",
 			value:
               `:moneybag: ${user.resources.gold}`,
 		},
 		{
-			name: ":axe: Wood",
+			name: ":axe: Wood (lumbermill)",
 			value:
               lumber,
 			inline: true,
 		},
 		{
-			name: ":pick: Ores",
+			name: ":pick: Ores (mine)",
 			value:
               ores,
 			inline: true,
 		},
 		{
-			name: ":fire: Bars",
+			name: ":fire: Bars (forge)",
 			value:
               bars,
 			inline: true,

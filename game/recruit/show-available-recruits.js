@@ -3,7 +3,7 @@ const icons = require("../../icons/icons");
 const allUnits = require("./all-units");
 
 const duelEmbed = (user) => {
-    const title = `${user.account.username}'s available recruits with the current level of barracks and archery`;
+    const title = `${user.account.username}'s available recruits with the current level of barracks and archery (usage: \`!recruit unitName\`)`;
     const sideColor = "#45b6fe";
     const fields = [];
 
@@ -15,8 +15,8 @@ const duelEmbed = (user) => {
 
     if(fields.length === 0) {
         fields.push({
-            name: "You do not own any buildings that are able to recruit units",
-            value: "\u200B",
+            name: "You do not own any buildings that are able to recruit units.",
+            value: "Try to build a barracks or an archery to get started: `!build barracks` followed by `!recruit peasant`",
         });
     }
 
