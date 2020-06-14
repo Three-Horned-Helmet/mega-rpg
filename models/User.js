@@ -454,6 +454,23 @@ userSchema.methods.heroHpLoss = function(lossPercentage) {
 	return this.save();
 };
 
+userSchema.methods.heroHpLossFixedAmount = function(damage) {
+	this.hero.currentHealth -= damage;
+	// if the hero dies
+	if (this.hero.currentHealth <= 0 && this.hero.rank > 0) {
+		Object.keys(heroStatIncreaseOnLevel[this.hero.rank]).forEach(s=>{
+			this.hero[s] -= heroStatIncreaseOnLevel[this.hero.rank][s];
+		});
+		this.hero.rank -= 1;
+			this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
+			this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] || 50;
+	}
+	if (this.hero.currentHealth > 0) {
+		this.hero.currentHealth = 0;
+	}
+	return this.save();
+};
+
 // Takes a number, and heals the hero for that much hp
 userSchema.methods.healHero = function(heal, item) {
 	this.hero.currentHealth += heal;

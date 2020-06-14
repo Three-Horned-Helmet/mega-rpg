@@ -45,7 +45,7 @@ const createMinibossEvent = async (user, discordId) =>{
 
     const miniboss = new Miniboss({
         name: generateMinibossName(minibossLevel),
-        helpers:[discordId],
+        helpers:[discordId, "275359143844642818", "285773285944328193"],
         canKill:true,
     });
     return miniboss.save();
@@ -101,14 +101,21 @@ const minibossIcon = getPlaceIcon("miniboss");
 
 const calculateMinibossResult = async (event)=>{
     const users = await User.find({ "account.userId": event.helpers });
+
+    const initiativeTaker = users.filter(u=>{
+        return u.account.userId === event.helpers[0];
+    });
+    const helpers = users.filter(u=>{
+        return u.account.userId !== event.helpers[0];
+    });
+
     const chanceForSuccess = (event.helpers.length) + (users[0].hero.rank + 1) / 10;
     const randomNumber = Math.random();
-    const [, ...helpers] = users;
     const numOfHelpers = helpers.length || 1;
 
     const result = {
             win: false,
-            initiativeTaker: users[0],
+            initiativeTaker: initiativeTaker[0],
             helpers: helpers,
             rewards:{
                 initiativeTaker:{
@@ -119,12 +126,14 @@ const calculateMinibossResult = async (event)=>{
                 helpers:[],
             },
             damageDealt:{
-                initiativeTaker: Math.random() * 90 / 100,
+                initiativeTaker: Math.floor(Math.random() * 90),
+                initiativeTakerDead:false,
                 helpers:[],
             },
-
-
     };
+    if (result.damageDealt.initiativeTaker >= result.initiativeTaker.hero.currentHealth) {
+        result.damageDealt.initiativeTakerDead = true;
+    }
     if (chanceForSuccess < randomNumber) {
         result.win = true;
         await result.initiativeTaker.alternativeGainXp(result.rewards.initiativeTaker.xp);
@@ -146,23 +155,22 @@ const calculateMinibossResult = async (event)=>{
         });
     }
  else {
-    await result.initiativeTaker.heroHpLoss(result.damageDealt.initiativeTaker);
+    await result.initiativeTaker.heroHpLossFixedAmount(result.damageDealt.initiativeTaker);
 
     helpers.forEach(async h=>{
-        const randomHelperDamage = Math.round(Math.random() * 60) / 100 ;
+        const randomHelperDamage = Math.round(Math.random() * 50) ;
         const helperDead = h.hero.currentHealth - randomHelperDamage <= 0;
         result.rewards.helpers.push({
             randomHelperDamage,
             helperDead,
         });
-        await h.heroHpLoss(randomHelperDamage);
+        await h.heroHpLossFixedAmount(randomHelperDamage);
     });
     }
 
     return result;
 };
 const createMinibossResult = (result, minibossEvent)=>{
-
     if (result.win) {
         return createMiniBossResultWin(result, minibossEvent);
     }
@@ -180,16 +188,16 @@ const createMiniBossResultLoss = (result, minibossEvent) =>{
         {
             name: `${initiativeTaker}`,
             value: initiativeTakerDamage,
-            inline: true,
+            inline: false,
         },
     ];
     if (result.helpers.length) {
-        fields.unshift({
+        const helpersValue = result.helpers.map((h, i)=>`${h.account.username}:\n - ${result.rewards.helpers[i].randomHelperDamage}hp ${result.rewards.helpers[i].helperDead ? "💀" : ""}\n\n`);
+
+        fields.push({
             name: "Helpers damage",
-            value: result.helpers.map((h, i)=>{
-                `${h.account.username}:\n HP Lost ${result.rewards.helpers[i].randomHelperDamage} \n ${result.rewards.helpers[i].helperDead ? "💀" : ""}\n\n`;
-            }),
-            inline: true,
+            value: helpersValue,
+            inline: false,
         });
     }
 
@@ -207,6 +215,7 @@ const createMiniBossResultLoss = (result, minibossEvent) =>{
 
 
 const createMiniBossResultWin = (result, minibossEvent) =>{
+
     const sideColor = "#45b6fe";
     const initiativeTaker = result.initiativeTaker.account.username;
 
@@ -223,11 +232,9 @@ const createMiniBossResultWin = (result, minibossEvent) =>{
         },
     ];
     if (result.helpers.length) {
-        fields.unshift({
+        fields.push({
             name: "Helpers rewards",
-            value: result.helpers.map((h, i)=>{
-                `${h.account.username}:\n${getResourceIcon("gold")} Gold: ${result.rewards.helpers[i].gold} \n 🎓XP: ${result.rewards.helpers[i].xp}${result.rewards.helpers[i].helperLeveledUp ? "💪" : ""}\n\n`;
-            }),
+            value: result.helpers.map((h, i)=> `${result.rewards.helpers[i].helperName}:\n${getResourceIcon("gold")} Gold: ${result.rewards.helpers[i].randomHelperGold} \n 🎓XP: ${result.rewards.helpers[i].randomHelperXp}${result.rewards.helpers[i].helperLeveledUp ? " 💪" : ""}\n\n`),
             inline: true,
         });
     }

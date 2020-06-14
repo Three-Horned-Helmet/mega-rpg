@@ -36,6 +36,7 @@ module.exports = {
 			await minibossEvent.addUser(rUser.id);
 		});
 		collector.on("end", async collected => {
+			console.warn(collected);
 			const result = await calculateMinibossResult(minibossEvent);
 			const embed = createMinibossResult(result, minibossEvent);
 			message.channel.send(embed);
