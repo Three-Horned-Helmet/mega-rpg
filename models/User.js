@@ -322,7 +322,7 @@ userSchema.methods.collectResource = async function(collectBuildings, now, resou
 					.levels[level].productionRate);
 
 				// If collect was called before you have any at all (prevent the reset of collect)
-				if(!produced) {
+				if(!produced && !resource) {
 					return totalCollected[producing] = totalCollected[producing] ?
 						totalCollected[producing] + produced : produced;
 				}
