@@ -17,14 +17,18 @@ const handleBuyCommand = async (args, user) =>{
 
 // Show all items in the shop and their price
 const displayShop = (user) =>{
-	let message = "";
+	let message = "Try `!buy <itemName>` to buy an item.\n\n Available items: \n";
+	let noItems = true;
 
 	Object.values(consumeObj).forEach(item =>{
 		const { building, level } = item.requirement;
 		if(user.empire.find(b => b.name === building && b.level >= level)) {
-			message += `${item.name}: ${item.price}g\n`;
+			message += `- ${item.name}: ${item.price}g\n`;
+			noItems = false;
 		}
 	});
+
+	if(noItems) message += "No available items for sale. Try `!build shop` to get started.";
 
 	return message;
 };

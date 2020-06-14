@@ -4,7 +4,7 @@ const availableBuilds = require("../game/build/show-available-builds");
 
 module.exports = {
 	name: "build",
-	description: "Build or upgrade a structure.",
+	description: "Build or upgrade structures used for creating an army. Try: `!build mine` followed by `!grid` to get started.",
 	shortcuts: {
 		ba: "barracks",
 		ar: "archery",
