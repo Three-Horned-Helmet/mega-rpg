@@ -35,7 +35,7 @@ const checkIfPossibleToProduce = (user, resource, buildingReq, buildingReqLevel)
 	if(!buildingReq || (!buildingReqLevel && buildingReqLevel !== 0)) {
 		return {
 			response: false,
-			message: `It is not possible to produce ${resource}`,
+			message: `It is not possible to produce ${resource}. You need **Mine** or **Lumbermill** level 1 to be able to produce different resources! See \`!help produce\``,
 		};
 	}
 

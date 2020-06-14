@@ -20,8 +20,8 @@ const produceEmbed = (user) => {
 
     if(currentProdField.length === 0) {
         currentProdField.push({
-            name: "You do not own any buildings that are able to produce resources. Build a mine or lumbermill.",
-            value: "\u200B",
+            name: "You do not own any buildings that are able to produce resources",
+            value: "Build a mine or lumbermill to get started (`!build mine` or `!build lumbermill`).",
         });
     }
 
@@ -39,8 +39,9 @@ const produceEmbed = (user) => {
 
     const availableProdFields = {
             name: "Available productions:",
-            value: produceMessage(availableProduces),
+            value: produceMessage(availableProduces) || "No available productions: Upgrade your Mine and Lumbermill to get more resources to produce (`!build mine -u` or `!build lumbermill -u`",
         };
+
 
 	const produceRecruit = new Discord.MessageEmbed()
 		.setTitle(title)
