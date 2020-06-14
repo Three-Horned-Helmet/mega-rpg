@@ -3,7 +3,7 @@ const icons = require("../../icons/icons");
 const buildingsObj = require("./buildings-object");
 
 const buildingEmbed = (user) => {
-    const title = `${user.account.username}'s available buildings:`;
+    const title = `${user.account.username}'s available buildings (usage: \`!build <buildingName>\`):`;
     const sideColor = "#45b6fe";
     const fields = [];
 
