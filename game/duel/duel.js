@@ -17,7 +17,8 @@ const duelPlayer = async (user, opponent, msg) =>{
    battleStats.oppStats = oppStats;
    battleStats.userStats = userStats;
 
-   const gainsModifier = (oppStats.health + oppStats.attack) / (userStats.health + userStats.attack);
+   const gainsModifier = battleStats.win ? (oppStats.health + oppStats.attack) / (userStats.health + userStats.attack) :
+    (userStats.health + userStats.attack) / (oppStats.health + oppStats.attack);
    const expGain = Math.floor(Math.random() * 20 * gainsModifier);
    const goldGain = Math.floor(Math.random() * 10 * gainsModifier);
 
