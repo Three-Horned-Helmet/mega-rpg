@@ -4,7 +4,7 @@ const allItemShortcuts = require("../game/items/all-items-shortcut");
 
 module.exports = {
 	name: "craft",
-	description: "crafts items",
+	description: "Crafts items from the blacksmith, armorer or forge. Try `!build forge` followed by `!craft bronze bar 2` to get started. Type `!craft` to see all of your available crafts.",
 	shortcuts: allItemShortcuts,
 	execute(message, args, user) {
 		if(args.length === 0) return message.channel.send(displayCrafts(user));
