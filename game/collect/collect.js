@@ -1,4 +1,6 @@
 const collectResources = async (user, collect) => {
+	if(!["mine", "lumbermill", "all"].includes(collect)) collect = "all";
+
 	const canBeCollected = checkIfPossibleToCollect(user, collect);
 	if(!canBeCollected.response) return canBeCollected.message;
 
@@ -19,18 +21,16 @@ const collectResources = async (user, collect) => {
 };
 
 const checkIfPossibleToCollect = (user, collect) => {
-	// Check if arguments are allowed
-	if(!["mine", "lumbermill", "all"].includes(collect)) {
-		return {
-			response: false,
-			message: "invalid arguments" };
-	}
 
 	// Check if you have mine or lumbermill
 	if(!user.empire.find(building => building.name === collect || collect === "all")) {
+		let message;
+		if(collect === "all") message = "You have no production buildings. \nTry to type `!build mine` or `!build lumbermill` to get started";
+		else message = `You have no ${collect}s`;
+
 		return {
 			response: false,
-			message: `You have no ${collect === "alls" ? "production buildings" : collect}s`,
+			message,
 		};
 	}
 
