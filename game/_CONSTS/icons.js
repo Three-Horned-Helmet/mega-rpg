@@ -14,8 +14,18 @@ const getPlaceIcon = (type) => {
 		fish: "🐡",
 		dungeon: "🗺",
 	};
-
 	return lexicon[type];
+};
+const getDungeonIcon = (type) =>{
+	const lexicon = {
+		["Ogre tooth"]:"🦷",
+		["Troll Ear"]:"👂🏿",
+	};
+	return lexicon[type];
+};
+
+const getGreenRedIcon = (bool)=>{
+	return bool ? "✅" : "❌";
 };
 
 const getResourceIcon = (type)=>{
@@ -32,4 +42,4 @@ const getResourceIcon = (type)=>{
 	return lexicon[type];
 };
 
-module.exports = { getLocationIcon, getPlaceIcon, getResourceIcon };
+module.exports = { getLocationIcon, getPlaceIcon, getResourceIcon, getDungeonIcon, getGreenRedIcon };

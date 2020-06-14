@@ -5,32 +5,36 @@ mongoose.connect(process.env.MONGODB_URI, { useUnifiedTopology: true, useNewUrlP
 
 const { Schema } = mongoose;
 
-
 const bossSchema = new Schema({
     name: String,
     canKill:{
         type:Boolean,
         default:false,
     },
-    dead: {
+    active: {
         type:Boolean,
-        default:false,
+        default:true,
     },
     allowArmy: {
         type:Boolean,
-        default:true,
+        default:false,
     },
     allowHelpers:{
         type:Boolean,
         default:true,
     },
     stats:{
-        attack:100,
-        health:100,
+        attack:{
+            type:Number,
+            default:1000,
+        },
+        health:{
+            type:Number,
+            default:1000,
+         },
     },
     helpers:{
-        type: [Schema.Types.ObjectId],
-        ref: "User",
+        type: Array,
         default: [],
     },
     rewards:{
@@ -40,7 +44,11 @@ const bossSchema = new Schema({
         },
         xp:{
             type: Number,
-            default: 100,
+            default: 500,
+        },
+        gold:{
+            type: Number,
+            default: 2222,
         },
     },
 }, {
@@ -49,4 +57,20 @@ const bossSchema = new Schema({
       updatedAt: "updatedAt",
     },
   });
+
+  bossSchema.methods.addUser = function(discordId) {
+	if (this.helpers.includes(discordId)) {
+        return;
+    }
+    if (this.helpers.length > 10) {
+        return;
+    }
+    this.helpers.push(discordId);
+	return this.save();
+};
+
+bossSchema.methods.deactivateMiniboss = function() {
+	this.active = false;
+	return this.save();
+};
   module.exports = mongoose.model("Miniboss", bossSchema);

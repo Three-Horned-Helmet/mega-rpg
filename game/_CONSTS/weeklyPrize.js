@@ -1,4 +1,4 @@
-const weeklyprices = {
+const weeklyprizes = {
     0: {
         gold:200,
     },
@@ -23,8 +23,8 @@ const weeklyprices = {
     },
 };
 
-const getWeeklyPrice = (week)=>{
-    return weeklyprices[week];
+const getWeeklyPrize = (week)=>{
+    return weeklyprizes[week];
 };
 
-module.exports = { getWeeklyPrice };
+module.exports = { getWeeklyPrize };

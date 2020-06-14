@@ -28,7 +28,7 @@ const handleFish = async (user) => {
         // 0,1,2
         const multiplier = fish.indexOf(fishResult);
         // 0-50
-        goldResult = Math.floor(multiplier * 20 + (Math.random() * 10));
+        goldResult = Math.floor(multiplier * 10 + (Math.random() * 5));
 
         result = `you caught a ${fishResult} and sold it for ${goldResult} gold`;
     }

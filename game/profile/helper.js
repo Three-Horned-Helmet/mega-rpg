@@ -23,25 +23,14 @@ const determineSupporterTitle = (subscription) => {
 	return result;
 };
 
-// gets best players. use this for simple ranking
-/* const getTopExpPlayers = async (limit = 5)=>{
-    const bestPlayers = await User
-    .find({})
-    .sort("hero.currentExp")
-    .limit(limit)
-    .lean()
-
-    return bestPlayers;
-}; */
-
 const getPlayerPosition = async (discordId, criteria = "hero.currentExp")=>{
     const bestPlayers = await User
     .find({})
     .select("account")
-    .sort(criteria)
+    .sort({ [criteria]:-1 })
     .lean();
     const position = bestPlayers.findIndex(p=> p.account.userId === discordId);
-    return position;
+    return position + 1;
 };
 
 

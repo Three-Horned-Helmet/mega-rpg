@@ -162,9 +162,15 @@ const userSchema = new Schema({
 		inventory: {
 			["Small Heal Potion"]: {
 				type: Number,
-				default: 1,
+				default: 5,
 			},
 			["Large Heal Potion"]: {
+				type: Number,
+				default: 0,
+			},
+		},
+		dungeonKeys:{
+			["Ogre tooth"]:{
 				type: Number,
 				default: 0,
 			},
@@ -200,12 +206,12 @@ const userSchema = new Schema({
 			},
 		},
 	},
-	consecutivePrices:{
-		dailyPrice: {
+	consecutivePrizes:{
+		dailyPrize: {
 			type: Number,
 			default: 0,
 		},
-		weeklyPrice:{
+		weeklyPrize:{
 			type: Number,
 			default: 0,
 		},
@@ -412,7 +418,7 @@ userSchema.methods.unitLoss = function(lossPercentage) {
 	Object.values(this.army.units).forEach(unitBuilding => {
 		Object.keys(unitBuilding).forEach(unit => {
 			if(typeof unitBuilding[unit] === "number") {
-				unitBuilding[unit] = Math.floor(unitBuilding[unit] * lossPercentage);
+				unitBuilding[unit] = unitBuilding[unit] - Math.floor(unitBuilding[unit] * lossPercentage);
 				this.markModified(`army.units.${unitBuilding}.${unit}`);
 			}
 		});
@@ -473,7 +479,6 @@ userSchema.methods.gainExp = async function(exp, newExpToNextRank, statGains) {
 			this.hero[stat] += statGains[stat];
 			this.markModified(`hero.${stat}`);
 		}
-
 		this.markModified("hero.expToNextRank");
 	}
 
@@ -513,7 +518,7 @@ userSchema.methods.buyItem = async function(item) {
 userSchema.methods.handleConsecutive = function(resources, consecutive, now, cyclus) {
 
 	this.cooldowns[cyclus] = now;
-	this.consecutivePrices[cyclus] = consecutive;
+	this.consecutivePrizes[cyclus] = consecutive;
 
 	Object.keys(resources).forEach(r=>{
 		this.resources[r] += resources[r];
@@ -556,6 +561,15 @@ userSchema.methods.alternativeGainXp = async function(xp = 0) {
 					this.hero[s] += heroStatIncreaseOnLevel[this.hero.rank][s];
 				});
 	}
+	return this.save();
+};
+
+userSchema.methods.giveDungeonKey = async function(key = "Ogre tooth") {
+	if (this.hero.dungeonKeys[key]) {
+		return;
+	}
+	this.hero.dungeonKeys[key] += 1;
+
 	return this.save();
 };
 
