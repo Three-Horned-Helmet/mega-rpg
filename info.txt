@@ -1,3 +1,4 @@
+Æ
 **__INFO__**
 MEGA-RPG is a game where you as a player can build an empire, recruit an army and together with your hero you can conquer the world. Explore the area around your kingdom and hunt the animals, raid nearby villages or fight other players in epic PvP duels!
 
@@ -38,9 +39,9 @@ __Craft:__
 `!craft` => Returns all available items that you can craft and their costs
 `!craft [item]` => Crafts 1 of the specified item (!craft bronze sword)
 `!craft [item] [amount]` => Crafts the x amount of the specified item (!craft bronze sword 5)
-
-__Dailyprice:__
-`!dailyprice` => A daily price that could be collected every 24 hours
+Æ
+__Dailyprize:__
+`!dailyprize` => A daily prize that could be collected every 24 hours
 
 __Duel:__
 `!duel [@user]` => Duels the user in a friendly full army battle without losses (!duel @SpinningSiri)
@@ -83,12 +84,13 @@ __Recruit:__
 
 __Resources:__
 `!resources` => Returns all your resources (!resources)
-
+Æ
 __Stake:__
 `!stake [@player]` => Stakes another player that must accept the challenge. Loser loses an aritfact item and 20% hero exp, winner gets it. (!stake @SpinningSiri)
 
 __Use:__
 `!use [itemName]` => Uses the specified item (consumable). (!use small heal potion)
 
-__Weeklyprice:__
-`!weeklyprice` => A weekly price that could be collected every 7 days
+__Weeklyprize:__
+`!weeklyprize` => A weekly prize that could be collected every 7 days
+Æ

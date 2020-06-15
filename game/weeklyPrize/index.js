@@ -1,17 +1,17 @@
 const Discord = require("discord.js");
 const { onCooldown } = require("../_CONSTS/cooldowns");
-const { getWeeklyPrice } = require("../_CONSTS/weeklyPrice");
+const { getWeeklyPrize } = require("../_CONSTS/weeklyPrize");
 const { getResourceIcon } = require("../_CONSTS/icons");
 
 const handleWeekly = async (user) => {
-    const onCooldownInfo = onCooldown("weeklyPrice", user);
+    const onCooldownInfo = onCooldown("weeklyPrize", user);
     if (onCooldownInfo.response) {
         return onCooldownInfo.embed;
     }
     const now = new Date();
-    const lastClaimLessThanTwoDays = user.cooldowns.dailyPrice + 1000 * 60 * 60 * 14 >= now;
+    const lastClaimLessThanTwoDays = user.cooldowns.dailyPrize + 1000 * 60 * 60 * 14 >= now;
 
-    let consecutiveWeek = user.consecutivePrices.weeklyPrice;
+    let consecutiveWeek = user.consecutivePrizes.weeklyPrize;
 
     if (lastClaimLessThanTwoDays) {
         consecutiveWeek = 0;
@@ -20,14 +20,14 @@ const handleWeekly = async (user) => {
         consecutiveWeek = 4;
     }
 
-    const weeklyPriceResult = getWeeklyPrice(consecutiveWeek);
-    await user.handleConsecutive(weeklyPriceResult, (consecutiveWeek + 1), now, "weeklyPrice");
+    const weeklyPrizeResult = getWeeklyPrize(consecutiveWeek);
+    await user.handleConsecutive(weeklyPrizeResult, (consecutiveWeek + 1), now, "weeklyPrize");
 
-     const embededResult = generatePriceEmbed(weeklyPriceResult, consecutiveWeek);
+     const embededResult = generatePrizeEmbed(weeklyPrizeResult, consecutiveWeek);
      return embededResult;
 };
 
-const generatePriceEmbed = (result, consecutiveWeek)=>{
+const generatePrizeEmbed = (result, consecutiveWeek)=>{
     getResourceIcon();
 
     const sideColor = "#45b6fe";

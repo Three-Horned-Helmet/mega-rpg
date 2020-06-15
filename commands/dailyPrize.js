@@ -1,7 +1,7 @@
-const { handleDaily } = require("../game/dailyPrice");
+const { handleDaily } = require("../game/dailyPrize");
 
 module.exports = {
-    name: "dailyprice",
+    name: "dailyprize",
     aliases:["daily"],
 	description: "Get daily bonuses!",
 	async execute(message, args, user) {

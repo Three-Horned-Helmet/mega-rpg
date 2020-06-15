@@ -6,8 +6,8 @@ const worldLocations = {
 				name: "Highlanders",
 				type: "raid",
 				stats:{
-					attack: 30,
-					health:10,
+					attack: 300,
+					health:100,
 				},
 				rewards:{
 					gold: 100,
@@ -17,8 +17,8 @@ const worldLocations = {
 				name: "Wolves",
 				type: "raid",
 				stats:{
-					attack: 15,
-					health:5,
+					attack: 150,
+					health:50,
 				},
 				rewards:{
 					gold: 50,
@@ -28,7 +28,7 @@ const worldLocations = {
 				name: "Bandit Camp",
 				type: "luck",
 				rewards:{
-					gold: 1000,
+					gold: 500,
 				},
 			},
 		},
@@ -37,45 +37,45 @@ const worldLocations = {
 				name: "Bandit Camp",
 				type: "raid",
 				stats:{
-					attack: 30,
-					health:20,
+					attack: 300,
+					health:200,
 				},
 				rewards:{
-					gold: 1000,
+					gold: 70,
 				},
 			},
 			"Fishing village": {
 				name: "Fishing village",
 				type: "raid",
 				stats:{
-					attack: 10,
-					health:30,
+					attack: 100,
+					health:300,
 				},
 				rewards:{
-					gold: 500,
-					"oak wood": 100,
-					"yew wood": 50,
+					gold: 100,
+					"oak wood": 50,
+					"yew wood": 20,
 				},
 			},
 			"Collapsed Mine": {
 				name: "Collapsed Mine",
 				type: "raid",
 				stats:{
-					attack: 20,
-					health:20,
+					attack: 200,
+					health:200,
 				},
 				rewards:{
-					gold: 100,
-					"copper ore": 200,
-					"iron ore": 150,
+					gold: 50,
+					"copper ore": 100,
+					"iron ore": 60,
 				},
 			},
 			Forest: {
 				name: "Forest",
 				type: "hunt",
 				stats:{
-					attack: 5,
-					health:5,
+					attack: 10,
+					health:10,
 				},
 				rewards:{
 					gold: 40,
@@ -85,27 +85,30 @@ const worldLocations = {
 				name: "Cave",
 				type: "hunt",
 				stats:{
-					attack: 2,
-					health:2,
+					attack: 20,
+					health:15,
 				},
 				rewards:{
-					gold: 100,
+					gold: 50,
 				},
 			},
-			"Bandidos de la Grande": {
-				name: "Bandidos de la Grande",
+			"C'Thun": {
+				name: "C'Thun",
 				type: "miniboss",
 				stats:{
-					attack: 5,
-					health:5,
+					attack: 500,
+					health:500,
+				},
+				reward:{
+					dungeonKey: "Ogre tooth",
 				},
 			},
 			"Bandit's Castle": {
 				name: "Bandit's Castle",
 				type: "dungeon",
 				stats:{
-					attack: 5,
-					health:5,
+					attack: 500,
+					health:500,
 				},
 			},
 			River: {
@@ -114,6 +117,9 @@ const worldLocations = {
 				difficulty: 1,
 			},
 		},
+	},
+	"Misty Mountains":{
+
 	},
 };
 

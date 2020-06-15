@@ -1,4 +1,4 @@
-const dailyPrices = {
+const dailyPrizes = {
     0: {
         gold: 50,
     },
@@ -23,8 +23,8 @@ const dailyPrices = {
     },
 };
 
-const getDailyPrice = (day)=>{
-    return dailyPrices[day];
+const getDailyPrize = (day)=>{
+    return dailyPrizes[day];
 };
 
-module.exports = { getDailyPrice };
+module.exports = { getDailyPrize };

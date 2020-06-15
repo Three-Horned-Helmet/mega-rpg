@@ -3,7 +3,7 @@ const cooldowns = {
         type: Date,
         default: 0,
     },
-    dailyPrice:{
+    dailyPrize:{
         type:Date,
         default:0,
     },
@@ -23,7 +23,7 @@ const cooldowns = {
         type:Date,
         default:0,
     },
-    weeklyPrice:{
+    weeklyPrize:{
         type:Date,
         default:0,
     },
@@ -50,7 +50,7 @@ const statistics = {
         type: Number,
         default:0,
     },
-    dailyPrice: {
+    dailyPrize: {
         type: Number,
         default:0,
     },
@@ -90,7 +90,7 @@ const statistics = {
         type: Number,
         default:0,
     },
-    weeklyPrice:{
+    weeklyPrize:{
         type: Number,
         default:0,
     },
