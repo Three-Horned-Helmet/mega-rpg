@@ -24,8 +24,9 @@ const handleHunt = async (user, place = null) => {
     const { currentLocation } = user.world;
     const placesInCurrentWorld = worldLocations[currentLocation].places;
     const locationIcon = getLocationIcon(currentLocation);
-
+    console.log(currentLocation, "currentLocation");
     const userExploredPlaces = user.world.locations[currentLocation].explored;
+
     const userExploredHuntPlaces = userExploredPlaces
     .filter(p=>{
         return placesInCurrentWorld[p].type === "hunt";

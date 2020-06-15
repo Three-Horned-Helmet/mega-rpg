@@ -45,7 +45,7 @@ const createMinibossEvent = async (user, discordId) =>{
 
     const miniboss = new Miniboss({
         name: generateMinibossName(minibossLevel),
-        helpers:[discordId, "275359143844642818", "285773285944328193"],
+        helpers:[discordId],
         canKill:true,
     });
     return miniboss.save();

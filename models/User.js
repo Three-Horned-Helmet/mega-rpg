@@ -465,7 +465,7 @@ userSchema.methods.heroHpLossFixedAmount = function(damage) {
 			this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
 			this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] || 50;
 	}
-	if (this.hero.currentHealth > 0) {
+	if (this.hero.currentHealth < 0) {
 		this.hero.currentHealth = 0;
 	}
 	return this.save();
