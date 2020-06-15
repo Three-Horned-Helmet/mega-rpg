@@ -27,7 +27,8 @@ const showQuestDescription = (quest) => {
 
 // Change this to an embed
 const showQuestRewards = (quest) => {
-    return quest.reward;
+    const msg = `Congratulations you have completed ${quest.name}!\n\n__Rewards:__\n${quest.reward}`;
+    return msg;
 };
 
 

@@ -80,7 +80,6 @@ const questHelper = (user, questName) => {
     if(!quest) return console.error(`Did not find quest '${questName.name}' to user '${user.account.username}'`);
 
     if(!quest.started) {
-        console.log(quest, "!STARTED");
         user.startQuest(questName);
         return false;
     }
