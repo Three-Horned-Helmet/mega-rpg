@@ -219,8 +219,16 @@ const userSchema = new Schema({
 	// Array of Objects.
 	// quests: [{started: Bolean, questKeySequence: Array, name: String}]
 	quests: {
-		type: Array,
-		default: [],
+		type: [
+			{
+				type: Object,
+			},
+		],
+		default: [{
+			started: false,
+			questKeySequence: ["gettingStarted", "buildMine"],
+			name: "Build a Mine",
+		}],
 	},
 	// object too big, moved to ./uservalues/default
 	statistics,
@@ -232,7 +240,9 @@ const userSchema = new Schema({
   });
 
   userSchema.methods.startQuest = async function(questName) {
-	const foundIndex = this.quests.indexOf(q => q.name === questName);
+	const foundIndex = this.quests.indexOf(this.quests.find(q => {
+		return q.name === questName;
+}));
 	this.quests[foundIndex].started = true;
 	this.markModified(`quests.${foundIndex}.started`);
 	return this.save();
@@ -244,7 +254,7 @@ userSchema.methods.addNewQuest = async function(quest) {
 };
 
 userSchema.methods.removeQuest = async function(questName) {
-	const questIndex = this.quests.indexOf(q => q.name === questName);
+	const questIndex = this.quests.indexOf(this.quests.find(q => q.name === questName));
 	this.quests.splice(questIndex, 1);
 	return this.save();
 };
