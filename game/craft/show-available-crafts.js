@@ -3,7 +3,7 @@ const icons = require("../../icons/icons");
 const allItems = require("../items/all-items");
 
 const craftsEmbed = (user) => {
-    const title = `${user.account.username}'s available crafts:`;
+    const title = `${user.account.username}'s available crafts (usage: \`!craft <itemName> <amount>\`):`;
     const sideColor = "#45b6fe";
 
     const fields = Object.values(allItems).filter(item => {
@@ -16,7 +16,7 @@ const craftsEmbed = (user) => {
     if(fields.length === 0) {
         fields.push({
             name: "You need a building like blacksmith, armorer or forge to craft items",
-            value: "\u200B",
+            value: "Try `!build forge` followed by `!craft bronze bar 2` to get started",
         });
     }
 

@@ -163,7 +163,7 @@ module.exports = {
 		},
 		requirement: {
 			building: "armorer",
-			level: 0,
+			level: 1,
 		},
 		stats: {
 			attack: 280,
@@ -179,7 +179,7 @@ module.exports = {
 		},
 		requirement: {
 			building: "armorer",
-			level: 0,
+			level: 1,
 		},
 		stats: {
 			attack: 350,
@@ -196,7 +196,7 @@ module.exports = {
 		},
 		requirement: {
 			building: "armorer",
-			level: 0,
+			level: 1,
 		},
 		stats: {
 			attack: 245,
@@ -214,7 +214,7 @@ module.exports = {
 		},
 		requirement: {
 			building: "armorer",
-			level: 0,
+			level: 1,
 		},
 		stats: {
 			attack: 375,
@@ -232,7 +232,7 @@ module.exports = {
 		},
 		requirement: {
 			building: "armorer",
-			level: 0,
+			level: 1,
 		},
 		stats: {
 			health: 145,
@@ -250,7 +250,7 @@ module.exports = {
 		},
 		requirement: {
 			building: "armorer",
-			level: 0,
+			level: 1,
 		},
 		stats: {
 			health: 200,
@@ -268,7 +268,7 @@ module.exports = {
 		},
 		requirement: {
 			building: "armorer",
-			level: 0,
+			level: 1,
 		},
 		stats: {
 			health: 300,
@@ -284,7 +284,7 @@ module.exports = {
 		},
 		requirement: {
 			building: "armorer",
-			level: 0,
+			level: 1,
 		},
 		stats: {
 			health: 130,
@@ -302,7 +302,7 @@ module.exports = {
 		},
 		requirement: {
 			building: "armorer",
-			level: 0,
+			level: 1,
 		},
 		stats: {
 			health: 270,

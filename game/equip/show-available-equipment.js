@@ -3,7 +3,7 @@ const icons = require("../../icons/icons");
 const allItems = require("../items/all-items");
 
 const equipmentEmbed = (user) => {
-    const title = `${user.account.username}'s available equipment:`;
+    const title = `${user.account.username}'s available equipment (usage: \`!equip <itemName\`):`;
     const sideColor = "#45b6fe";
 
     const fields = Object.keys(user.army.armory).filter(el => !el.startsWith("$")).map(iType => {
@@ -13,7 +13,7 @@ const equipmentEmbed = (user) => {
     if(fields.length === 0) {
         fields.push({
             name: "You dont have any equipment in your inventory. You can craft some if you have a blacksmith or armorer",
-            value: "\u200B",
+            value: "Try `!build blacksmith` followed by `!craft bronze sword` to get started. You can then equip the bronze sword with `!equip bronze sword`",
         });
     }
 
@@ -42,7 +42,7 @@ const addEquipmentField = (user, iType) => {
         const itemAmount = user.army.armory[iType][item];
         if(!itemAmount) return false;
         const itemObj = allItems[item];
-        return `${item.capitalize()}(${itemAmount})\n${objectMessage(itemObj.stats)}`;
+        return `${item.capitalize()} (${itemAmount})\n${objectMessage(itemObj.stats)}`;
     }).filter(el => el);
 
     const field = {

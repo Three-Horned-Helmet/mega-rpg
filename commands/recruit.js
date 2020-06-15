@@ -3,7 +3,7 @@ const showRecruitsEmbed = require("../game/recruit/show-available-recruits");
 
 module.exports = {
 	name: "recruit",
-	description: "recruit commands.",
+	description: "Recruitment of units for your army. You need a barracks or archery to recruit units. `!recruit` will show you all your available recruits and `!recruit <unitName` is the usage to recruit units.",
 	aliases: ["r"],
 	shortcuts: {
 		pe: "peasant",
