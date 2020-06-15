@@ -216,6 +216,12 @@ const userSchema = new Schema({
 			default: 0,
 		},
 	},
+	// Array of Objects.
+	// quests: [{started: Bolean, questKeySequence: Array, name: String}]
+	quests: {
+		type: Array,
+		default: [],
+	},
 	// object too big, moved to ./uservalues/default
 	statistics,
 }, {
@@ -224,6 +230,24 @@ const userSchema = new Schema({
       updatedAt: "updatedAt",
     },
   });
+
+  userSchema.methods.startQuest = async function(questName) {
+	const foundIndex = this.quests.indexOf(q => q.name === questName);
+	this.quests[foundIndex].started = true;
+	this.markModified(`quests.${foundIndex}.started`);
+	return this.save();
+};
+
+userSchema.methods.addNewQuest = async function(quest) {
+	this.quests.push(quest);
+	return this.save();
+};
+
+userSchema.methods.removeQuest = async function(questName) {
+	const questIndex = this.quests.indexOf(q => q.name === questName);
+	this.quests.splice(questIndex, 1);
+	return this.save();
+};
 
 userSchema.methods.gainResource = function(resource, quantity) {
 	this.resources[resource] += quantity;

@@ -63,9 +63,14 @@ const checkIfBuildIsPossible = (user, building, coordinates) => {
 		const buildRes = buildingCost.cost[resource];
 
 		if(!(userRes >= buildRes)) {
+			let msg = "";
+			if(resource === "Copper Ore" || resource === "Iron Ore") msg += "Build a Mine to gather ore.";
+			else if (resource === "Oak Wood" || resource === "Yew Wood") msg += "Buil a Lumbermill to gather wood.";
+			else if (resource === "Gold") msg += "You can gather gold by `!hunt`, `!raid`, `!fish` or `!duel`.";
+
 			return {
 				response: false,
-				message: `You are missing ${userRes ? buildRes - userRes : buildRes} of ${resource}`,
+				message: `You are missing ${userRes ? buildRes - userRes : buildRes} of ${resource}. ` + msg,
 			};
 		}
 	}
