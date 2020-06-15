@@ -21,7 +21,8 @@ const questHandler = async (user, questName) => {
 
 // Change this to an embed
 const showQuestDescription = (quest) => {
-    return quest.description;
+    const msg = `__Description:__\n${quest.description}\n\n__Objective:__\n${quest.objective}\n\n__Rewards__:\n${quest.reward}`;
+    return msg;
 };
 
 // Change this to an embed
