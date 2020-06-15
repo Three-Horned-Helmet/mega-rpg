@@ -80,7 +80,7 @@ const minibossIcon = getPlaceIcon("miniboss");
 
 	const embedInvitation = new Discord.MessageEmbed()
         .setTitle(`A Miniboss has been triggered by ${username}!`)
-        .setDescription(`Help to deafeat ${minibossIcon} ${miniboss.name} from ${locationIcon} ${currentLocation} `)
+        .setDescription(`Help to defeat ${minibossIcon} ${miniboss.name} from ${locationIcon} ${currentLocation} `)
 		.setColor(sideColor)
 		.addFields(
 			{
@@ -181,7 +181,7 @@ const createMiniBossResultLoss = (result, minibossEvent) =>{
     const sideColor = "#45b6fe";
     const initiativeTaker = result.initiativeTaker.account.username;
 
-    const initiativeTakerDamage = `Lost: ${result.damageDealt.initiativeTaker} HP`;
+    const initiativeTakerDamage = `-${result.damageDealt.initiativeTaker} HP`;
 
     const minibossIcon = getPlaceIcon("miniboss");
     const fields = [

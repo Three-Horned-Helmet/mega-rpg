@@ -15,6 +15,8 @@ module.exports = {
 
 		const minibossEvent = await createMinibossEvent(user, message.author.id);
 
+		const now = new Date();
+		await user.setNewCooldown("miniboss", now);
 		const minibossInvitation = createMinibossInvitation(minibossEvent, user);
 
 		const invitation = await message.channel.send(minibossInvitation);
