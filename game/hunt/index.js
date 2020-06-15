@@ -28,9 +28,6 @@ const handleHunt = async (user, place = null) => {
 
     const userExploredHuntPlaces = userExploredPlaces
     .filter(p=>{
-        console.log(p, "p");
-        console.log(placesInCurrentWorld[p]);
-
         return placesInCurrentWorld[p].type === "hunt";
     })
     .map(p=>{

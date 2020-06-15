@@ -24,7 +24,7 @@ module.exports = {
 			return reaction.emoji.name === "🧟";
 		};
 
-		const collector = invitation.createReactionCollector(filter, { time: 1000 * 5, errors: ["time"] });
+		const collector = invitation.createReactionCollector(filter, { time: 1000 * 20, errors: ["time"] });
 		collector.on("collect", async (result, rUser) => {
 			if (rUser.bot) {
 				return;
