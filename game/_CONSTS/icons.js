@@ -38,6 +38,7 @@ const getResourceIcon = (type)=>{
 	["bronze bar"]: ":orange_square:",
 	["iron bar"]: ":white_large_square:",
 	["steel bar"]: ":brown_square:",
+	["xp"]: "🎓",
 	};
 	return lexicon[type];
 };

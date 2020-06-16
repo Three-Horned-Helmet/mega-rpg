@@ -231,6 +231,7 @@ userSchema.methods.gainResource = function(resource, quantity) {
 };
 
 userSchema.methods.gainManyResources = function(obj) {
+
 	Object.keys(obj).forEach(r=>{
 		this.resources[r] += obj[r];
 	});
