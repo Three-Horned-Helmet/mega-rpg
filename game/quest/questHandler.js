@@ -1,6 +1,6 @@
 const allQuests = require("./all-quests");
 
-const questHandler = async (user, questName) => {
+const questHandler = async (user) => {
     // If there are no quests available
     if(user.quests.length === 0) return "You currently have no available quests. You may get new ones when you explore new areas or obtain specific items or building levels";
 
