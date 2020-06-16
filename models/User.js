@@ -219,17 +219,18 @@ const userSchema = new Schema({
 	// Array of Objects.
 	// quests: [{started: Bolean, questKeySequence: Array, name: String}]
 	quests: {
-		type: [
-			{
-				type: Object,
-			},
-		],
-		default: [{
-			started: false,
-			questKeySequence: ["gettingStarted", "buildMine"],
-			name: "Build a Mine",
-		}],
+			type: [
+				{
+					type: Object,
+				},
+			],
+			default: [{
+				started: false,
+				questKeySequence: ["gettingStarted", "buildMine"],
+				name: "Build a Mine",
+			}],
 	},
+	completedQuests: [String],
 	// object too big, moved to ./uservalues/default
 	statistics,
 }, {
@@ -256,6 +257,7 @@ userSchema.methods.addNewQuest = async function(quest) {
 userSchema.methods.removeQuest = async function(questName) {
 	const questIndex = this.quests.indexOf(this.quests.find(q => q.name === questName));
 	this.quests.splice(questIndex, 1);
+	this.completedQuests.push(questName);
 	return this.save();
 };
 
@@ -300,9 +302,11 @@ userSchema.methods.updateHousePop = function(newPop) {
 	return this.save();
 };
 
-userSchema.methods.recruitUnits = function(unit, amount) {
-	for (const resource in unit.cost) {
-		this.resources[resource] -= unit.cost[resource] * amount;
+userSchema.methods.recruitUnits = function(unit, amount, free) {
+	if(!free) {
+		for (const resource in unit.cost) {
+			this.resources[resource] -= unit.cost[resource] * amount;
+		}
 	}
 
 	this.army.units[unit.requirement.building][unit.name] += amount;

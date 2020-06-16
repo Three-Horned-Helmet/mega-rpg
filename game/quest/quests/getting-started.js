@@ -1,3 +1,6 @@
+const allUnits = require("../../recruit/all-units");
+const allItems = require("../../items/all-items");
+
 module.exports = {
     buildMine: {
         name: "Build a Mine",
@@ -15,7 +18,7 @@ module.exports = {
             if(!user.empire.find(b => b.name === "mine")) return false;
 
             // Does the user have the required copper ore
-            if(user.resources["copper ore"] < 5) return false;
+            if(!(user.resources["copper ore"] >= 5)) return false;
 
             // Get reward
             await user.gainManyResources({
@@ -52,7 +55,7 @@ module.exports = {
             if(!user.empire.find(b => b.name === "lumbermill")) return false;
 
             // Does the user have the required copper ore
-            if(user.resources["oak wood"] < 5) return false;
+            if(!(user.resources["oak wood"] >= 5)) return false;
 
             // Get reward
             await user.gainManyResources({
@@ -60,11 +63,82 @@ module.exports = {
                 ["oak wood"]: 10,
             });
 
+            // Add next quest
+            const newQuest = {
+                name: "Explore your Surroundings",
+                started: false,
+                questKeySequence: ["gettingStarted", "exploreSurroundings"],
+            };
+
+            await user.addNewQuest(newQuest);
+            await user.removeQuest(this.name);
+
+            return true;
+        },
+    },
+    exploreSurroundings: {
+        name: "Explore your Surroundings",
+        description: "You have now successfully started your production in your empire and it is time to explore your empire's surroundings to try and find some nearby sources of income. \n\nYou can explore with the command `!explore` and you will have a chance of finding different areas that you can interact with around your empire",
+        objective: "Explore 'River'",
+        reward: "Gold: 35\nCopper Ore: 5",
+        winDescription: "With the 'River' explored you can go fishing in it with the command `!fish`. This is an excellent source of gold!",
+        questKeySequence: ["gettingStarted", "exploreSurroundings"],
+
+        // Returns false if the quest description is shown, or true if the quest is being completed
+        execute: async function(user) {
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse) return false;
+
+            // Has the user explored River
+            if(!user.world.locations["Grassy Plains"].explored.find(area => area === "River")) return false;
+
+            // Get reward
+            await user.gainManyResources({
+                gold: 35,
+                ["copper ore"]: 5,
+            });
+
+            // Add next quest
+            const newQuest = {
+                name: "Recruit an Army",
+                started: false,
+                questKeySequence: ["gettingStarted", "recruitArmy"],
+            };
+
+            await user.addNewQuest(newQuest);
+            await user.removeQuest(this.name);
+
+            return true;
+        },
+    },
+    recruitArmy: {
+        name: "Recruit an Army",
+        description: "With the exploration of the nearby areas you will find animals to hunt, hostile encampments, minibosses, dungeons or even new quests areas! To prepare you for the enemies around your empire you will have to recruit an army to deal with these dangers. Your objective is to build a Forge, Blacksmith and Barracks to produce an army that can raid nearby encampments. \n\nYou can build Forge, Blacksmith and Barracks with `!build forge`, `!build blacksmith` and `!build barracks`, respectively. A Forge enables you to can craft bronze bars `!craft bronze bar 1`, Blacksmith can use the bronze bars to craft weaponry `!craft bronze sword 1` and a Barracks can be used to produce soldiers that can use the crafted equipment `!recruit peasant 1`",
+        objective: "Craft 10 Bronze Swords\nGet an army of 10 Peasants",
+        reward: "Peasant: 5\nBronze Helmet: 5\nBronze Leggings: 5",
+        winDescription: "The weaponry is automatically worn by your army so you dont have to worry about that, just make sure you have enough equipment for all your units to improve their fighting capabilities. With an army well prepared you can `!explore` until you find an encampment to `!raid` to gain valuable resources and experience!",
+        questKeySequence: ["gettingStarted", "recruitArmy"],
+
+        // Returns false if the quest description is shown, or true if the quest is being completed
+        execute: async function(user) {
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse) return false;
+
+            // Does the user have the enough bronze swords
+            if(!(user.army.armory.weapon["bronze sword"] >= 10)) return false;
+
+            // Does the user have the enough peasants
+            if(!(user.army.units.barracks.peasant >= 10)) return false;
+
+            // Get reward
+            await user.recruitUnits(allUnits["peasant"], 5, true);
+            await user.addItem(allItems["bronze helmet"], 5);
+            await user.addItem(allItems["bronze leggings"], 5);
             // // Add next quest
             // const newQuest = {
             //     name: "Build a Lumbermill",
             //     started: false,
-            //     questKeySequence: ["starterQuests", "buildLumbermill"],
+            //     questKeySequence: ["gettingStarted", "buildLumbermill"],
             // };
 
             // await user.addNewQuest(newQuest);
