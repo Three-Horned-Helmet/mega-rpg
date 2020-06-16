@@ -55,7 +55,7 @@ describe("miniboss command", () => {
 		expect(result.startsWith("Your hero's health is too low")).to.be.equal(true);
 
 	});
-	it("should suceed solo with high rank", async ()=>{
+	it("should succeed when initativetaker has higher rank than helper", async ()=>{
 		const world = {
 			currentLocation:"Grassy Plains",
 			locations:{
@@ -65,14 +65,16 @@ describe("miniboss command", () => {
 			},
 		};
 		const hero = {
-			rank:8,
+			rank:9,
 			stats:{
 				attack:1,
 				defense:1,
 			},
 		};
 		const testUser = await createTestUser({ world, hero });
+		const helper0 = await createTestUser({ hero:{ rank:3 } });
 		const miniboss = createMinibossEvent(testUser);
+		miniboss.helpers.push(helper0.account.userId);
 		const result = await calculateMinibossResult(miniboss);
 		// cleanup todo: why doesn't the function clean itself?
 		miniboss.helpers = [];
