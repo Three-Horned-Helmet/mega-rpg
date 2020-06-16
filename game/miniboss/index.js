@@ -1,15 +1,55 @@
-const Discord = require("discord.js");
 const { onCooldown } = require("../_CONSTS/cooldowns");
 const { worldLocations } = require("../_CONSTS/explore");
-const { getLocationIcon, getPlaceIcon, getDungeonIcon, getGreenRedIcon, getResourceIcon } = require("../_CONSTS/icons");
+const { getLocationIcon } = require("../_CONSTS/icons");
+const { createMinibossInvitation, createMinibossResult } = require("./embedGenerator");
 
-const Miniboss = require("../../models/Miniboss");
 const User = require("../../models/User");
 /* const { calculatePveFullArmyResult } = require("../../combat/combat");
 const { generateEmbedPveFullArmy } = require("../../combat/pveEmedGenerator"); */
 
-const minibossStartAllowed = (user)=>{
 
+const handleMiniboss = async (message, user)=>{
+
+    // cooldown, health, explored miniboss
+    const disallowed = minibossStartAllowed(user);
+		if (disallowed) {
+			return disallowed;
+        }
+
+    const miniboss = createMinibossEvent(user);
+
+    const now = new Date();
+    await user.setNewCooldown("miniboss", now);
+
+    const minibossInvitation = createMinibossInvitation(miniboss, user);
+    const invitation = await message.channel.send(minibossInvitation);
+
+    await invitation.react("🧟");
+
+    const reactionFilter = (reaction) => {
+        return reaction.emoji.name === "🧟";
+    };
+
+    const collector = await invitation.createReactionCollector(reactionFilter, { time: 1000 * 20, errors: ["time"] });
+    collector.on("collect", async (result, rUser) => {
+        if (rUser.bot || miniboss.helpers.length > 9) {
+            return;
+        }
+        const allowedHelper = await validateHelper(rUser.id);
+        if (!allowedHelper) {
+            return;
+        }
+        miniboss.helpers.push(rUser.id);
+    });
+
+     collector.on("end", async () => {
+        const result = await calculateMinibossResult(miniboss);
+        const embed = createMinibossResult(result, miniboss);
+        message.channel.send(embed);
+});
+};
+
+const minibossStartAllowed = (user)=>{
     // checks for cooldown
     const cooldownInfo = onCooldown("miniboss", user);
     if (cooldownInfo.response) {
@@ -39,28 +79,14 @@ const minibossStartAllowed = (user)=>{
     return null;
 };
 
-const createMinibossEvent = async (user, discordId) =>{
+const createMinibossEvent = (user) =>{
     const { currentLocation } = user.world;
-    const minibossLevel = Object.keys(worldLocations).indexOf(currentLocation);
-
-    const miniboss = new Miniboss({
-        name: generateMinibossName(minibossLevel),
-        helpers:[discordId],
-        canKill:true,
+    const minibossname = Object.keys(worldLocations[currentLocation].places).find(p=>{
+        return worldLocations[currentLocation].places[p].type === "miniboss";
     });
-    return miniboss.save();
-};
-
-// todo, take values from explore _const
-const generateMinibossName = level=>{
-const lexicon = {
-    0:"C'Thun",
-    1:"Nameless King",
-    2:"Jinpachi",
-    3:"Ornstein",
-    4:"Baldur",
-};
-return lexicon[level];
+    const miniboss = worldLocations[currentLocation].places[minibossname];
+    miniboss.helpers.push(user.account.userId);
+    return miniboss;
 };
 
 const validateHelper = async discordId =>{
@@ -68,50 +94,26 @@ const validateHelper = async discordId =>{
     return user.hero.currentHealth > user.hero.health * 0.05;
 };
 
-const createMinibossInvitation = (miniboss, user)=>{
-const sideColor = "#45b6fe";
-const username = user.account.username;
-const { currentLocation } = user.world;
-const locationIcon = getLocationIcon(currentLocation);
-const minibossIcon = getPlaceIcon("miniboss");
 
-    const rules = `\`Army allowed: ${getGreenRedIcon(miniboss.allowArmy)}\`\n \`Miniboss deadly: ${getGreenRedIcon(miniboss.canKill)}\`\n \`Helpers allowed: ${getGreenRedIcon(miniboss.allowHelpers)}\``;
-    const rewards = `${getResourceIcon("gold")} \`Gold: ${miniboss.rewards.gold}\`\n 🎓 \`XP: ${miniboss.rewards.xp}\` \n ${getDungeonIcon(miniboss.rewards.dungeonKey)} \` Key: ${miniboss.rewards.dungeonKey}\``;
-
-	const embedInvitation = new Discord.MessageEmbed()
-        .setTitle(`A Miniboss has been triggered by ${username}!`)
-        .setDescription(`Help to deafeat ${minibossIcon} ${miniboss.name} from ${locationIcon} ${currentLocation} `)
-		.setColor(sideColor)
-		.addFields(
-			{
-				name: "Rules",
-				value: rules,
-				inline: false,
-            },
-            {
-				name: `${miniboss.name}'s reward:`,
-				value: rewards,
-				inline: false,
-			},
-		)
-		.setFooter(`React with a ${getPlaceIcon("miniboss")} within 20 seconds to participate! (max 10!)`);
-
-	return embedInvitation;
-};
-
-const calculateMinibossResult = async (event)=>{
-    const users = await User.find({ "account.userId": event.helpers });
+const calculateMinibossResult = async (miniboss)=>{
+    const users = await User.find({ "account.userId": miniboss.helpers });
 
     const initiativeTaker = users.filter(u=>{
-        return u.account.userId === event.helpers[0];
+        return u.account.userId === miniboss.helpers[0];
     });
     const helpers = users.filter(u=>{
-        return u.account.userId !== event.helpers[0];
+        return u.account.userId !== miniboss.helpers[0];
     });
 
-    const chanceForSuccess = (event.helpers.length) + (users[0].hero.rank + 1) / 10;
-    const randomNumber = Math.random();
-    const numOfHelpers = helpers.length || 1;
+    let chanceForSuccess = helpers.reduce((acc, cur)=>{
+        return acc + cur.hero.rank;
+    }, 0) + initiativeTaker[0].hero.rank + 2;
+
+    // Temporary workaround for testcases
+    if (initiativeTaker[0].account.testUser) {
+        chanceForSuccess -= 2;
+    }
+    const randomNumber = Math.random() * 10;
 
     const result = {
             win: false,
@@ -119,14 +121,14 @@ const calculateMinibossResult = async (event)=>{
             helpers: helpers,
             rewards:{
                 initiativeTaker:{
-                    dungeonKey: event.rewards.dungeonKey,
-                    gold: Math.round(event.rewards.gold / 2),
-                    xp: Math.round(event.rewards.xp / 2),
+                    dungeonKey: null,
+                    gold: Math.round(miniboss.rewards.gold / 2),
+                    xp: Math.round(miniboss.rewards.xp / 2),
                 },
                 helpers:[],
             },
             damageDealt:{
-                initiativeTaker: Math.floor(Math.random() * 90),
+                initiativeTaker: Math.floor(Math.random() * miniboss.stats.attack),
                 initiativeTakerDead:false,
                 helpers:[],
             },
@@ -134,120 +136,51 @@ const calculateMinibossResult = async (event)=>{
     if (result.damageDealt.initiativeTaker >= result.initiativeTaker.hero.currentHealth) {
         result.damageDealt.initiativeTakerDead = true;
     }
-    if (chanceForSuccess < randomNumber) {
+    if (chanceForSuccess > randomNumber) {
         result.win = true;
+        if(result.initiativeTaker.hero.rank >= 2) {
+            result.rewards.initiativeTaker.dungeonKey = miniboss.rewards.dungeonKey;
+        }
         await result.initiativeTaker.alternativeGainXp(result.rewards.initiativeTaker.xp);
-        await result.initiativeTaker.gainResource(result.rewards.initiativeTaker.gold);
+        await result.initiativeTaker.gainManyResources({ gold: result.rewards.initiativeTaker.gold });
         await result.initiativeTaker.giveDungeonKey(result.rewards.initiativeTaker.dungeonKey);
-        helpers.forEach(async h=>{
-            const randomHelperXp = Math.round(Math.random() * event.rewards.xp / numOfHelpers);
-            const randomHelperGold = Math.round(Math.random() * event.rewards.gold / numOfHelpers);
+        await asyncForEach(result.helpers, async (h) => {
+            const randomHelperXp = Math.round((Math.random() * miniboss.rewards.xp) / helpers.length);
+            const randomHelperGold = Math.round((Math.random() * miniboss.rewards.gold) / helpers.length);
             const helperName = h.account.username;
             const helperLeveledUp = randomHelperXp + h.hero.currentExp > h.hero.expToNextRank;
+            await h.alternativeGainXp(randomHelperXp);
+            await h.gainManyResources({ gold:randomHelperGold });
             result.rewards.helpers.push({
                 randomHelperXp,
                 randomHelperGold,
                 helperName,
                 helperLeveledUp,
             });
-            await h.alternativeGainXp(randomHelperXp);
-            await h.gainResource(randomHelperGold);
         });
     }
  else {
     await result.initiativeTaker.heroHpLossFixedAmount(result.damageDealt.initiativeTaker);
 
-    helpers.forEach(async h=>{
-        const randomHelperDamage = Math.round(Math.random() * 50) ;
+    await asyncForEach(result.helpers, async (h)=>{
+        const randomHelperDamage = Math.round(Math.random() * miniboss.stats.attack) ;
         const helperDead = h.hero.currentHealth - randomHelperDamage <= 0;
+        await h.heroHpLossFixedAmount(randomHelperDamage);
         result.rewards.helpers.push({
             randomHelperDamage,
             helperDead,
         });
-        await h.heroHpLossFixedAmount(randomHelperDamage);
     });
     }
-
     return result;
 };
-const createMinibossResult = (result, minibossEvent)=>{
-    if (result.win) {
-        return createMiniBossResultWin(result, minibossEvent);
+
+
+async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index += 1) {
+      await callback(array[index], index, array);
     }
-    return createMiniBossResultLoss(result, minibossEvent);
-};
-
-const createMiniBossResultLoss = (result, minibossEvent) =>{
-    const sideColor = "#45b6fe";
-    const initiativeTaker = result.initiativeTaker.account.username;
-
-    const initiativeTakerDamage = `Lost: ${result.damageDealt.initiativeTaker} HP`;
-
-    const minibossIcon = getPlaceIcon("miniboss");
-    const fields = [
-        {
-            name: `${initiativeTaker}`,
-            value: initiativeTakerDamage,
-            inline: false,
-        },
-    ];
-    if (result.helpers.length) {
-        const helpersValue = result.helpers.map((h, i)=>`${h.account.username}:\n - ${result.rewards.helpers[i].randomHelperDamage}hp ${result.rewards.helpers[i].helperDead ? "💀" : ""}\n\n`);
-
-        fields.push({
-            name: "Helpers damage",
-            value: helpersValue,
-            inline: false,
-        });
-    }
-
-	const embedResult = new Discord.MessageEmbed()
-        .setTitle(`${initiativeTaker} ${result.helpers.length ? "and his helpers" : ""} failed to defeat ${minibossIcon} ${minibossEvent.name} `)
-        .setDescription("Damage taken: ")
-		.setColor(sideColor)
-		.addFields(
-			...fields,
-		);
-
-    return embedResult;
-
-};
+  }
 
 
-const createMiniBossResultWin = (result, minibossEvent) =>{
-
-    const sideColor = "#45b6fe";
-    const initiativeTaker = result.initiativeTaker.account.username;
-
-    let initiativeTakerRewards = `${getResourceIcon("gold")} Gold: ${result.rewards.initiativeTaker.gold} \n\n 🎓XP: ${result.rewards.initiativeTaker.xp}`;
-    if (result.rewards.initiativeTaker.dungeonKey) {
-        initiativeTakerRewards += `\n\n ${getDungeonIcon(result.rewards.initiativeTaker.dungeonKey)} ${result.rewards.initiativeTaker.dungeonKey} !`;
-    }
-    const minibossIcon = getPlaceIcon("miniboss");
-    const fields = [
-        {
-            name: `${initiativeTaker} rewards`,
-            value: initiativeTakerRewards,
-            inline: true,
-        },
-    ];
-    if (result.helpers.length) {
-        fields.push({
-            name: "Helpers rewards",
-            value: result.helpers.map((h, i)=> `${result.rewards.helpers[i].helperName}:\n${getResourceIcon("gold")} Gold: ${result.rewards.helpers[i].randomHelperGold} \n 🎓XP: ${result.rewards.helpers[i].randomHelperXp}${result.rewards.helpers[i].helperLeveledUp ? " 💪" : ""}\n\n`),
-            inline: true,
-        });
-    }
-
-	const embedResult = new Discord.MessageEmbed()
-        .setTitle(`${initiativeTaker} ${result.helpers.length ? "and his helpers" : ""} successfuly defeated ${minibossIcon} ${minibossEvent.name} `)
-        .setDescription("Rewards will be distributed: ")
-		.setColor(sideColor)
-		.addFields(
-			...fields,
-		);
-
-    return embedResult;
-        };
-
-module.exports = { minibossStartAllowed, createMinibossEvent, createMinibossInvitation, validateHelper, calculateMinibossResult, createMinibossResult };
+module.exports = { handleMiniboss, createMinibossEvent, minibossStartAllowed, createMinibossResult, calculateMinibossResult };
