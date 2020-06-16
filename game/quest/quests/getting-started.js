@@ -100,6 +100,40 @@ module.exports = {
 
             // Add next quest
             const newQuest = {
+                name: "Build a shop",
+                started: false,
+                questKeySequence: ["gettingStarted", "buildShop"],
+            };
+
+            await user.addNewQuest(newQuest);
+            await user.removeQuest(this.name);
+
+            return true;
+        },
+    },
+    buildShop: {
+        name: "Build a shop",
+        description: "Your hero will lose hp when fighting, and thus needs to get healed back up. To do this you can buy healing potions from a shop. Your goal is to build a shop and buy a small healing potion\n\nYou can build a shop with the command `!build shop`, buy a small heal potion with the command `!buy small heal potion` and use it with the command `!use small heal potion`",
+        objective: "Build a shop level 0\nBuy a small heal potion",
+        reward: "Gold: 5",
+        winDescription: "Make sure to not let your hero die as it will lose experience and possibly ranks",
+        questKeySequence: ["gettingStarted", "buildShop"],
+
+        // Returns false if the quest description is shown, or true if the quest is being completed
+        execute: async function(user) {
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse) return false;
+
+            // Does the user have a lumbermill
+            if(!user.empire.find(b => b.name === "shop")) return false;
+
+            // Get reward
+            await user.gainManyResources({
+                gold: 5,
+            });
+
+               // Add next quest
+               const newQuest = {
                 name: "Recruit an Army",
                 started: false,
                 questKeySequence: ["gettingStarted", "recruitArmy"],
@@ -116,7 +150,7 @@ module.exports = {
         description: "With the exploration of the nearby areas you will find animals to hunt, hostile encampments, minibosses, dungeons or even new quests areas! To prepare you for the enemies around your empire you will have to recruit an army to deal with these dangers. Your objective is to build a Forge, Blacksmith and Barracks to produce an army that can raid nearby encampments. \n\nYou can build Forge, Blacksmith and Barracks with `!build forge`, `!build blacksmith` and `!build barracks`, respectively. A Forge enables you to can craft bronze bars `!craft bronze bar 1`, Blacksmith can use the bronze bars to craft weaponry `!craft bronze sword 1` and a Barracks can be used to produce soldiers that can use the crafted equipment `!recruit peasant 1`",
         objective: "Craft 10 Bronze Swords\nGet an army of 10 Peasants",
         reward: "Peasant: 5\nBronze Helmet: 5\nBronze Leggings: 5",
-        winDescription: "The weaponry is automatically worn by your army so you dont have to worry about that, just make sure you have enough equipment for all your units to improve their fighting capabilities. With an army well prepared you can `!explore` until you find an encampment to `!raid` to gain valuable resources and experience!",
+        winDescription: "The weaponry is automatically worn by your army so you dont have to worry about that, just make sure you have enough equipment for all your units to improve their fighting capabilities. Don't forget to also build some farms to increase your max population allowing more units to be recruited. With an army well prepared you can `!explore` until you find an encampment to `!raid` and gain valuable resources and experience!",
         questKeySequence: ["gettingStarted", "recruitArmy"],
 
         // Returns false if the quest description is shown, or true if the quest is being completed

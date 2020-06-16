@@ -2,6 +2,9 @@
 **__INFO__**
 MEGA-RPG is a game where you as a player can build an empire, recruit an army and together with your hero you can conquer the world. Explore the area around your kingdom and hunt the animals, raid nearby villages or fight other players in epic PvP duels!
 
+**__GET STARTED__**
+It is recommended to follow the `!quest` guidelines to get into the game
+
 **__BUILDINGS:__**
 __Archery:__ Recruitment of archers
 __Armorer:__ Crafting of high end expensive equipment primarily used by your hero

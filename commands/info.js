@@ -14,6 +14,7 @@ module.exports = {
             }
 
             const toSend = data.substring(i + 1, Math.min(data.length, j));
+            console.log(toSend);
             message.author.send(toSend);
         }
 		message.reply("I've sent you a DM with more info about the game!");

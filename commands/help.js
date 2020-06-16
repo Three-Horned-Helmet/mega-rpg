@@ -10,6 +10,7 @@ module.exports = {
 		const { commands } = message.client;
 
 		if (!args.length) {
+			data.push("*You can type `!info` for more detailed info about the game, or `!quest` to start questing*\n");
 			data.push("__Here's a list of all my commands:__");
 			data.push(commands.map((command) => command.name).join(", "));
 			data.push(
