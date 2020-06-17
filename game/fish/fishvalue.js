@@ -8,7 +8,7 @@ const fishPrices = {
     "Swordfish":100,
 };
 
-const calculateFishResult = (fish, chance = 0.1) => {
+const calculateFishResult = (fish, chance = (1 / 3)) => {
     const result = {
         response: "",
         gold: 0,
