@@ -14,7 +14,6 @@ const calculateFishResult = (fish, chance = 0.1) => {
         gold: 0,
     };
     const randomNumber = Math.random();
-    console.log(randomNumber, chance);
 
     // if player loses
     if (randomNumber < chance) {
