@@ -286,9 +286,16 @@ userSchema.methods.gainResource = function(resource, quantity) {
 };
 
 userSchema.methods.gainManyResources = function(obj) {
-
 	Object.keys(obj).forEach(r=>{
 		this.resources[r] += obj[r];
+	});
+	return this.save();
+};
+
+userSchema.methods.removeManyResources = function(obj) {
+	Object.keys(obj).forEach(r=>{
+		this.resources[r] -= obj[r];
+		if(this.resources[r] < 0) this.resources[r] = 0;
 	});
 	return this.save();
 };

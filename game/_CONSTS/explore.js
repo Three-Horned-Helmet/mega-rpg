@@ -134,13 +134,26 @@ const worldLocations = {
 				type: "raid",
 				questMob: true,
 				stats:{
-					attack: 200, // Should be 2000, each
-					health: 200,
+					attack: 2000,
+					health: 2000,
 				},
 				rewards:{
 					gold: 1000,
 					"iron bar": 30,
 					"yew wood": 60,
+				},
+			},
+			"Pack of Implings": {
+				name: "Pack of Implings",
+				type: "hunt",
+				questMob: true,
+				stats:{
+					attack: 700,
+					health: 700,
+				},
+				rewards:{
+					gold: 500,
+					"yew wood": 100,
 				},
 			},
 		},

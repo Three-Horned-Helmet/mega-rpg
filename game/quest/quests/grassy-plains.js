@@ -137,7 +137,7 @@ module.exports = {
         found: "You found the second half of the Treasure Map",
         notFound: "You looked around for the second half of the Treasure Map, but found nothing",
         intro: "You searched through the encampment and found a **Torn Piece of Paper** with some scriblings on it.",
-        description: "After a closer inspection of the paper you notice it is drawn like a treasure map with the text *'...mains of the Creat...'*, but the other half of the Map has been torn off. \n\nIt seems like you need the second part of the Map to be able to locate the Treasure.",
+        description: "After a closer inspection of the paper you notice it is a worn out piece of a map with directions written on it, however you only have some of the directions as big parts of the map has been torn off. On top of the map it is written *'...mains of the Creat...'* in big red letters, however the rest of the text is unfortuneatly torn off. \n\nIt seems like you need the second part of the Map to be able to find what the map directs to.",
         objective: "Raid **Bandit Camp** until you find the missing pieces of the  Treasure Map",
         reward: "Treasure Map: 1",
         winDescription: "You successfully patched the pieces together, creating a damaged treasure map. \n\nThe text on the map is still incomplete but shows *'...mains of the Creat...'* and *'...easure no one finds...'*.\n**A new quest is available**",
@@ -152,13 +152,11 @@ module.exports = {
             const userQuest = user.quests.find(q => q.name === this.name);
             if(userQuest.pve.find(raid => !raid.completed)) return false;
 
-            // Get reward
-
             // Add next quest
             const newQuest = {
                 name: "The Lost Hut",
                 started: false,
-                questKeySequence: ["Grassy Plains", "lostMap"],
+                questKeySequence: ["Grassy Plains", "lostHut"],
                 pve: [{
                     name: "Forest",
                     completed: false,
@@ -181,7 +179,7 @@ module.exports = {
         }],
         found: "You found an old hut in the middle of darkest parts of the Forest",
         notFound: "You looked around but found no signs of the building",
-        description: "The Treasure Map is in a very rough shape making it diffcult to figure out where it wants to lead you. After carefully investigating it, you see that it wants you to find some sort of building deep inside of the Forest, however its exact location is not possible to understand.",
+        description: "The Treasure Map is in a very rough shape making it diffcult to figure out the directions. After carefully investigating it, you see that it wants you to find some sort of building deep inside of the Forest, however its exact location is not possible to understand.",
         objective: "Search the Forest for the building drawn on the map",
         reward: "Oak wood: 15\nYew wood: 15",
         winDescription: "The old hut is in terrible shape, but it seems to have been a magnificent building back in its prime days. As you get closer to the hut you hear noises inside of it. Not human voices, but small screaches and rattle noises. You sneak up to the dilapidated building, and peak through a small dusty window.\n**A new quest is available**",
@@ -228,11 +226,11 @@ module.exports = {
             completed: false,
             chance: 1,
         }],
-        found: "You found an old hut in the middle of darkest parts of the Forest",
-        description: "The hut is filled with several implings, small vile creatures made by the devil himself, but the treasure must be inside of the hut? There is no way to sneak in there unoticed... There is only one solution to get to the treasure!",
-        objective: "Defeat the Pack of Implings! (`!raid pack of implings`)",
-        reward: "gold: 300",
-        winDescription: "The dead Implings are soaked in blood and spread across the floor. Exhausted from the battle you start looking around the old hut for the well deserved treasure. There are scratches along the walls, shattered vials on the shelves and stained blood on the walls. Somehow everything seems to have been burnt... It must've been the implings, lucky the house has not yet burned down. As you strafe across the floor you stumble on a piece of wood sticking up from the floor. You lift it up and notice someone has been digging in the dirty underneath.\n**A new quest is available**",
+        found: "You enter the main room in the hut",
+        description: "The hut is filled with several implings, small vile creatures made by the devil himself! The treasure must be inside of the hut, but there is no way to sneak in there unnoticed... \n\nThere is only one solution to get to the treasure!",
+        objective: "Defeat the Pack of Implings! (`!hunt pack of implings`)",
+        reward: "Gold: 300",
+        winDescription: "The dead Implings are soaked in blood and spread across the floor. Exhausted from the battle you start looking around the old hut for signs of the treasure. \n\nThere are scratches along the walls, shattered vials on the shelves and stained blood on the walls. Somehow everything seems burnt... It must've been the implings. Surprisingly, the house has not been burned down. \n\nAs you strafe across the floor you stumble on a piece of wood sticking up from the floor. You lift it up and notice someone has been digging in the dirt underneath.\n**A new quest is available**",
         questKeySequence: ["Grassy Plains", "packOfImplings"],
 
         // Returns false if the quest description is shown, or true if the quest is being completed
@@ -272,10 +270,10 @@ module.exports = {
     },
     diggingForTreasure: {
         name: "Digging for Treasure",
-        description: "The floor is full of mud, ash and stones making digging quite the a challenge. You need to craft proper equipment to get anywhere in this rough earth.",
+        description: "The floor is full of mud, ash and stones making digging quite the challenge. You need to craft proper equipment to get anywhere in this rough earth.",
         objective: "Gather 50 iron bars and 30 yew wood to craft digging equipment",
-        reward: "gold: 75",
-        winDescription: "With the proper equipment you start digging into the earth. As you get deeper you find an increasingly amount of what seems to be small animal bones covered in thick layers of ash. A lot of sweating later a glimmer of shiny metal emerges in the thick ash. You pick up a round, solid gold medallion. With a stroke you remove the dirt surrounding it to find some letters engraved into the shiny object. It is a beautiful piece and may be worth some nice gold on the market, but you decide to keep it. After several more hours of digging you find nothing but bones and ash. With a sigh you leave the old hut with nothing but a shiny golden medallion engraved with the letters C.M.\n",
+        reward: "Gold: 150",
+        winDescription: "With the proper equipment you start digging into the earth. \n\nAs you get deeper, you come across an increasingly amount of what seems to be small bones covered in thick layers of ash. \n\nA lot of sweat later a glimmer of shiny metal emerges from the ashes. You pick up a round, solid Gold Medallion. With a quick stroke, you remove the dirt surrounding it to find some letters engraved into the shiny object. It is a beautiful piece and may be worth some nice gold on the market, but you decide to keep it. \n\nAfter several more hours of digging you find nothing but bones and ash. \n\nWith a *sigh* you leave the old hut with nothing but a shiny Golden Medallion engraved with the letters **C.M.**",
         questKeySequence: ["Grassy Plains", "diggingForTreasure"],
 
         // Returns false if the quest description is shown, or true if the quest is being completed
@@ -285,13 +283,19 @@ module.exports = {
                 return false;
             }
 
-            // Has the user completed the PvE requirements?
-            const userQuest = user.quests.find(q => q.name === this.name);
-            if(userQuest.pve.find(raid => !raid.completed)) return false;
+            // Does the user have sufficient resources?
+            if(!(user.resources["yew wood"] >= 30)) return false;
+            if(!(user.resources["iron bar"] >= 50)) return false;
+
+            // Consume the resources
+            await user.removeManyResources({
+                "yew wood": 30,
+                "iron bar": 50,
+            });
 
             // Get reward
             await user.gainManyResources({
-                gold: 300,
+                gold: 150,
             });
 
             await user.removeQuest(this.name);

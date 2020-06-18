@@ -27,13 +27,13 @@ const questHandler = async (user, questName) => {
 
 // Change this to an embed
 const showQuestDescription = (user, quest) => {
-    const msg = `**__${quest.name}:__**\n\n__Description:__\n${quest.description.replace("%username%", user.account.username)}\n\n__Objective:__\n${quest.objective}\n\n__Rewards__:\n${quest.reward}`;
+    const msg = `\n\n**__${quest.name}:__**\n\n__Description:__\n${quest.description.replace("%username%", user.account.username)}\n\n__Objective:__\n${quest.objective}\n\n__Rewards__:\n${quest.reward}`;
     return msg;
 };
 
 // Change this to an embed
 const showQuestRewards = (quest) => {
-    const msg = `Congratulations you have completed __${quest.name}__! \n${quest.winDescription || ""}\n\n__Rewards:__\n${quest.reward}`;
+    const msg = `Congratulations you have completed __${quest.name}__! \n\n${quest.winDescription || ""}\n\n__Rewards:__\n${quest.reward}`;
     return msg;
 };
 

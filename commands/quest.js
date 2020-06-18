@@ -7,7 +7,7 @@ module.exports = {
 		const questName = args.join(" ");
 
 		questHandler(user, questName).then((response) => {
-			message.channel.send(`<@${message.author.id}>\n\n${response}`);
+			message.channel.send(`<@${message.author.id}>: ${response}`);
 		});
 	},
 };
