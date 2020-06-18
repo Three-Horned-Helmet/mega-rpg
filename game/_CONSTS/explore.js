@@ -128,6 +128,20 @@ const worldLocations = {
 				type: "fish",
 				fish: ["Cod", "Trout", "Swordfish"],
 			},
+			// Questmobs
+			"Confront Bandits": {
+				name: "Confront Bandits",
+				type: "raid",
+				stats:{
+					attack: 200, // Should be 2000, each
+					health: 200,
+				},
+				rewards:{
+					gold: 1000,
+					"iron bar": 30,
+					"yew wood": 60,
+				},
+			},
 		},
 	},
 	"Misty Mountains":{

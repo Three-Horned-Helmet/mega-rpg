@@ -304,7 +304,16 @@ userSchema.methods.handleExplore = function(now, currentLocation, place) {
 	if (!this.world.locations[currentLocation].explored.includes(place)) {
 		this.world.locations[currentLocation].explored.push(place);
 	}
-	this.save();
+	return this.save();
+};
+
+userSchema.methods.removeExploredArea = function(currentLocation, place) {
+	const locationIndex = this.world.locations[currentLocation].explored.indexOf(place);
+	this.world.locations[currentLocation].explored.splice(locationIndex, 1);
+
+	this.markModified(`world.locations.${currentLocation}.explored`);
+
+	return this.save();
 };
 
 userSchema.methods.buyBuilding = function(building, buildingCost) {

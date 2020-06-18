@@ -14,7 +14,7 @@ const questHandler = async (user, questName) => {
         const questResponse = await quest.execute(user);
 
         // Show quest description
-        if(!questResponse) return showQuestDescription(quest);
+        if(!questResponse) return showQuestDescription(user, quest);
         else return showQuestRewards(quest);
     }
 
@@ -25,8 +25,8 @@ const questHandler = async (user, questName) => {
 };
 
 // Change this to an embed
-const showQuestDescription = (quest) => {
-    const msg = `**__${quest.name}:__**\n\n__Description:__\n${quest.description}\n\n__Objective:__\n${quest.objective}\n\n__Rewards__:\n${quest.reward}`;
+const showQuestDescription = (user, quest) => {
+    const msg = `**__${quest.name}:__**\n\n__Description:__\n${quest.description.replace("%username%", user.account.username)}\n\n__Objective:__\n${quest.objective}\n\n__Rewards__:\n${quest.reward}`;
     return msg;
 };
 
