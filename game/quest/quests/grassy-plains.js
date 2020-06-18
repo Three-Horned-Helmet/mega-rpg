@@ -61,7 +61,7 @@ module.exports = {
         }],
         description: "You venture deeper into the Collapsed Mine until you hear some noises.\n\nBandit 1: '... must've brought back the little shit. We better get rid of it!'\nBandit 2: 'You mean to kill it?'\nBandit 1: 'I don't see any other choice either, let us do it tonight!'\nBandit 3: 'But are we even able to...'\nBandit 3: 'Shhhh! I think I hear someone out in the hall! HELLO? IS ANYONE THERE?'\n\n*You rapid but quietly move out of the cave*\n\n'There are way too many of them, I better come back with some more men to take them down!', - %username%",
         objective: "Gather your full strength and attack the bandits! (`!raid confront bandits`)",
-        reward: "Black Granite Mace: 1",
+        reward: "Iron sword: 10",
         winDescription: "%username%: 'WHERE HAVE YOU TAKEN THE LITTLE GIRL?'\nBandit 1: 'What little little girl? What are you talking about?'\n%username%: 'There was a little girl playing around near this Collapsed mine a day ago, and now she is gone! Where have you taken her?\nBandit 1: 'I... I don't know what you are talking about! There has not been anyone around here since we came here a few months ago!'\nBandit 2: 'Yes, we swear! I know we are bandits and all, but we would never take a small girl!'\n%username%: 'Liars!'\nBandit 1: 'Look, there are nothing in here that shows any signs of any girl, alright?'\n\n*You look around the room and notices nothing more than a few pieces of mens clothing and some food*\n\nBandit 3: 'One day ago you said? I may have seen the little girl! I heard a loud scream and when I went to look I noticed a small shadow sliding across the forest! Maybe that was her?'\nBandit 1: 'It must have been! We promise you we have never touched any young girls ever!'\n\n*You decide to believe them, and leave the cave to bring back the terrible news to the Fishing Village*\n**A new quest is available**",
         questKeySequence: ["Grassy Plains", "confrontingBandits"],
 
@@ -83,17 +83,40 @@ module.exports = {
             if(userQuest.pve.find(raid => !raid.completed)) return false;
 
             // Get reward
-            await user.addItem(allItems["black granite mace"], 1);
+            await user.addItem(allItems["iron sword"], 10);
 
 
             // Add next quest
-            // const newQuest = {
-            //     name: "Build a Lumbermill",
-            //     started: false,
-            //     questKeySequence: ["gettingStarted", "buildLumbermill"],
-            // };
+            const newQuest = {
+                name: "Return the Bad News",
+                started: false,
+                questKeySequence: ["Grassy Plains", "returnBadNews"],
+            };
 
-            // await user.addNewQuest(newQuest);
+            await user.addNewQuest(newQuest);
+            await user.removeQuest(this.name);
+
+            return true;
+        },
+    },
+    returnBadNews: {
+        name: "Return the Bad News",
+        description: "You need to delive the bad news to the Young Woman in the Fishing Village. Hopefully she will take it alright.",
+        objective: "Return to the fishing village (`!quest return the bad news`)",
+        reward: "Black Granite Mace: 1",
+        winDescription: "'Oh my poor little girl!', *sobs* Young Woman. 'She must be so afraid all by her self in the forest! What can have happened to her... It... It must have been the Bandit King! He was once a nice and honourable man that walked the streets of this very village, until he lost his wife in a terrible accident and disappeared for a few months. By the time he came back he was beyond recognition and has been a monster ever since.\n\nThank you brave warrior for doing what you can to help me. Here take this as a tolken of graditude, it belonged to my father.",
+        questKeySequence: ["Grassy Plains", "confrontingBandits"],
+
+        // Returns false if the quest description is shown, or true if the quest is being completed
+        execute: async function(user) {
+            const questResponse = await questHelper(user, this.name);
+            if(!questResponse) {
+                return false;
+            }
+
+            // Get reward
+            await user.addItem(allItems["black granite mace"], 1);
+
             await user.removeQuest(this.name);
 
             return true;
