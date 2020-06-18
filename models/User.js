@@ -127,7 +127,7 @@ const userSchema = new Schema({
 				},
 				explored: [String],
 			},
-			"Mist Mountains": {
+			"Misty Mountains": {
 				available: {
 					type: Boolean,
 					default: false,
