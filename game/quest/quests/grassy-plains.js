@@ -1,6 +1,8 @@
 const allItems = require("../../items/all-items");
 
 module.exports = {
+
+    // THE MISSING DAUGHTER SAGA
     missingDaughter: {
         name: "Missing Daughter",
         area: "Fishing village",
@@ -104,7 +106,7 @@ module.exports = {
         description: "You need to delive the bad news to the Young Woman in the Fishing Village. Hopefully she will take it alright.",
         objective: "Return to the fishing village (`!quest return the bad news`)",
         reward: "Black Granite Mace: 1",
-        winDescription: "'Oh my poor little girl!', *sobs* Young Woman. 'She must be so afraid all by her self in the forest! What can have happened to her... It... It must have been the Bandit King! He was once a nice and honourable man that walked the streets of this very village, until he lost his wife in a terrible accident and disappeared for a few months. By the time he came back he was beyond recognition and has been a monster ever since.\n\nThank you brave warrior for doing what you can to help me. Here take this as a tolken of graditude, it belonged to my father.",
+        winDescription: "'Oh my poor little girl!', *sobs* Young Woman. 'She must be so afraid all by herself in the forest! What can have happened to her... It... It must have been the Bandit King! He was once a nice and honourable man that walked the streets of this village, until he lost his wife in a terrible accident and disappeared for a several months. By the time he came back he was beyond recognition and has been a monster ever since.'\n\n'Thank you for doing what you can to help me. Here... Take this Mace as a tolken of graditude, it belonged to my father who was a skilled blacksmith. You may have better use for it than me...'",
         questKeySequence: ["Grassy Plains", "confrontingBandits"],
 
         // Returns false if the quest description is shown, or true if the quest is being completed
@@ -122,7 +124,106 @@ module.exports = {
             return true;
         },
     },
+
+    // A FOOLS TREASURE HUNT
+    lostMap: {
+        name: "A Lost Map",
+        area: "Bandit Camp",
+        pve: [{
+            name: "Bandit Camp",
+            completed: false,
+            chance: 1, // SET IT BACK TO 0.2!
+        }],
+        found: "You found the second half of the Treasure Map",
+        notFound: "You looked around for the second half of the Treasure Map, but found nothing",
+        intro: "You searched through the encampment and found a **Torn Piece of Paper** with some scriblings on it.",
+        description: "After a closer inspection of the paper you notice it is drawn like a treasure map with the text *'...mains of the Creat...'*, but the other half of the Map has been torn off. \n\nIt seems like you need the second part of the Map to be able to locate the Treasure.",
+        objective: "Raid **Bandit Camp** until you find the missing pieces of the  Treasure Map",
+        reward: "Treasure Map: 1",
+        winDescription: "You successfully patched the pieces together, creating a damaged treasure map. \n\nThe text on the map is still incomplete but shows *'...mains of the Creat...'* and *'...easure no one finds...'*.\n**A new quest is available**",
+        questKeySequence: ["Grassy Plains", "lostMap"],
+
+        // Returns false if the quest description is shown, or true if the quest is being completed
+        execute: async function(user) {
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse) return false;
+
+            // Has the user completed the PvE requirements?
+            const userQuest = user.quests.find(q => q.name === this.name);
+            if(userQuest.pve.find(raid => !raid.completed)) return false;
+
+            // Get reward
+
+            // Add next quest
+            const newQuest = {
+                name: "The Lost Hut",
+                started: false,
+                questKeySequence: ["Grassy Plains", "lostMap"],
+                pve: [{
+                    name: "Forest",
+                    completed: false,
+                    chance: 1, // SET IT BACK TO 0.25!
+                }],
+            };
+
+            await user.addNewQuest(newQuest);
+            await user.removeQuest(this.name);
+
+            return true;
+        },
+    },
+    lostHut: {
+        name: "The Lost Hut",
+        pve: [{
+            name: "Forest",
+            completed: false,
+            chance: 0.25, // SET IT BACK TO 0.25!
+        }],
+        found: "You found an old hut in the middle of darkest parts of the Forest",
+        notFound: "You looked around but found no signs of the building",
+        description: "The Treasure Map is in a very rough shape making it diffcult to figure out where it wants to lead you. After carefully investigating it, you see that it wants you to find some sort of building deep inside of the Forest, however its exact location is not possible to understand.",
+        objective: "Search the Forest for the building drawn on the map",
+        reward: "Oak wood: 15\nYew wood: 15",
+        winDescription: "The old hut is in terrible shape, but it seems to have been a magnificent building back in its prime days. As you get closer to the hut you hear noises inside of it. Not human voices, but small screaches and rattle noises. You sneak up to the dilapidated building, and peak through a small dusty window.\n**A new quest is available**",
+        questKeySequence: ["Grassy Plains", "lostMap"],
+
+        // Returns false if the quest description is shown, or true if the quest is being completed
+        execute: async function(user) {
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse) return false;
+
+            // Has the user completed the PvE requirements?
+            const userQuest = user.quests.find(q => q.name === this.name);
+            if(userQuest.pve.find(raid => !raid.completed)) return false;
+
+            // Get reward
+            await user.gainManyResources({
+                ["oak wood"]: 15,
+                ["yew wood"]: 15,
+            });
+
+            // Add next quest
+            // const newQuest = {
+            //     name: "Confronting the Bandits",
+            //     started: false,
+            //     questKeySequence: ["Grassy Plains", "confrontingBandits"],
+            //     pve: [{
+            //         name: "Confront Bandits",
+            //         completed: false,
+            //         chance: 1,
+            //         unique: true,
+            //     }],
+            // };
+
+            // await user.addNewQuest(newQuest);
+            await user.removeQuest(this.name);
+
+            return true;
+        },
+    },
 };
+
+// \n\nThe hut is filled with several implings.Small vile creatures made by the devil himself, but the treasure must be inside of the hut?
 
 
 const questHelper = async (user, questName) => {

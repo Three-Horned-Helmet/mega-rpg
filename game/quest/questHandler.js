@@ -5,7 +5,8 @@ const questHandler = async (user, questName) => {
     if(user.quests.length === 0) return "You currently have no available quests. You may get new ones when you explore new areas or obtain specific items or building levels";
 
     // If the user only has one quest available, execute this quest
-    if(user.quests.length === 1) {
+    // Change it to if(user.quests.length === 1) when it has been handled having several active quests
+    if(user.quests.length > 0) {
         let quest = "";
         user.quests[0].questKeySequence.forEach(questKey => {
             quest = quest ? quest[questKey] : allQuests[questKey];
@@ -32,7 +33,7 @@ const showQuestDescription = (user, quest) => {
 
 // Change this to an embed
 const showQuestRewards = (quest) => {
-    const msg = `Congratulations you have completed __${quest.name}__! ${quest.winDescription || ""}\n\n__Rewards:__\n${quest.reward}`;
+    const msg = `Congratulations you have completed __${quest.name}__! \n${quest.winDescription || ""}\n\n__Rewards:__\n${quest.reward}`;
     return msg;
 };
 
