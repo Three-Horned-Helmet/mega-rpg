@@ -14,6 +14,7 @@ const createTestUser = ({
 	account = {
 		username: "Anniken Avisbud",
 		userId: rndmId(),
+		testUser: true,
 	},
 	resources = {
 		gold:100,

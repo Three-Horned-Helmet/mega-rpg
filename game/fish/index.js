@@ -1,52 +1,35 @@
 const { onCooldown } = require("../_CONSTS/cooldowns");
+const { worldLocations } = require("../_CONSTS/explore");
+const { getLocationIcon, getPlaceIcon } = require("../_CONSTS/icons");
+const { calculateFishResult } = require("./fishvalue");
 
 const handleFish = async (user) => {
-    const { explored } = user.world.locations["Grassy Plains"];
     const { currentLocation } = user.world;
     const onCooldownInfo = onCooldown("fish", user);
 
     if (onCooldownInfo.response) {
         return onCooldownInfo.embed;
     }
-    if (!explored.includes("River")) {
-        return `You have not explored any rivers yet in ${currentLocation}`;
+
+    const fishingPlaceInformation = Object.values(worldLocations[currentLocation].places).find(p=>{
+        return p.type === "fish";
+    });
+    const locationIcon = getLocationIcon(currentLocation);
+    const placeIcon = getPlaceIcon("fish");
+    if (!user.world.locations[currentLocation].explored.includes([fishingPlaceInformation.name])) {
+        return `You haven't found any place to ${placeIcon} fish in ${locationIcon} ${currentLocation}`;
     }
+
     const now = new Date();
 
-    const randomNumber = Math.random();
-    const chance = 0.5;
+    const { fish } = fishingPlaceInformation;
 
-    let goldResult = 0;
-    const fish = ["Cod", "Trout", "Swordfish"];
-    let fishResult = "";
+    const result = calculateFishResult(fish);
 
-    let result = "";
+    await user.handleFishResult(result.gold, now);
 
-    if (randomNumber > chance) {
-        // 'Swordfish'
-        fishResult = fish[Math.floor(Math.random() * fish.length)];
-        // 0,1,2
-        const multiplier = fish.indexOf(fishResult);
-        // 0-50
-        goldResult = Math.floor(multiplier * 10 + (Math.random() * 5));
-
-        result = `you caught a ${fishResult} and sold it for ${goldResult} gold`;
-    }
- else {
-    result = generateFailFishSentence();
-    }
-    user.handleFishResult(goldResult, now);
-
-    return result;
+    return result.response;
 };
 
-const generateFailFishSentence = () => {
-    const sentences = [
-        "You fished for hours with no luck",
-        "You lost your bait while fishing",
-        "You caught an old boot",
-        "You put your fishing rod down and took a swim instead"];
-    return sentences[Math.floor(Math.random() * sentences.length)];
-};
 
 module.exports = { handleFish };

@@ -40,11 +40,6 @@ describe("explore command", () => {
 			results.push(await exploreCommand.execute(mockMessages[i], null, allUsers[i]));
 		}
 
-		/* results.forEach(r=>{
-			expect(typeof r).to.be.equal("string");
-			expect(r.length).to.be.at.least(10);
-        }); */
-
 		let howManyPlacesFound = 0;
 		allUsers.forEach(d=>{
 			howManyPlacesFound += d.world.locations["Grassy Plains"].explored.length;

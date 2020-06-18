@@ -117,7 +117,6 @@ const userSchema = new Schema({
 		currentLocation: {
 			type: String,
 			default: "Grassy Plains",
-			enum:["Grassy Plains", "Misty Mountains"],
 		},
 
 		locations: {
@@ -128,13 +127,20 @@ const userSchema = new Schema({
 				},
 				explored: [String],
 			},
-			/* "Mist Mountains": {
+			"Mist Mountains": {
 				available: {
 					type: Boolean,
 					default: false,
 				},
 				explored: [String],
-			}, */
+			},
+			"Deep Caves": {
+				available: {
+					type: Boolean,
+					default: false,
+				},
+				explored: [String],
+			},
 		},
 	},
 
@@ -267,6 +273,7 @@ userSchema.methods.gainResource = function(resource, quantity) {
 };
 
 userSchema.methods.gainManyResources = function(obj) {
+
 	Object.keys(obj).forEach(r=>{
 		this.resources[r] += obj[r];
 	});
