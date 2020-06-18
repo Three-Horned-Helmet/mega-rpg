@@ -203,27 +203,103 @@ module.exports = {
             });
 
             // Add next quest
-            // const newQuest = {
-            //     name: "Confronting the Bandits",
-            //     started: false,
-            //     questKeySequence: ["Grassy Plains", "confrontingBandits"],
-            //     pve: [{
-            //         name: "Confront Bandits",
-            //         completed: false,
-            //         chance: 1,
-            //         unique: true,
-            //     }],
-            // };
+            const newQuest = {
+                name: "A Pack of Implings",
+                started: false,
+                questKeySequence: ["Grassy Plains", "packOfImplings"],
+                pve: [{
+                    name: "Pack of Implings",
+                    completed: false,
+                    chance: 1,
+                    unique: true,
+                }],
+            };
 
-            // await user.addNewQuest(newQuest);
+            await user.addNewQuest(newQuest);
+            await user.removeQuest(this.name);
+
+            return true;
+        },
+    },
+    packOfImplings: {
+        name: "A Pack of Implings",
+        pve: [{
+            name: "Pack of Implings",
+            completed: false,
+            chance: 1,
+        }],
+        found: "You found an old hut in the middle of darkest parts of the Forest",
+        description: "The hut is filled with several implings, small vile creatures made by the devil himself, but the treasure must be inside of the hut? There is no way to sneak in there unoticed... There is only one solution to get to the treasure!",
+        objective: "Defeat the Pack of Implings! (`!raid pack of implings`)",
+        reward: "gold: 300",
+        winDescription: "The dead Implings are soaked in blood and spread across the floor. Exhausted from the battle you start looking around the old hut for the well deserved treasure. There are scratches along the walls, shattered vials on the shelves and stained blood on the walls. Somehow everything seems to have been burnt... It must've been the implings, lucky the house has not yet burned down. As you strafe across the floor you stumble on a piece of wood sticking up from the floor. You lift it up and notice someone has been digging in the dirty underneath.\n**A new quest is available**",
+        questKeySequence: ["Grassy Plains", "packOfImplings"],
+
+        // Returns false if the quest description is shown, or true if the quest is being completed
+        execute: async function(user) {
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse) {
+                const now = new Date();
+                const currentLocation = "Grassy Plains";
+                const newlyExploredPlaceName = "Pack of Implings";
+
+	            await user.handleExplore(now, currentLocation, newlyExploredPlaceName);
+
+                return false;
+            }
+
+            // Has the user completed the PvE requirements?
+            const userQuest = user.quests.find(q => q.name === this.name);
+            if(userQuest.pve.find(raid => !raid.completed)) return false;
+
+            // Get reward
+            await user.gainManyResources({
+                gold: 300,
+            });
+
+            // Add next quest
+            const newQuest = {
+                name: "Digging for Treasure",
+                started: false,
+                questKeySequence: ["Grassy Plains", "diggingForTreasure"],
+            };
+
+            await user.addNewQuest(newQuest);
+            await user.removeQuest(this.name);
+
+            return true;
+        },
+    },
+    diggingForTreasure: {
+        name: "Digging for Treasure",
+        description: "The floor is full of mud, ash and stones making digging quite the a challenge. You need to craft proper equipment to get anywhere in this rough earth.",
+        objective: "Gather 50 iron bars and 30 yew wood to craft digging equipment",
+        reward: "gold: 75",
+        winDescription: "With the proper equipment you start digging into the earth. As you get deeper you find an increasingly amount of what seems to be small animal bones covered in thick layers of ash. A lot of sweating later a glimmer of shiny metal emerges in the thick ash. You pick up a round, solid gold medallion. With a stroke you remove the dirt surrounding it to find some letters engraved into the shiny object. It is a beautiful piece and may be worth some nice gold on the market, but you decide to keep it. After several more hours of digging you find nothing but bones and ash. With a sigh you leave the old hut with nothing but a shiny golden medallion engraved with the letters C.M.\n",
+        questKeySequence: ["Grassy Plains", "diggingForTreasure"],
+
+        // Returns false if the quest description is shown, or true if the quest is being completed
+        execute: async function(user) {
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse) {
+                return false;
+            }
+
+            // Has the user completed the PvE requirements?
+            const userQuest = user.quests.find(q => q.name === this.name);
+            if(userQuest.pve.find(raid => !raid.completed)) return false;
+
+            // Get reward
+            await user.gainManyResources({
+                gold: 300,
+            });
+
             await user.removeQuest(this.name);
 
             return true;
         },
     },
 };
-
-// \n\nThe hut is filled with several implings.Small vile creatures made by the devil himself, but the treasure must be inside of the hut?
 
 
 const questHelper = async (user, questName) => {

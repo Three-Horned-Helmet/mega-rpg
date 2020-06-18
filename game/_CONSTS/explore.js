@@ -132,6 +132,7 @@ const worldLocations = {
 			"Confront Bandits": {
 				name: "Confront Bandits",
 				type: "raid",
+				questMob: true,
 				stats:{
 					attack: 200, // Should be 2000, each
 					health: 200,
