@@ -116,11 +116,22 @@ const worldLocations = {
 			"Bandit's Castle": {
 				name: "Bandit's Castle",
 				type: "dungeon",
+				rules:{
+					allowArmy: false,
+					canKill: true,
+					allowHelpers: true,
+				},
+				rewards:{
+					gold:5000,
+					xp:1100,
+				},
+				helpers:[],
 				requires: "Ogre tooth",
 				unlocks: "Misty Mountains",
 				stats:{
 					attack: 500,
 					health:500,
+					healing:false,
 				},
 			},
 			River: {
@@ -247,6 +258,16 @@ const worldLocations = {
 			"Windlow Volcano": {
 				name: "Windlow Volcano",
 				type: "dungeon",
+				rules:{
+					allowArmy: false,
+					canKill: true,
+					allowHelpers: true,
+				},
+				rewards:{
+					gold:5000,
+					xp:1100,
+				},
+				helpers:[],
 				requires: "Eridian Vase",
 				stats:{
 					attack: 500,
@@ -379,6 +400,16 @@ const worldLocations = {
 				name: "Collapsing Sanctuary",
 				requires: "The One Shell",
 				type: "dungeon",
+				rules:{
+					allowArmy: false,
+					canKill: true,
+					allowHelpers: true,
+				},
+				rewards:{
+					gold:5000,
+					xp:1100,
+				},
+				helpers:[],
 				stats:{
 					attack: 500,
 					health:500,

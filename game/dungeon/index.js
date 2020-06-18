@@ -1,50 +1,48 @@
 const { onCooldown } = require("../_CONSTS/cooldowns");
 const { worldLocations } = require("../_CONSTS/explore");
 const { getLocationIcon, getDungeonIcon } = require("../_CONSTS/icons");
-const { createMinibossInvitation, createMinibossResult } = require("./embedGenerator");
+const { createDungeonInvitation, createDungeonResult } = require("./embedGenerator");
 
 const User = require("../../models/User");
 
-// Note: The success of defeating the miniboss is based soley on user rank
+// Note: The success of defeating the dungeon is based soley on user rank
 const handleDungeon = async (message, user)=>{
 
-    // cooldown, health, explored miniboss
+    // cooldown, health, explored dungeon
     const disallowed = dungeonStartAllowed(user);
 		if (disallowed) {
 			return disallowed;
         }
 
-    const miniboss = createMinibossEvent(user);
+    const dungeon = createDungeonEvent(user);
 
     const now = new Date();
-    await user.setNewCooldown("miniboss", now);
+    await user.setNewCooldown("dungeon", now);
 
-    const minibossInvitation = createMinibossInvitation(miniboss, user);
-    const invitation = await message.channel.send(minibossInvitation);
-
-    await invitation.react("🧟");
+    const dungeonInvitation = createDungeonInvitation(dungeon, user);
+    const invitation = await message.channel.send(dungeonInvitation);
+    await invitation.react("🗺");
 
     const reactionFilter = (reaction) => {
-        return reaction.emoji.name === "🧟";
+        return reaction.emoji.name === "🗺";
     };
 
     const collector = await invitation.createReactionCollector(reactionFilter, { time: 1000 * 20, errors: ["time"] });
     collector.on("collect", async (result, rUser) => {
-        if (rUser.bot || miniboss.helpers.length > 9) {
+        if (rUser.bot || dungeon.helpers.length > 4) {
             return;
         }
         const allowedHelper = await validateHelper(rUser.id);
         if (!allowedHelper) {
             return;
         }
-        miniboss.helpers.push(rUser.id);
+        dungeon.helpers.push(rUser.id);
+        // if helpers length, end collection
     });
 
      collector.on("end", async () => {
-        const result = await calculateMinibossResult(miniboss);
-        const embed = createMinibossResult(result, miniboss);
-        message.channel.send(embed);
-});
+        await startDungeonEvent(message, dungeon);
+    });
 };
 
 const dungeonStartAllowed = (user)=>{
@@ -65,7 +63,7 @@ const dungeonStartAllowed = (user)=>{
     if (user.hero.dungeonKeys[requiredDungeonKey]) {
         let response = `You try to enter ${dungeonInformation.name}, but you don't have the required ${getDungeonIcon(requiredDungeonKey)} ${requiredDungeonKey} to proceed. `;
         if (user.hero.rank < 2) {
-            response += `Try defeating the Miniboss in ${locationIcon} ${currentLocation} to obtain the required dungeon key`;
+            response += `Try defeating the dungeon in ${locationIcon} ${currentLocation} to obtain the required dungeon key`;
         }
         return response;
     }
@@ -90,14 +88,14 @@ if (user.hero.currentHealth < user.hero.health * 0.05) {
     return null;
 };
 
-const createMinibossEvent = (user) =>{
+const createDungeonEvent = (user) =>{
     const { currentLocation } = user.world;
-    const minibossname = Object.keys(worldLocations[currentLocation].places).find(p=>{
-        return worldLocations[currentLocation].places[p].type === "miniboss";
+    const dungeonName = Object.keys(worldLocations[currentLocation].places).find(p=>{
+        return worldLocations[currentLocation].places[p].type === "dungeon";
     });
-    const miniboss = worldLocations[currentLocation].places[minibossname];
-    miniboss.helpers.push(user.account.userId);
-    return miniboss;
+    const dungeon = worldLocations[currentLocation].places[dungeonName];
+    dungeon.helpers.push(user.account.userId);
+    return dungeon;
 };
 
 const validateHelper = async discordId =>{
@@ -105,26 +103,66 @@ const validateHelper = async discordId =>{
     return user.hero.currentHealth > user.hero.health * 0.05;
 };
 
+const startDungeonEvent = async (message, dungeon) => {
+    const users = await User.find({ "account.userId": dungeon.helpers });
+    const playersDiscordIds = users.map(p=> p.account.userId);
+    const initiativeTaker = users.filter(u=> u.account.userId === dungeon.helpers[0]);
 
-const calculateMinibossResult = async (miniboss)=>{
-    const users = await User.find({ "account.userId": miniboss.helpers });
+    // const helpers = users.filter(u=>u.account.userId !== dungeon.helpers[0]);
+    // colors https://gist.github.com/thomasbnt/b6f455e2c7d743b796917fa3c205f812
 
-    const initiativeTaker = users.filter(u=>{
-        return u.account.userId === miniboss.helpers[0];
+    const progress = {
+        win: false,
+        playersDiscordIds,
+        attempts: 0,
+        initiativeTaker: initiativeTaker[0],
+        players: users,
+        dungeon: dungeon,
+        weaponAnswer:new Map(),
+    };
+
+    // recursive starts here
+
+    const dungeonRound = createDungeonRound(progress);
+
+    const round = await message.channel.send(dungeonRound);
+    const weaponAnswerFilter = ["a", "b", "c", "d", "slash", "strike", "disarm", "heal"];
+    const answerLexicon = {
+        a: "slash",
+        b: "strike",
+        c: "disarm",
+        d: "heal",
+    };
+    const filter = (response, user) => {
+        // checks for not given answer, includes in the original team and answer is among the accepted answers.
+        return progress.weaponAnswer.has(user.id) === false && progress.playerDiscordIds.includes(user.id) && weaponAnswerFilter.some(alternative => alternative === response.content.toLowerCase());
+    };
+
+    const collector = await round.awaitMessages(filter, { time: 1000 * 15, errors: ["time"] });
+    collector.on("collect", async (result, rUser) => {
+        if (rUser.bot || dungeon.helpers.length > 4) {
+            return;
+        }
+        if (result.includes(Object.keys(answerLexicon))) {
+            progress.weaponAnswer.set(rUser.id, answerLexicon[result]);
+        }
+         else {
+            progress.weaponAnswer.set(rUser.id, result);
+        }
+        // if length is something, collection end after timeout
     });
-    const helpers = users.filter(u=>{
-        return u.account.userId !== miniboss.helpers[0];
-    });
 
-    let chanceForSuccess = helpers.reduce((acc, cur)=>{
-        return acc + cur.hero.rank;
-    }, 0) + initiativeTaker[0].hero.rank + 2;
+     collector.on("end", async () => {
 
-    // Temporary workaround for testcases
-    if (initiativeTaker[0].account.testUser) {
-        chanceForSuccess -= 2;
-    }
-    const randomNumber = Math.random() * 10;
+        // const result = await calculateDungeonResult(dungeon);
+        // const embed = createDungeonResult(result, dungeon);
+        // message.channel.send(embed);
+});
+};
+
+
+const calculateDungeonResult = async (dungeon)=>{
+   // const users = await User.find({ "account.userId": dungeon.helpers });
 
     const result = {
             win: false,
@@ -133,13 +171,13 @@ const calculateMinibossResult = async (miniboss)=>{
             rewards:{
                 initiativeTaker:{
                     dungeonKey: null,
-                    gold: Math.round(miniboss.rewards.gold / 2),
-                    xp: Math.round(miniboss.rewards.xp / 2),
+                    gold: Math.round(dungeon.rewards.gold / 2),
+                    xp: Math.round(dungeon.rewards.xp / 2),
                 },
                 helpers:[],
             },
             damageDealt:{
-                initiativeTaker: Math.floor(Math.random() * miniboss.stats.attack),
+                initiativeTaker: Math.floor(Math.random() * dungeon.stats.attack),
                 initiativeTakerDead:false,
                 helpers:[],
             },
@@ -150,14 +188,14 @@ const calculateMinibossResult = async (miniboss)=>{
     if (chanceForSuccess > randomNumber) {
         result.win = true;
         if(result.initiativeTaker.hero.rank >= 2) {
-            result.rewards.initiativeTaker.dungeonKey = miniboss.rewards.dungeonKey;
+            result.rewards.initiativeTaker.dungeonKey = dungeon.rewards.dungeonKey;
         }
         await result.initiativeTaker.alternativeGainXp(result.rewards.initiativeTaker.xp);
         await result.initiativeTaker.gainManyResources({ gold: result.rewards.initiativeTaker.gold });
         await result.initiativeTaker.giveDungeonKey(result.rewards.initiativeTaker.dungeonKey);
         await asyncForEach(result.helpers, async (h) => {
-            const randomHelperXp = Math.round((Math.random() * miniboss.rewards.xp) / helpers.length);
-            const randomHelperGold = Math.round((Math.random() * miniboss.rewards.gold) / helpers.length);
+            const randomHelperXp = Math.round((Math.random() * dungeon.rewards.xp) / helpers.length);
+            const randomHelperGold = Math.round((Math.random() * dungeon.rewards.gold) / helpers.length);
             const helperName = h.account.username;
             const helperLeveledUp = randomHelperXp + h.hero.currentExp > h.hero.expToNextRank;
             await h.alternativeGainXp(randomHelperXp);
@@ -174,7 +212,7 @@ const calculateMinibossResult = async (miniboss)=>{
     await result.initiativeTaker.heroHpLossFixedAmount(result.damageDealt.initiativeTaker);
 
     await asyncForEach(result.helpers, async (h)=>{
-        const randomHelperDamage = Math.round(Math.random() * miniboss.stats.attack) ;
+        const randomHelperDamage = Math.round(Math.random() * dungeon.stats.attack) ;
         const helperDead = h.hero.currentHealth - randomHelperDamage <= 0;
         await h.heroHpLossFixedAmount(randomHelperDamage);
         result.rewards.helpers.push({
@@ -194,4 +232,4 @@ async function asyncForEach(array, callback) {
   }
 
 
-module.exports = { handleDungeon, createMinibossEvent, dungeonStartAllowed, createMinibossResult, calculateMinibossResult };
+module.exports = { handleDungeon, createDungeonEvent, dungeonStartAllowed, createDungeonResult, calculateDungeonResult };

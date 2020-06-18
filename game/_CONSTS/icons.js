@@ -43,4 +43,13 @@ const getResourceIcon = (type)=>{
 	return lexicon[type];
 };
 
-module.exports = { getLocationIcon, getPlaceIcon, getResourceIcon, getDungeonIcon, getGreenRedIcon };
+const getStatsIcon = (type)=>{
+	const lexicon = {
+	["health"]: ":heart:",
+	["attack"]: ":crossed_swords:",
+	["defense"]: ":shield:",
+	};
+	return lexicon[type];
+};
+
+module.exports = { getLocationIcon, getPlaceIcon, getResourceIcon, getDungeonIcon, getGreenRedIcon, getStatsIcon };

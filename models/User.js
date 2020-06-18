@@ -614,11 +614,13 @@ userSchema.methods.alternativeGainXp = async function(xp = 0) {
 		this.hero.currentExp += xp;
 	}
 	if (this.hero.currentExp >= this.hero.expToNextRank) {
-		this.hero.rank += 1;
-		this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
+		if (heroExpToNextLevel.length > this.hero.rank) {
+			this.hero.rank += 1;
+			this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
 				Object.keys(heroStatIncreaseOnLevel[this.hero.rank]).forEach(s=>{
 					this.hero[s] += heroStatIncreaseOnLevel[this.hero.rank][s];
 				});
+			}
 	}
 	return this.save();
 };
