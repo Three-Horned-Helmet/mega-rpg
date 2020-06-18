@@ -28,8 +28,8 @@ const createGridCanvas = async (user) => {
 					);
 				}
 			}
-			catch {
-				console.error(`Image does not exist, ${building}`);
+			catch (err) {
+				console.error(`Image does not exist, ${building}`, err);
 			}
 		});
 	});
