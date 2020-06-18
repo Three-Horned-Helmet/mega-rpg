@@ -4,10 +4,8 @@ const { getLocationIcon } = require("../_CONSTS/icons");
 const { createMinibossInvitation, createMinibossResult } = require("./embedGenerator");
 
 const User = require("../../models/User");
-/* const { calculatePveFullArmyResult } = require("../../combat/combat");
-const { generateEmbedPveFullArmy } = require("../../combat/pveEmedGenerator"); */
 
-
+// Note: The success of defeating the miniboss is based soley on user rank
 const handleMiniboss = async (message, user)=>{
 
     // cooldown, health, explored miniboss
