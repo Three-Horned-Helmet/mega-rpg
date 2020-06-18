@@ -41,11 +41,9 @@ describe("consecutive prizes commands", () => {
             testUser.resources.gold = 0;
             await testUser.save();
         }
-        expect(goldResults[0]).to.be.equal(50);
-        expect(goldResults[1]).to.be.equal(110);
-        expect(goldResults[2]).to.be.equal(250);
-        expect(goldResults[3]).to.be.equal(500);
-        expect(goldResults[4]).to.be.equal(1200);
+		[50, 110, 250, 500, 1200].forEach((p, i)=>{
+			expect(goldResults[i]).to.be.equal(p);
+		});
     });
 
     it("should not give better prices after 5 days", async ()=>{
@@ -101,12 +99,11 @@ describe("consecutive prizes commands", () => {
             goldResults.push(testUser.resources.gold);
             testUser.resources.gold = 0;
             await testUser.save();
-        }
-        expect(goldResults[0]).to.be.equal(200);
-        expect(goldResults[1]).to.be.equal(2000);
-        expect(goldResults[2]).to.be.equal(5000);
-        expect(goldResults[3]).to.be.equal(10000);
-        expect(goldResults[4]).to.be.equal(20000);
+		}
+		[200, 2000, 5000, 10000, 20000].forEach((p, i)=>{
+			expect(goldResults[i]).to.be.equal(p);
+		});
+
     });
 
     it("should not give better prices after 5 weeks", async ()=>{
@@ -139,4 +136,3 @@ describe("consecutive prizes commands", () => {
 		});
 	});
 });
-
