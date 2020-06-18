@@ -9,7 +9,7 @@ module.exports = {
         pve: [{
             name: "Collapsed Mine",
             completed: false,
-            chance: 1,
+            chance: 0.33,
         }],
         found: "You found a torn up doll",
         notFound: "You searched around the Collapsed Mine but found no signs of the young womans daughter. Maybe she is futher in?",
@@ -75,7 +75,7 @@ module.exports = {
                 const currentLocation = "Grassy Plains";
                 const newlyExploredPlaceName = "Confront Bandits";
 
-	            await user.handleExplore(now, currentLocation, newlyExploredPlaceName);
+                await user.handleExplore(now, currentLocation, newlyExploredPlaceName);
 
                 return false;
             }
@@ -132,7 +132,7 @@ module.exports = {
         pve: [{
             name: "Bandit Camp",
             completed: false,
-            chance: 1, // SET IT BACK TO 0.2!
+            chance: 0.2,
         }],
         found: "You found the second half of the Treasure Map",
         notFound: "You looked around for the second half of the Treasure Map, but found nothing",
@@ -160,7 +160,7 @@ module.exports = {
                 pve: [{
                     name: "Forest",
                     completed: false,
-                    chance: 1, // SET IT BACK TO 0.25!
+                    chance: 0.25,
                 }],
             };
 
@@ -175,7 +175,7 @@ module.exports = {
         pve: [{
             name: "Forest",
             completed: false,
-            chance: 0.25, // SET IT BACK TO 0.25!
+            chance: 0.25,
         }],
         found: "You found an old hut in the middle of darkest parts of the Forest",
         notFound: "You looked around but found no signs of the building",
@@ -241,7 +241,7 @@ module.exports = {
                 const currentLocation = "Grassy Plains";
                 const newlyExploredPlaceName = "Pack of Implings";
 
-	            await user.handleExplore(now, currentLocation, newlyExploredPlaceName);
+                await user.handleExplore(now, currentLocation, newlyExploredPlaceName);
 
                 return false;
             }
