@@ -113,7 +113,8 @@ const calculateMinibossResult = async (miniboss)=>{
     if (initiativeTaker[0].account.testUser) {
         chanceForSuccess -= 2;
     }
-    const randomNumber = Math.random() * 10;
+
+    const difficulty = Math.random() * miniboss.stats.difficulty;
 
     const result = {
             win: false,
@@ -136,7 +137,7 @@ const calculateMinibossResult = async (miniboss)=>{
     if (result.damageDealt.initiativeTaker >= result.initiativeTaker.hero.currentHealth) {
         result.damageDealt.initiativeTakerDead = true;
     }
-    if (chanceForSuccess > randomNumber) {
+    if (chanceForSuccess > difficulty) {
         result.win = true;
         if(result.initiativeTaker.hero.rank >= 2) {
             result.rewards.initiativeTaker.dungeonKey = miniboss.rewards.dungeonKey;

@@ -1,7 +1,8 @@
 const getLocationIcon = (worldLocation)=>{
 	const lexicon = {
 		"Grassy Plains" : "🌳",
-		"Misty Mountains" : "🗻",
+		"Misty Mountains" : "🏔",
+		"Deep Caves" : "🌋",
 	};
 	return lexicon[worldLocation];
 };
@@ -19,7 +20,9 @@ const getPlaceIcon = (type) => {
 const getDungeonIcon = (type) =>{
 	const lexicon = {
 		["Ogre tooth"]:"🦷",
-		["Troll Ear"]:"👂🏿",
+		["The One Shell"]:"🐚",
+		["Eridian Vase"]: "🏺",
+
 	};
 	return lexicon[type];
 };
