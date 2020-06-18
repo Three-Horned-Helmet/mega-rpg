@@ -65,8 +65,8 @@ const gainHeroExp = async (user, exp, message) => {
 				`<@${user.account.userId}>: Congratulations your hero just reached level ${updatedUser.hero.rank} and gained ${statMessage}your next level is in ${heroExpToNextLevel[level + 1] - currentExp} exp`,
 			);
 		}
-		catch{
-			console.error("Was not able to send new hero level message");
+		catch(err) {
+			console.error("Was not able to send new hero level message", err);
 		}
 	}
 
@@ -109,8 +109,8 @@ const removeHeroExp = async (user, exp, message) => {
 				`<@${user.account.userId}>: Your hero lost a level in the battle and is now level ${updatedUser.hero.rank} and lost stats: ${statMessage}`,
 			);
 		}
-		catch{
-			console.error("Was not able to send new hero level message");
+		catch(err) {
+			console.error("Was not able to send new hero level message", err);
 		}
 	}
 
