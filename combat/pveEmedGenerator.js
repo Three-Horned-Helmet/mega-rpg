@@ -9,9 +9,9 @@ function generateEmbedPveFullArmy(user, placeInfo, pveResult, questIntro) {
 }
 
 
-function generateEmbedPveHero(user, placeInfo, pveResult) {
+function generateEmbedPveHero(user, placeInfo, pveResult, questIntro) {
     if (pveResult.win) {
-        return generateEmbedPveHeroWin(user, placeInfo, pveResult);
+        return generateEmbedPveHeroWin(user, placeInfo, pveResult, questIntro);
     }
     return generateEmbedPveHeroLoss(user, placeInfo, pveResult);
 
@@ -121,7 +121,7 @@ function generateEmbedPveFullArmyLoss(user, placeInfo, pveResult) {
 return embedLoss;
 }
 
-function generateEmbedPveHeroWin(user, placeInfo, pveResult) {
+function generateEmbedPveHeroWin(user, placeInfo, pveResult, questIntro) {
     const sideColor = "#45b6fe";
     const placeName = placeInfo.name;
     const placeIcon = getPlaceIcon(placeInfo.type);
@@ -142,10 +142,7 @@ function generateEmbedPveHeroWin(user, placeInfo, pveResult) {
         expReward += "💪 You leveled up! 💪";
     }
 
-    const embedWin = new Discord.MessageEmbed()
-    .setTitle(title)
-    .setColor(sideColor)
-    .addFields(
+    const fields = [
         {
             name: "Resources",
             value: resourceReward,
@@ -161,6 +158,20 @@ function generateEmbedPveHeroWin(user, placeInfo, pveResult) {
             value:  heroCasulty,
             inline: false,
         },
+    ];
+
+    if(questIntro) {
+        fields.push({
+            name: "New Quest",
+            value: questIntro,
+        });
+    }
+
+    const embedWin = new Discord.MessageEmbed()
+    .setTitle(title)
+    .setColor(sideColor)
+    .addFields(
+        ...fields,
     );
 return embedWin;
 }

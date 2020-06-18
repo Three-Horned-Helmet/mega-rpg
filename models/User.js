@@ -234,6 +234,11 @@ const userSchema = new Schema({
 				started: false,
 				questKeySequence: ["gettingStarted", "buildMine"],
 				name: "Build a Mine",
+				// pve: [{ // Raid is optional
+				// 	name: String, // e.g: "Collapsed Mine"
+				//	completed: Bolean,
+				// chance: Number, // e.g. 0.5 chance to get it (50%)
+				// },]
 			}],
 	},
 	completedQuests: [String],
@@ -264,6 +269,14 @@ userSchema.methods.removeQuest = async function(questName) {
 	const questIndex = this.quests.indexOf(this.quests.find(q => q.name === questName));
 	this.quests.splice(questIndex, 1);
 	this.completedQuests.push(questName);
+	return this.save();
+};
+
+userSchema.methods.updateQuestObjective = async function(quest) {
+	const questIndex = this.quests.indexOf(this.quests.find(q => q.name === quest.name));
+	this.quests[questIndex].pve = quest.pve;
+
+	this.markModified(`quests.${questIndex}.pve`);
 	return this.save();
 };
 

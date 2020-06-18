@@ -7,6 +7,7 @@ module.exports = {
         description: "Welcome to MEGA RPG, where your goal is to create the largest empire and conquer the world! Now let's get you started!\n\n Your first objective is to __build a Mine__ and __collect 5 copper ore__. \n\nYou can build a Mine with the command `!build mine` and it will passively collect ores depending on the level of the Mine. A level 0 Mine will collect 1 copper ore per minute, and can be collected with the command `!collect`. Mines are crucial for rapid expansion and in production of an unbeatable army!",
         objective: "Build: Mine level 0\n Collect: 5 Copper Ore",
         reward: "Gold: 20\nCopper Ore: 5",
+        winDescription: "A Mine will help you build new structures in your empire!\n**A new quest is available**",
         questKeySequence: ["gettingStarted", "buildMine"],
 
         // Returns false if the quest description is shown, or true if the quest is being completed
@@ -44,6 +45,7 @@ module.exports = {
         description: "You have now set up a production of copper ore, however some buildings, units and items require wood as well to be made. Your next goal is to __build a Lumbermill__ and collect __5 oak wood__. \n\nYou can build a lumbermill with the command `!build lumbermill` and it will passively collect wood depending on the level of the lumbermill. A level 0 lumbermill will collect 1 oak wood per minute, and can be collected with the command `!collect`. Lumbermill are crucial in obtaining certain buildings, items or units!",
         objective: "Build: Lumbermill level 0\n Collect: 5 Oak Wood",
         reward: "Gold: 25\nOak Wood: 10",
+        winDescription: "With the Lumbermill set up you are now able to start expanding your kingdom!\n**A new quest is available**",
         questKeySequence: ["gettingStarted", "buildLumbermill"],
 
         // Returns false if the quest description is shown, or true if the quest is being completed
@@ -81,7 +83,7 @@ module.exports = {
         description: "You have now successfully started your production in your empire and it is time to explore your empire's surroundings to try and find some nearby sources of income. \n\nYou can explore with the command `!explore` and you will have a chance of finding different areas that you can interact with around your empire",
         objective: "Explore 'River'",
         reward: "Gold: 35\nCopper Ore: 5",
-        winDescription: "With the 'River' explored you can go fishing in it with the command `!fish`. This is an excellent source of gold!",
+        winDescription: "With the 'River' explored you can go fishing in it with the command `!fish`. This is an excellent source of gold!\n**A new quest is available**",
         questKeySequence: ["gettingStarted", "exploreSurroundings"],
 
         // Returns false if the quest description is shown, or true if the quest is being completed
@@ -116,7 +118,7 @@ module.exports = {
         description: "Your hero will lose hp when fighting, and thus needs to get healed back up. To do this you can buy healing potions from a shop. Your goal is to build a shop and buy a small healing potion\n\nYou can build a shop with the command `!build shop`, buy a small heal potion with the command `!buy small heal potion` and use it with the command `!use small heal potion`",
         objective: "Build a shop level 0\nBuy a small heal potion",
         reward: "Gold: 5",
-        winDescription: "Make sure to not let your hero die as it will lose experience and possibly ranks",
+        winDescription: "Make sure to not let your hero die as it will lose experience and possibly ranks\n**A new quest is available**",
         questKeySequence: ["gettingStarted", "buildShop"],
 
         // Returns false if the quest description is shown, or true if the quest is being completed
