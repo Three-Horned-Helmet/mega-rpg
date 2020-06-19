@@ -26,22 +26,37 @@ const getWorld = (user) => {
 		legend.add(`${getPlaceIcon(type)}: ${type} - `);
 	});
 	const footerFriendlyLegend = Array.from(legend).join("");
+	const fields = [
+		{
+			name: "Current location:",
+			value: currentLocationWithIcon,
+			inline: false,
+		},
+		{ name: "\u200B", value: "\u200B" },
+		{
+			name: `Explored Places in ${currentLocation}:`,
+			value: exploredPlacesWithIcons,
+			inline: false,
+		},
+	];
+
+	const availableLocations = Object.keys(user.world.locations)
+		.filter(l=> user.world.locations[l].available === true && l !== currentLocation)
+		.map(l=> `${getLocationIcon(l)} ${l}`);
+
+	if (availableLocations.length) {
+		fields.splice(1, 0, {
+			name: "Available locations",
+			value: availableLocations,
+			inline: false,
+		});
+	}
 
 	const embedUser = new Discord.MessageEmbed()
 		.setTitle(`${username}'s world`)
 		.setColor(sideColor)
 		.addFields(
-			{
-				name: "Current location:",
-				value: currentLocationWithIcon,
-				inline: false,
-			},
-			{ name: "\u200B", value: "\u200B" },
-			{
-				name: "Explored Locations:",
-				value: exploredPlacesWithIcons,
-				inline: false,
-			},
+			...fields,
 		)
 		.setFooter(`Legend:\n ${footerFriendlyLegend}`);
 	return embedUser;
