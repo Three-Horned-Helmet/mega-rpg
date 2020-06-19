@@ -48,7 +48,7 @@ const showQuestDescription = (user, quest) => {
 };
 
 const showQuestRewards = (quest) => {
-    const msg = `Congratulations you have completed __${quest.name}__! \n\n${quest.winDescription || ""}\n\n__Rewards:__\n${quest.reward}`;
+    const msg = `Congratulations you have completed **__${quest.name}__**! \n\n${quest.winDescription || ""}\n\n__Rewards:__\n${quest.reward}`;
     return msg;
 };
 

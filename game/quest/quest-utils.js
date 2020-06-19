@@ -38,9 +38,13 @@ const checkQuest = async (user, place, currentLocation) => {
 
     // GETTING A NEW QUEST
     // Is there a quest for the location, and has it been started/found already?
-    const quest = Object.values(allQuests[currentLocation]).find(q => q.area === place && !user.completedQuests.includes(q.name) && !user.quests.find(startedQuests => startedQuests.name === q.name));
+    const quest = Object.values(allQuests[currentLocation]).find(q => q.obtaining && q.obtaining.area === place && !user.completedQuests.includes(q.name) && !user.quests.find(startedQuests => startedQuests.name === q.name));
 
     if(!quest) return;
+
+    // Are you able to obtain the quest
+    const obtainNumber = Math.random();
+    if(obtainNumber > quest.obtaining.chance) return;
 
     // Add the new quest to the user
     const newQuest = {

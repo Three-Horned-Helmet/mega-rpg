@@ -39,7 +39,7 @@ const exploreArea = (user, places, currentLocation, now)=>{
 	const placeNames = Object.keys(places);
 	const newlyExploredPlaceName = placeNames[Math.floor(Math.random() * placeNames.length)];
 	const previouslyExploredPlaces = user.world.locations[currentLocation].explored;
-	const msg = previouslyExploredPlaces.includes(newlyExploredPlaceName) || newlyExploredPlaceName.questMob ?
+	const msg = previouslyExploredPlaces.includes(newlyExploredPlaceName) || newlyExploredPlaceName.notExplorable ?
 		generateFailExploreMessage(currentLocation)
 		: generateSuccessExploreMessage(currentLocation, newlyExploredPlaceName, user.hero.rank);
 

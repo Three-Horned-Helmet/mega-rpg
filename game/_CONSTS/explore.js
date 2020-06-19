@@ -132,7 +132,7 @@ const worldLocations = {
 			"Confront Bandits": {
 				name: "Confront Bandits",
 				type: "raid",
-				questMob: true,
+				notExplorable: true,
 				stats:{
 					attack: 2000,
 					health: 2000,
@@ -146,7 +146,7 @@ const worldLocations = {
 			"Pack of Implings": {
 				name: "Pack of Implings",
 				type: "hunt",
-				questMob: true,
+				notExplorable: true,
 				stats:{
 					attack: 700,
 					health: 700,
@@ -154,6 +154,18 @@ const worldLocations = {
 				rewards:{
 					gold: 500,
 					"yew wood": 100,
+				},
+			},
+			"Bugbear": {
+				name: "Bugbear",
+				type: "raid",
+				notExplorable: true,
+				stats:{
+					attack: 1350,
+					health: 1350,
+				},
+				rewards:{
+					gold: 350,
 				},
 			},
 		},

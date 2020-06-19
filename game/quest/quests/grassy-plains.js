@@ -1,11 +1,15 @@
 const allItems = require("../../items/all-items");
+const { use } = require("chai");
 
 module.exports = {
 
     // THE MISSING DAUGHTER SAGA
     missingDaughter: {
         name: "Missing Daughter",
-        area: "Fishing village",
+        obtaining: {
+            area: "Fishing village",
+            chance: 1,
+        },
         pve: [{
             name: "Collapsed Mine",
             completed: false,
@@ -128,7 +132,10 @@ module.exports = {
     // A FOOLS TREASURE HUNT
     lostMap: {
         name: "A Lost Map",
-        area: "Bandit Camp",
+        obtaining: {
+            area: "Bandit Camp",
+            chance: 1,
+        },
         pve: [{
             name: "Bandit Camp",
             completed: false,
@@ -225,6 +232,7 @@ module.exports = {
             name: "Pack of Implings",
             completed: false,
             chance: 1,
+            unique: true,
         }],
         found: "You enter the main room in the hut",
         description: "The hut is filled with several implings, small vile creatures made by the devil himself! The treasure must be inside of the hut, but there is no way to sneak in there unnoticed... \n\nThere is only one solution to get to the treasure!",
@@ -297,6 +305,125 @@ module.exports = {
             await user.gainManyResources({
                 gold: 150,
             });
+
+            await user.removeQuest(this.name);
+
+            return true;
+        },
+    },
+
+    // THE MYSTERY CAVE
+    meetingBugbear: {
+        name: "A Meeting with Bugbear",
+        obtaining: {
+            area: "Cave",
+            chance: 0.3,
+        },
+        intro: "As you venture deeper into the Cave you hear some strange squeals.",
+        pve: [{
+            name: "Bugbear",
+            completed: false,
+            chance: 1,
+            unique: true,
+        }],
+        found: "You enter the main room in the hut",
+        description: "You silently move closer to the squealing. As you round the corner you see a tall crooked shadow inspecting a giant rock by the wall of the wet Cave. A Goblin! You are surprised by the sight and tries to leave only to stuble over some stones.\n\n'Yeek! What do we have here!', *\\*squeeal\\**, 'Is it a puny human disturbing busy Bugbear?' *\\*shriiiek\\** 'What business does a human have in the Cave?'\n\n'I... I was just hunting for Spiders when I heard your squealing!'\n\n'You better leave working Bugbear alone' *\\*reeek\\** 'Little Human is lucky hungry Bugbear is busy, else you would greet the red man! Run now! Leave! Now!' *\\*yiiik\\**\n\n*You take on Bugbears advice and run out of the Cave to greet the warm sunlight outside!*\n\n'What is a dangerous Goblin doing around in this area? It can not safe to let him stay, I need to end him before he starts making mischief!', %username%",
+        objective: "Gather your full strength and attack Bugbear! (`!raid bugbear`)",
+        reward: "Gold: 300",
+        winDescription: "'You... Defeated... Dying Bugbear... I just... Wanted... Stone... The... Smell...'\n**A new quest is available**",
+        questKeySequence: ["Grassy Plains", "meetingBugbear"],
+
+        // Returns false if the quest description is shown, or true if the quest is being completed
+        execute: async function(user) {
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse) {
+                const now = new Date();
+                const currentLocation = "Grassy Plains";
+                const newlyExploredPlaceName = "Pack of Implings";
+
+                await user.handleExplore(now, currentLocation, newlyExploredPlaceName);
+
+                return false;
+            }
+
+            // Has the user completed the PvE requirements?
+            const userQuest = user.quests.find(q => q.name === this.name);
+            if(userQuest.pve.find(raid => !raid.completed)) return false;
+
+            // Get reward
+            await user.gainManyResources({
+                gold: 300,
+            });
+
+            // Add next quest
+            const newQuest = {
+                name: "The Rock",
+                started: false,
+                questKeySequence: ["Grassy Plains", "theRock"],
+            };
+
+            await user.addNewQuest(newQuest);
+            await user.removeQuest(this.name);
+
+            return true;
+        },
+    },
+    theRock: {
+        name: "The Rock",
+        description: "At Bugbears last breath he twitches his muscles to move his arm a little closer to the giant rock he had been intensely observing earlier. \n\nYou move closer to inspect it and notice a round hole that could fit a large coin of some sorts. With the grown mans force you try to move the rock, but it doesn't bulge. 'I wonder what could be in there...'",
+        objective: "Find a way to remove the rock",
+        reward: "iron ore: 10",
+        winDescription: "You try to put the *C.M.* Gold Medallion into the hole.\n\n\\**Click*\\*\n\n*The large rock starts moving to the side leaving an entrance behind it.*\n\nYou move through the entrance to be amazed by the sight of a large chamber filled with all sorts of weaponry and small rotten corpses.\n**A new quest is available**",
+        questKeySequence: ["Grassy Plains", "theRock"],
+
+        // Returns false if the quest description is shown, or true if the quest is being completed
+        execute: async function(user) {
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse) {
+                return false;
+            }
+
+            if(!user.completedQuests.includes("Digging for Treasure")) return false;
+
+            // Get reward
+            await user.gainManyResources({
+                "iron ore": 10,
+            });
+
+            // Add next quest
+            const newQuest = {
+                name: "Chamber of Weaponry",
+                started: false,
+                questKeySequence: ["Grassy Plains", "chamberOfWeaponry"],
+            };
+
+            await user.addNewQuest(newQuest);
+            await user.removeQuest(this.name);
+
+            return true;
+        },
+    },
+    chamberOfWeaponry: {
+        name: "Chamber of Weaponry",
+        description: "As you walk around the chamber you notice the blood stained walls and the stench of rotten flesh. Among the mess you find some valuable artifact items and decides to pick them up. Even if they are very old, they are in perfect condition.",
+        objective: "Bring home the treasure.",
+        reward: "Gold: 1000\nBauxite Daggers: 1\nThree Horned Helmet: 1",
+        winDescription: "You decide to take the valuables and leave the Cave, wondering what the place may have been used for...",
+        questKeySequence: ["Grassy Plains", "chamberOfWeaponry"],
+
+        // Returns false if the quest description is shown, or true if the quest is being completed
+        execute: async function(user) {
+            const questResponse = await questHelper(user, this.name);
+            if(!questResponse) {
+                return false;
+            }
+
+            // Get reward
+            await user.gainManyResources({
+                "gold": 1000,
+            });
+            await user.addItem(allItems["bauxite daggers"], 1);
+            await user.addItem(allItems["three horned helmet"], 1);
 
             await user.removeQuest(this.name);
 
