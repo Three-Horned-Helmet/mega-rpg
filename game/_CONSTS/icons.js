@@ -28,6 +28,18 @@ const getDungeonKeyIcon = (type) =>{
 	return lexicon[type];
 };
 
+const getWeaponIcon = (weapon)=>{
+	const lexicon = {
+		strike: "🔪",
+		critical: "‼️",
+		slash: "🗡",
+		disarm: "🕊",
+		heal: "🧪",
+
+	};
+	return lexicon[weapon];
+};
+
 const getGreenRedIcon = (bool)=>{
 	return bool ? "✅" : "❌";
 };
@@ -56,4 +68,4 @@ const getStatsIcon = (type)=>{
 	return lexicon[type];
 };
 
-module.exports = { getLocationIcon, getPlaceIcon, getResourceIcon, getDungeonKeyIcon, getGreenRedIcon, getStatsIcon };
+module.exports = { getLocationIcon, getPlaceIcon, getResourceIcon, getDungeonKeyIcon, getGreenRedIcon, getStatsIcon, getWeaponIcon };

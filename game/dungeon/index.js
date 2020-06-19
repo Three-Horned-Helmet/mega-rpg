@@ -1,7 +1,7 @@
 const { onCooldown } = require("../_CONSTS/cooldowns");
 const { worldLocations } = require("../_CONSTS/explore");
 const { getLocationIcon, getDungeonKeyIcon } = require("../_CONSTS/icons");
-const { createDungeonInvitation, createDungeonResult, generateDungeonRound } = require("./embedGenerator");
+const { createDungeonInvitation, createDungeonResult, generateDungeonBossRound } = require("./embedGenerator");
 
 const User = require("../../models/User");
 
@@ -28,7 +28,7 @@ const handleDungeon = async (message, user)=>{
         return reaction.emoji.name === "🗺";
     };
 
-    const collector = await invitation.createReactionCollector(reactionFilter, { time: 1000 * 5, errors: ["time"] });
+    const collector = await invitation.createReactionCollector(reactionFilter, { time: 1000 * 15, errors: ["time"] });
     collector.on("collect", async (result, rUser) => {
         if (rUser.bot || dungeon.helpers.length > 4) {
             return;
@@ -52,7 +52,7 @@ const createDungeonEvent = (user) =>{
         return worldLocations[currentLocation].places[p].type === "dungeon";
     });
     const dungeon = worldLocations[currentLocation].places[dungeonName];
-    dungeon.helpers.push(user.account.userId);
+    dungeon.helpers.unshift(user.account.userId);
     return dungeon;
 };
 
@@ -66,10 +66,12 @@ const startDungeonEvent = async (message, dungeon) => {
     const progress = {
         win: false,
         earlyfinish: false,
-        attempts: 0,
+        bossAttempts: 0,
+        currentRoom:0,
         initiativeTaker: initiativeTaker[0],
         players: users,
         dungeon: dungeon,
+        roundResults:[],
         weaponAnswer:new Map(),
     };
 
@@ -82,16 +84,17 @@ const startDungeonEvent = async (message, dungeon) => {
 
 const createDungeonRound = async (message, progress)=>{
 
-    const weaponAnswerFilter = ["a", "b", "c", "d", "slash", "strike", "disarm", "heal"];
     const answerLexicon = {
         a: "slash",
         b: "strike",
-        c: "disarm",
-        d: "heal",
+        c: "critical",
+        d: "disarm",
+        e: "heal",
     };
+    const weaponAnswerFilter = [...Object.keys(answerLexicon), ...Object.values(answerLexicon)];
 
     // send a nice embed here
-    const dungeonRound = generateDungeonRound(progress);
+    const dungeonRound = generateDungeonBossRound(progress);
     await message.channel.send(dungeonRound);
 
         const filter = (response) => {
@@ -99,7 +102,7 @@ const createDungeonRound = async (message, progress)=>{
             return progress.weaponAnswer.has(response.author.id) === false && progress.dungeon.helpers.includes(response.author.id) && weaponAnswerFilter.some(alternative => alternative === response.content.toLowerCase());
         };
 
-        const collector = await message.channel.createMessageCollector(filter, { time: 1000 * 5, errors: ["time"] });
+        const collector = await message.channel.createMessageCollector(filter, { time: 1000 * 15, errors: ["time"] });
         collector.on("collect", async (result)=>{
             if (result.author.bot) {
                 return;
@@ -118,7 +121,12 @@ const createDungeonRound = async (message, progress)=>{
             }
         });
         collector.on("end", async () => {
+            // calculate process and generate strings
+            // if length == 0, end
+            // if round > 3, end
+            // if boss.health <= 0, end
 
+            const result = await calculateDungeonResult(progress);
             console.log("end");
     });
         // if length is something, collection end after timeout
@@ -126,67 +134,25 @@ const createDungeonRound = async (message, progress)=>{
 };
 
 
-const calculateDungeonResult = async (dungeon)=>{
-   // const users = await User.find({ "account.userId": dungeon.helpers });
-
-    const result = {
-            win: false,
-            initiativeTaker: initiativeTaker[0],
-            helpers: helpers,
-            rewards:{
-                initiativeTaker:{
-                    dungeonKey: null,
-                    gold: Math.round(dungeon.rewards.gold / 2),
-                    xp: Math.round(dungeon.rewards.xp / 2),
-                },
-                helpers:[],
-            },
-            damageDealt:{
-                initiativeTaker: Math.floor(Math.random() * dungeon.stats.attack),
-                initiativeTakerDead:false,
-                helpers:[],
-            },
-    };
-    if (result.damageDealt.initiativeTaker >= result.initiativeTaker.hero.currentHealth) {
-        result.damageDealt.initiativeTakerDead = true;
-    }
-    if (chanceForSuccess > randomNumber) {
-        result.win = true;
-        if(result.initiativeTaker.hero.rank >= 2) {
-            result.rewards.initiativeTaker.dungeonKey = dungeon.rewards.dungeonKey;
+const calculateDungeonResult = async (progress)=>{
+    progress.weaponAnswer.forEach((weapon, player)=>{
+        const playerInfo = progress.players.find(p=>{
+            return p.account.userId === player;
+        });
+        console.log(progress, "progress");
+        console.log(weapon, "eapon");
+        const weaponInfo = getWeaponInfo(weapon);
+        const chance = Math.random();
+        if (weaponInfo.chanceforSuccess > chance) {
+            if (weaponInfo.type === "attack") {
+                const damageInflicted = Math.round(Math.random() * (playerInfo.hero.attack - (playerInfo.hero.attack / 2)) + playerInfo.hero.attack * 2) * weaponInfo * weaponInfo.damage;
+                console.log(damageInflicted, "damageInflicted");
+            }
         }
-        await result.initiativeTaker.alternativeGainXp(result.rewards.initiativeTaker.xp);
-        await result.initiativeTaker.gainManyResources({ gold: result.rewards.initiativeTaker.gold });
-        await result.initiativeTaker.giveDungeonKey(result.rewards.initiativeTaker.dungeonKey);
-        await asyncForEach(result.helpers, async (h) => {
-            const randomHelperXp = Math.round((Math.random() * dungeon.rewards.xp) / helpers.length);
-            const randomHelperGold = Math.round((Math.random() * dungeon.rewards.gold) / helpers.length);
-            const helperName = h.account.username;
-            const helperLeveledUp = randomHelperXp + h.hero.currentExp > h.hero.expToNextRank;
-            await h.alternativeGainXp(randomHelperXp);
-            await h.gainManyResources({ gold:randomHelperGold });
-            result.rewards.helpers.push({
-                randomHelperXp,
-                randomHelperGold,
-                helperName,
-                helperLeveledUp,
-            });
-        });
-    }
- else {
-    await result.initiativeTaker.heroHpLossFixedAmount(result.damageDealt.initiativeTaker);
-
-    await asyncForEach(result.helpers, async (h)=>{
-        const randomHelperDamage = Math.round(Math.random() * dungeon.stats.attack) ;
-        const helperDead = h.hero.currentHealth - randomHelperDamage <= 0;
-        await h.heroHpLossFixedAmount(randomHelperDamage);
-        result.rewards.helpers.push({
-            randomHelperDamage,
-            helperDead,
-        });
     });
-    }
-    return result;
+
+
+    return progress;
 };
 
 
@@ -239,6 +205,42 @@ if (user.hero.currentHealth < user.hero.health * 0.05) {
 const validateHelper = async discordId =>{
     const user = await User.findOne({ "account.userId": discordId }).lean();
     return user.hero.currentHealth > user.hero.health * 0.05;
+};
+
+const getWeaponInfo = (weapon)=>{
+    const lexicon = {
+        "slash":{
+            type: "attack",
+            chanceforSuccess: 0.95,
+            damage: 1,
+            description: "95% chance of causing up to 1 times the max attack",
+        },
+        "strike":{
+            type: "attack",
+            chanceforSuccess: 0.80,
+            damage: 2,
+            description: "80% chance of causing up to 2 times the max attack",
+        },
+        "critical":{
+            type: "attack",
+            chanceforSuccess: 0.40,
+            damage: 4,
+            description: "40% chance of causing up to 4 times the max attack",
+        },
+        "disarm":{
+            type: "attack",
+            chanceforSuccess: 0.25,
+            damage: null,
+            description: "25% chance of lowering boss attack",
+        },
+        "heal":{
+            type: "heal",
+            chanceforSuccess: 0.95,
+            damage: null,
+            description: "95% chance of healing teammate with lowest hp",
+        },
+    };
+    return lexicon[weapon];
 };
 
 module.exports = { handleDungeon, createDungeonEvent, dungeonStartAllowed, createDungeonResult, calculateDungeonResult };

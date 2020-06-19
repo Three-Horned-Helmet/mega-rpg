@@ -143,6 +143,9 @@ const worldLocations = {
 					xp:1100,
 					drop: true,
 				},
+				allowedWeapons:["slash", "strike", "critical", "disarm", "heal"],
+				bossWeapons:["slash", "strike", "heal"],
+				/* "285773285944328193" */
 				helpers:[],
 				requires: "Ogre tooth",
 				unlocks: "Misty Mountains",
@@ -150,7 +153,7 @@ const worldLocations = {
 					attack: 500,
 					health:500,
 					currentHealth:500,
-					healing:false,
+					healing:true,
 				},
 			},
 			River: {
