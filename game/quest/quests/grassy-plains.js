@@ -326,7 +326,7 @@ module.exports = {
             chance: 1,
             unique: true,
         }],
-        found: "You enter the main room in the hut",
+        found: "Bugbear falls to his knees squeeling",
         description: "You silently move closer to the squealing. As you round the corner you see a tall crooked shadow inspecting a giant rock by the wall of the wet Cave. A Goblin! You are surprised by the sight and tries to leave only to stuble over some stones.\n\n'Yeek! What do we have here!', *\\*squeeal\\**, 'Is it a puny human disturbing busy Bugbear?' *\\*shriiiek\\** 'What business does a human have in the Cave?'\n\n'I... I was just hunting for Spiders when I heard your squealing!'\n\n'You better leave working Bugbear alone' *\\*reeek\\** 'Little Human is lucky hungry Bugbear is busy, else you would greet the red man! Run now! Leave! Now!' *\\*yiiik\\**\n\n*You take on Bugbears advice and run out of the Cave to greet the warm sunlight outside!*\n\n'What is a dangerous Goblin doing around in this area? It can not safe to let him stay, I need to end him before he starts making mischief!', %username%",
         objective: "Gather your full strength and attack Bugbear! (`!raid bugbear`)",
         reward: "Gold: 300",
