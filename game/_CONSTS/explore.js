@@ -118,43 +118,48 @@ const worldLocations = {
 				type: "dungeon",
 				rooms:[
 					{
-						name: "Castle guards",
+						name: "Castle Courtyard",
 						attack: 100,
 						health: 100,
 					},
 					{
-						name: "Castle servents",
+						name: "Castle Hallway",
 						attack: 200,
 						health: 200,
 					},
 					{
-						name: "Castle protector",
+						name: "Castle Trophey Room",
 						attack: 300,
 						health: 300,
 					},
 				],
-				rules:{
-					allowArmy: false,
-					canKill: true,
-					allowHelpers: true,
-				},
-				rewards:{
-					gold:5000,
-					xp:1100,
-					drop: true,
-				},
-				allowedWeapons:["slash", "strike", "critical", "disarm", "heal"],
-				bossWeapons:["slash", "strike", "heal"],
-				/* "285773285944328193" */
-				helpers:[],
 				requires: "Ogre tooth",
-				unlocks: "Misty Mountains",
-				stats:{
-					attack: 500,
-					health:500,
-					currentHealth:500,
-					healing:true,
+				boss:{
+					name: "Bandit King",
+					rules:{
+						attacksEachRound:2,
+						allowArmy: false,
+						canKill: true,
+						allowHelpers: true,
+					},
+					rewards:{
+						gold:5000,
+						xp:1100,
+						drop: true,
+					},
+					stats:{
+						attack: 500,
+						health:500,
+						currentHealth:500,
+						healing:true,
+					},
+					bossWeapons:["slash", "strike", "heal"],
+					helpers:["285773285944328193"],
+					numOfAllowedWeapons: 3,
+					allowedWeapons:[],
+					unlocks: "Misty Mountains",
 				},
+
 			},
 			River: {
 				name: "River",

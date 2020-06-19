@@ -35,6 +35,7 @@ const getWeaponIcon = (weapon)=>{
 		slash: "🗡",
 		disarm: "🕊",
 		heal: "🧪",
+		poke: "👉",
 
 	};
 	return lexicon[weapon];
