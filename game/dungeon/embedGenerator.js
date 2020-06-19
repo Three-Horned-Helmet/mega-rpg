@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const { getLocationIcon, getStatsIcon, getPlaceIcon, getDungeonIcon, getGreenRedIcon, getResourceIcon } = require("../_CONSTS/icons");
+const { getLocationIcon, getStatsIcon, getPlaceIcon, getDungeonKeyIcon, getGreenRedIcon, getResourceIcon } = require("../_CONSTS/icons");
 
 const createDungeonInvitation = (dungeon, user)=>{
     const sideColor = "#45b6fe";
@@ -7,14 +7,13 @@ const createDungeonInvitation = (dungeon, user)=>{
     const { currentLocation } = user.world;
     const locationIcon = getLocationIcon(currentLocation);
     const dungeonIcon = getPlaceIcon("dungeon");
-
-        const rules = `\`Army allowed: ${getGreenRedIcon(dungeon.rules.allowArmy)}\`\n \`Dungeon deadly: ${getGreenRedIcon(dungeon.rules.canKill)}\`\n \`Helpers allowed: ${getGreenRedIcon(dungeon.rules.allowHelpers)}\``;
-        const dungeonStats = `${getStatsIcon("health")} \`Health: ${dungeon.stats.health}\`\n ${getStatsIcon("attack")} \`Attack: ${dungeon.stats.attack}\`\n Healing: ${getGreenRedIcon(dungeon.stats.healing)}`;
-        const rewards = `${getResourceIcon("gold")} \`Gold: ${dungeon.rewards.gold}\`\n ${getResourceIcon("xp")} \`XP: ${dungeon.rewards.xp}\` \n ${getDungeonIcon(dungeon.rewards.dungeonKey)} \` Unclocks: ${getLocationIcon(dungeon.unlocks)} ${dungeon.unlocks}\``;
+        const rules = `\`Army allowed: ${getGreenRedIcon(dungeon.rules.allowArmy)}\`\n \`Dungeon deadly: ${getGreenRedIcon(dungeon.rules.canKill)}\`\n \`Helpers allowed: ${getGreenRedIcon(dungeon.rules.allowHelpers)}\`\n`;
+        const dungeonStats = `${getStatsIcon("health")} \`Health: ${dungeon.stats.health}\`\n ${getStatsIcon("attack")} \`Attack: ${dungeon.stats.attack}\`\n \`Healing: ${getGreenRedIcon(dungeon.stats.healing)}\`\n`;
+        const rewards = `${getResourceIcon("gold")} \`Gold: ${dungeon.rewards.gold}\`\n ${getResourceIcon("xp")} \`XP: ${dungeon.rewards.xp}\`\n\`Loot drop: ${getGreenRedIcon(dungeon.rewards.drop)}\`\n\n   **Unclocks**: ${getLocationIcon(dungeon.unlocks)} **${dungeon.unlocks}**\n`;
 
         const embedInvitation = new Discord.MessageEmbed()
             .setTitle(`${username} is attempting a dungeon!!`)
-            .setDescription(`Help taking out ${dungeonIcon} ${dungeon.name} in ${locationIcon} ${currentLocation} `)
+            .setDescription(`Help taking out ${dungeonIcon} ${dungeon.name} in ${locationIcon} ${currentLocation}!`)
             .setColor(sideColor)
             .addFields(
                 {
@@ -37,6 +36,62 @@ const createDungeonInvitation = (dungeon, user)=>{
         return embedInvitation;
     };
 
+    const generateDungeonRound = (progress)=>{
+
+
+        const sideColor = "#45b6fe";
+        const initiativeTakerName = progress.initiativeTaker.account.username;
+        const dungeonName = progress.dungeon.name;
+        const dungeonIcon = getPlaceIcon("dungeon");
+
+        const getPlayersHp = (players)=>{
+            // embed get's messed up if hp bar is longer than 20
+            const MAX_REPEATING = 20;
+            const totalPlayerHealth = players.reduce((acc, curr)=> acc + curr.hero.health, 0);
+            const totalPlayerCurrentHealth = players.reduce((acc, curr)=> acc + curr.hero.currentHealth, 0);
+            const percentageHealth = (totalPlayerCurrentHealth / totalPlayerHealth * 100) * MAX_REPEATING / 100;
+            const percentageMissingHealth = MAX_REPEATING - percentageHealth;
+
+            return `\`\`\`diff\n+ ${"|".repeat(percentageHealth)}${" ".repeat(percentageMissingHealth)} \n \`\`\``;
+        };
+        const getDungeonHp = (stats)=>{
+            const MAX_REPEATING = 20;
+            const percentageHealth = (stats.currentHealth / stats.health * 100) * MAX_REPEATING / 100;
+            const percentageMissingHealth = MAX_REPEATING - percentageHealth;
+
+            return `\`\`\`diff\n- ${"|".repeat(percentageHealth)}${" ".repeat(percentageMissingHealth)} \n \`\`\``;
+        };
+
+
+        const dungeonHp = getDungeonHp(progress.dungeon.stats);
+        const playersHp = getPlayersHp(progress.players);
+
+        const title = `${dungeonIcon} ${dungeonName}`;
+
+        const fields = [
+            {
+                name: `${dungeonName} HP:`,
+                value: dungeonHp,
+                inline: true,
+            },
+            {
+                name: `${initiativeTakerName}'s gang total HP:`,
+                value: playersHp,
+                inline: true,
+            },
+        ];
+
+        const embedResult = new Discord.MessageEmbed()
+            .setTitle(title)
+            .setDescription("Round description ")
+            .setColor(sideColor)
+            .addFields(
+                ...fields,
+            );
+        return embedResult;
+    };
+
+
     const createDungeonResult = (result, dungeon)=>{
         if (result.win) {
             return createMiniBossResultWin(result, dungeon);
@@ -44,7 +99,9 @@ const createDungeonInvitation = (dungeon, user)=>{
         return createMiniBossResultLoss(result, dungeon);
     };
 
-    const createMiniBossResultLoss = (result, dungeon) =>{
+    const createMiniBossResultLoss = (message, dungeon) =>{
+
+
         const sideColor = "#45b6fe";
         const initiativeTaker = result.initiativeTaker.account.username;
 
@@ -87,7 +144,7 @@ const createDungeonInvitation = (dungeon, user)=>{
 
         let initiativeTakerRewards = `${getResourceIcon("gold")} Gold: ${result.rewards.initiativeTaker.gold} \n\n ${getResourceIcon("xp")} XP: ${result.rewards.initiativeTaker.xp}`;
         if (result.rewards.initiativeTaker.dungeonKey) {
-            initiativeTakerRewards += `\n\n ${getDungeonIcon(result.rewards.initiativeTaker.dungeonKey)} ${result.rewards.initiativeTaker.dungeonKey} !`;
+            initiativeTakerRewards += `\n\n ${getDungeonKeyIcon(result.rewards.initiativeTaker.dungeonKey)} ${result.rewards.initiativeTaker.dungeonKey} !`;
         }
         const dungeonIcon = getPlaceIcon("dungeon");
         const fields = [
@@ -116,4 +173,4 @@ const createDungeonInvitation = (dungeon, user)=>{
         };
 
 
-            module.exports = { createDungeonInvitation, createDungeonResult };
+            module.exports = { createDungeonInvitation, createDungeonResult, generateDungeonRound };

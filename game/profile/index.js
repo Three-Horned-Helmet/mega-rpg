@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const { determineSupporterTitle, getAllSoldiers, getPlayerPosition } = require("./helper");
-const { getDungeonIcon } = require("../_CONSTS/icons");
+const { getDungeonKeyIcon } = require("../_CONSTS/icons");
 const calculateStats = require("../../combat/calculate-stats");
 
 const prettifyUser = async (message, user) => {
@@ -52,7 +52,7 @@ const prettifyUser = async (message, user) => {
 
 	Object.keys(hero.dungeonKeys).forEach(dk=>{
 		if (hero.dungeonKeys[dk] && !dk.startsWith("$")) {
-			dungeonKeys.value.push(`${getDungeonIcon(dk)} ${dk} \n`);
+			dungeonKeys.value.push(`${getDungeonKeyIcon(dk)} ${dk} \n`);
 		}
 	});
 	if (dungeonKeys.value.length) {

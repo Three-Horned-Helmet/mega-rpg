@@ -1,7 +1,7 @@
 const { onCooldown } = require("../_CONSTS/cooldowns");
 const { worldLocations } = require("../_CONSTS/explore");
-const { getLocationIcon, getDungeonIcon } = require("../_CONSTS/icons");
-const { createDungeonInvitation, createDungeonResult } = require("./embedGenerator");
+const { getLocationIcon, getDungeonKeyIcon } = require("../_CONSTS/icons");
+const { createDungeonInvitation, createDungeonResult, generateDungeonRound } = require("./embedGenerator");
 
 const User = require("../../models/User");
 
@@ -11,8 +11,9 @@ const handleDungeon = async (message, user)=>{
     // cooldown, health, explored dungeon
     const disallowed = dungeonStartAllowed(user);
 		if (disallowed) {
-			return disallowed;
+            return message.channel.send(disallowed);
         }
+
 
     const dungeon = createDungeonEvent(user);
 
@@ -27,7 +28,7 @@ const handleDungeon = async (message, user)=>{
         return reaction.emoji.name === "🗺";
     };
 
-    const collector = await invitation.createReactionCollector(reactionFilter, { time: 1000 * 20, errors: ["time"] });
+    const collector = await invitation.createReactionCollector(reactionFilter, { time: 1000 * 5, errors: ["time"] });
     collector.on("collect", async (result, rUser) => {
         if (rUser.bot || dungeon.helpers.length > 4) {
             return;
@@ -45,49 +46,6 @@ const handleDungeon = async (message, user)=>{
     });
 };
 
-const dungeonStartAllowed = (user)=>{
-    // checks for cooldown
-    const cooldownInfo = onCooldown("dungeon", user);
-    if (cooldownInfo.response) {
-        return cooldownInfo.embed;
-    }
-
-    const { currentLocation } = user.world;
-    const locationIcon = getLocationIcon(currentLocation);
-    const dungeonInformation = Object.values(worldLocations[currentLocation].places).find(p=>{
-        return p.type === "dungeon";
-    });
-
-    // Checks if user has the correct key
-    const requiredDungeonKey = dungeonInformation.requires;
-    if (user.hero.dungeonKeys[requiredDungeonKey]) {
-        let response = `You try to enter ${dungeonInformation.name}, but you don't have the required ${getDungeonIcon(requiredDungeonKey)} ${requiredDungeonKey} to proceed. `;
-        if (user.hero.rank < 2) {
-            response += `Try defeating the dungeon in ${locationIcon} ${currentLocation} to obtain the required dungeon key`;
-        }
-        return response;
-    }
-
-
-    // checks for too low hp
-    {
-if (user.hero.currentHealth < user.hero.health * 0.05) {
-        let feedback = `Your hero's health is too low (**${user.hero.currentHealth}**)`;
-        if (user.hero.rank < 2) {
-            feedback += "\n You can `!build` a shop and `!build` potions";
-        }
-        return feedback;
-    }
-}
-
-
-    if (!user.world.locations[currentLocation].explored.includes([dungeonInformation.name])) {
-        return `You haven't found any dungeon in ${locationIcon} ${currentLocation}`;
-    }
-
-    return null;
-};
-
 const createDungeonEvent = (user) =>{
     const { currentLocation } = user.world;
     const dungeonName = Object.keys(worldLocations[currentLocation].places).find(p=>{
@@ -98,22 +56,16 @@ const createDungeonEvent = (user) =>{
     return dungeon;
 };
 
-const validateHelper = async discordId =>{
-    const user = await User.findOne({ "account.userId": discordId }).lean();
-    return user.hero.currentHealth > user.hero.health * 0.05;
-};
 
 const startDungeonEvent = async (message, dungeon) => {
     const users = await User.find({ "account.userId": dungeon.helpers });
-    const playersDiscordIds = users.map(p=> p.account.userId);
     const initiativeTaker = users.filter(u=> u.account.userId === dungeon.helpers[0]);
 
     // const helpers = users.filter(u=>u.account.userId !== dungeon.helpers[0]);
-    // colors https://gist.github.com/thomasbnt/b6f455e2c7d743b796917fa3c205f812
 
     const progress = {
         win: false,
-        playersDiscordIds,
+        earlyfinish: false,
         attempts: 0,
         initiativeTaker: initiativeTaker[0],
         players: users,
@@ -123,9 +75,13 @@ const startDungeonEvent = async (message, dungeon) => {
 
     // recursive starts here
 
-    const dungeonRound = createDungeonRound(progress);
+    const result = await createDungeonRound(message, progress);
+    // const round = message.channel.send(dungeonRound);
 
-    const round = await message.channel.send(dungeonRound);
+};
+
+const createDungeonRound = async (message, progress)=>{
+
     const weaponAnswerFilter = ["a", "b", "c", "d", "slash", "strike", "disarm", "heal"];
     const answerLexicon = {
         a: "slash",
@@ -133,31 +89,40 @@ const startDungeonEvent = async (message, dungeon) => {
         c: "disarm",
         d: "heal",
     };
-    const filter = (response, user) => {
-        // checks for not given answer, includes in the original team and answer is among the accepted answers.
-        return progress.weaponAnswer.has(user.id) === false && progress.playerDiscordIds.includes(user.id) && weaponAnswerFilter.some(alternative => alternative === response.content.toLowerCase());
-    };
 
-    const collector = await round.awaitMessages(filter, { time: 1000 * 15, errors: ["time"] });
-    collector.on("collect", async (result, rUser) => {
-        if (rUser.bot || dungeon.helpers.length > 4) {
-            return;
-        }
-        if (result.includes(Object.keys(answerLexicon))) {
-            progress.weaponAnswer.set(rUser.id, answerLexicon[result]);
-        }
-         else {
-            progress.weaponAnswer.set(rUser.id, result);
-        }
-        // if length is something, collection end after timeout
+    // send a nice embed here
+    const dungeonRound = generateDungeonRound(progress);
+    await message.channel.send(dungeonRound);
+
+        const filter = (response) => {
+            // checks for not already submitted answer, includes in the original team and answer is among the accepted answers.
+            return progress.weaponAnswer.has(response.author.id) === false && progress.dungeon.helpers.includes(response.author.id) && weaponAnswerFilter.some(alternative => alternative === response.content.toLowerCase());
+        };
+
+        const collector = await message.channel.createMessageCollector(filter, { time: 1000 * 5, errors: ["time"] });
+        collector.on("collect", async (result)=>{
+            if (result.author.bot) {
+                return;
+            }
+            const answer = result.content.toLowerCase();
+            // adds answer to progress object
+            if (Object.keys(answerLexicon).includes(answer)) {
+                progress.weaponAnswer.set(result.author.id, answerLexicon[answer]);
+            }
+            else {
+                progress.weaponAnswer.set(result.author.id, answer);
+            }
+            // stops collecting if all users have answered
+            if (progress.weaponAnswer.size >= progress.dungeon.helpers.length) {
+                collector.stop();
+            }
+        });
+        collector.on("end", async () => {
+
+            console.log("end");
     });
+        // if length is something, collection end after timeout
 
-     collector.on("end", async () => {
-
-        // const result = await calculateDungeonResult(dungeon);
-        // const embed = createDungeonResult(result, dungeon);
-        // message.channel.send(embed);
-});
 };
 
 
@@ -231,5 +196,49 @@ async function asyncForEach(array, callback) {
     }
   }
 
+  const dungeonStartAllowed = (user)=>{
+    // checks for cooldown
+    const cooldownInfo = onCooldown("dungeon", user);
+    if (cooldownInfo.response) {
+        return cooldownInfo.embed;
+    }
+
+    const { currentLocation } = user.world;
+    const locationIcon = getLocationIcon(currentLocation);
+    const dungeonInformation = Object.values(worldLocations[currentLocation].places).find(p=>{
+        return p.type === "dungeon";
+    });
+
+    if (!user.world.locations[currentLocation].explored.includes([dungeonInformation.name])) {
+        return `You haven't found any dungeon in ${locationIcon} ${currentLocation}`;
+    }
+
+    // Checks if user has the correct key
+    const requiredDungeonKey = dungeonInformation.requires;
+    if (!user.hero.dungeonKeys[requiredDungeonKey]) {
+        let response = `You try to enter ${dungeonInformation.name}, but you don't have the required ${getDungeonKeyIcon(requiredDungeonKey)} ${requiredDungeonKey} to proceed. `;
+        if (user.hero.rank < 2) {
+            response += `Try defeating the dungeon in ${locationIcon} ${currentLocation} to obtain the required dungeon key`;
+        }
+        return response;
+    }
+
+
+    // checks for too low hp
+    {
+if (user.hero.currentHealth < user.hero.health * 0.05) {
+        let feedback = `Your hero's health is too low (**${user.hero.currentHealth}**)`;
+        if (user.hero.rank < 2) {
+            feedback += "\n You can `!build` a shop and `!build` potions";
+        }
+        return feedback;
+    }
+}
+    return null;
+};
+const validateHelper = async discordId =>{
+    const user = await User.findOne({ "account.userId": discordId }).lean();
+    return user.hero.currentHealth > user.hero.health * 0.05;
+};
 
 module.exports = { handleDungeon, createDungeonEvent, dungeonStartAllowed, createDungeonResult, calculateDungeonResult };

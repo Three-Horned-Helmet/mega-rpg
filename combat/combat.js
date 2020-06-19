@@ -31,7 +31,7 @@ const calculatePveHero = (user, npc) => {
 		acc[cur] = randomReward;
 		return acc;
 	}, {});
-	pveResult.expReward = Math.ceil(Math.random() * (npc.stats.attack + npc.stats.health));
+	pveResult.expReward = Math.ceil(Math.random() * (npc.stats.attack + npc.stats.health) / 2);
 }
  else {
 	pveResult.expReward = Math.ceil(Math.random() * 5);
@@ -80,7 +80,7 @@ const calculatePveFullArmyResult = (user, npc) => {
 		acc[cur] = randomReward;
 		return acc;
 	}, {});
-	pveResult.expReward = Math.ceil(Math.random() * (npc.stats.attack + npc.stats.health));
+	pveResult.expReward = Math.ceil(Math.random() * (npc.stats.attack + npc.stats.health) / 2);
 }
  else {
 	pveResult.expReward = Math.ceil(Math.random() * 10);

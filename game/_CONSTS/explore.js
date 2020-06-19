@@ -116,6 +116,23 @@ const worldLocations = {
 			"Bandit's Castle": {
 				name: "Bandit's Castle",
 				type: "dungeon",
+				rooms:[
+					{
+						name: "Castle guards",
+						attack: 100,
+						health: 100,
+					},
+					{
+						name: "Castle servents",
+						attack: 200,
+						health: 200,
+					},
+					{
+						name: "Castle protector",
+						attack: 300,
+						health: 300,
+					},
+				],
 				rules:{
 					allowArmy: false,
 					canKill: true,
@@ -124,6 +141,7 @@ const worldLocations = {
 				rewards:{
 					gold:5000,
 					xp:1100,
+					drop: true,
 				},
 				helpers:[],
 				requires: "Ogre tooth",
@@ -131,6 +149,7 @@ const worldLocations = {
 				stats:{
 					attack: 500,
 					health:500,
+					currentHealth:500,
 					healing:false,
 				},
 			},

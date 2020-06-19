@@ -1,4 +1,5 @@
 const getLocationIcon = (worldLocation)=>{
+
 	const lexicon = {
 		"Grassy Plains" : "🌳",
 		"Misty Mountains" : "🏔",
@@ -17,7 +18,7 @@ const getPlaceIcon = (type) => {
 	};
 	return lexicon[type];
 };
-const getDungeonIcon = (type) =>{
+const getDungeonKeyIcon = (type) =>{
 	const lexicon = {
 		["Ogre tooth"]:"🦷",
 		["The One Shell"]:"🐚",
@@ -55,4 +56,4 @@ const getStatsIcon = (type)=>{
 	return lexicon[type];
 };
 
-module.exports = { getLocationIcon, getPlaceIcon, getResourceIcon, getDungeonIcon, getGreenRedIcon, getStatsIcon };
+module.exports = { getLocationIcon, getPlaceIcon, getResourceIcon, getDungeonKeyIcon, getGreenRedIcon, getStatsIcon };

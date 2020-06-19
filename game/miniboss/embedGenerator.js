@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const { getLocationIcon, getPlaceIcon, getDungeonIcon, getGreenRedIcon, getResourceIcon } = require("../_CONSTS/icons");
+const { getLocationIcon, getPlaceIcon, getDungeonKeyIcon, getGreenRedIcon, getResourceIcon } = require("../_CONSTS/icons");
 
 const createMinibossInvitation = (miniboss, user)=>{
     const sideColor = "#45b6fe";
@@ -9,7 +9,7 @@ const createMinibossInvitation = (miniboss, user)=>{
     const minibossIcon = getPlaceIcon("miniboss");
 
         const rules = `\`Army allowed: ${getGreenRedIcon(miniboss.rules.allowArmy)}\`\n \`Miniboss deadly: ${getGreenRedIcon(miniboss.rules.canKill)}\`\n \`Helpers allowed: ${getGreenRedIcon(miniboss.rules.allowHelpers)}\``;
-        const rewards = `${getResourceIcon("gold")} \`Gold: ${miniboss.rewards.gold}\`\n ${getResourceIcon("xp")} \`XP: ${miniboss.rewards.xp}\` \n ${getDungeonIcon(miniboss.rewards.dungeonKey)} \` Key: ${miniboss.rewards.dungeonKey}\``;
+        const rewards = `${getResourceIcon("gold")} \`Gold: ${miniboss.rewards.gold}\`\n ${getResourceIcon("xp")} \`XP: ${miniboss.rewards.xp}\` \n ${getDungeonKeyIcon(miniboss.rewards.dungeonKey)} \` Key: ${miniboss.rewards.dungeonKey}\``;
 
         const embedInvitation = new Discord.MessageEmbed()
             .setTitle(`A Miniboss has been triggered by ${username}!`)
@@ -82,7 +82,7 @@ const createMinibossInvitation = (miniboss, user)=>{
 
         let initiativeTakerRewards = `${getResourceIcon("gold")} Gold: ${result.rewards.initiativeTaker.gold} \n\n ${getResourceIcon("xp")} XP: ${result.rewards.initiativeTaker.xp}`;
         if (result.rewards.initiativeTaker.dungeonKey) {
-            initiativeTakerRewards += `\n\n ${getDungeonIcon(result.rewards.initiativeTaker.dungeonKey)} ${result.rewards.initiativeTaker.dungeonKey} !`;
+            initiativeTakerRewards += `\n\n ${getDungeonKeyIcon(result.rewards.initiativeTaker.dungeonKey)} ${result.rewards.initiativeTaker.dungeonKey} !`;
         }
         const minibossIcon = getPlaceIcon("miniboss");
         const fields = [
