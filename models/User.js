@@ -269,6 +269,8 @@ userSchema.methods.removeQuest = async function(questName) {
 	const questIndex = this.quests.indexOf(this.quests.find(q => q.name === questName));
 	this.quests.splice(questIndex, 1);
 	this.completedQuests.push(questName);
+
+	return;
 	return this.save();
 };
 
@@ -331,6 +333,23 @@ userSchema.methods.buyBuilding = function(building, buildingCost) {
 
 	this.empire = this.empire.filter(structure => !(structure.position[0] === building.position[0] && structure.position[1] === building.position[1]));
 	this.empire.push(building);
+	return this.save();
+};
+
+userSchema.methods.decreaseBuildingLevel = function(building, buildingLevel, level) {
+	let buildingIndex = -1;
+	const userBuilding = this.empire.find((structure, i) =>{
+		if(structure.name === building && structure.level === buildingLevel) {
+			buildingIndex = i;
+			return true;
+		}
+		return false;
+	});
+	userBuilding.level -= level;
+
+	this.markModified(`empire.${buildingIndex}.level`);
+
+	return;
 	return this.save();
 };
 
@@ -556,6 +575,7 @@ userSchema.methods.healHero = function(heal, item) {
 		this.markModified("hero.inventory");
 	}
 
+	return;
 	return this.save();
 };
 

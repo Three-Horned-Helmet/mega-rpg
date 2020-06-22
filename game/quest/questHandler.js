@@ -20,7 +20,7 @@ const questHandler = async (user, questName) => {
         quest = user.quests.find(q => q.name.toLowerCase() === questName);
     }
     else {
-        quest = user.quest[questName.split(" ")[0]];
+        quest = user.quests[parseInt(questName.split(" ")[0])];
     }
 
     if(!quest) return showUnableToFindQuest(user, questName);
@@ -44,7 +44,7 @@ const handleExecuteQuest = async (user, userQuest, choice) => {
 
 const showQuestDescription = (user, quest, userQuest) => {
     let msg = "";
-    if(quest.author) msg += `*Author: ${quest.author}*`;
+    if(quest.author) msg += `*Guest Author: ${quest.author}*`;
     msg += `\n\n**__${quest.name}:__**\n\n__Description:__\n${quest.description.replace(/%username%/g, user.account.username).replace(/%questIndex%/g, user.quests.indexOf(userQuest))}`;
     if(quest.objective) msg += `\n\n__Objective:__\n${quest.objective}`;
     if(quest.reward) msg += `\n\n__Rewards__:\n${quest.reward}`;
@@ -52,7 +52,10 @@ const showQuestDescription = (user, quest, userQuest) => {
 };
 
 const showQuestRewards = (user, quest) => {
-    const msg = `Congratulations you have completed **__${quest.name}__**! \n\n${quest.winDescription.replace(/%username%/g, user.account.username)}\n\n__Rewards:__\n${quest.reward}`;
+    let msg = `Congratulations you have completed **__${quest.name}__**!`;
+    if(quest.winDescription) msg += ` \n\n${quest.winDescription.replace(/%username%/g, user.account.username)}`;
+    if(quest.reward) msg += `\n\n__Rewards:__\n${quest.reward}`;
+
     return msg;
 };
 
