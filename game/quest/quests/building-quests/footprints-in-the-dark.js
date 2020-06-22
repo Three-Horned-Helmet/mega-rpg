@@ -30,7 +30,7 @@ module.exports = {
 
             if(choiceNumber === 1) {
                 user.healHero(500);
-                user.decreaseBuildingLevel("lumbermill", 1, 1);
+                user.changeBuildingLevel("lumbermill", 1, -1);
                 this.winDescription = this.winChoice1;
             }
             else if (choiceNumber === 2) {
@@ -127,7 +127,7 @@ module.exports = {
 
             if(choiceNumber === 1) {
                 await user.heroHpLoss(1);
-                user.decreaseBuildingLevel("lumbermill", 1, 1);
+                user.changeBuildingLevel("lumbermill", 1, -1);
                 this.winDescription = this.winChoice1;
             }
             else if (choiceNumber === 2) {
@@ -182,7 +182,7 @@ module.exports = {
 
             if(choiceNumber === 1) {
                 await user.heroHpLoss(1);
-                user.decreaseBuildingLevel("lumbermill", 1, 1);
+                user.changeBuildingLevel("lumbermill", 1, -1);
                 this.winDescription = this.winChoice1;
             }
             else if (choiceNumber === 2) {
@@ -213,9 +213,10 @@ module.exports = {
         author: "Sindre Heldrup",
         description: "You look at the Elven Lord expectantly hoping he is about to give you the answers of how to strike it off with that hot bartender you’ve been staring down every night for the past month.\n\nHe continues: 'It was some of my hunters, returning from a hunt but noticing a section of the forest missing, chopped down by your lumberjacks...'\n\nYou look at him with disappointment written all over your face as you realize he won’t provide you with a brilliant strategy to strike it off with the bartender. \n\nHe says: 'Yes, I can see the disappointment in your face, I realize a great deal of materials and equipment were destroyed by my elves...'\n\n*\\*You quickly nod, feeling relief he can’t read your mind.\\**\n\nHe says: 'We do not wish for bad blood between our two people, and therefore I __offer__ to help you replace the equipment lost and rebuild what we destroyed. However, I will not punish the hunters, nor can I guarantee it never happens again. But this time we will make up for it, as a sign of good faith. Give your answer by tomorrow!'\n\n**You return to your village and think about your options, identifying three possible routes to take:**\n```diff\nChoice 1:\n- Do nothing and go back to sleep. Damn, but you feel very tired already. If you catch some good hours before the days works you can possibly go to the bar in the evening and stare down the bartender some more. Tempting. (!quest %questIndex% choice 1)\n\nChoice 2:\n- Rouse your warriors, those elves must be punished! (!quest %questIndex% choice 2)\n\nChoice 3:\n- You return the following night to the designated area, meeting the Elven Lord and accept his offer to help you rebuild and replace the equipment. (!quest %questIndex% choice 3)\n```",
         winDescription: "",
-        winChoice1: "You buckle down on your answer: 'No, really, I do love the forest with all my heart and taking random walks in it during the night is my life’s true calling. You know, the woods are basi...'\n\n*\\*The elven lord points to his mouth and you are gagged before being able to finish your love ballad of the forest.\\**\n\nThe elven lord: 'Off with his head.'\n\n*- Your Lumbermill's level decreased back to 0*\n*- Your hero died*",
-        winChoice2: "*\\*The elven lord looks at you with a serious face.\\**\n\nHe says: 'Now that is honesty if I’ve ever seen it. I appreciate that. Because of that I will provide you with the answers you seek.'\n**A new quest is available**",
-        questKeySequence: ["Building Quests", "liesNotTollerated"],
+        winChoice1: "Your plan worked out nicely and you had a good nights rest.\n\n*- Your Hero gained 200 hp *\n",
+        winChoice2: "You gather your men and set off into the woods as day breaks.\n**A new quest is available**",
+        winChoice3: "Through the elven expertise they manage to raise the Lumbermill to a higher standard than before. \n\nYou shake the hand of the elven lord, promising peace between your people and them, the Elven Lord giving his assurances that he will try to keep elves from attacking the Lumbermill in rage.\n\n*- Your Lumbermill gained an additional level and is now level 2!*\n",
+        questKeySequence: ["Building Quests", "newStart"],
 
         // Returns false if the quest description is shown, or true if the quest is being completed
         execute: async function(user, choice) {
@@ -226,13 +227,12 @@ module.exports = {
 
             const choiceNumber = parseInt(choice[1]);
             // Only 2 answers possible
-            if(!(choiceNumber <= 2 && choiceNumber >= 1)) return false;
+            if(!(choiceNumber <= 3 && choiceNumber >= 1)) return false;
 
             user.removeQuest(this.name);
 
             if(choiceNumber === 1) {
-                await user.heroHpLoss(1);
-                user.decreaseBuildingLevel("lumbermill", 1, 1);
+                user.healHero(200);
                 this.winDescription = this.winChoice1;
             }
             else if (choiceNumber === 2) {
@@ -250,6 +250,13 @@ module.exports = {
                 // };
 
                 // user.addNewQuest(newQuest);
+            }
+            if(choiceNumber === 3) {
+                // GIVE THE USER AN ADDITIONAL LEVEL ON THE LUMBERMILL
+                if(user.empire.find(b => b.name === "lumbermill" && b.level === 1)) {
+                    user.changeBuildingLevel("lumbermill", 1, 1);
+                }
+                this.winDescription = this.winChoice3;
             }
 
             await user.save();

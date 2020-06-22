@@ -335,21 +335,20 @@ userSchema.methods.buyBuilding = function(building, buildingCost) {
 	return this.save();
 };
 
-userSchema.methods.decreaseBuildingLevel = function(building, buildingLevel, level) {
+userSchema.methods.changeBuildingLevel = function(buildingName, buildingLevel, level) {
 	let buildingIndex = -1;
 	const userBuilding = this.empire.find((structure, i) =>{
-		if(structure.name === building && structure.level === buildingLevel) {
+		if(structure.name === buildingName && structure.level === buildingLevel) {
 			buildingIndex = i;
 			return true;
 		}
 		return false;
 	});
-	userBuilding.level -= level;
+	userBuilding.level += level;
 
 	this.markModified(`empire.${buildingIndex}.level`);
 
 	return;
-	return this.save();
 };
 
 userSchema.methods.updateHousePop = function(newPop) {
@@ -370,13 +369,14 @@ userSchema.methods.recruitUnits = function(unit, amount, free) {
 	return this.save();
 };
 
-userSchema.methods.updateNewProduction = function(productionName, product, now) {
+userSchema.methods.updateNewProduction = function(productionName, now) {
 	const foundIndex = this.empire.findIndex(building => building.name === productionName && !building.lastCollected);
 	if (foundIndex === -1) {
 		return;
 	}
 	this.empire[foundIndex].lastCollected = now;
-	this.empire[foundIndex].producing = product;
+
+	if(!this.empire[foundIndex].producing) this.empire[foundIndex].producing = "oak wood";
 
 	this.markModified(`empire.${foundIndex}.lastCollected`);
 	this.markModified(`empire.${foundIndex}.producing`);
