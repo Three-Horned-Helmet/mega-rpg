@@ -1,6 +1,6 @@
 const allQuests = require("./all-quests");
 
-const checkQuest = async (user, place, currentLocation) => {
+const checkRaidAndHuntQuest = async (user, place, currentLocation) => {
     // Does the user have a quest here
     const currentQuest = user.quests.find(q => q.pve ? q.pve.find(raid => raid.name === place && !raid.completed) && q.started : false);
 
@@ -58,4 +58,24 @@ const checkQuest = async (user, place, currentLocation) => {
     return quest.intro;
 };
 
-module.exports = { checkQuest };
+const checkBuildQuests = async (user, building) => {
+    // GETTING A NEW QUEST
+    // Is there a quest for the location, and has it been started/found already?
+    const quest = Object.values(allQuests["Building Quests"]).find(q => q.requirement && q.requirement.building === building.name && q.requirement.level === building.level && !user.completedQuests.includes(q.name) && !user.quests.find(startedQuests => startedQuests.name === q.name));
+
+    if(!quest) return false;
+
+    // Add the new quest to the user
+    const newQuest = {
+        name: quest.name,
+        started: false,
+        questKeySequence: quest.questKeySequence,
+        pve: quest.pve,
+    };
+
+    await user.addNewQuest(newQuest);
+
+    return quest.intro;
+};
+
+module.exports = { checkQuest: checkRaidAndHuntQuest, checkBuildQuests };

@@ -16,34 +16,38 @@ const questHandler = async (user, questName) => {
 
     // Is the arg the quest index or name
     let quest;
-    if(isNaN(questName)) {
+    if(isNaN(questName) && isNaN(questName[0])) {
         quest = user.quests.find(q => q.name.toLowerCase() === questName);
     }
     else {
-        quest = user.quests[questName];
+        quest = user.quest[questName.split(" ")[0]];
     }
 
     if(!quest) return showUnableToFindQuest(user, questName);
 
     // Handle execute quest
-    return await handleExecuteQuest(user, quest);
+    return await handleExecuteQuest(user, quest, questName.split(" ").slice(1));
 };
 
-const handleExecuteQuest = async (user, userQuest) => {
+const handleExecuteQuest = async (user, userQuest, choice) => {
     let quest;
     userQuest.questKeySequence.forEach(questKey => {
         quest = quest ? quest[questKey] : allQuests[questKey];
     });
 
-    const questResponse = await quest.execute(user);
+    const questResponse = await quest.execute(user, choice);
 
     // Show quest description
-    if(!questResponse) return showQuestDescription(user, quest);
-    else return showQuestRewards(user, quest);
+    if(!questResponse) return showQuestDescription(user, quest, userQuest);
+    else return showQuestRewards(user, quest, userQuest);
 };
 
-const showQuestDescription = (user, quest) => {
-    const msg = `\n\n**__${quest.name}:__**\n\n__Description:__\n${quest.description.replace(/%username%/g, user.account.username)}\n\n__Objective:__\n${quest.objective}\n\n__Rewards__:\n${quest.reward}`;
+const showQuestDescription = (user, quest, userQuest) => {
+    let msg = "";
+    if(quest.author) msg += `*Author: ${quest.author}*`;
+    msg += `\n\n**__${quest.name}:__**\n\n__Description:__\n${quest.description.replace(/%username%/g, user.account.username).replace(/%questIndex%/g, user.quests.indexOf(userQuest))}`;
+    if(quest.objective) msg += `\n\n__Objective:__\n${quest.objective}`;
+    if(quest.reward) msg += `\n\n__Rewards__:\n${quest.reward}`;
     return msg;
 };
 
