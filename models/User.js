@@ -51,6 +51,10 @@ const userSchema = new Schema({
 			type: Number,
 			default: 0,
 		},
+		["barlind wood"]: {
+			type: Number,
+			default: 0,
+		},
 
 		["copper ore"]: {
 			type: Number,

@@ -147,6 +147,16 @@ module.exports = {
 				produce: "yew wood",
 				productionRate: 2,
 			},
+			{
+				cost: {
+					gold: 600,
+					 ["oak wood"]: 100,
+					 ["yew wood"]: 100,
+				},
+				level: 2,
+				produce: "barlind wood",
+				productionRate: 3,
+			},
 		],
 		execute: async function(user) {
 			// Add the lastCollected and producing to new mine

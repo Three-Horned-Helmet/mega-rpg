@@ -107,9 +107,9 @@ module.exports = {
         author: "Sindre Heldrup",
         description: "You wake up by a fire, feeling your hands tied together, but otherwise feeling fine apart from a dull pain at the back of your head. You squint your eyes due to the light emanating from the fire, looking around you. A bunch of what appears to be elves are clustered around you, looking at you with curious eyes.\n\nYou think: 'What’s the matter with them, have they never seen a handsome man before.'\n\nA voice rises above the murmur from the crowd: 'Bring forth the human'.\n\nYou are brought in front of a tall and slender elf sitting on a wooden throne elevated by a wooden platform. His hair is silver, his eyes shining with wisdom and age, and his body covered with a clothing of green and brown. \n\nHe asks you: 'Why were you out in our wood at the middle of the night Human?'\n\n**Three answers spring to your mind:**\n```diff\nChoice 1:\n- 'Whatever, I’ll do what I want.' Uttering the words you also decide to flip him off to prove how much of a badass you really are. (!quest %questIndex% choice 1)\n\nChoice 2:\n- 'I just awoke in the night and thought it was a fantastic idea to rise from bed and take a quick stroll in the wood. You know, just for fun, me being such a dedicated nature lover.' (!quest %questIndex% choice 2)\n\nChoice 3:\n- 'My lumbermill was raided and I was following the tracks when I was ambushed.' (!quest %questIndex% choice 3)\n```",
         winDescription: "",
-        winChoice1: "The elf on the throne looks at you with disgust written all over his face. \n\nIn a loud and clear voice he says: 'Off with his head'.\n\nYou decide to do what is heroic and burp while the axe is swinging toward your neck. You think: I do not think anyone has died while burping before, I’m such a bada...\n\n*- Your Lumbermill's level decreased back to 0*\n*- Your hero died*",
+        winChoice1: "The elf on the throne looks at you with disgust written all over his face. \n\nIn a loud and clear voice he says: 'Off with his head'.\n\nYou decide to do what is heroic and burp while the axe is swinging toward your neck. 'I do not think anyone has died while burping before, I’m such a bada...'\n\n*- Your hero died*\n*- Your Lumbermill's level decreased back to 0*",
         winChoice2: "The elf on the throne look at you with raised eyebrows.\n\nHe says: 'Do you really think I will believe a human would take a walk through the woods by themselves for the beauty of the forest? Answer me, but do not lie to me again Human. This is your one and only warning.'\n**A new quest is available**",
-        winChoice3: "*\\*The elven lord looks at you with a serious face.\\**\n\nHe says: 'Now that is honesty if I’ve ever seen it. I appreciate that. Because of that I will provide you with the answers you seek.'\n**A new quest is available**",
+        winChoice3: "*\\*The Elven Lord looks at you with a serious face.\\**\n\nHe says: 'Now that is honesty if I’ve ever seen it. I appreciate that. Because of that I will provide you with the answers you seek.'\n**A new quest is available**",
         questKeySequence: ["Building Quests", "woodElves"],
 
         // Returns false if the quest description is shown, or true if the quest is being completed
@@ -142,7 +142,7 @@ module.exports = {
                 user.addNewQuest(newQuest);
             }
             else if (choiceNumber === 3) {
-                // this.winDescription = this.winChoice2;
+                this.winDescription = this.winChoice3;
 
                 const newQuest = {
                     name: "A New Start",
@@ -163,8 +163,8 @@ module.exports = {
         author: "Sindre Heldrup",
         description: "*\\*The elf on the throne look at you with raised eyebrows.\\**\n\nHe says: 'Do you really think I will believe a human would take a walk through the woods by themselves for the beauty of the forest? Answer me, but do not lie to me again Human. This is your one and only warning.'\n\n**You think of two possible answers:**\n```diff\nChoice 1:\n- 'No, really, I do love the forest with all my heart and taking random walks in it during the night is my life’s true calling. You know, the woods are basically my second home!' (!quest %questIndex% choice 1)\n\nChoice 2:\n- 'My Lumbermill was raided and I were following the tracks when I was ambushed.' (!quest %questIndex% choice 2)\n```",
         winDescription: "",
-        winChoice1: "You buckle down on your answer: 'No, really, I do love the forest with all my heart and taking random walks in it during the night is my life’s true calling. You know, the woods are basi...'\n\n*\\*The elven lord points to his mouth and you are gagged before being able to finish your love ballad of the forest.\\**\n\nThe elven lord: 'Off with his head.'\n\n*- Your Lumbermill's level decreased back to 0*\n*- Your hero died*",
-        winChoice2: "*\\*The elven lord looks at you with a serious face.\\**\n\nHe says: 'Now that is honesty if I’ve ever seen it. I appreciate that. Because of that I will provide you with the answers you seek.'\n**A new quest is available**",
+        winChoice1: "You buckle down on your answer: 'No, really, I do love the forest with all my heart and taking random walks in it during the night is my life’s true calling. You know, the woods are basi...'\n\n*\\*The Elven Lord points to his mouth and you are gagged before being able to finish your love ballad of the forest.\\**\n\nThe Elven Lord: 'Off with his head.'\n\n*- Your hero died*\n*- Your Lumbermill's level decreased back to 0*",
+        winChoice2: "*\\*The Elven Lord looks at you with a serious face.\\**\n\nHe says: 'Now that is honesty if I’ve ever seen it. I appreciate that. Because of that I will provide you with the answers you seek.'\n**A new quest is available**",
         questKeySequence: ["Building Quests", "liesNotTollerated"],
 
         // Returns false if the quest description is shown, or true if the quest is being completed
@@ -210,7 +210,7 @@ module.exports = {
         winDescription: "",
         winChoice1: "Your plan worked out nicely and you had a good nights rest.\n\n*- Your Hero gained 200 hp *\n",
         winChoice2: "You gather up your army to attack the Wood Elves.\n**A new quest is available**",
-        winChoice3: "Through the elven expertise they manage to raise the Lumbermill to a higher standard than before. \n\nYou shake the hand of the elven lord, promising peace between your people and them, the Elven Lord giving his assurances that he will try to keep elves from attacking the Lumbermill in rage.\n\n*- Your Lumbermill gained an additional level and is now level 2!*\n",
+        winChoice3: "Through the elven expertise they manage to raise the Lumbermill to a higher standard than before. \n\nYou shake the hand of the Elven Lord, promising peace between your people and them, the Elven Lord giving his assurances that he will try to keep elves from attacking the Lumbermill in rage.\n\n*- Your Lumbermill gained an additional level and is now level 2!*\n",
         questKeySequence: ["Building Quests", "newStart"],
 
         // Returns false if the quest description is shown, or true if the quest is being completed
@@ -241,6 +241,7 @@ module.exports = {
                         name: "Wood Elves",
                         completed: false,
                         chance: 1,
+                        unique: true,
                     }],
                 };
 
@@ -267,9 +268,10 @@ module.exports = {
             name: "Wood Elves",
             completed: false,
             chance: 1,
+            unique: true,
         }],
         found: "The Elven Lord falls to the ground",
-        description: "You off into the woods as day breaks. Several hours of walking later you reach the Wood Elves.\n\n'Draw your swords!'",
+        description: "You off into the woods as day breaks. Several hours of walking later you reach the Wood Elves.\n\n%username%: 'DRAW YOUR SWORDS!'",
         winDescription: "With the Elven Lord defeated you return back to your Empire to enjoy your Lumbermill in peace!",
         objective: "Defeat the Wood Elves (`!raid wood elves`)",
         reward: "Oak wood: 100\nYew wood: 100\n",
