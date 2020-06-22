@@ -195,5 +195,3 @@ const questHelper = (user, questName) => {
     }
     return true;
 };
-
-// module.exports = starterQuests;

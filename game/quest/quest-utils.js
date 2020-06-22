@@ -28,8 +28,7 @@ const checkQuest = async (user, place, currentLocation) => {
         if(objectiveFound) {
             await user.updateQuestObjective(currentQuest);
 
-
-             return questObj.found;
+            return questObj.found;
         }
          else {
             return questObj.notFound;

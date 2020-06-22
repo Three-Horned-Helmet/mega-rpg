@@ -39,16 +39,16 @@ const handleExecuteQuest = async (user, userQuest) => {
 
     // Show quest description
     if(!questResponse) return showQuestDescription(user, quest);
-    else return showQuestRewards(quest);
+    else return showQuestRewards(user, quest);
 };
 
 const showQuestDescription = (user, quest) => {
-    const msg = `\n\n**__${quest.name}:__**\n\n__Description:__\n${quest.description.replace("%username%", user.account.username)}\n\n__Objective:__\n${quest.objective}\n\n__Rewards__:\n${quest.reward}`;
+    const msg = `\n\n**__${quest.name}:__**\n\n__Description:__\n${quest.description.replace(/%username%/g, user.account.username)}\n\n__Objective:__\n${quest.objective}\n\n__Rewards__:\n${quest.reward}`;
     return msg;
 };
 
-const showQuestRewards = (quest) => {
-    const msg = `Congratulations you have completed **__${quest.name}__**! \n\n${quest.winDescription || ""}\n\n__Rewards:__\n${quest.reward}`;
+const showQuestRewards = (user, quest) => {
+    const msg = `Congratulations you have completed **__${quest.name}__**! \n\n${quest.winDescription.replace(/%username%/g, user.account.username)}\n\n__Rewards:__\n${quest.reward}`;
     return msg;
 };
 
