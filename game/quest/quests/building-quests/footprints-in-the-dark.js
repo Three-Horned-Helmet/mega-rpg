@@ -144,13 +144,13 @@ module.exports = {
             else if (choiceNumber === 3) {
                 // this.winDescription = this.winChoice2;
 
-                // const newQuest = {
-                //     name: "Lies are not Tollerated",
-                //     started: false,
-                //     questKeySequence: ["Building Quests", "liesNotTollerated"],
-                // };
+                const newQuest = {
+                    name: "A New Start",
+                    started: false,
+                    questKeySequence: ["Building Quests", "newStart"],
+                };
 
-                // user.addNewQuest(newQuest);
+                user.addNewQuest(newQuest);
             }
 
             await user.save();
@@ -186,20 +186,15 @@ module.exports = {
                 this.winDescription = this.winChoice1;
             }
             else if (choiceNumber === 2) {
-                // this.winDescription = this.winChoice2;
+                this.winDescription = this.winChoice2;
 
-                // const newQuest = {
-                //     name: "Finding the Saboteurs",
-                //     started: false,
-                //     questKeySequence: ["Building Quests", "findingSaboteurs"],
-                //     pve: [{
-                //         name: "Forest",
-                //         completed: false,
-                //         chance: 0.25,
-                //     }],
-                // };
+                const newQuest = {
+                    name: "A New Start",
+                    started: false,
+                    questKeySequence: ["Building Quests", "newStart"],
+                };
 
-                // user.addNewQuest(newQuest);
+                user.addNewQuest(newQuest);
             }
 
             await user.save();
@@ -214,7 +209,7 @@ module.exports = {
         description: "You look at the Elven Lord expectantly hoping he is about to give you the answers of how to strike it off with that hot bartender you’ve been staring down every night for the past month.\n\nHe continues: 'It was some of my hunters, returning from a hunt but noticing a section of the forest missing, chopped down by your lumberjacks...'\n\nYou look at him with disappointment written all over your face as you realize he won’t provide you with a brilliant strategy to strike it off with the bartender. \n\nHe says: 'Yes, I can see the disappointment in your face, I realize a great deal of materials and equipment were destroyed by my elves...'\n\n*\\*You quickly nod, feeling relief he can’t read your mind.\\**\n\nHe says: 'We do not wish for bad blood between our two people, and therefore I __offer__ to help you replace the equipment lost and rebuild what we destroyed. However, I will not punish the hunters, nor can I guarantee it never happens again. But this time we will make up for it, as a sign of good faith. Give your answer by tomorrow!'\n\n**You return to your village and think about your options, identifying three possible routes to take:**\n```diff\nChoice 1:\n- Do nothing and go back to sleep. Damn, but you feel very tired already. If you catch some good hours before the days works you can possibly go to the bar in the evening and stare down the bartender some more. Tempting. (!quest %questIndex% choice 1)\n\nChoice 2:\n- Rouse your warriors, those elves must be punished! (!quest %questIndex% choice 2)\n\nChoice 3:\n- You return the following night to the designated area, meeting the Elven Lord and accept his offer to help you rebuild and replace the equipment. (!quest %questIndex% choice 3)\n```",
         winDescription: "",
         winChoice1: "Your plan worked out nicely and you had a good nights rest.\n\n*- Your Hero gained 200 hp *\n",
-        winChoice2: "You gather your men and set off into the woods as day breaks.\n**A new quest is available**",
+        winChoice2: "You gather up your army to attack the Wood Elves.\n**A new quest is available**",
         winChoice3: "Through the elven expertise they manage to raise the Lumbermill to a higher standard than before. \n\nYou shake the hand of the elven lord, promising peace between your people and them, the Elven Lord giving his assurances that he will try to keep elves from attacking the Lumbermill in rage.\n\n*- Your Lumbermill gained an additional level and is now level 2!*\n",
         questKeySequence: ["Building Quests", "newStart"],
 
@@ -236,27 +231,27 @@ module.exports = {
                 this.winDescription = this.winChoice1;
             }
             else if (choiceNumber === 2) {
-                // this.winDescription = this.winChoice2;
+                this.winDescription = this.winChoice2;
 
-                // const newQuest = {
-                //     name: "Finding the Saboteurs",
-                //     started: false,
-                //     questKeySequence: ["Building Quests", "findingSaboteurs"],
-                //     pve: [{
-                //         name: "Forest",
-                //         completed: false,
-                //         chance: 0.25,
-                //     }],
-                // };
+                const newQuest = {
+                    name: "A Battle for the Wood",
+                    started: false,
+                    questKeySequence: ["Building Quests", "battleForWood"],
+                    pve: [{
+                        name: "Wood Elves",
+                        completed: false,
+                        chance: 1,
+                    }],
+                };
 
-                // user.addNewQuest(newQuest);
+                user.addNewQuest(newQuest);
             }
-            if(choiceNumber === 3) {
-                // GIVE THE USER AN ADDITIONAL LEVEL ON THE LUMBERMILL
+            else if(choiceNumber === 3) {
+                this.winDescription = this.winChoice3;
+
                 if(user.empire.find(b => b.name === "lumbermill" && b.level === 1)) {
                     user.changeBuildingLevel("lumbermill", 1, 1);
                 }
-                this.winDescription = this.winChoice3;
             }
 
             await user.save();
@@ -264,8 +259,47 @@ module.exports = {
             return true;
         },
     },
-};
 
+    battleForWood: {
+        name: "A Battle for the Wood",
+        author: "Sindre Heldrup",
+        pve: [{
+            name: "Wood Elves",
+            completed: false,
+            chance: 1,
+        }],
+        found: "The Elven Lord falls to the ground",
+        description: "You off into the woods as day breaks. Several hours of walking later you reach the Wood Elves.\n\n'Draw your swords!'",
+        winDescription: "With the Elven Lord defeated you return back to your Empire to enjoy your Lumbermill in peace!",
+        objective: "Defeat the Wood Elves (`!raid wood elves`)",
+        reward: "Oak wood: 100\nYew wood: 100\n",
+        questKeySequence: ["Building Quests", "battleForWood"],
+
+        // Returns false if the quest description is shown, or true if the quest is being completed
+        execute: async function(user, choice) {
+            const questResponse = await questHelper(user, this.name);
+            if(!questResponse || !choice) {
+                return false;
+            }
+
+       // Has the user completed the PvE requirements?
+       const userQuest = user.quests.find(q => q.name === this.name);
+       if(userQuest.pve.find(raid => !raid.completed)) return false;
+
+       // Get reward
+       await user.gainManyResources({
+           "oak wood": 100,
+           "yew wood": 100,
+       });
+
+       user.removeQuest(this.name);
+
+       await user.save();
+
+            return true;
+        },
+    },
+};
 
 const questHelper = async (user, questName) => {
     const quest = user.quests.find(q => q.name === questName);

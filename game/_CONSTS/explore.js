@@ -128,6 +128,7 @@ const worldLocations = {
 				type: "fish",
 				fish: ["Cod", "Trout", "Swordfish"],
 			},
+
 			// Questmobs
 			"Confront Bandits": {
 				name: "Confront Bandits",
@@ -166,6 +167,19 @@ const worldLocations = {
 				},
 				rewards:{
 					gold: 350,
+				},
+			},
+			"Wood Elves": {
+				name: "Wood Elves",
+				type: "raid",
+				notExplorable: true,
+				stats:{
+					attack: 800,
+					health: 800,
+				},
+				rewards:{
+					"oak wood": 100,
+					"yew wood": 100,
 				},
 			},
 		},
