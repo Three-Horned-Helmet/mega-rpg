@@ -262,7 +262,6 @@ const userSchema = new Schema({
 
 userSchema.methods.addNewQuest = async function(quest) {
 	this.quests.push(quest);
-	return this.save();
 };
 
 userSchema.methods.removeQuest = async function(questName) {

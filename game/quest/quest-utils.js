@@ -23,7 +23,12 @@ const checkRaidAndHuntQuest = async (user, place, currentLocation) => {
         if(unique) await user.removeExploredArea(currentLocation, place);
 
         // Find the quest in the quest object
-        const questObj = Object.values(allQuests[currentLocation]).find(q => q.name === currentQuest.name);
+        // const questObj = Object.values(allQuests[currentLocation]).find(q => q.name === currentQuest.name);
+
+        let questObj;
+        currentQuest.questKeySequence.forEach(questKey => {
+            questObj = questObj ? questObj[questKey] : allQuests[questKey];
+        });
 
         if(objectiveFound) {
             await user.updateQuestObjective(currentQuest);

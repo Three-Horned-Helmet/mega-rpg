@@ -34,8 +34,10 @@ module.exports = {
                 questKeySequence: ["gettingStarted", "buildLumbermill"],
             };
 
-            await user.addNewQuest(newQuest);
-            await user.removeQuest(this.name);
+            user.addNewQuest(newQuest);
+            user.removeQuest(this.name);
+
+            await user.save();
 
             return true;
         },
@@ -72,8 +74,10 @@ module.exports = {
                 questKeySequence: ["gettingStarted", "exploreSurroundings"],
             };
 
-            await user.addNewQuest(newQuest);
-            await user.removeQuest(this.name);
+            user.addNewQuest(newQuest);
+            user.removeQuest(this.name);
+
+            await user.save();
 
             return true;
         },
@@ -107,8 +111,10 @@ module.exports = {
                 questKeySequence: ["gettingStarted", "buildShop"],
             };
 
-            await user.addNewQuest(newQuest);
-            await user.removeQuest(this.name);
+            user.addNewQuest(newQuest);
+            user.removeQuest(this.name);
+
+            await user.save();
 
             return true;
         },
@@ -141,8 +147,10 @@ module.exports = {
                 questKeySequence: ["gettingStarted", "recruitArmy"],
             };
 
-            await user.addNewQuest(newQuest);
-            await user.removeQuest(this.name);
+            user.addNewQuest(newQuest);
+            user.removeQuest(this.name);
+
+            await user.save();
 
             return true;
         },
@@ -178,7 +186,9 @@ module.exports = {
             // };
 
             // await user.addNewQuest(newQuest);
-            await user.removeQuest(this.name);
+            user.removeQuest(this.name);
+
+            await user.save();
 
             return true;
         },

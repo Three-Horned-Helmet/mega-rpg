@@ -49,9 +49,10 @@ module.exports = {
                     unique: true,
                 }],
             };
+            user.addNewQuest(newQuest);
+            user.removeQuest(this.name);
 
-            await user.addNewQuest(newQuest);
-            await user.removeQuest(this.name);
+            await user.save();
 
             return true;
         },
@@ -99,8 +100,10 @@ module.exports = {
                 questKeySequence: ["Grassy Plains", "returnBadNews"],
             };
 
-            await user.addNewQuest(newQuest);
-            await user.removeQuest(this.name);
+            user.addNewQuest(newQuest);
+            user.removeQuest(this.name);
+
+            await user.save();
 
             return true;
         },
@@ -123,7 +126,9 @@ module.exports = {
             // Get reward
             await user.addItem(allItems["black granite mace"], 1);
 
-            await user.removeQuest(this.name);
+            user.removeQuest(this.name);
+
+            await user.save();
 
             return true;
         },
@@ -170,9 +175,10 @@ module.exports = {
                     chance: 0.25,
                 }],
             };
+       user.addNewQuest(newQuest);
+            user.removeQuest(this.name);
 
-            await user.addNewQuest(newQuest);
-            await user.removeQuest(this.name);
+            await user.save();
 
             return true;
         },
@@ -219,9 +225,10 @@ module.exports = {
                     unique: true,
                 }],
             };
+       user.addNewQuest(newQuest);
+            user.removeQuest(this.name);
 
-            await user.addNewQuest(newQuest);
-            await user.removeQuest(this.name);
+            await user.save();
 
             return true;
         },
@@ -269,9 +276,10 @@ module.exports = {
                 started: false,
                 questKeySequence: ["Grassy Plains", "diggingForTreasure"],
             };
+            user.addNewQuest(newQuest);
+            user.removeQuest(this.name);
 
-            await user.addNewQuest(newQuest);
-            await user.removeQuest(this.name);
+            await user.save();
 
             return true;
         },
@@ -306,7 +314,9 @@ module.exports = {
                 gold: 150,
             });
 
-            await user.removeQuest(this.name);
+            user.removeQuest(this.name);
+
+            await user.save();
 
             return true;
         },
@@ -362,8 +372,10 @@ module.exports = {
                 questKeySequence: ["Grassy Plains", "theRock"],
             };
 
-            await user.addNewQuest(newQuest);
-            await user.removeQuest(this.name);
+            user.addNewQuest(newQuest);
+            user.removeQuest(this.name);
+
+            await user.save();
 
             return true;
         },
@@ -397,8 +409,10 @@ module.exports = {
                 questKeySequence: ["Grassy Plains", "chamberOfWeaponry"],
             };
 
-            await user.addNewQuest(newQuest);
-            await user.removeQuest(this.name);
+            user.addNewQuest(newQuest);
+            user.removeQuest(this.name);
+
+            await user.save();
 
             return true;
         },
@@ -425,7 +439,9 @@ module.exports = {
             await user.addItem(allItems["bauxite daggers"], 1);
             await user.addItem(allItems["three horned helmet"], 1);
 
-            await user.removeQuest(this.name);
+            user.removeQuest(this.name);
+
+            await user.save();
 
             return true;
         },
