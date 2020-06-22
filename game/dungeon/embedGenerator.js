@@ -1,7 +1,8 @@
 const Discord = require("discord.js");
-const { getLocationIcon, getStatsIcon, getWeaponIcon, getPlaceIcon, getDungeonKeyIcon, getGreenRedIcon, getResourceIcon } = require("../_CONSTS/icons");
+const { getLocationIcon, getStatsIcon, getWeaponIcon, getPlaceIcon, getGreenRedIcon, getResourceIcon } = require("../_CONSTS/icons");
 
-const createDungeonInvitation = (dungeon, user)=>{
+// Dungeon boss invitation
+const createDungeonBossInvitation = (dungeon, user)=>{
     const sideColor = "#45b6fe";
     const username = user.account.username;
     const { currentLocation } = user.world;
@@ -56,35 +57,33 @@ const createDungeonInvitation = (dungeon, user)=>{
     const generateDungeonBossRound = (progress)=>{
 
         const weapons = progress.dungeon.boss.allowedWeapons;
-        /* const weapons = {
-            a: { name:"slash", desc: "95% chance of causing up to 1 times the max attack" },
-            b: { name: "strike", desc: "80% chance of causing up to 2 times the max attack" },
-            c: { name: "critical", desc: "40% chance of causing up to 4 times the max attack" },
-            d: { name:"disarm", desc: "25% chance of lowering boss attack" },
-            e: { name: "heal", desc: "95% chance of healing teammate with lowest hp" },
-        }; */
 
-        const sideColor = "#45b6fe";
         const initiativeTakerName = progress.initiativeTaker.account.username;
-        const gangNames = progress.players
+        const bottomLeft = progress.players
             .filter(p=> p.account.username !== initiativeTakerName)
-            .map(p=>p.account.username);
+            .map(p=> `${p.account.username} ${p.hero.currentHealth <= 0 ? "☠️" : ""} `);
+
+        const roundResults = progress.roundResults;
+        if (roundResults.length) {
+            bottomLeft.push("\n");
+            bottomLeft.push(`\`Results from round ${progress.bossAttempts}:\``);
+            bottomLeft.push(roundResults);
+        }
         const dungeonName = progress.dungeon.name;
         const dungeonIcon = getPlaceIcon("dungeon");
 
         const bossName = progress.dungeon.boss.name;
-
         const dungeonHp = getDungeonHp(progress.dungeon.boss.stats);
         const playersHp = getPlayersHp(progress.players, progress.dungeon.boss.helpers);
-
-        const title = `${dungeonIcon} ${dungeonName} ~~~ BOSS FIGHT`;
 
         const weaponsTitle = "Choose your weapon:";
         const weaponsOverview = Object.keys(weapons).map(w=>{
             const { answer, name, description } = weapons[w];
             return `${getWeaponIcon(name)} ${answer}) **${name}** ${description}\n`;
         });
-
+        const title = `${dungeonIcon} ${dungeonName}  ~~~  BOSS FIGHT \nround ${progress.bossAttempts + 1}`;
+        const sideColor = "#45b6fe";
+        const description = progress.dungeon.boss.roundDescriptions[progress.bossAttempts];
         const footer = "TIP: Write your weapon of choice in the chat. eg -> a or c";
 
         const fields = [
@@ -105,7 +104,7 @@ const createDungeonInvitation = (dungeon, user)=>{
             },
             {
                 name: `${initiativeTakerName}'s gang:`,
-                value: gangNames,
+                value: bottomLeft,
                 inline: true,
             },
             {
@@ -117,7 +116,7 @@ const createDungeonInvitation = (dungeon, user)=>{
 
         const embedResult = new Discord.MessageEmbed()
             .setTitle(title)
-            .setDescription("The castle is too narrow to join with your army and will therefor not help you for the boss fight. Your hero walks into the final room and the door shuts closed. The option of fleeing is no longer available ")
+            .setDescription(description)
             .setColor(sideColor)
             .addFields(
                 ...fields,
@@ -127,79 +126,98 @@ const createDungeonInvitation = (dungeon, user)=>{
     };
 
 
-    const createDungeonResult = (result, dungeon)=>{
-        if (result.win) {
-            return createMiniBossResultWin(result, dungeon);
+    const generateDungeonBossResult = (progress)=>{
+        if (progress.win) {
+            return createDungeonBossResultWin(progress);
         }
-        return createMiniBossResultLoss(result, dungeon);
+        return createDungeonBossResultLoss(progress);
     };
 
-    const createMiniBossResultLoss = (message, dungeon) =>{
+    const createDungeonBossResultWin = (progress) =>{
 
-
+        const initiativeTakerName = progress.initiativeTaker.account.username;
         const sideColor = "#45b6fe";
-        const initiativeTaker = result.initiativeTaker.account.username;
 
-        const initiativeTakerDamage = `-${result.damageDealt.initiativeTaker} HP`;
+        const topLeft = progress.players
+            .filter(p=> p.account.username !== initiativeTakerName)
+            .map(p=> `${p.account.username} ${p.hero.currentHealth <= 0 ? "☠️" : ""} `);
 
-        const dungeonIcon = getPlaceIcon("dungeon");
-        const fields = [
-            {
-                name: `${initiativeTaker}`,
-                value: initiativeTakerDamage,
-                inline: false,
-            },
-        ];
-        if (result.helpers.length) {
-            const helpersValue = result.helpers.map((h, i)=>`${h.account.username}:\n - ${result.rewards.helpers[i].randomHelperDamage}hp ${result.rewards.helpers[i].helperDead ? "💀" : ""}\n\n`);
-            fields.push({
-                name: "Helpers damage",
-                value: helpersValue,
-                inline: false,
-            });
+        const { roundResults } = roundResults;
+        if (roundResults.length) {
+            topLeft.push("\n");
+            topLeft.push("`Results from last round:`");
+            topLeft.push(roundResults);
         }
 
+        // if not explored, use !travel to move to another location
+        const fields = [
+            {
+                name: `${initiativeTakerName}'s gang:`,
+                value: topLeft,
+                inline: true,
+            },
+            {
+                name: "Rewards",
+                value: "Player rewards goes here",
+                inline: true,
+            },
+        ];
+
+        const bossName = progress.dungeon.boss.name;
+        const title = `${bossName} defeated!`;
+
+        const unlockedLocation = progress.dungeon.boss.unlocks;
+        const locationIcon = getLocationIcon(unlockedLocation);
+        const description = `${initiativeTakerName} has unlocked ${locationIcon} ${unlockedLocation}`;
+
+
         const embedResult = new Discord.MessageEmbed()
-            .setTitle(`${initiativeTaker} ${result.helpers.length ? "and his helpers" : ""} failed to defeat ${dungeonIcon} ${dungeon.name} `)
-            .setDescription("Damage taken: ")
+            .setTitle(title)
+            .setDescription(description)
             .setColor(sideColor)
             .addFields(
                 ...fields,
             );
-
         return embedResult;
-
     };
 
 
-    const createMiniBossResultWin = (result, dungeon) =>{
+    const createDungeonBossResultLoss = (progress) =>{
 
+        const initiativeTakerName = progress.initiativeTaker.account.username;
         const sideColor = "#45b6fe";
-        const initiativeTaker = result.initiativeTaker.account.username;
 
-        let initiativeTakerRewards = `${getResourceIcon("gold")} Gold: ${result.rewards.initiativeTaker.gold} \n\n ${getResourceIcon("xp")} XP: ${result.rewards.initiativeTaker.xp}`;
-        if (result.rewards.initiativeTaker.dungeonKey) {
-            initiativeTakerRewards += `\n\n ${getDungeonKeyIcon(result.rewards.initiativeTaker.dungeonKey)} ${result.rewards.initiativeTaker.dungeonKey} !`;
+        const bottomLeft = progress.players
+            .filter(p=> p.account.username !== initiativeTakerName)
+            .map(p=> `${p.account.username} ${p.hero.currentHealth <= 0 ? "☠️" : ""} `);
+
+        const { roundResults } = progress;
+        if (roundResults.length) {
+            bottomLeft.push("\n");
+            bottomLeft.push("`Results from last round:`");
+            bottomLeft.push(roundResults);
         }
-        const dungeonIcon = getPlaceIcon("dungeon");
+
         const fields = [
             {
-                name: `${initiativeTaker} rewards`,
-                value: initiativeTakerRewards,
-                inline: true,
+                name: `${initiativeTakerName}'s gang:`,
+                value: "initiativeTakerDamage",
+                inline: false,
             },
         ];
-        if (result.helpers.length) {
-            fields.push({
-                name: "Helpers rewards",
-                value: result.helpers.map((h, i)=> `${result.rewards.helpers[i].helperName}:\n${getResourceIcon("gold")} Gold: ${result.rewards.helpers[i].randomHelperGold} \n ${getResourceIcon("xp")} XP: ${result.rewards.helpers[i].randomHelperXp}${result.rewards.helpers[i].helperLeveledUp ? " 💪" : ""}\n\n`),
-                inline: true,
-            });
-        }
+
+
+        const bossName = progress.dungeon.boss.name;
+        const title = `${bossName} defeated ${initiativeTakerName}!`;
+
+        const unlockedLocation = progress.dungeon.boss.unlocks;
+        const locationIcon = getLocationIcon(unlockedLocation);
+        const description = `${initiativeTakerName} has unlocked ${locationIcon} ${unlockedLocation}`;
+
 
         const embedResult = new Discord.MessageEmbed()
-            .setTitle(`${initiativeTaker} ${result.helpers.length ? "and his helpers" : ""} successfuly defeated ${dungeonIcon} ${dungeon.name} `)
-            .setDescription("Rewards will be distributed: ")
+            .setTitle(title)
+            .setDescription(description)
             .setColor(sideColor)
             .addFields(
                 ...fields,
@@ -228,5 +246,42 @@ const createDungeonInvitation = (dungeon, user)=>{
             return `\`\`\`diff\n- ${"|".repeat(percentageHealth)}${" ".repeat(percentageMissingHealth)} \n \`\`\``;
         };
 
+        const generateRoundResult = (roundResults) => {
 
-            module.exports = { createDungeonInvitation, createDungeonResult, generateDungeonBossRound };
+            const status = roundResults.map(r=>{
+                switch (r.type) {
+                    case "attack":
+                        return generateAttackString(r);
+                    case "heal":
+                        return generateHealString(r);
+                    case "disarm":
+                        return generateDisarmString(r);
+                    default:
+                        return "default value, something bad happend";
+                }
+            });
+            return status;
+        };
+
+        const generateAttackString = (info)=>{
+            console.log(info, "info");
+            let string = `\n- **${info.playerName}** used ${info.weaponName} attack causing **${info.damageGiven}** damage `;
+            if (info.playerAttacked) {
+                string += `to **${info.playerAttacked}**`;
+            }
+            return string;
+        };
+
+        const generateHealString = (info)=>{
+            if (info.playerAttacked) {
+                return `\n${info.playerName} helead ${info.playerAttacked} with ${info.healGiven}`;
+            }
+            return `\n${info.playerName} healed himself with ${info.healGiven}`;
+        };
+
+        const generateDisarmString = (info)=>{
+            return "someone was disarmed";
+        };
+
+
+            module.exports = { createDungeonBossInvitation, generateDungeonBossRound, generateDungeonBossResult };

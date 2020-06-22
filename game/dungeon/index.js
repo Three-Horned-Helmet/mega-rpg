@@ -1,19 +1,15 @@
-const { onCooldown } = require("../_CONSTS/cooldowns");
-const { worldLocations } = require("../_CONSTS/explore");
-const { getLocationIcon, getDungeonKeyIcon } = require("../_CONSTS/icons");
-const { createDungeonInvitation, createDungeonResult, generateDungeonBossRound } = require("./embedGenerator");
-
 const User = require("../../models/User");
+const { worldLocations } = require("../_CONSTS/explore");
 
-// Note: The success of defeating the dungeon is based soley on user rank
-const handleDungeon = async (message, user)=>{
+const { createDungeonInvitation, generateDungeonBossRound, generateDungeonBossResult } = require("./embedGenerator");
+const { getWeaponInfo, dungeonBossStartAllowed, validateHelper, randomIntBetweenMinMax } = require("./helper");
 
-    // cooldown, health, explored dungeon
-    const disallowed = dungeonStartAllowed(user);
+const handleDungeonBoss = async (message, user)=>{
+    // cooldown, health, explored dungeon and dungeon key
+    const disallowed = dungeonBossStartAllowed(user);
 		if (disallowed) {
             return message.channel.send(disallowed);
         }
-
 
     const dungeon = createDungeonEvent(user);
 
@@ -33,12 +29,14 @@ const handleDungeon = async (message, user)=>{
         if (rUser.bot || dungeon.boss.helpers.length > 4) {
             return;
         }
+        if (dungeon.boss.helpers.includes(rUser.id)) {
+            return;
+        }
         const allowedHelper = await validateHelper(rUser.id);
         if (!allowedHelper) {
             return;
         }
         dungeon.boss.helpers.push(rUser.id);
-        // if helpers length, end collection
     });
 
      collector.on("end", async () => {
@@ -46,6 +44,7 @@ const handleDungeon = async (message, user)=>{
     });
 };
 
+// Finds dungeon in current world
 const createDungeonEvent = (user) =>{
     const { currentLocation } = user.world;
     const dungeonName = Object.keys(worldLocations[currentLocation].places).find(p=>{
@@ -57,13 +56,13 @@ const createDungeonEvent = (user) =>{
 };
 
 
+// c
 const startDungeonEvent = async (message, dungeon) => {
     const users = await User.find({ "account.userId": dungeon.boss.helpers });
     const initiativeTaker = users.filter(u=> u.account.userId === dungeon.boss.helpers[0]);
 
     const progress = {
         win: false,
-        earlyfinish: false,
         bossAttempts: 0,
         currentRoom:0,
         initiativeTaker: initiativeTaker[0],
@@ -74,9 +73,8 @@ const startDungeonEvent = async (message, dungeon) => {
     };
 
     // recursive starts here
-
     const result = await createDungeonRound(message, progress);
-    // const round = message.channel.send(dungeonRound);
+    message.channel.send(result);
 
 };
 
@@ -116,67 +114,143 @@ const createDungeonRound = async (message, progress)=>{
             }
         });
         collector.on("end", async () => {
-            // calculate process and generate strings
-            // if length == 0, end
-            // if round > 3, end
-            // if boss.health <= 0, end
-
             const result = await calculateDungeonResult(progress);
-            console.log("end");
+            if (result.dungeon.boss.helpers.length && result.dungeon.boss.stats.currentHealth > 0 && result.bossAttempts < 4) {
+                await createDungeonRound(message, result);
+            }
+            else {
+                console.error("round over");
+                console.error(result.dungeon.boss.helpers.length, result.dungeon.boss.stats.currentHealth > 0, result.bossAttempts < 4);
+                return generateDungeonBossResult(progress);
+            }
     });
-        // if length is something, collection end after timeout
-
 };
 
+// Calculates the fight between players and boss
+// function includes db-calls to set new hp
 
 const calculateDungeonResult = async (progress)=>{
     let damageGiven = 0;
     let disarmGiven = 0;
-    progress.weaponAnswer.forEach((weapon, player)=>{
+    let bossSelfHeal = 0;
+
+    // cleans up roundResults from previous round
+    progress.roundResults = [];
+
+    const awaitHealPromises = {};
+    const awaitDamagePromises = {};
+
+    progress.weaponAnswer.forEach(async (weapon, player)=>{
         const playerInfo = progress.players.find(p=>{
             return p.account.userId === player;
         });
-        const playerName = playerInfo.account.username;
-        const weaponInfo = getWeaponInfo(weapon);
         const chance = Math.random();
-        const result = {
-            type: weaponInfo.type,
-            playerName: playerName,
-            weaponName: weaponInfo.name,
-            damageGiven:0,
-            healGiven: 0,
-            disarmGiven: 0,
 
-            playerHealed: null,
-        };
+        const weaponInfo = getWeaponInfo(weapon);
+        const playerName = playerInfo.account.username;
+
         if (weaponInfo.chanceforSuccess > 0) {
             if (weaponInfo.type === "attack") {
-                console.log("attack");
-                result.damageGiven = Math.round(Math.random() * (playerInfo.hero.attack * weaponInfo.damage - (playerInfo.hero.attack / 2 * weaponInfo.damage)) + (playerInfo.hero.attack / 2 * weaponInfo.damage));
-                damageGiven += result.damageGiven;
+                const tempDamageGiven = randomIntBetweenMinMax(playerInfo.hero.attack / 2 * weaponInfo.damage, (playerInfo.hero.attack * weaponInfo.damage));
+                // playerResult.damageGiven = tempDamageGiven;
+                damageGiven += tempDamageGiven;
+                progress.roundResults.push(generateAttackString(playerName, weaponInfo, tempDamageGiven, progress.dungeon.boss.name));
             }
             if (weaponInfo.type === "heal") {
-                console.log("heal");
-                result.playerHealed = progress.players.sort((a, b)=>b.hero.currentHealth - a.hero.currentHealth);
-                result.healGiven = Math.round(Math.random() * (playerInfo.hero.health * weaponInfo.damage - (playerInfo.hero.health * weaponInfo.damage / 2)) + (playerInfo.hero.health * weaponInfo.damage / 2));
-                // await result.playerHealed.givehp
+                const playerWithLowestHp = progress.players
+                    .sort((a, b)=>a.hero.currentHealth - b.hero.currentHealth)
+                    .filter(p=> p.hero.currentHealth > 0)[0];
+                const playerHealedName = playerWithLowestHp.account.username;
+                const healGiven = randomIntBetweenMinMax((playerInfo.hero.health * weaponInfo.damage / 2), (playerInfo.hero.health * weaponInfo.damage));
+                // todo, same thing here as other object
+                await playerWithLowestHp.healHero(healGiven);
+                if (awaitHealPromises[playerHealedName]) {
+                    awaitHealPromises[playerHealedName].healGiven += healGiven;
+                }
+                    else {
+                        awaitHealPromises[playerHealedName] = {
+                        user: playerWithLowestHp,
+                        damage: healGiven,
+                    };
+                }
+                progress.roundResults.push(generateHealString(playerName, weaponInfo, healGiven, playerHealedName));
+
             }
             if (weaponInfo.type === "disarm") {
-                console.log("disarm");
-                result.disarmGiven = Math.round(Math.random() * (progress.dungeon.boss.stats.attack * weaponInfo.damage - (progress.dungeon.boss.stats.attack / 2 * weaponInfo.damage)) + (progress.dungeon.boss.stats.attack / 2 * weaponInfo.damage));
-                disarmGiven += result.disarmGiven;
+                const tempDisarmGiven = randomIntBetweenMinMax((progress.dungeon.boss.stats.attack / 2 * weaponInfo.damage), (progress.dungeon.boss.stats.attack * weaponInfo.damage));
+                disarmGiven += tempDisarmGiven;
+                progress.roundResults.push(generateDisarmString(playerName, weaponInfo, tempDisarmGiven));
             }
         }
-        progress.roundResults.push(result);
     });
+
+
+    for (let i = 0; i < progress.dungeon.boss.rules.attacksEachRound; i += 1) {
+        const alivePlayers = progress.players.filter(p=> p.hero.currentHealth > 0);
+        const randomPlayer = alivePlayers[Math.floor(Math.random() * alivePlayers.length)];
+
+        const bossName = progress.dungeon.boss.name;
+
+        const randomWeaponName = progress.dungeon.boss.bossWeapons[Math.floor(Math.random() * progress.dungeon.boss.bossWeapons.length)];
+        const weaponInfo = getWeaponInfo(randomWeaponName);
+        const { stats } = progress.dungeon.boss;
+
+        if (randomPlayer) {
+            if (weaponInfo.type === "attack") {
+                const tempDamageGiven = randomIntBetweenMinMax((stats.attack * weaponInfo.damage), (stats.attack / 2 * weaponInfo.damage));
+
+                if (awaitDamagePromises[randomPlayer.account.username]) {
+                    awaitDamagePromises[randomPlayer.account.username].damage += tempDamageGiven;
+                }
+                    else {
+                    awaitDamagePromises[randomPlayer.account.username] = {
+                        user: randomPlayer,
+                        damage: tempDamageGiven,
+                    };
+                }
+                // removes user from helper array if dead
+                if (randomPlayer.hero.currentHealth - tempDamageGiven <= 0) {
+                    progress.dungeon.boss.helpers = progress.dungeon.boss.helpers.filter(h=> h !== randomPlayer.account.userId);
+                }
+                progress.roundResults.push(generateAttackString(bossName, weaponInfo, tempDamageGiven, randomPlayer.account.username));
+            }
+        }
+        if (weaponInfo.type === "heal") {
+            const healGiven = randomIntBetweenMinMax((stats.health * weaponInfo.damage), (stats.health * weaponInfo.damage / 2));
+            bossSelfHeal += healGiven;
+            progress.roundResults.push(generateHealString(bossName, weaponInfo, healGiven));
+        }
+    }
+    // takes care of healing
+    await asyncForEach(Object.keys(awaitHealPromises), async (u)=>{
+        return await awaitHealPromises[u].user.healHero(awaitHealPromises[u].healGiven);
+    });
+
+    // inflicts damage on user document
+    await asyncForEach(Object.keys(awaitDamagePromises), async (u)=>{
+        return await awaitDamagePromises[u].user.heroHpLossFixedAmount(awaitDamagePromises[u].damage);
+    });
+
+
+    progress.dungeon.boss.stats.currentHealth += bossSelfHeal;
+
+    // prevents boss from healing more than max hp
+    if (progress.dungeon.boss.stats.currentHealth >= progress.dungeon.boss.stats.health) {
+        progress.dungeon.boss.stats.currentHealth = progress.dungeon.boss.stats.health;
+    }
 
     progress.dungeon.boss.stats.currentHealth -= damageGiven;
     progress.dungeon.boss.stats.attack -= disarmGiven;
-    console.log(progress.dungeon.boss.stats, "progress");
+    progress.bossAttempts += 1;
+    progress.weaponAnswer.clear();
+
+    // checks if boss dead
+    if (progress.dungeon.boss.stats.currentHealth <= 0) {
+        progress.win = true;
+    }
 
     return progress;
 };
-
 
 async function asyncForEach(array, callback) {
     for (let index = 0; index < array.length; index += 1) {
@@ -184,119 +258,20 @@ async function asyncForEach(array, callback) {
     }
   }
 
-  const dungeonStartAllowed = (user)=>{
-    // checks for cooldown
-    const cooldownInfo = onCooldown("dungeon", user);
-    if (cooldownInfo.response) {
-        return cooldownInfo.embed;
-    }
-
-    const { currentLocation } = user.world;
-    const locationIcon = getLocationIcon(currentLocation);
-    const dungeonInformation = Object.values(worldLocations[currentLocation].places).find(p=>{
-        return p.type === "dungeon";
-    });
-
-    if (!user.world.locations[currentLocation].explored.includes([dungeonInformation.name])) {
-        return `You haven't found any dungeon in ${locationIcon} ${currentLocation}`;
-    }
-
-    // Checks if user has the correct key
-    const requiredDungeonKey = dungeonInformation.requires;
-    if (!user.hero.dungeonKeys[requiredDungeonKey]) {
-        let response = `You try to enter ${dungeonInformation.name}, but you don't have the required ${getDungeonKeyIcon(requiredDungeonKey)} ${requiredDungeonKey} to proceed. `;
-        if (user.hero.rank < 2) {
-            response += `Try defeating the dungeon in ${locationIcon} ${currentLocation} to obtain the required dungeon key`;
-        }
-        return response;
-    }
-
-    if (user.hero.currentHealth < user.hero.health * 0.05) {
-        let feedback = `Your hero's health is too low (**${user.hero.currentHealth}**)`;
-        if (user.hero.rank < 2) {
-            feedback += "\n You can `!build` a shop and `!build` potions";
-        }
-        return feedback;
-    }
-    return null;
+  const generateAttackString = (playerName, weaponInfo, damageGiven, playerAttacked = null)=>{
+    const string = `\n- **${playerName}** used ${weaponInfo.name} attack causing **${damageGiven}** damage to **${playerAttacked}**`;
+    return string;
 };
-const validateHelper = async discordId =>{
-    const user = await User.findOne({ "account.userId": discordId }).lean();
-    return user.hero.currentHealth > user.hero.health * 0.05;
+const generateHealString = (playerName, weaponInfo, healGiven, playerHealed = null)=>{
+    if (playerHealed) {
+        return `\n${playerName} helead ${playerHealed}. +${healGiven} HP`;
+    }
+    return `\n${playerName} used self heal. +${healGiven}HP`;
 };
 
-const getWeaponInfo = (weapon, num = null)=>{
-    const weaponInformation = {
-        "slash":{
-            name: "slash",
-            type: "attack",
-            answer: null,
-            chanceforSuccess: 0.95,
-            damage: 1,
-            description: "95% chance of slashing the enemy",
-        },
-        "strike":{
-            name: "strike",
-            type: "attack",
-            answer: null,
-            chanceforSuccess: 0.80,
-            damage: 2,
-            description: "80% chance of causing a strong attack",
-        },
-        "critical":{
-            name: "critical",
-            type: "attack",
-            answer: null,
-            chanceforSuccess: 0.40,
-            damage: 4,
-            description: "40% chance of causing a brutal attack",
-        },
-        "disarm":{
-            name: "disarm",
-            type: "disarm",
-            answer: null,
-            chanceforSuccess: 0.25,
-            damage: 0.2,
-            description: "25% chance of lowering boss attack",
-        },
-        "heal":{
-            name: "heal",
-            type: "heal",
-            answer: null,
-            chanceforSuccess: 0.90,
-            damage: 0.25,
-            description: "90% chance of healing a teammate",
-        },
-        "poke":{
-            name: "poke",
-            type: "attack",
-            answer: null,
-            chanceforSuccess: 0.1,
-            damage: 0.05,
-            description: "10% chance of poking the enemy",
-        },
-    };
-    if (num) {
-      const alphabet = ["a", "b", "c", "d", "e"];
-        const shuffled = Object
-            .entries(weaponInformation)
-            .sort(() => 0.5 - Math.random())
-            .slice(0, num)
-            .reduce((obj, [k, v]) => ({
-                ...obj,
-                [k]: v,
-            }), {});
-            // Sorry
-            for (const i in Object.keys(shuffled)) {
-              shuffled[Object.keys(shuffled)[i]].answer = alphabet[i];
-            }
-        return shuffled;
-      }
-    if (weapon) {
-      return weaponInformation[weapon];
-    }
-    return weaponInformation;
+const generateDisarmString = (playerName, weaponInfo, disarmGiven)=>{
+    return `${playerName} used ${weaponInfo.name} to lower the boss attack with ${disarmGiven}`;
 };
 
 
-module.exports = { handleDungeon, createDungeonEvent, dungeonStartAllowed, createDungeonResult, calculateDungeonResult };
+module.exports = { handleDungeonBoss, createDungeonEvent, calculateDungeonResult };

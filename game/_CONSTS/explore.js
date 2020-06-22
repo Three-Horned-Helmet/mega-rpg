@@ -142,6 +142,12 @@ const worldLocations = {
 						canKill: true,
 						allowHelpers: true,
 					},
+					roundDescriptions:[
+						"You enter the very last room of the castle, seing the very foe you came to seek. Your personal army shivers in fear in the face of the Castle's Monarch, they can't help you fight this boss. Choose your weapon wisely to defeat the **Bandit King**!",
+						"Choose your weapon wisely!",
+						"Choose your weapon wisely!",
+						"Choose your weapon wisely!",
+					],
 					rewards:{
 						gold:5000,
 						xp:1100,
@@ -149,11 +155,12 @@ const worldLocations = {
 					},
 					stats:{
 						attack: 500,
-						health:500,
-						currentHealth:500,
+						health:20000,
+						currentHealth:20000,
 						healing:true,
 					},
-					bossWeapons:["slash", "strike", "heal"],
+					/* , "heal" */
+					bossWeapons:["slash", "strike"],
 					helpers:["285773285944328193"],
 					numOfAllowedWeapons: 3,
 					allowedWeapons:[],
