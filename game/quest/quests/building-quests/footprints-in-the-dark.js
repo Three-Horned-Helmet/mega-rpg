@@ -279,6 +279,13 @@ module.exports = {
         execute: async function(user, choice) {
             const questResponse = await questHelper(user, this.name);
             if(!questResponse || !choice) {
+
+                const now = new Date();
+                const currentLocation = "Grassy Plains";
+                const newlyExploredPlaceName = "Wood Elves";
+
+                await user.handleExplore(now, currentLocation, newlyExploredPlaceName);
+
                 return false;
             }
 
