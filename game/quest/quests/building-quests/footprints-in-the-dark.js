@@ -250,9 +250,7 @@ module.exports = {
             else if(choiceNumber === 3) {
                 this.winDescription = this.winChoice3;
 
-                if(user.empire.find(b => b.name === "lumbermill" && b.level === 1)) {
-                    user.changeBuildingLevel("lumbermill", 1, 1);
-                }
+                user.changeBuildingLevel("lumbermill", 1, 1);
             }
 
             await user.save();
@@ -271,8 +269,8 @@ module.exports = {
             unique: true,
         }],
         found: "The Elven Lord falls to the ground",
-        description: "You off into the woods as day breaks. Several hours of walking later you reach the Wood Elves.\n\n%username%: 'DRAW YOUR SWORDS!'",
-        winDescription: "With the Elven Lord defeated you return back to your Empire to enjoy your Lumbermill in peace!",
+        description: "You gather your men and set off into the woods as day breaks in search of those nasty elves. After a couple of hours a wild elf appears. You, still feeling the nick at your honor from being knocked unconscious by the elves pick up a rock and throw it at the elf. The wild elf disappears.\n\nYou lead the men further into the forest and discover the elven village",
+        winDescription: "They fight valiantly yet are utterly crushed by the might of your force.\nThe elves lord is brought to you alive. \n\nThe elven lord: 'How could you do this, I thought we had an agreem...'\n\nYou cut him off. Literally. By the head. \n\nSeeing his silvery hair now painted in red, your pride saved for now, you head back to the village to take a good long sip of a well-deserved beer while staring down the poor bartender. An honest day of work, and now the lumbermill is once again safe from nasty silver haired elves trying to feed you information apart from how to hit on a hot bartender.\n\n*\\*Your Lumbermill is still in ruins and is set back to level 0\\**",
         objective: "Defeat the Wood Elves (`!raid wood elves`)",
         reward: "Oak wood: 100\nYew wood: 100\n",
         questKeySequence: ["Building Quests", "battleForWood"],
@@ -293,6 +291,8 @@ module.exports = {
            "oak wood": 100,
            "yew wood": 100,
        });
+
+       user.changeBuildingLevel("lumbermill", 1, -1);
 
        user.removeQuest(this.name);
 

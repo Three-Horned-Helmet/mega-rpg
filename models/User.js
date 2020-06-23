@@ -348,9 +348,11 @@ userSchema.methods.changeBuildingLevel = function(buildingName, buildingLevel, l
 		}
 		return false;
 	});
-	userBuilding.level += level;
+	if(userBuilding) {
+		userBuilding.level += level;
 
-	this.markModified(`empire.${buildingIndex}.level`);
+		this.markModified(`empire.${buildingIndex}.level`);
+	}
 
 	return;
 };
