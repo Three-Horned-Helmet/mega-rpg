@@ -274,7 +274,6 @@ userSchema.methods.removeQuest = async function(questName) {
 	this.completedQuests.push(questName);
 
 	return;
-	return this.save();
 };
 
 userSchema.methods.updateQuestObjective = async function(quest) {
@@ -581,7 +580,6 @@ userSchema.methods.healHero = function(heal, item) {
 	}
 
 	return;
-	return this.save();
 };
 
 // NB: I think I can remove the markModified (or atleast only have it for hero?)
