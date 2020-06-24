@@ -128,6 +128,60 @@ const worldLocations = {
 				type: "fish",
 				fish: ["Cod", "Trout", "Swordfish"],
 			},
+
+			// Questmobs
+			"Confront Bandits": {
+				name: "Confront Bandits",
+				type: "raid",
+				notExplorable: true,
+				stats:{
+					attack: 2000,
+					health: 2000,
+				},
+				rewards:{
+					gold: 1000,
+					"iron bar": 30,
+					"yew wood": 60,
+				},
+			},
+			"Pack of Implings": {
+				name: "Pack of Implings",
+				type: "hunt",
+				notExplorable: true,
+				stats:{
+					attack: 700,
+					health: 700,
+				},
+				rewards:{
+					gold: 500,
+					"yew wood": 100,
+				},
+			},
+			"Bugbear": {
+				name: "Bugbear",
+				type: "raid",
+				notExplorable: true,
+				stats:{
+					attack: 1350,
+					health: 1350,
+				},
+				rewards:{
+					gold: 350,
+				},
+			},
+			"Wood Elves": {
+				name: "Wood Elves",
+				type: "raid",
+				notExplorable: true,
+				stats:{
+					attack: 800,
+					health: 800,
+				},
+				rewards:{
+					"oak wood": 100,
+					"yew wood": 100,
+				},
+			},
 		},
 	},
 	"Misty Mountains":{

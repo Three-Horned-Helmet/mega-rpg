@@ -1,3 +1,5 @@
+const { checkBuildQuests } = require("../quest/quest-utils");
+
 // Takes a user, a building and coordinates and pushes the building to the users Empire array
 const constructBuilding = async (user, building, coordinates) => {
 	if(!coordinates[0] && coordinates[0] !== 0) {
@@ -19,7 +21,12 @@ const constructBuilding = async (user, building, coordinates) => {
 
 	if(building.execute) await building.execute(user);
 
-	return `You have successfully created ${newBuilding.name} level ${newBuilding.level}`;
+	const questIntro = await checkBuildQuests(user, newBuilding);
+
+	let msg = `You have successfully created ${newBuilding.name} level ${newBuilding.level}`;
+	if(questIntro) msg += `\n\n**New Quest:**\n${questIntro}`;
+
+	return msg;
 };
 
 // Takes a user object, building array, and coordinates array.

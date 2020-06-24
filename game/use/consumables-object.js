@@ -30,7 +30,10 @@ const useHealingPotion = async (user, item) =>{
 	if(!(user.hero.inventory[item.name] > 0)) return `You have no ${item.name} in your inventory`;
 	if(user.hero.currentHealth >= user.hero.health) return "You already have full health";
 
-	const updatedUser = await user.healHero(item.healingValue, item.name);
+	user.healHero(item.healingValue, item.name);
+
+	const updatedUser = await user.save();
+
 	return `You drank a ${item.name} and your hero has ${updatedUser.hero.currentHealth}/${updatedUser.hero.health} hp left`;
 };
 

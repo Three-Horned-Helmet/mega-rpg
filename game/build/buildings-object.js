@@ -97,7 +97,7 @@ module.exports = {
 				return acc + this.levels[cur.level].popIncrease * 0.1;
 			}, 0);
 
-			user.updateHousePop(newPop);
+			return await user.updateHousePop(newPop);
 		},
 	},
 	mine: {
@@ -123,7 +123,7 @@ module.exports = {
 		],
 		execute: async function(user) {
 			// Add the lastCollected and producing to new mine
-			user.updateNewProduction("mine", "copper ore", new Date());
+			return await user.updateNewProduction("mine", "copper ore", new Date());
 		},
 	},
 	lumbermill: {
@@ -147,10 +147,20 @@ module.exports = {
 				produce: "yew wood",
 				productionRate: 2,
 			},
+			{
+				cost: {
+					gold: 600,
+					 ["oak wood"]: 100,
+					 ["yew wood"]: 100,
+				},
+				level: 2,
+				produce: "barlind wood",
+				productionRate: 3,
+			},
 		],
 		execute: async function(user) {
 			// Add the lastCollected and producing to new mine
-			user.updateNewProduction("lumbermill", "oak wood", new Date());
+			return await user.updateNewProduction("lumbermill", new Date());
 		},
 	},
 	forge: {

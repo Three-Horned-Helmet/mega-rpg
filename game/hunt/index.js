@@ -3,6 +3,7 @@ const { worldLocations } = require("../_CONSTS/explore");
 const { getLocationIcon } = require("../_CONSTS/icons");
 const { calculatePveHero } = require("../../combat/combat");
 const { generateEmbedPveHero } = require("../../combat/pveEmedGenerator");
+const { checkQuest } = require("../quest/quest-utils");
 
 const handleHunt = async (user, place = null) => {
 
@@ -89,6 +90,7 @@ const handleHunt = async (user, place = null) => {
  const huntResult = calculatePveHero(user, placeInfo);
 
  // saves to database
+ let questIntro;
  const now = new Date();
 await user.setNewCooldown("hunt", now);
 await user.heroHpLoss(huntResult.lossPercentage);
@@ -96,10 +98,11 @@ await user.alternativeGainXp(huntResult.expReward);
 
 if (huntResult.win) {
     await user.gainManyResources(huntResult.resourceReward);
+    questIntro = await checkQuest(user, placeInfo.name, currentLocation);
 }
 
 // generates a Discord embed
-    const huntEmbed = generateEmbedPveHero(user, placeInfo, huntResult);
+    const huntEmbed = generateEmbedPveHero(user, placeInfo, huntResult, questIntro);
 
  return huntEmbed;
 
