@@ -178,6 +178,9 @@ const calculateDungeonResult = async (progress)=>{
                 progress.roundResults.push(generateDisarmString(playerName, weaponInfo, tempDisarmGiven));
             }
         }
+ else{
+            progress.roundResults.push(`${playerName} failed to use ${weaponInfo.name}`);
+        }
     });
 
 
@@ -254,7 +257,8 @@ const calculateDungeonResult = async (progress)=>{
     return progress;
 };
 
-  const generateAttackString = (playerName, weaponInfo, damageGiven, playerAttacked = null)=>{
+  const generateAttackString = (playerName, weaponInfo, damageGiven, playerAttacked)=>{
+
     const string = `\n- **${playerName}** used ${weaponInfo.name} attack causing **${damageGiven}** damage to **${playerAttacked}**`;
     return string;
 };

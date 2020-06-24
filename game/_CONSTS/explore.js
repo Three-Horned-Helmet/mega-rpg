@@ -101,7 +101,7 @@ const worldLocations = {
 					difficulty: 10,
 				},
 				rewards:{
-					dungeonKey: "Ogre tooth",
+					dungeonKey: "CM Key",
 					gold: 2222,
 					xp: 500,
 				},
@@ -113,10 +113,10 @@ const worldLocations = {
 				},
 				helpers:[],
 			},
-			"Windlow Volcano": {
-				name: "Windlow Volcano",
+			"Bandit's Mansion": {
+				name: "Bandit's Mansion",
 				type: "dungeon",
-				requires: "Ogre tooth",
+				requires: "CM Key",
 				rooms:[
 					{
 						name: "Castle Courtyard",

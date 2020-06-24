@@ -229,9 +229,7 @@ const createDungeonBossInvitation = (dungeon, user)=>{
         const bossName = progress.dungeon.boss.name;
         const title = `${bossName} defeated ${initiativeTakerName}!`;
 
-        const unlockedLocation = progress.dungeon.boss.unlocks;
-        const locationIcon = getLocationIcon(unlockedLocation);
-        const description = `${initiativeTakerName} has unlocked ${locationIcon} ${unlockedLocation}`;
+        const description = "Heal up and try again later!";
 
 
         const embedResult = new Discord.MessageEmbed()

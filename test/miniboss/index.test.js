@@ -100,7 +100,7 @@ describe("miniboss command", () => {
 				defense:1,
 			},
 			dungeonKeys:{
-				["Ogre tooth"]: 0,
+				["CM Key"]: 0,
 			},
 		};
 
@@ -124,7 +124,7 @@ describe("miniboss command", () => {
 		expect(result.initiativeTaker.hero.attack > 1).to.be.equal(true);
 		expect(result.initiativeTaker.hero.currentExp > 100).to.be.equal(true);
 		expect(result.initiativeTaker.hero.rank).to.be.equal(4);
-		expect(result.initiativeTaker.hero.dungeonKeys["Ogre tooth"]).to.be.equal(1);
+		expect(result.initiativeTaker.hero.dungeonKeys["CM Key"]).to.be.equal(1);
 
 
 		result.helpers.forEach(h=>{
@@ -133,7 +133,7 @@ describe("miniboss command", () => {
 		expect(h.hero.attack > 1).to.be.equal(true);
 		expect(h.hero.currentExp > 100).to.be.equal(true);
 		expect(h.hero.rank).to.be.equal(4);
-		expect(h.hero.dungeonKeys["Ogre tooth"]).to.be.equal(0);
+		expect(h.hero.dungeonKeys["CM Key"]).to.be.equal(0);
 		});
 		miniboss.helpers = [];
 	});

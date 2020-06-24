@@ -60,10 +60,22 @@ const userSchema = new Schema({
 			type: Number,
 			default: 5,
 		},
-		["iron ore"]: Number,
-		["bronze bar"]: Number,
-		["iron bar"]: Number,
-		["steel bar"]: Number,
+		["iron ore"]: {
+			type: Number,
+			default: 0,
+		},
+		["bronze bar"]: {
+			type: Number,
+			default: 0,
+		},
+		["iron bar"]: {
+			type: Number,
+			default: 0,
+		},
+		["steel bar"]: {
+			type: Number,
+			default: 0,
+		},
 	},
 
 	army: {
@@ -180,7 +192,15 @@ const userSchema = new Schema({
 			},
 		},
 		dungeonKeys:{
-			["Ogre tooth"]:{
+			["CM Key"]:{
+				type: Number,
+				default: 0,
+			},
+			["Eridian Vase"]:{
+				type: Number,
+				default: 0,
+			},
+			["The One Shell"]:{
 				type: Number,
 				default: 0,
 			},
@@ -694,7 +714,7 @@ userSchema.methods.locationTravel = async function(location) {
 };
 
 
-userSchema.methods.giveDungeonKey = async function(key = "Ogre tooth") {
+userSchema.methods.giveDungeonKey = async function(key = "CM Key") {
 	if (this.hero.dungeonKeys[key]) {
 		return;
 	}
