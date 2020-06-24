@@ -5,7 +5,7 @@ const Discord = require("discord.js");
 const cooldowns = {
 	dailyPrize:(1000 * 60 * 60 * 24),
 	duel: (1000 * 60 * 2),
-	dungeon:(1000/*  * 60 * 60 * 12 */),
+	dungeon:(1000 * 60 * 60 * 12),
 	explore: (1000 * 30),
 	fish:(1000 * 15),
 	hunt:(1000 * 20),

@@ -115,8 +115,6 @@ const createDungeonBossRound = async (message, progress)=>{
         collector.on("end", async () => {
             const result = await calculateDungeonResult(progress);
             if (result.finish) {
-                console.error("round over");
-                console.error(result.dungeon.boss.helpers.length, result.dungeon.boss.stats.currentHealth > 0, result.bossAttempts < 4);
                 const finalResult = await generateDungeonBossResult(progress);
                 message.channel.send(finalResult);
             }
@@ -149,7 +147,7 @@ const calculateDungeonResult = async (progress)=>{
         const weaponInfo = getWeaponInfo(weapon);
         const playerName = playerInfo.account.username;
 
-        if (weaponInfo.chanceforSuccess > 0) {
+        if (weaponInfo.chanceforSuccess > chance) {
             if (weaponInfo.type === "attack") {
                 const tempDamageGiven = randomIntBetweenMinMax(playerInfo.hero.attack / 2 * weaponInfo.damage, (playerInfo.hero.attack * weaponInfo.damage));
                 // playerResult.damageGiven = tempDamageGiven;

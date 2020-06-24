@@ -51,6 +51,10 @@ const userSchema = new Schema({
 			type: Number,
 			default: 0,
 		},
+		["barlind wood"]: {
+			type: Number,
+			default: 0,
+		},
 
 		["copper ore"]: {
 			type: Number,
@@ -225,17 +229,23 @@ const userSchema = new Schema({
 	// Array of Objects.
 	// quests: [{started: Bolean, questKeySequence: Array, name: String}]
 	quests: {
-		type: [
-			{
-				type: Object,
-			},
-		],
-		default: [{
-			started: false,
-			questKeySequence: ["gettingStarted", "buildMine"],
-			name: "Build a Mine",
-		}],
+			type: [
+				{
+					type: Object,
+				},
+			],
+			default: [{
+				started: false,
+				questKeySequence: ["gettingStarted", "buildMine"],
+				name: "Build a Mine",
+				// pve: [{ // Raid is optional
+				// 	name: String, // e.g: "Collapsed Mine"
+				//	completed: Bolean,
+				// chance: Number, // e.g. 0.5 chance to get it (50%)
+				// },]
+			}],
 	},
+	completedQuests: [String],
 	// object too big, moved to ./uservalues/default
 	statistics,
 }, {
@@ -256,12 +266,21 @@ const userSchema = new Schema({
 
 userSchema.methods.addNewQuest = async function(quest) {
 	this.quests.push(quest);
-	return this.save();
 };
 
 userSchema.methods.removeQuest = async function(questName) {
 	const questIndex = this.quests.indexOf(this.quests.find(q => q.name === questName));
 	this.quests.splice(questIndex, 1);
+	this.completedQuests.push(questName);
+
+	return;
+};
+
+userSchema.methods.updateQuestObjective = async function(quest) {
+	const questIndex = this.quests.indexOf(this.quests.find(q => q.name === quest.name));
+	this.quests[questIndex].pve = quest.pve;
+
+	this.markModified(`quests.${questIndex}.pve`);
 	return this.save();
 };
 
@@ -271,9 +290,16 @@ userSchema.methods.gainResource = function(resource, quantity) {
 };
 
 userSchema.methods.gainManyResources = function(obj) {
-
 	Object.keys(obj).forEach(r=>{
 		this.resources[r] += obj[r];
+	});
+	return this.save();
+};
+
+userSchema.methods.removeManyResources = function(obj) {
+	Object.keys(obj).forEach(r=>{
+		this.resources[r] -= obj[r];
+		if(this.resources[r] < 0) this.resources[r] = 0;
 	});
 	return this.save();
 };
@@ -290,7 +316,16 @@ userSchema.methods.handleExplore = function(now, currentLocation, place) {
 		this.world.locations[currentLocation].explored.push(place);
 		this.markModified(this.world.locations[currentLocation].explored);
 	}
-	this.save();
+	return this.save();
+};
+
+userSchema.methods.removeExploredArea = function(currentLocation, place) {
+	const locationIndex = this.world.locations[currentLocation].explored.indexOf(place);
+	this.world.locations[currentLocation].explored.splice(locationIndex, 1);
+
+	this.markModified(`world.locations.${currentLocation}.explored`);
+
+	return this.save();
 };
 
 userSchema.methods.buyBuilding = function(building, buildingCost) {
@@ -303,14 +338,34 @@ userSchema.methods.buyBuilding = function(building, buildingCost) {
 	return this.save();
 };
 
+userSchema.methods.changeBuildingLevel = function(buildingName, buildingLevel, level) {
+	let buildingIndex = -1;
+	const userBuilding = this.empire.find((structure, i) =>{
+		if(structure.name === buildingName && structure.level === buildingLevel) {
+			buildingIndex = i;
+			return true;
+		}
+		return false;
+	});
+	if(userBuilding) {
+		userBuilding.level += level;
+
+		this.markModified(`empire.${buildingIndex}.level`);
+	}
+
+	return;
+};
+
 userSchema.methods.updateHousePop = function(newPop) {
 	this.maxPop = newPop;
 	return this.save();
 };
 
-userSchema.methods.recruitUnits = function(unit, amount) {
-	for (const resource in unit.cost) {
-		this.resources[resource] -= unit.cost[resource] * amount;
+userSchema.methods.recruitUnits = function(unit, amount, free) {
+	if(!free) {
+		for (const resource in unit.cost) {
+			this.resources[resource] -= unit.cost[resource] * amount;
+		}
 	}
 
 	this.army.units[unit.requirement.building][unit.name] += amount;
@@ -319,13 +374,14 @@ userSchema.methods.recruitUnits = function(unit, amount) {
 	return this.save();
 };
 
-userSchema.methods.updateNewProduction = function(productionName, product, now) {
+userSchema.methods.updateNewProduction = function(productionName, now) {
 	const foundIndex = this.empire.findIndex(building => building.name === productionName && !building.lastCollected);
 	if (foundIndex === -1) {
 		return;
 	}
 	this.empire[foundIndex].lastCollected = now;
-	this.empire[foundIndex].producing = product;
+
+	if(!this.empire[foundIndex].producing) this.empire[foundIndex].producing = "oak wood";
 
 	this.markModified(`empire.${foundIndex}.lastCollected`);
 	this.markModified(`empire.${foundIndex}.producing`);
@@ -523,7 +579,7 @@ userSchema.methods.healHero = function(heal, item) {
 		this.markModified("hero.inventory");
 	}
 
-	return this.save();
+	return;
 };
 
 // NB: I think I can remove the markModified (or atleast only have it for hero?)

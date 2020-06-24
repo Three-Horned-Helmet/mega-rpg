@@ -1,23 +1,23 @@
 const Discord = require("discord.js");
 const { getResourceIcon, getPlaceIcon } = require("../game/_CONSTS/icons");
 
-function generateEmbedPveFullArmy(user, placeInfo, pveResult, dungeonRaid = false) {
+function generateEmbedPveFullArmy(user, placeInfo, pveResult, questIntro = false, dungeonRaid = false) {
     if (pveResult.win) {
-        return generateEmbedPveFullArmyWin(user, placeInfo, pveResult, dungeonRaid);
+        return generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro, dungeonRaid);
     }
     return generateEmbedPveFullArmyLoss(user, placeInfo, pveResult);
 }
 
 
-function generateEmbedPveHero(user, placeInfo, pveResult) {
+function generateEmbedPveHero(user, placeInfo, pveResult, questIntro = false) {
     if (pveResult.win) {
-        return generateEmbedPveHeroWin(user, placeInfo, pveResult);
+        return generateEmbedPveHeroWin(user, placeInfo, pveResult, questIntro);
     }
     return generateEmbedPveHeroLoss(user, placeInfo, pveResult);
 
 }
 
-function generateEmbedPveFullArmyWin(user, placeInfo, pveResult, dungeonRaid) {
+function generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro, dungeonRaid) {
     const sideColor = "#45b6fe";
     const placeName = placeInfo.name;
     const placeIcon = getPlaceIcon(placeInfo.type);
@@ -40,11 +40,7 @@ function generateEmbedPveFullArmyWin(user, placeInfo, pveResult, dungeonRaid) {
         expReward += "💪 You leveled up! 💪";
     }
 
-
-    const embedWin = new Discord.MessageEmbed()
-    .setTitle(title)
-    .setColor(sideColor)
-    .addFields(
+    const fields = [
         {
             name: "Resources",
             value: resourceReward,
@@ -60,6 +56,20 @@ function generateEmbedPveFullArmyWin(user, placeInfo, pveResult, dungeonRaid) {
             value: [casulty, heroCasulty],
             inline: false,
         },
+    ];
+
+    if(questIntro) {
+        fields.push({
+            name: "Quest",
+            value: questIntro,
+        });
+    }
+
+    const embedWin = new Discord.MessageEmbed()
+    .setTitle(title)
+    .setColor(sideColor)
+    .addFields(
+        ...fields,
     );
     if (dungeonRaid) {
         embedWin.footer = { text:"Proceed to the next room? ✅ / 🚫" };
@@ -114,7 +124,7 @@ function generateEmbedPveFullArmyLoss(user, placeInfo, pveResult) {
 return embedLoss;
 }
 
-function generateEmbedPveHeroWin(user, placeInfo, pveResult) {
+function generateEmbedPveHeroWin(user, placeInfo, pveResult, questIntro) {
     const sideColor = "#45b6fe";
     const placeName = placeInfo.name;
     const placeIcon = getPlaceIcon(placeInfo.type);
@@ -135,10 +145,7 @@ function generateEmbedPveHeroWin(user, placeInfo, pveResult) {
         expReward += "💪 You leveled up! 💪";
     }
 
-    const embedWin = new Discord.MessageEmbed()
-    .setTitle(title)
-    .setColor(sideColor)
-    .addFields(
+    const fields = [
         {
             name: "Resources",
             value: resourceReward,
@@ -154,6 +161,20 @@ function generateEmbedPveHeroWin(user, placeInfo, pveResult) {
             value:  heroCasulty,
             inline: false,
         },
+    ];
+
+    if(questIntro) {
+        fields.push({
+            name: "Quest",
+            value: questIntro,
+        });
+    }
+
+    const embedWin = new Discord.MessageEmbed()
+    .setTitle(title)
+    .setColor(sideColor)
+    .addFields(
+        ...fields,
     );
 return embedWin;
 }

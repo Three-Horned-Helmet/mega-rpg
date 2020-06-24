@@ -3,6 +3,7 @@ const { worldLocations } = require("../_CONSTS/explore");
 const { getLocationIcon } = require("../_CONSTS/icons");
 const { calculatePveFullArmyResult } = require("../../combat/combat");
 const { generateEmbedPveFullArmy } = require("../../combat/pveEmedGenerator");
+const { checkQuest } = require("../quest/quest-utils");
 
 const handleRaid = async (user, place = null) => {
 
@@ -90,16 +91,18 @@ if (!userExploredPlaces.includes(placeInfo.name)) {
  const raidResult = calculatePveFullArmyResult(user, placeInfo);
 
  // saves to database
+ let questIntro;
  const now = new Date();
 await user.setNewCooldown("raid", now);
 await user.unitLoss(raidResult.lossPercentage);
 await user.alternativeGainXp(raidResult.expReward);
 if (raidResult.win) {
     await user.gainManyResources(raidResult.resourceReward);
+    questIntro = await checkQuest(user, placeInfo.name, currentLocation);
 }
 
 // generates a Discord embed
-const raidEmbed = generateEmbedPveFullArmy(user, placeInfo, raidResult);
+    const raidEmbed = generateEmbedPveFullArmy(user, placeInfo, raidResult, questIntro);
  return raidEmbed;
 
 };

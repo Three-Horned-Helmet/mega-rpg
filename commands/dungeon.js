@@ -5,6 +5,7 @@ const { handleDungeonRooms } = require("../game/dungeon/rooms");
 - Players healing between rounds or otherwise do actions not connected to dungeon
 - If another player triggers the dungeon while someone is in dungeon, the values might copy from current dungeon instead of a new one
 - Possible issue with paralell saving to mongodb when attacking dungeon boss
+- Most likely an temp issue with losing dungeon boss result view
 */
 module.exports = {
 	name: "dungeon",
