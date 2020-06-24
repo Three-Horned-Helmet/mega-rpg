@@ -1,15 +1,15 @@
 const Discord = require("discord.js");
 const { getResourceIcon, getPlaceIcon } = require("../game/_CONSTS/icons");
 
-function generateEmbedPveFullArmy(user, placeInfo, pveResult, questIntro) {
+function generateEmbedPveFullArmy(user, placeInfo, pveResult, questIntro = false, dungeonRaid = false) {
     if (pveResult.win) {
-        return generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro);
+        return generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro, dungeonRaid);
     }
     return generateEmbedPveFullArmyLoss(user, placeInfo, pveResult);
 }
 
 
-function generateEmbedPveHero(user, placeInfo, pveResult, questIntro) {
+function generateEmbedPveHero(user, placeInfo, pveResult, questIntro = false) {
     if (pveResult.win) {
         return generateEmbedPveHeroWin(user, placeInfo, pveResult, questIntro);
     }
@@ -17,7 +17,7 @@ function generateEmbedPveHero(user, placeInfo, pveResult, questIntro) {
 
 }
 
-function generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro) {
+function generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro, dungeonRaid) {
     const sideColor = "#45b6fe";
     const placeName = placeInfo.name;
     const placeIcon = getPlaceIcon(placeInfo.type);
@@ -71,6 +71,9 @@ function generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro) {
     .addFields(
         ...fields,
     );
+    if (dungeonRaid) {
+        embedWin.footer = { text:"Proceed to the next room? ✅ / 🚫" };
+    }
 return embedWin;
 }
 

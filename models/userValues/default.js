@@ -7,6 +7,10 @@ const cooldowns = {
         type:Date,
         default:0,
     },
+    dungeon:{
+        type:Date,
+        default:0,
+    },
     explore: {
         type:Date,
         default:0,

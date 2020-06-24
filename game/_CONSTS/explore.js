@@ -1,6 +1,6 @@
 const worldLocations = {
 	"Grassy Plains": {
-		description: "1st world. Here you can find all the noobs, such as yourself",
+		description: "Here you can find all the noobs, such as yourself",
 		randomEvents: {
 			"Highlanders": {
 				name: "Highlanders",
@@ -113,15 +113,83 @@ const worldLocations = {
 				},
 				helpers:[],
 			},
-			"Bandit's Castle": {
-				name: "Bandit's Castle",
+			"Windlow Volcano": {
+				name: "Windlow Volcano",
 				type: "dungeon",
 				requires: "Ogre tooth",
-				unlocks: "Misty Mountains",
-				stats:{
-					attack: 500,
-					health:500,
+				rooms:[
+					{
+						name: "Castle Courtyard",
+						type: "raid",
+						stats:{
+							attack: 200,
+							health:200,
+						},
+						rewards:{
+							gold: 50,
+							"copper ore": 100,
+							"iron ore": 60,
+						},
+					},
+					{
+						name: "Castle Hallway",
+						type: "raid",
+						stats:{
+							attack: 200,
+							health:200,
+						},
+						rewards:{
+							gold: 50,
+							"copper ore": 100,
+							"iron ore": 60,
+						},
+					},
+					{
+						name: "Castle Trophey Room",
+						type: "raid",
+						stats:{
+							attack: 200,
+							health:200,
+						},
+						rewards:{
+							gold: 50,
+							"copper ore": 100,
+							"iron ore": 60,
+						},
+					},
+				],
+				boss:{
+					name: "Bandit King",
+					rules:{
+						attacksEachRound:2,
+						allowArmy: false,
+						canKill: true,
+						allowHelpers: true,
+					},
+					roundDescriptions:[
+						"You enter the very last room of the castle, seing the very foe you came to seek. Your personal army shivers in fear in the face of the Castle's Monarch, they can't help you fight this boss. Choose your weapon wisely to defeat the **Bandit King**!",
+						"Choose your weapon wisely!",
+						"Choose your weapon wisely!",
+						"Choose your weapon wisely!",
+					],
+					rewards:{
+						gold:5000,
+						xp:1100,
+						drop: ["greatsword of the spring", "bauxite daggers", "Large Heal Potion", "Small Heal Potion"],
+					},
+					stats:{
+						attack: 500,
+						health:2000,
+						currentHealth:2000,
+						healing:true,
+					},
+					bossWeapons:["slash", "strike", "heal"],
+					helpers:[],
+					numOfAllowedWeapons: 3,
+					allowedWeapons:[],
+					unlocks: "Misty Mountains",
 				},
+
 			},
 			River: {
 				name: "River",
@@ -185,7 +253,7 @@ const worldLocations = {
 		},
 	},
 	"Misty Mountains":{
-		description: "2nd world. You've entered a hostile environment where rewards are equally big as the threats",
+		description: "You've entered a hostile environment where rewards are equally big as the threats",
 		randomEvents: {
 			"Mountain Bandits": {
 				name: "Mountain Bandits",
@@ -302,21 +370,94 @@ const worldLocations = {
 				name: "Windlow Volcano",
 				type: "dungeon",
 				requires: "Eridian Vase",
-				stats:{
-					attack: 500,
-					health:500,
+				rooms:[
+					{
+						name: "Volcano Foot",
+						type: "raid",
+						stats:{
+							attack: 200,
+							health:200,
+						},
+						rewards:{
+							gold: 50,
+							"copper ore": 100,
+							"iron ore": 60,
+						},
+					},
+					{
+						name: "Volcano Vent",
+						type: "raid",
+						stats:{
+							attack: 200,
+							health:200,
+						},
+						rewards:{
+							gold: 50,
+							"copper ore": 100,
+							"iron ore": 60,
+						},
+					},
+					{
+						name: "Magma Chamber",
+						type: "raid",
+						stats:{
+							attack: 200,
+							health:200,
+						},
+						rewards:{
+							gold: 50,
+							"copper ore": 100,
+							"iron ore": 60,
+						},
+					},
+				],
+				boss:{
+					name: "Volcano King",
+					rules:{
+						attacksEachRound:2,
+						allowArmy: false,
+						canKill: true,
+						allowHelpers: true,
+					},
+					roundDescriptions:[
+						"You enter the very last room of the castle, seing the very foe you came to seek. Your personal army shivers in fear in the face of the Castle's Monarch, they can't help you fight this boss. Choose your weapon wisely to defeat the **Volcano King**!",
+						"Choose your weapon wisely!",
+						"Choose your weapon wisely!",
+						"Choose your weapon wisely!",
+					],
+					rewards:{
+						gold:5000,
+						xp:1100,
+						drop: ["greatsword of the spring", "bauxite daggers", "Large Heal Potion", "Small Heal Potion"],
+					},
+					stats:{
+						attack: 500,
+						health:2000,
+						currentHealth:2000,
+						healing:true,
+					},
+					bossWeapons:["slash", "strike", "heal"],
+					helpers:[],
+					numOfAllowedWeapons: 3,
+					allowedWeapons:[],
+					unlocks: "Deep Caves",
 				},
-				unlocks:"Deep Caves",
+
 			},
+			River: {
+				name: "River",
+				type: "fish",
+				fish: ["Cod", "Trout", "Swordfish"],
+			},
+		},
 		["Cold Boiling Lake"]: {
 				name: "Cold Boiling Lake",
 				type: "fish",
 				fish: ["Cod", "Trout", "Swordfish", "Salmon", "Macrel"],
 			},
-		},
 	},
 	"Deep Caves":{
-		description: "3rd world. You're in one of the darkest and most forgotten places of Mega RPG",
+		description: "You're in one of the darkest and most forgotten places of Mega RPG",
 		randomEvents: {
 			"Lost skeletons": {
 				name: "Lost skeletons",
@@ -433,6 +574,16 @@ const worldLocations = {
 				name: "Collapsing Sanctuary",
 				requires: "The One Shell",
 				type: "dungeon",
+				rules:{
+					allowArmy: false,
+					canKill: true,
+					allowHelpers: true,
+				},
+				rewards:{
+					gold:5000,
+					xp:1100,
+				},
+				helpers:[],
 				stats:{
 					attack: 500,
 					health:500,
