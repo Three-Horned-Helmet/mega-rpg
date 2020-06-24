@@ -74,7 +74,7 @@ const getWeaponInfo = (weapon, num = null)=>{
     }
     return weaponInformation;
 };
-const dungeonBossStartAllowed = (user)=>{
+const dungeonStartAllowed = (user)=>{
     // checks for cooldown
     const cooldownInfo = onCooldown("dungeon", user);
     if (cooldownInfo.response) {
@@ -119,4 +119,4 @@ const randomIntBetweenMinMax = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
   };
 
-module.exports = { getWeaponInfo, dungeonBossStartAllowed, validateHelper, randomIntBetweenMinMax };
+module.exports = { getWeaponInfo, dungeonStartAllowed, validateHelper, randomIntBetweenMinMax };

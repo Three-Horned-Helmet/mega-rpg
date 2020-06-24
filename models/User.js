@@ -564,11 +564,12 @@ userSchema.methods.removeExp = async function(exp, newExpToNextRank, statRemoval
 	return this.save();
 };
 
-userSchema.methods.buyItem = async function(item) {
-	this.resources.gold -= item.price;
+userSchema.methods.buyItem = async function(item, giveAway = false) {
+	if (!giveAway) {
+		this.resources.gold -= item.price;
+	}
 
 	this.hero.inventory[item.name] += 1;
-
 	this.markModified("hero.inventory");
 
 	return this.save();
@@ -614,7 +615,7 @@ userSchema.methods.alternativeGainXp = async function(xp = 0) {
 		this.hero.currentExp += xp;
 	}
 	if (this.hero.currentExp >= this.hero.expToNextRank) {
-		if (heroExpToNextLevel.length > this.hero.rank) {
+		if (heroExpToNextLevel.length > this.hero.rank + 1) {
 			this.hero.rank += 1;
 			this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
 				Object.keys(heroStatIncreaseOnLevel[this.hero.rank]).forEach(s=>{
@@ -624,6 +625,18 @@ userSchema.methods.alternativeGainXp = async function(xp = 0) {
 	}
 	return this.save();
 };
+
+userSchema.methods.unlockNewLocation = async function(location) {
+	this.world.locations[location].available = true;
+
+	return this.save();
+};
+
+userSchema.methods.locationTravel = async function(location) {
+	this.world.currentLocation = location;
+	return this.save();
+};
+
 
 userSchema.methods.giveDungeonKey = async function(key = "Ogre tooth") {
 	if (this.hero.dungeonKeys[key]) {

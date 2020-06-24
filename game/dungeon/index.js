@@ -1,22 +1,22 @@
 const User = require("../../models/User");
 const { worldLocations } = require("../_CONSTS/explore");
 
-const { createDungeonInvitation, generateDungeonBossRound, generateDungeonBossResult } = require("./embedGenerator");
-const { getWeaponInfo, dungeonBossStartAllowed, validateHelper, randomIntBetweenMinMax } = require("./helper");
+const { createDungeonBossInvitation, generateDungeonBossRound, generateDungeonBossResult } = require("./embedGenerator");
+const { getWeaponInfo, dungeonStartAllowed, validateHelper, randomIntBetweenMinMax } = require("./helper");
 
 const handleDungeonBoss = async (message, user)=>{
     // cooldown, health, explored dungeon and dungeon key
-    const disallowed = dungeonBossStartAllowed(user);
+    const disallowed = dungeonStartAllowed(user);
 		if (disallowed) {
             return message.channel.send(disallowed);
         }
 
-    const dungeon = createDungeonEvent(user);
+    const dungeon = createDungeonBossEvent(user);
 
     const now = new Date();
     await user.setNewCooldown("dungeon", now);
 
-    const dungeonInvitation = createDungeonInvitation(dungeon, user);
+    const dungeonInvitation = createDungeonBossInvitation(dungeon, user);
     const invitation = await message.channel.send(dungeonInvitation);
     await invitation.react("🗺");
 
@@ -24,7 +24,7 @@ const handleDungeonBoss = async (message, user)=>{
         return reaction.emoji.name === "🗺";
     };
 
-    const collector = await invitation.createReactionCollector(reactionFilter, { time: 1000 * 5, errors: ["time"] });
+    const collector = await invitation.createReactionCollector(reactionFilter, { time: 1000 * 4, errors: ["time"] });
     collector.on("collect", async (result, rUser) => {
         if (rUser.bot || dungeon.boss.helpers.length > 4) {
             return;
@@ -40,12 +40,12 @@ const handleDungeonBoss = async (message, user)=>{
     });
 
      collector.on("end", async () => {
-        await startDungeonEvent(message, dungeon);
+        await startDungeonBossEvent(message, dungeon);
     });
 };
 
 // Finds dungeon in current world
-const createDungeonEvent = (user) =>{
+const createDungeonBossEvent = (user) =>{
     const { currentLocation } = user.world;
     const dungeonName = Object.keys(worldLocations[currentLocation].places).find(p=>{
         return worldLocations[currentLocation].places[p].type === "dungeon";
@@ -57,14 +57,14 @@ const createDungeonEvent = (user) =>{
 
 
 // c
-const startDungeonEvent = async (message, dungeon) => {
+const startDungeonBossEvent = async (message, dungeon) => {
     const users = await User.find({ "account.userId": dungeon.boss.helpers });
     const initiativeTaker = users.filter(u=> u.account.userId === dungeon.boss.helpers[0]);
 
     const progress = {
         win: false,
+        finish:false,
         bossAttempts: 0,
-        currentRoom:0,
         initiativeTaker: initiativeTaker[0],
         players: users,
         dungeon: dungeon,
@@ -73,12 +73,10 @@ const startDungeonEvent = async (message, dungeon) => {
     };
 
     // recursive starts here
-    const result = await createDungeonRound(message, progress);
-    message.channel.send(result);
-
+    return await createDungeonBossRound(message, progress);
 };
 
-const createDungeonRound = async (message, progress)=>{
+const createDungeonBossRound = async (message, progress)=>{
 
     const { numOfAllowedWeapons } = progress.dungeon.boss;
     const threeRandomWeapons = getWeaponInfo(null, numOfAllowedWeapons);
@@ -94,7 +92,7 @@ const createDungeonRound = async (message, progress)=>{
             return progress.weaponAnswer.has(response.author.id) === false && progress.dungeon.boss.helpers.includes(response.author.id) && weaponAnswerFilter.some(alternative => alternative === response.content.toLowerCase());
         };
 
-        const collector = await message.channel.createMessageCollector(filter, { time: 1000 * 5, errors: ["time"] });
+        const collector = await message.channel.createMessageCollector(filter, { time: 1000 * 4, errors: ["time"] });
         collector.on("collect", async (result)=>{
             if (result.author.bot) {
                 return;
@@ -104,6 +102,7 @@ const createDungeonRound = async (message, progress)=>{
             if (Object.keys(threeRandomWeapons).includes(answer)) {
                 progress.weaponAnswer.set(result.author.id, answer);
             }
+            // todo stop people from healing between roudns
             else {
                 const weaponInformation = Object.values(threeRandomWeapons).find(w=>w.answer === answer);
                 progress.weaponAnswer.set(result.author.id, weaponInformation.name);
@@ -115,13 +114,14 @@ const createDungeonRound = async (message, progress)=>{
         });
         collector.on("end", async () => {
             const result = await calculateDungeonResult(progress);
-            if (result.dungeon.boss.helpers.length && result.dungeon.boss.stats.currentHealth > 0 && result.bossAttempts < 4) {
-                await createDungeonRound(message, result);
-            }
-            else {
+            if (result.finish) {
                 console.error("round over");
                 console.error(result.dungeon.boss.helpers.length, result.dungeon.boss.stats.currentHealth > 0, result.bossAttempts < 4);
-                return generateDungeonBossResult(progress);
+                const finalResult = await generateDungeonBossResult(progress);
+                message.channel.send(finalResult);
+            }
+            else {
+                return await createDungeonBossRound(message, result);
             }
     });
 };
@@ -163,7 +163,6 @@ const calculateDungeonResult = async (progress)=>{
                 const playerHealedName = playerWithLowestHp.account.username;
                 const healGiven = randomIntBetweenMinMax((playerInfo.hero.health * weaponInfo.damage / 2), (playerInfo.hero.health * weaponInfo.damage));
                 // todo, same thing here as other object
-                await playerWithLowestHp.healHero(healGiven);
                 if (awaitHealPromises[playerHealedName]) {
                     awaitHealPromises[playerHealedName].healGiven += healGiven;
                 }
@@ -174,7 +173,6 @@ const calculateDungeonResult = async (progress)=>{
                     };
                 }
                 progress.roundResults.push(generateHealString(playerName, weaponInfo, healGiven, playerHealedName));
-
             }
             if (weaponInfo.type === "disarm") {
                 const tempDisarmGiven = randomIntBetweenMinMax((progress.dungeon.boss.stats.attack / 2 * weaponInfo.damage), (progress.dungeon.boss.stats.attack * weaponInfo.damage));
@@ -221,6 +219,7 @@ const calculateDungeonResult = async (progress)=>{
             progress.roundResults.push(generateHealString(bossName, weaponInfo, healGiven));
         }
     }
+
     // takes care of healing
     await asyncForEach(Object.keys(awaitHealPromises), async (u)=>{
         return await awaitHealPromises[u].user.healHero(awaitHealPromises[u].healGiven);
@@ -244,19 +243,18 @@ const calculateDungeonResult = async (progress)=>{
     progress.bossAttempts += 1;
     progress.weaponAnswer.clear();
 
-    // checks if boss dead
-    if (progress.dungeon.boss.stats.currentHealth <= 0) {
-        progress.win = true;
+    // checks if fight is over
+    if (progress.dungeon.boss.helpers.length === 0 || progress.dungeon.boss.stats.currentHealth <= 0 || progress.bossAttempts > 3) {
+        progress.finish = true;
+        progress.win = progress.dungeon.boss.helpers.length && progress.dungeon.boss.stats.currentHealth <= 0;
+        if (progress.win) {
+            const rewards = await calculateDungeonBossRewards(progress);
+            progress.rewards = rewards;
+        }
     }
 
     return progress;
 };
-
-async function asyncForEach(array, callback) {
-    for (let index = 0; index < array.length; index += 1) {
-      await callback(array[index], index, array);
-    }
-  }
 
   const generateAttackString = (playerName, weaponInfo, damageGiven, playerAttacked = null)=>{
     const string = `\n- **${playerName}** used ${weaponInfo.name} attack causing **${damageGiven}** damage to **${playerAttacked}**`;
@@ -273,5 +271,55 @@ const generateDisarmString = (playerName, weaponInfo, disarmGiven)=>{
     return `${playerName} used ${weaponInfo.name} to lower the boss attack with ${disarmGiven}`;
 };
 
+const calculateDungeonBossRewards = async progress => {
+    const { initiativeTaker } = progress;
+    const initiativeTakerAlive = progress.initiativeTaker.hero.currentHealth > 0;
 
-module.exports = { handleDungeonBoss, createDungeonEvent, calculateDungeonResult };
+    const alivePlayers = progress.players.filter(p=> p.hero.currentHealth > 0 && p.account.userId !== initiativeTaker.account.userId);
+    const numOfAliveHelpers = alivePlayers.length;
+
+
+    const staticRewards = progress.dungeon.boss.rewards;
+
+    const rewards = {
+        initiativeTaker:{},
+        helpers:[],
+    };
+
+    if (initiativeTakerAlive) {
+         rewards.initiativeTaker.gold = Math.round(staticRewards.gold / 2);
+         rewards.initiativeTaker.xp = Math.round(staticRewards.gold / 2);
+         rewards.initiativeTaker.drop = staticRewards.drop[Math.floor(Math.random() * staticRewards.drop.length)];
+         rewards.initiativeTaker.locationUnlocked = progress.dungeon.boss.unlocks;
+
+
+        await initiativeTaker.alternativeGainXp(rewards.initiativeTaker.xp);
+        await initiativeTaker.gainManyResources({ gold: rewards.initiativeTaker.gold });
+        await initiativeTaker.unlockNewLocation(rewards.initiativeTaker.locationUnlocked);
+        // await give drop
+    }
+
+
+    await asyncForEach(alivePlayers, async (p)=>{
+        const helperReward = {
+            name: p.account.username,
+            gold:Math.round(staticRewards.gold / numOfAliveHelpers),
+            xp: Math.round(staticRewards.xp / numOfAliveHelpers),
+            drop: staticRewards.drop[Math.floor(Math.random() * staticRewards.drop.length)],
+        };
+        await p.alternativeGainXp(helperReward.xp);
+        await p.gainManyResources({ gold: helperReward.gold });
+        // await give drop
+        rewards.helpers.push(helperReward);
+    });
+    return rewards;
+};
+
+async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index += 1) {
+      await callback(array[index], index, array);
+    }
+  }
+
+
+module.exports = { handleDungeonBoss, createDungeonBossEvent, calculateDungeonResult };

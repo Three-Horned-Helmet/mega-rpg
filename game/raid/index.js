@@ -82,6 +82,10 @@ const handleRaid = async (user, place = null) => {
     return `${place} does not exist in ${locationIcon} ${currentLocation}. Use !look to see your surroundings`;
 }
 
+if (!userExploredPlaces.includes(placeInfo.name)) {
+    return "You haven't explored this place yet. Try `!explore` in order to find it!";
+}
+
     // calculates result
  const raidResult = calculatePveFullArmyResult(user, placeInfo);
 
@@ -95,7 +99,7 @@ if (raidResult.win) {
 }
 
 // generates a Discord embed
-    const raidEmbed = generateEmbedPveFullArmy(user, placeInfo, raidResult);
+const raidEmbed = generateEmbedPveFullArmy(user, placeInfo, raidResult);
  return raidEmbed;
 
 };

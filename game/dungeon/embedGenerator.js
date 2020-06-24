@@ -59,9 +59,11 @@ const createDungeonBossInvitation = (dungeon, user)=>{
         const weapons = progress.dungeon.boss.allowedWeapons;
 
         const initiativeTakerName = progress.initiativeTaker.account.username;
-        const bottomLeft = progress.players
-            .filter(p=> p.account.username !== initiativeTakerName)
-            .map(p=> `${p.account.username} ${p.hero.currentHealth <= 0 ? "☠️" : ""} `);
+        const bottomLeft = progress.players.length > 1 ?
+            progress.players
+                .filter(p=> p.account.username !== initiativeTakerName)
+                .map(p=> `${p.account.username} ${p.hero.currentHealth <= 0 ? "☠️" : ""} `)
+                : ["You're fighting solo!"];
 
         const roundResults = progress.roundResults;
         if (roundResults.length) {
@@ -85,7 +87,6 @@ const createDungeonBossInvitation = (dungeon, user)=>{
         const sideColor = "#45b6fe";
         const description = progress.dungeon.boss.roundDescriptions[progress.bossAttempts];
         const footer = "TIP: Write your weapon of choice in the chat. eg -> a or c";
-
         const fields = [
             {
                 name: `${bossName} HP:`,
@@ -136,20 +137,34 @@ const createDungeonBossInvitation = (dungeon, user)=>{
     const createDungeonBossResultWin = (progress) =>{
 
         const initiativeTakerName = progress.initiativeTaker.account.username;
+        const initiativeTakerAlive = progress.initiativeTaker.hero.currentHealth > 0;
         const sideColor = "#45b6fe";
+
+        const bossName = progress.dungeon.boss.name;
 
         const topLeft = progress.players
             .filter(p=> p.account.username !== initiativeTakerName)
             .map(p=> `${p.account.username} ${p.hero.currentHealth <= 0 ? "☠️" : ""} `);
 
-        const { roundResults } = roundResults;
+        const { roundResults } = progress;
         if (roundResults.length) {
             topLeft.push("\n");
             topLeft.push("`Results from last round:`");
+            topLeft.push(`\n ☠️ ☠️ ${bossName} ☠️ ☠️ `);
             topLeft.push(roundResults);
         }
 
-        // if not explored, use !travel to move to another location
+        const rewards = [];
+
+        if (initiativeTakerAlive) {
+            rewards.push(`${initiativeTakerName}\n ${getResourceIcon("gold")} Gold: ${progress.rewards.initiativeTaker.gold}\n ${getResourceIcon("xp")}Xp: ${progress.rewards.initiativeTaker.xp} \n 🎲Drop: ${progress.rewards.initiativeTaker.drop}`);
+        }
+        if (progress.rewards.helpers.length) {
+            progress.rewards.helpers.length.forEach(r=>{
+                rewards.push(`${r.name}\n ${getResourceIcon("gold")} Gold: ${r.gold}\n ${getResourceIcon("xp")}Xp: ${r.xp} \n 🎲Drop: ${r.drop}`);
+            });
+        }
+
         const fields = [
             {
                 name: `${initiativeTakerName}'s gang:`,
@@ -158,18 +173,23 @@ const createDungeonBossInvitation = (dungeon, user)=>{
             },
             {
                 name: "Rewards",
-                value: "Player rewards goes here",
+                value: rewards,
                 inline: true,
             },
         ];
 
-        const bossName = progress.dungeon.boss.name;
+
         const title = `${bossName} defeated!`;
 
         const unlockedLocation = progress.dungeon.boss.unlocks;
         const locationIcon = getLocationIcon(unlockedLocation);
-        const description = `${initiativeTakerName} has unlocked ${locationIcon} ${unlockedLocation}`;
-
+        let description = `${initiativeTakerName} `;
+        if (initiativeTakerAlive) {
+            description += `has unlocked ${locationIcon} ${unlockedLocation}`;
+        }
+        else {
+            description += "died trying to fight the boss";
+        }
 
         const embedResult = new Discord.MessageEmbed()
             .setTitle(title)
@@ -183,7 +203,6 @@ const createDungeonBossInvitation = (dungeon, user)=>{
 
 
     const createDungeonBossResultLoss = (progress) =>{
-
         const initiativeTakerName = progress.initiativeTaker.account.username;
         const sideColor = "#45b6fe";
 
@@ -201,7 +220,7 @@ const createDungeonBossInvitation = (dungeon, user)=>{
         const fields = [
             {
                 name: `${initiativeTakerName}'s gang:`,
-                value: "initiativeTakerDamage",
+                value: bottomLeft,
                 inline: false,
             },
         ];
@@ -244,43 +263,6 @@ const createDungeonBossInvitation = (dungeon, user)=>{
             const percentageMissingHealth = MAX_REPEATING - percentageHealth;
 
             return `\`\`\`diff\n- ${"|".repeat(percentageHealth)}${" ".repeat(percentageMissingHealth)} \n \`\`\``;
-        };
-
-        const generateRoundResult = (roundResults) => {
-
-            const status = roundResults.map(r=>{
-                switch (r.type) {
-                    case "attack":
-                        return generateAttackString(r);
-                    case "heal":
-                        return generateHealString(r);
-                    case "disarm":
-                        return generateDisarmString(r);
-                    default:
-                        return "default value, something bad happend";
-                }
-            });
-            return status;
-        };
-
-        const generateAttackString = (info)=>{
-            console.log(info, "info");
-            let string = `\n- **${info.playerName}** used ${info.weaponName} attack causing **${info.damageGiven}** damage `;
-            if (info.playerAttacked) {
-                string += `to **${info.playerAttacked}**`;
-            }
-            return string;
-        };
-
-        const generateHealString = (info)=>{
-            if (info.playerAttacked) {
-                return `\n${info.playerName} helead ${info.playerAttacked} with ${info.healGiven}`;
-            }
-            return `\n${info.playerName} healed himself with ${info.healGiven}`;
-        };
-
-        const generateDisarmString = (info)=>{
-            return "someone was disarmed";
         };
 
 

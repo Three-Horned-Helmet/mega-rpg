@@ -1,9 +1,9 @@
 const Discord = require("discord.js");
 const { getResourceIcon, getPlaceIcon } = require("../game/_CONSTS/icons");
 
-function generateEmbedPveFullArmy(user, placeInfo, pveResult) {
+function generateEmbedPveFullArmy(user, placeInfo, pveResult, dungeonRaid = false) {
     if (pveResult.win) {
-        return generateEmbedPveFullArmyWin(user, placeInfo, pveResult);
+        return generateEmbedPveFullArmyWin(user, placeInfo, pveResult, dungeonRaid);
     }
     return generateEmbedPveFullArmyLoss(user, placeInfo, pveResult);
 }
@@ -17,7 +17,7 @@ function generateEmbedPveHero(user, placeInfo, pveResult) {
 
 }
 
-function generateEmbedPveFullArmyWin(user, placeInfo, pveResult) {
+function generateEmbedPveFullArmyWin(user, placeInfo, pveResult, dungeonRaid) {
     const sideColor = "#45b6fe";
     const placeName = placeInfo.name;
     const placeIcon = getPlaceIcon(placeInfo.type);
@@ -40,6 +40,7 @@ function generateEmbedPveFullArmyWin(user, placeInfo, pveResult) {
         expReward += "💪 You leveled up! 💪";
     }
 
+
     const embedWin = new Discord.MessageEmbed()
     .setTitle(title)
     .setColor(sideColor)
@@ -60,6 +61,9 @@ function generateEmbedPveFullArmyWin(user, placeInfo, pveResult) {
             inline: false,
         },
     );
+    if (dungeonRaid) {
+        embedWin.footer = { text:"Proceed to the next room? ✅ / 🚫" };
+    }
 return embedWin;
 }
 
