@@ -622,14 +622,14 @@ userSchema.methods.removeExp = async function(exp, newExpToNextRank, statRemoval
 	return this.save();
 };
 
-userSchema.methods.buyItem = async function(item) {
-	this.resources.gold -= item.price;
+userSchema.methods.buyItem = async function(item, amount = 1) {
+	if(item.price) {
+		this.resources.gold -= item.price;
+	}
 
-	this.hero.inventory[item.name] += 1;
+	this.hero.inventory[item.name] += amount;
 
 	this.markModified("hero.inventory");
-
-	return this.save();
 };
 
 userSchema.methods.handleConsecutive = function(resources, consecutive, now, cyclus) {

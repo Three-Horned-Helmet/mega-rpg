@@ -58,7 +58,9 @@ const checkRaidAndHuntQuest = async (user, place, currentLocation) => {
         pve: quest.pve,
     };
 
-    await user.addNewQuest(newQuest);
+    user.addNewQuest(newQuest);
+
+    await user.save();
 
     return quest.intro;
 };
@@ -78,7 +80,9 @@ const checkBuildQuests = async (user, building) => {
         pve: quest.pve,
     };
 
-    await user.addNewQuest(newQuest);
+    user.addNewQuest(newQuest);
+
+    await user.save();
 
     return quest.intro;
 };

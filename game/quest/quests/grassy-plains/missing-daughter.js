@@ -7,7 +7,7 @@ module.exports = {
         name: "Missing Daughter",
         obtaining: {
             area: "Fishing village",
-            chance: 1,
+            chance: 0.4,
         },
         pve: [{
             name: "Cave",
