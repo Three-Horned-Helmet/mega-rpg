@@ -175,7 +175,8 @@ module.exports = {
             if(!(user.army.units.barracks.peasant >= 10)) return false;
 
             // Get reward
-            await user.recruitUnits(allUnits["peasant"], 5, true);
+            user.addOrRemoveUnits(allUnits["peasant"], 5, true);
+            await user.save();
             await user.addItem(allItems["bronze helmet"], 5);
             await user.addItem(allItems["bronze leggings"], 5);
             // // Add next quest

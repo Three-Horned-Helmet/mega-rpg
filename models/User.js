@@ -361,7 +361,8 @@ userSchema.methods.updateHousePop = function(newPop) {
 	return this.save();
 };
 
-userSchema.methods.recruitUnits = function(unit, amount, free) {
+// Recruit, Add or Remove Units
+userSchema.methods.addOrRemoveUnits = function(unit, amount, free) {
 	if(!free) {
 		for (const resource in unit.cost) {
 			this.resources[resource] -= unit.cost[resource] * amount;
@@ -370,8 +371,6 @@ userSchema.methods.recruitUnits = function(unit, amount, free) {
 
 	this.army.units[unit.requirement.building][unit.name] += amount;
 	// this.markModified(`army.units.${unit.requirement.building}.${unit.name}`);
-
-	return this.save();
 };
 
 userSchema.methods.updateNewProduction = function(productionName, now) {
@@ -461,16 +460,19 @@ userSchema.methods.addItem = function(item, amount, craft) {
 };
 
 // Removes the item (if hero => remove it from hero, else from armory)
-userSchema.methods.removeItem = function(item, hero) {
+userSchema.methods.removeItem = function(item, hero, amount = 1) {
 	// Removes the item from the hero
+	const itemType = item.typeSequence[item.typeSequence.length - 1];
+
 	if(hero) {
-		const itemType = item.typeSequence[item.typeSequence.length - 1];
 		this.hero.armor[itemType] = "[NONE]";
 
 		this.markModified("hero.armor");
 	}
-
-	return this.save();
+	else {
+		this.army.armory[itemType][item.name] -= amount;
+		this.markModified(`army.armory.${itemType}.${item.name}`);
+	}
 };
 
 userSchema.methods.handleFishResult = function(goldresult, now) {
