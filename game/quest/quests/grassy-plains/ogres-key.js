@@ -1,3 +1,5 @@
+const { questHelper } = require("../../quest-helper");
+
 module.exports = {
 
     // THE OGRE'S KEY
@@ -55,15 +57,4 @@ module.exports = {
             return true;
         },
     },
-};
-
-const questHelper = (user, questName) => {
-    const quest = user.quests.find(q => q.name === questName);
-    if(!quest) return console.error(`Did not find quest '${questName.name}' to user '${user.account.username}'`);
-
-    if(!quest.started) {
-        user.startQuest(questName);
-        return false;
-    }
-    return true;
 };

@@ -33,6 +33,8 @@ const checkRaidAndHuntQuest = async (user, place, currentLocation) => {
         if(objectiveFound) {
             await user.updateQuestObjective(currentQuest);
 
+            if(questObj.foundNewQuest) await questObj.foundNewQuest(user);
+
             return questObj.found;
         }
          else {

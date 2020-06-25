@@ -1,3 +1,5 @@
+const { questHelper } = require("../../quest-helper");
+
 module.exports = {
     // A FOOLS TREASURE HUNT
 
@@ -44,7 +46,7 @@ lostMap: {
    user.addNewQuest(newQuest);
         user.removeQuest(this.name);
 
-        await user.save();
+        user.save();
 
         return true;
     },
@@ -94,7 +96,7 @@ lostHut: {
    user.addNewQuest(newQuest);
         user.removeQuest(this.name);
 
-        await user.save();
+        user.save();
 
         return true;
     },
@@ -116,16 +118,8 @@ packOfImplings: {
 
     // Returns false if the quest description is shown, or true if the quest is being completed
     execute: async function(user) {
-        const questResponse = questHelper(user, this.name);
-        if(!questResponse) {
-            const now = new Date();
-            const currentLocation = "Grassy Plains";
-            const newlyExploredPlaceName = "Pack of Implings";
-
-            await user.handleExplore(now, currentLocation, newlyExploredPlaceName);
-
-            return false;
-        }
+        const questResponse = questHelper(user, this.name, "Grassy Plains", "Pack of Implings");
+        if(!questResponse) return false;
 
         // Has the user completed the PvE requirements?
         const userQuest = user.quests.find(q => q.name === this.name);
@@ -145,7 +139,7 @@ packOfImplings: {
         user.addNewQuest(newQuest);
         user.removeQuest(this.name);
 
-        await user.save();
+        user.save();
 
         return true;
     },
@@ -161,9 +155,7 @@ diggingForTreasure: {
     // Returns false if the quest description is shown, or true if the quest is being completed
     execute: async function(user) {
         const questResponse = questHelper(user, this.name);
-        if(!questResponse) {
-            return false;
-        }
+        if(!questResponse) return false;
 
         // Does the user have sufficient resources?
         if(!(user.resources["yew wood"] >= 30)) return false;
@@ -182,20 +174,9 @@ diggingForTreasure: {
 
         user.removeQuest(this.name);
 
-        await user.save();
+        user.save();
 
         return true;
     },
 },
-};
-
-const questHelper = (user, questName) => {
-    const quest = user.quests.find(q => q.name === questName);
-    if(!quest) return console.error(`Did not find quest '${questName.name}' to user '${user.account.username}'`);
-
-    if(!quest.started) {
-        user.startQuest(questName);
-        return false;
-    }
-    return true;
 };

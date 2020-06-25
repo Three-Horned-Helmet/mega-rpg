@@ -1,3 +1,4 @@
+const { questHelper } = require("../../quest-helper");
 const allItems = require("../../../items/all-items");
 
 module.exports = {
@@ -74,16 +75,8 @@ module.exports = {
 
         // Returns false if the quest description is shown, or true if the quest is being completed
         execute: async function(user) {
-            const questResponse = await questHelper(user, this.name);
-            if(!questResponse) {
-                const now = new Date();
-                const currentLocation = "Grassy Plains";
-                const newlyExploredPlaceName = "Confront Bandits";
-
-                await user.handleExplore(now, currentLocation, newlyExploredPlaceName);
-
-                return false;
-            }
+            const questResponse = await questHelper(user, this.name, "Grassy Plains", "Confront Bandits");
+            if(!questResponse) return false;
 
             // Has the user completed the PvE requirements?
             const userQuest = user.quests.find(q => q.name === this.name);
@@ -103,7 +96,7 @@ module.exports = {
             user.addNewQuest(newQuest);
             user.removeQuest(this.name);
 
-            await user.save();
+            user.save();
 
             return true;
         },
@@ -118,30 +111,17 @@ module.exports = {
 
         // Returns false if the quest description is shown, or true if the quest is being completed
         execute: async function(user) {
-            const questResponse = await questHelper(user, this.name);
-            if(!questResponse) {
-                return false;
-            }
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse) return false;
 
             // Get reward
             await user.addItem(allItems["black granite mace"], 1);
 
             user.removeQuest(this.name);
 
-            await user.save();
+            user.save();
 
             return true;
         },
     },
-};
-
-const questHelper = (user, questName) => {
-    const quest = user.quests.find(q => q.name === questName);
-    if(!quest) return console.error(`Did not find quest '${questName.name}' to user '${user.account.username}'`);
-
-    if(!quest.started) {
-        user.startQuest(questName);
-        return false;
-    }
-    return true;
 };

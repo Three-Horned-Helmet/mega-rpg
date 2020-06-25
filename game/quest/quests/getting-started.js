@@ -1,3 +1,4 @@
+const { questHelper } = require("../quest-helper");
 const allUnits = require("../../recruit/all-units");
 const allItems = require("../../items/all-items");
 
@@ -37,7 +38,7 @@ module.exports = {
             user.addNewQuest(newQuest);
             user.removeQuest(this.name);
 
-            await user.save();
+            user.save();
 
             return true;
         },
@@ -77,7 +78,7 @@ module.exports = {
             user.addNewQuest(newQuest);
             user.removeQuest(this.name);
 
-            await user.save();
+            user.save();
 
             return true;
         },
@@ -114,7 +115,7 @@ module.exports = {
             user.addNewQuest(newQuest);
             user.removeQuest(this.name);
 
-            await user.save();
+            user.save();
 
             return true;
         },
@@ -129,7 +130,7 @@ module.exports = {
 
         // Returns false if the quest description is shown, or true if the quest is being completed
         execute: async function(user) {
-            const questResponse = questHelper(user, this.name);
+            const questResponse = await questHelper(user, this.name);
             if(!questResponse) return false;
 
             // Does the user have a lumbermill
@@ -194,15 +195,4 @@ module.exports = {
             return true;
         },
     },
-};
-
-const questHelper = (user, questName) => {
-    const quest = user.quests.find(q => q.name === questName);
-    if(!quest) return console.error(`Did not find quest '${questName.name}' to user '${user.account.username}'`);
-
-    if(!quest.started) {
-        user.startQuest(questName);
-        return false;
-    }
-    return true;
 };

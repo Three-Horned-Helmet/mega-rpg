@@ -1,3 +1,4 @@
+const { questHelper } = require("../../quest-helper");
 const allItems = require("../../../items/all-items");
 const allUnits = require("../../../recruit/all-units");
 
@@ -38,20 +39,9 @@ module.exports = {
 
             user.removeQuest(this.name);
 
-            await user.save();
+            user.save();
 
             return true;
         },
     },
-};
-
-const questHelper = (user, questName) => {
-    const quest = user.quests.find(q => q.name === questName);
-    if(!quest) return console.error(`Did not find quest '${questName.name}' to user '${user.account.username}'`);
-
-    if(!quest.started) {
-        user.startQuest(questName);
-        return false;
-    }
-    return true;
 };
