@@ -182,6 +182,32 @@ const worldLocations = {
 					"yew wood": 100,
 				},
 			},
+			"Pack of Wolves": {
+				name: "Pack of Wolves",
+				type: "hunt",
+				notExplorable: true,
+				stats:{
+					attack: 600,
+					health: 600,
+				},
+				rewards:{
+					"yew wood": 20,
+					gold: 200,
+				},
+			},
+			"The Alpha Wolf": {
+				name: "The Alpha Wolf",
+				type: "hunt",
+				notExplorable: true,
+				stats:{
+					attack: 800,
+					health: 800,
+				},
+				rewards:{
+					"yew wood": 40,
+					gold: 400,
+				},
+			},
 		},
 	},
 	"Misty Mountains":{

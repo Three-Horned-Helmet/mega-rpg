@@ -284,6 +284,13 @@ userSchema.methods.updateQuestObjective = async function(quest) {
 	return this.save();
 };
 
+userSchema.methods.refreshQuestPve = async function(questName, pveIndex = 0) {
+	const questIndex = this.quests.indexOf(this.quests.find(q => q.name === questName));
+	this.quests[questIndex].pve[pveIndex].completed = false;
+
+	this.markModified(`quests.${questIndex}.pve.${pveIndex}.completed`);
+};
+
 userSchema.methods.gainResource = function(resource, quantity) {
 	this.resources[resource] += quantity;
 	return this.save();
