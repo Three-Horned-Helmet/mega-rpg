@@ -1,4 +1,5 @@
 const getLocationIcon = (worldLocation)=>{
+
 	const lexicon = {
 		"Grassy Plains" : "🌳",
 		"Misty Mountains" : "🏔",
@@ -17,7 +18,7 @@ const getPlaceIcon = (type) => {
 	};
 	return lexicon[type];
 };
-const getDungeonIcon = (type) =>{
+const getDungeonKeyIcon = (type) =>{
 	const lexicon = {
 		["Ogre tooth"]:"🦷",
 		["The One Shell"]:"🐚",
@@ -25,6 +26,18 @@ const getDungeonIcon = (type) =>{
 
 	};
 	return lexicon[type];
+};
+
+const getWeaponIcon = (weapon)=>{
+	const lexicon = {
+		strike: "🔪",
+		critical: "‼️",
+		slash: "🗡",
+		disarm: "🕊",
+		heal: "🧪",
+		poke: "👉",
+	};
+	return lexicon[weapon];
 };
 
 const getGreenRedIcon = (bool)=>{
@@ -46,4 +59,13 @@ const getResourceIcon = (type)=>{
 	return lexicon[type];
 };
 
-module.exports = { getLocationIcon, getPlaceIcon, getResourceIcon, getDungeonIcon, getGreenRedIcon };
+const getStatsIcon = (type)=>{
+	const lexicon = {
+	["health"]: ":heart:",
+	["attack"]: ":crossed_swords:",
+	["defense"]: ":shield:",
+	};
+	return lexicon[type];
+};
+
+module.exports = { getLocationIcon, getPlaceIcon, getResourceIcon, getDungeonKeyIcon, getGreenRedIcon, getStatsIcon, getWeaponIcon };
