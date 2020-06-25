@@ -301,7 +301,6 @@ userSchema.methods.removeManyResources = function(obj) {
 		this.resources[r] -= obj[r];
 		if(this.resources[r] < 0) this.resources[r] = 0;
 	});
-	return this.save();
 };
 
 

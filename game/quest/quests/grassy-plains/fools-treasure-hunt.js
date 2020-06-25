@@ -170,7 +170,7 @@ diggingForTreasure: {
         if(!(user.resources["iron bar"] >= 50)) return false;
 
         // Consume the resources
-        await user.removeManyResources({
+        user.removeManyResources({
             "yew wood": 30,
             "iron bar": 50,
         });
