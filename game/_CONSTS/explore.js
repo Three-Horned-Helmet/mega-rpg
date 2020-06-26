@@ -113,8 +113,8 @@ const worldLocations = {
 				},
 				helpers:[],
 			},
-			"Windlow Volcano": {
-				name: "Windlow Volcano",
+			"Bandit's Mansion": {
+				name: "Bandit's Mansion",
 				type: "dungeon",
 				requires: "Ogre tooth",
 				rooms:[

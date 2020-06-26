@@ -313,7 +313,6 @@ userSchema.methods.removeManyResources = function(obj) {
 
 userSchema.methods.setNewCooldown = function(type, now) {
 	this.cooldowns[type] = now;
-	return this.save();
 };
 
 userSchema.methods.handleExplore = function(now, currentLocation, place) {
