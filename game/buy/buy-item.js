@@ -39,7 +39,9 @@ const buyItem = async (user, item) =>{
 	const canBeBought = checkIfPossibleToBuy(user, item);
 	if(!canBeBought.response) return canBeBought.message;
 
-	await user.buyItem(item);
+	user.buyItem(item);
+
+	await user.save();
 
 	return `You bought a ${item.name}`;
 };

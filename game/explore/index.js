@@ -50,6 +50,7 @@ const exploreArea = (user, places, currentLocation, now)=>{
 
 
 	user.handleExplore(now, currentLocation, newlyExploredPlaceName);
+	user.save();
 	return msg;
 };
 

@@ -33,7 +33,8 @@ const stakePlayer = async (user, opponent, stakedItems, msg) =>{
 
         const wonItem = loserItems[Math.floor(Math.random() * loserItems.length)];
 
-        await loser.removeItem(artifactItems[wonItem], true);
+        loser.removeItem(artifactItems[wonItem], true);
+        await loser.save();
         await winner.addItem(artifactItems[wonItem], 1);
 
     // Determine exp won
