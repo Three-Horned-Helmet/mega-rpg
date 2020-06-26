@@ -6,7 +6,9 @@ const recruitUnits = async (user, unit, amount) => {
 	const canBeRecuited = checkIfPossibleToRecruit(user, unit, amount);
 	if(!canBeRecuited.response) return canBeRecuited.message;
 
-	await user.recruitUnits(unit, amount);
+	user.addOrRemoveUnits(unit, amount);
+
+	await user.save();
 
 	return canBeRecuited.message;
 };

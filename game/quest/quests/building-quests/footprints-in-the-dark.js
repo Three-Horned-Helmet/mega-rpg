@@ -1,3 +1,4 @@
+const questHelper = require("../../quest-helper");
 // const allItems = require("../../items/all-items");
 
 module.exports = {
@@ -17,10 +18,8 @@ module.exports = {
 
         // Returns false if the quest description is shown, or true if the quest is being completed
         execute: async function(user, choice) {
-            const questResponse = await questHelper(user, this.name);
-            if(!questResponse || !choice) {
-                return false;
-            }
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse || !choice) return false;
 
             const choiceNumber = parseInt(choice[1]);
             // Only 2 answers possible
@@ -50,7 +49,7 @@ module.exports = {
                 user.addNewQuest(newQuest);
             }
 
-            await user.save();
+            user.save();
 
             return true;
         },
@@ -73,10 +72,8 @@ module.exports = {
 
         // Returns false if the quest description is shown, or true if the quest is being completed
         execute: async function(user, choice) {
-            const questResponse = await questHelper(user, this.name);
-            if(!questResponse || !choice) {
-                return false;
-            }
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse || !choice) return false;
 
        // Has the user completed the PvE requirements?
        const userQuest = user.quests.find(q => q.name === this.name);
@@ -114,10 +111,8 @@ module.exports = {
 
         // Returns false if the quest description is shown, or true if the quest is being completed
         execute: async function(user, choice) {
-            const questResponse = await questHelper(user, this.name);
-            if(!questResponse || !choice) {
-                return false;
-            }
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse || !choice) return false;
 
             const choiceNumber = parseInt(choice[1]);
             // Only 2 answers possible
@@ -153,7 +148,7 @@ module.exports = {
                 user.addNewQuest(newQuest);
             }
 
-            await user.save();
+            user.save();
 
             return true;
         },
@@ -169,10 +164,8 @@ module.exports = {
 
         // Returns false if the quest description is shown, or true if the quest is being completed
         execute: async function(user, choice) {
-            const questResponse = await questHelper(user, this.name);
-            if(!questResponse || !choice) {
-                return false;
-            }
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse || !choice) return false;
 
             const choiceNumber = parseInt(choice[1]);
             // Only 2 answers possible
@@ -197,7 +190,7 @@ module.exports = {
                 user.addNewQuest(newQuest);
             }
 
-            await user.save();
+            user.save();
 
             return true;
         },
@@ -215,10 +208,8 @@ module.exports = {
 
         // Returns false if the quest description is shown, or true if the quest is being completed
         execute: async function(user, choice) {
-            const questResponse = await questHelper(user, this.name);
-            if(!questResponse || !choice) {
-                return false;
-            }
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse || !choice) return false;
 
             const choiceNumber = parseInt(choice[1]);
             // Only 2 answers possible
@@ -253,7 +244,7 @@ module.exports = {
                 user.changeBuildingLevel("lumbermill", 1, 1);
             }
 
-            await user.save();
+            user.save();
 
             return true;
         },
@@ -277,10 +268,8 @@ module.exports = {
 
         // Returns false if the quest description is shown, or true if the quest is being completed
         execute: async function(user, choice) {
-            const questResponse = await questHelper(user, this.name);
-            if(!questResponse || !choice) {
-                return false;
-            }
+            const questResponse = await questHelper(user, this.name, "Grassy Plains", "Wood Elves");
+            if(!questResponse || !choice) return false;
 
        // Has the user completed the PvE requirements?
        const userQuest = user.quests.find(q => q.name === this.name);
@@ -296,20 +285,9 @@ module.exports = {
 
        user.removeQuest(this.name);
 
-       await user.save();
+        user.save();
 
             return true;
         },
     },
-};
-
-const questHelper = async (user, questName) => {
-    const quest = user.quests.find(q => q.name === questName);
-    if(!quest) return console.error(`Did not find quest '${questName.name}' to user '${user.account.username}'`);
-
-    if(!quest.started) {
-        await user.startQuest(questName);
-        return false;
-    }
-    return true;
 };

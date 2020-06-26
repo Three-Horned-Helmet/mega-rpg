@@ -46,6 +46,8 @@ const exploreArea = async (user, places, currentLocation, now)=>{
 	}
 	else {
 		msg = generateSuccessExploreMessage(currentLocation, newlyExploredPlaceName, user.hero.rank);
+		user.handleExplore(now, currentLocation, newlyExploredPlaceName);
+		user.save();
 	}
 
 	user.handleExplore(now, currentLocation, newlyExploredPlaceName);
