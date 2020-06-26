@@ -20,7 +20,7 @@ const getPlaceIcon = (type) => {
 };
 const getDungeonKeyIcon = (type) =>{
 	const lexicon = {
-		["Ogre tooth"]:"🦷",
+		["CM key"]:"🦷",
 		["The One Shell"]:"🐚",
 		["Eridian Vase"]: "🏺",
 
