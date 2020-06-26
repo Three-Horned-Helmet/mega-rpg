@@ -484,7 +484,6 @@ userSchema.methods.handleFishResult = function(goldresult, now) {
 	if(goldresult > 0) {
 		this.resources.gold += goldresult;
 	}
-	return this.save();
 };
 
 userSchema.methods.equipItem = function(item, currentItem) {

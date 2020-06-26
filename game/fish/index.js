@@ -26,7 +26,8 @@ const handleFish = async (user) => {
 
     const result = calculateFishResult(fish);
 
-    await user.handleFishResult(result.gold, now);
+    user.handleFishResult(result.gold, now);
+    await user.save();
 
     return result.response;
 };

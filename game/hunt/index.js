@@ -28,12 +28,8 @@ const handleHunt = async (user, place = null) => {
     const userExploredPlaces = user.world.locations[currentLocation].explored;
 
     const userExploredHuntPlaces = userExploredPlaces
-    .filter(p=>{
-        return placesInCurrentWorld[p].type === "hunt";
-    })
-    .map(p=>{
-        return p.replace(/\s/g, "").toLowerCase();
-    });
+    .filter(p=> placesInCurrentWorld[p].type === "hunt")
+    .map(p=> p.replace(/\s/g, "").toLowerCase());
 
     // checks if user has explored any huntable places in current location
     if (!userExploredHuntPlaces.length) {
@@ -41,12 +37,8 @@ const handleHunt = async (user, place = null) => {
     }
 
      const userExploredNotHuntPlaces = userExploredPlaces
-     .filter(p=>{
-        return placesInCurrentWorld[p].type !== "hunt";
-    })
-     .map(p=>{
-        return p.replace(/\s/g, "").toLowerCase();
-    });
+     .filter(p=>placesInCurrentWorld[p].type !== "hunt")
+     .map(p=> p.replace(/\s/g, "").toLowerCase());
 
     // if user tries to hunt a place that is not huntable
     if (userExploredNotHuntPlaces.includes(place)) {
@@ -96,15 +88,15 @@ if (!userExploredPlaces.includes(placeInfo.name)) {
  // saves to database
  let questIntro;
  const now = new Date();
-await user.setNewCooldown("hunt", now);
-await user.heroHpLoss(huntResult.lossPercentage);
-await user.alternativeGainXp(huntResult.expReward);
+user.setNewCooldown("hunt", now);
+user.heroHpLoss(huntResult.lossPercentage);
+user.alternativeGainXp(huntResult.expReward);
 
 if (huntResult.win) {
-    await user.gainManyResources(huntResult.resourceReward);
+    user.gainManyResources(huntResult.resourceReward);
     questIntro = await checkQuest(user, placeInfo.name, currentLocation);
 }
-
+await user.save();
 // generates a Discord embed
     const huntEmbed = generateEmbedPveHero(user, placeInfo, huntResult, questIntro);
 

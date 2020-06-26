@@ -93,13 +93,14 @@ if (!userExploredPlaces.includes(placeInfo.name)) {
  // saves to database
  let questIntro;
  const now = new Date();
-await user.setNewCooldown("raid", now);
-await user.unitLoss(raidResult.lossPercentage);
-await user.alternativeGainXp(raidResult.expReward);
+user.setNewCooldown("raid", now);
+user.unitLoss(raidResult.lossPercentage);
+user.alternativeGainXp(raidResult.expReward);
 if (raidResult.win) {
-    await user.gainManyResources(raidResult.resourceReward);
+    user.gainManyResources(raidResult.resourceReward);
     questIntro = await checkQuest(user, placeInfo.name, currentLocation);
 }
+await user.save();
 
 // generates a Discord embed
     const raidEmbed = generateEmbedPveFullArmy(user, placeInfo, raidResult, questIntro);
