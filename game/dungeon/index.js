@@ -24,7 +24,7 @@ const handleDungeonBoss = async (message, user)=>{
         return reaction.emoji.name === "🗺";
     };
 
-    const collector = await invitation.createReactionCollector(reactionFilter, { time: 1000 * 4, errors: ["time"] });
+    const collector = await invitation.createReactionCollector(reactionFilter, { time: 1000 * 20, errors: ["time"] });
     collector.on("collect", async (result, rUser) => {
         if (rUser.bot || dungeon.boss.helpers.length > 4) {
             return;
@@ -92,7 +92,7 @@ const createDungeonBossRound = async (message, progress)=>{
             return progress.weaponAnswer.has(response.author.id) === false && progress.dungeon.boss.helpers.includes(response.author.id) && weaponAnswerFilter.some(alternative => alternative === response.content.toLowerCase());
         };
 
-        const collector = await message.channel.createMessageCollector(filter, { time: 1000 * 4, errors: ["time"] });
+        const collector = await message.channel.createMessageCollector(filter, { time: 1000 * 15, errors: ["time"] });
         collector.on("collect", async (result)=>{
             if (result.author.bot) {
                 return;
