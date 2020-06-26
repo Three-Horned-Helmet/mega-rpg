@@ -13,6 +13,7 @@ const getWorld = (user) => {
 
 	const exploredPlaces = user.world.locations[currentLocation].explored;
 	const exploredPlacesWithIcons = exploredPlaces.length ? exploredPlaces.map(place=>{
+		console.log(place, "place");
 		const type = worldLocations[currentLocation].places[place].type;
 		return `${getPlaceIcon(type)} ${place}`;
 	}) : defaultNonExplored;

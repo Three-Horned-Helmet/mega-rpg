@@ -5,7 +5,7 @@ const { getLocationIcon, getPlaceIcon } = require("../_CONSTS/icons");
 // TODO: finish handleRandomEvent
 // needed: a battlefunction
 
-const handleExplore = (user) => {
+const handleExplore = async (user) => {
 	const cd = onCooldown("explore", user);
 	if (cd.response) {
 		return cd.embed;
@@ -35,7 +35,7 @@ const handleRandomEvent = (randomEvents) => {
 	return `randomEvent triggered --> ${randomEvent} - not yet done`;
 };
 
-const exploreArea = (user, places, currentLocation, now)=>{
+const exploreArea = async (user, places, currentLocation, now)=>{
 	const placeNames = Object.keys(places);
 	const newlyExploredPlaceName = placeNames[Math.floor(Math.random() * placeNames.length)];
 	const previouslyExploredPlaces = user.world.locations[currentLocation].explored;
@@ -48,8 +48,9 @@ const exploreArea = (user, places, currentLocation, now)=>{
 		msg = generateSuccessExploreMessage(currentLocation, newlyExploredPlaceName, user.hero.rank);
 	}
 
-
 	user.handleExplore(now, currentLocation, newlyExploredPlaceName);
+	await user.save();
+
 	return msg;
 };
 

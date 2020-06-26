@@ -80,7 +80,8 @@ module.exports = {
                 const currentLocation = "Grassy Plains";
                 const newlyExploredPlaceName = "Confront Bandits";
 
-                await user.handleExplore(now, currentLocation, newlyExploredPlaceName);
+                user.handleExplore(now, currentLocation, newlyExploredPlaceName);
+                await user.save();
 
                 return false;
             }
@@ -256,7 +257,8 @@ module.exports = {
                 const currentLocation = "Grassy Plains";
                 const newlyExploredPlaceName = "Pack of Implings";
 
-                await user.handleExplore(now, currentLocation, newlyExploredPlaceName);
+                user.handleExplore(now, currentLocation, newlyExploredPlaceName);
+                await user.save();
 
                 return false;
             }
@@ -351,7 +353,8 @@ module.exports = {
                 const currentLocation = "Grassy Plains";
                 const newlyExploredPlaceName = "Pack of Implings";
 
-                await user.handleExplore(now, currentLocation, newlyExploredPlaceName);
+                user.handleExplore(now, currentLocation, newlyExploredPlaceName);
+                await user.save();
 
                 return false;
             }
