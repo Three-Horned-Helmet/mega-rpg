@@ -322,7 +322,6 @@ userSchema.methods.handleExplore = function(now, currentLocation, place) {
 		this.world.locations[currentLocation].explored.push(place);
 		this.markModified(this.world.locations[currentLocation].explored);
 	}
-	return this.save();
 };
 
 userSchema.methods.removeExploredArea = function(currentLocation, place) {
