@@ -24,12 +24,8 @@ const handleRaid = async (user, place = null) => {
 
     const userExploredPlaces = user.world.locations[currentLocation].explored;
     const userExploredRaidPlaces = userExploredPlaces
-    .filter(p=>{
-        return placesInCurrentWorld[p].type === "raid";
-    })
-    .map(p=>{
-        return p.replace(/\s/g, "").toLowerCase();
-    });
+        .filter(p=> placesInCurrentWorld[p].type === "raid")
+        .map(p=>p.replace(/\s/g, "").toLowerCase());
 
     // checks if user has explored any raidable place in current location
     if (!userExploredRaidPlaces.length) {
@@ -38,12 +34,8 @@ const handleRaid = async (user, place = null) => {
 
 
      const userExploredNotRaidPlaces = userExploredPlaces
-     .filter(p=>{
-        return placesInCurrentWorld[p].type !== "raid";
-    })
-     .map(p=>{
-        return p.replace(/\s/g, "").toLowerCase();
-    });
+        .filter(p=> placesInCurrentWorld[p].type !== "raid")
+        .map(p=> p.replace(/\s/g, "").toLowerCase());
 
     // if user tries to raid a place that is not raidable
     if (userExploredNotRaidPlaces.includes(place)) {

@@ -60,10 +60,22 @@ const userSchema = new Schema({
 			type: Number,
 			default: 5,
 		},
-		["iron ore"]: Number,
-		["bronze bar"]: Number,
-		["iron bar"]: Number,
-		["steel bar"]: Number,
+		["iron ore"]: {
+			type: Number,
+			default: 5,
+		},
+		["bronze bar"]: {
+			type: Number,
+			default: 5,
+		},
+		["iron bar"]: {
+			type: Number,
+			default: 5,
+		},
+		["steel bar"]: {
+			type: Number,
+			default: 5,
+		},
 	},
 
 	army: {
@@ -538,8 +550,6 @@ userSchema.methods.unitLoss = function(lossPercentage) {
 		this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
 		this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] || 50;
 	}
-
-	return this.save();
 };
 
 userSchema.methods.heroHpLoss = function(lossPercentage) {
