@@ -300,7 +300,6 @@ userSchema.methods.gainManyResources = function(obj) {
 	Object.keys(obj).forEach(r=>{
 		this.resources[r] += obj[r];
 	});
-	return this.save();
 };
 
 userSchema.methods.removeManyResources = function(obj) {
@@ -554,7 +553,6 @@ userSchema.methods.heroHpLoss = function(lossPercentage) {
 			this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
 			this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] || 50;
 	}
-	return this.save();
 };
 
 userSchema.methods.heroHpLossFixedAmount = function(damage) {
@@ -683,7 +681,6 @@ userSchema.methods.alternativeGainXp = async function(xp = 0) {
 				});
 			}
 	}
-	return this.save();
 };
 
 userSchema.methods.unlockNewLocation = async function(location) {

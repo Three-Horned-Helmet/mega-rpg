@@ -6,7 +6,6 @@ const { generateEmbedPveHero } = require("../../combat/pveEmedGenerator");
 const { checkQuest } = require("../quest/quest-utils");
 
 const handleHunt = async (user, place = null) => {
-
     // checks for cooldown
     const cooldownInfo = onCooldown("hunt", user);
     if (cooldownInfo.response) {
