@@ -115,11 +115,13 @@ const generateRace = (event)=>{
                 return `${r} --- ${getResourceIcon("gold")} ${(weightedMultiplier * GOLDPRIZE) + 500}`;
             });
             let bettingState = "```diff\n- PLEASE WAIT ```";
+            let footer = "Please wait until all racers are ready!";
                 if (state === "ready") {
                     bettingState = "```fix\n GET READY! \n```";
                 }
                 if (state === "go") {
                     bettingState = "```diff\n+ PLACE YOUR BETS! ```";
+                    footer = "Click the racer you think will win!";
                 }
 
             const embedInvitation = new Discord.MessageEmbed()
@@ -137,7 +139,8 @@ const generateRace = (event)=>{
                         value: bettingState,
                         inline: false,
                     },
-                );
+                )
+                .setFooter(footer);
 
             return embedInvitation;
         };

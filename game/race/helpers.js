@@ -1,6 +1,8 @@
 const User = require("../../models/User");
 const GOLDPRIZE = 500;
 
+// copy array
+
 const createChanceArray = (raceData)=> {
     const result = [];
     for (const key of Object.keys(raceData)) {
