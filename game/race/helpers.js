@@ -1,7 +1,24 @@
 const User = require("../../models/User");
 const GOLDPRIZE = 500;
 
-// copy array
+// https://medium.com/javascript-in-plain-english/how-to-deep-copy-objects-and-arrays-in-javascript-7c911359b089
+const deepCopyFunction = (inObject) => {
+    let value, key;
+
+    if (typeof inObject !== "object" || inObject === null) {
+      return inObject;
+    }
+
+    const outObject = Array.isArray(inObject) ? [] : {};
+
+    for (key in inObject) {
+      value = inObject[key];
+
+      outObject[key] = deepCopyFunction(value);
+    }
+
+    return outObject;
+  };
 
 const createChanceArray = (raceData)=> {
     const result = [];
@@ -49,4 +66,4 @@ async function asyncForEach(array, callback) {
     };
 
 
-module.exports = { createChanceArray, racePayOut, asyncForEach, validateUser };
+module.exports = { createChanceArray, racePayOut, asyncForEach, validateUser, deepCopyFunction };

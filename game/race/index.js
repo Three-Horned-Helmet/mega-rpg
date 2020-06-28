@@ -1,28 +1,31 @@
 const { raceData } = require("../_CONSTS/race.js");
-
 const sleep = require("util").promisify(setTimeout);
 const { generateRace, generateEndResult, createRaceInvitation } = require("./embedGenerators");
-const { createChanceArray, racePayOut, asyncForEach, validateUser } = require("./helpers");
+const { createChanceArray, racePayOut, asyncForEach, validateUser, deepCopyFunction } = require("./helpers");
 const User = require("../../models/User");
 const GOLDPRIZE = 500;
+const raceDataCopy = (deepCopyFunction(raceData));
 
 const handleRace = async (message, user)=>{
-    const generatedInvitation = createRaceInvitation(user, raceData);
+    const generatedInvitation = createRaceInvitation(user, raceDataCopy);
 
     const raceInvitation = await message.channel.send(generatedInvitation);
-    // todo: cooldown
+    const cooldownInfo = onCooldown("race", user);
+    if (cooldownInfo.response) {
+        return cooldownInfo.embed;
+    }
 
-    await asyncForEach(Object.keys(raceData), async (r, i)=>{
+    await asyncForEach(Object.keys(raceDataCopy), async (r, i)=>{
         if (i === 5) {
-            await raceInvitation.edit(createRaceInvitation(user, raceData, "ready"));
+            await raceInvitation.edit(createRaceInvitation(user, raceDataCopy, "ready"));
         }
         await raceInvitation.react(r);
     });
 
-    await raceInvitation.edit(createRaceInvitation(user, raceData, "go"));
+    await raceInvitation.edit(createRaceInvitation(user, raceDataCopy, "go"));
 
     const reactionFilter = (reaction) => {
-        return Object.keys(raceData).some(r=> r === reaction.emoji.name);
+        return Object.keys(raceDataCopy).some(r=> r === reaction.emoji.name);
     };
 
     const participants = new Map();
@@ -50,8 +53,8 @@ const handleRace = async (message, user)=>{
         const event = {
             winner: null,
             participants,
-            raceData,
-            weightedChance: createChanceArray(raceData),
+            raceDataCopy,
+            weightedChance: createChanceArray(raceDataCopy),
         };
         await startRace(message, event);
 });
@@ -68,8 +71,8 @@ const handleRace = async (message, user)=>{
             progress = await message.channel.send(raceEmbed);
         }
         if (event.winner) {
-            const gameOverResults = generateEndResult(event, raceData);
-            await racePayOut(event, raceData);
+            const gameOverResults = generateEndResult(event, raceDataCopy);
+            await racePayOut(event, raceDataCopy);
             return await message.channel.send(gameOverResults);
         }
 
@@ -82,8 +85,8 @@ const handleRace = async (message, user)=>{
 
     const generateResult = (event) =>{
         const mover = event.weightedChance[Math.floor(Math.random() * event.weightedChance.length)];
-        event.raceData[mover].dotsLength -= event.raceData[mover].jump();
-        if (event.raceData[mover].dotsLength <= 0) {
+        event.raceDataCopy[mover].dotsLength -= event.raceDataCopy[mover].jump();
+        if (event.raceDataCopy[mover].dotsLength <= 0) {
             event.winner = mover;
         }
         return event;
