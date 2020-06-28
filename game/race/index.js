@@ -1,19 +1,22 @@
-const { raceData } = require("../_CONSTS/race.js");
-const sleep = require("util").promisify(setTimeout);
+const User = require("../../models/User");
+
 const { generateRace, generateEndResult, createRaceInvitation } = require("./embedGenerators");
 const { createChanceArray, racePayOut, asyncForEach, validateUser, deepCopyFunction } = require("./helpers");
-const User = require("../../models/User");
+const { onCooldown } = require("../_CONSTS/cooldowns");
+const sleep = require("util").promisify(setTimeout);
+
 const GOLDPRIZE = 500;
+const { raceData } = require("../_CONSTS/race.js");
 const raceDataCopy = (deepCopyFunction(raceData));
 
 const handleRace = async (message, user)=>{
-    const generatedInvitation = createRaceInvitation(user, raceDataCopy);
-
-    const raceInvitation = await message.channel.send(generatedInvitation);
     const cooldownInfo = onCooldown("race", user);
     if (cooldownInfo.response) {
         return cooldownInfo.embed;
     }
+    const generatedInvitation = createRaceInvitation(user, raceDataCopy);
+
+    const raceInvitation = await message.channel.send(generatedInvitation);
 
     await asyncForEach(Object.keys(raceDataCopy), async (r, i)=>{
         if (i === 5) {

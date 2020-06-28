@@ -4,9 +4,9 @@ const GOLDPRIZE = 500;
 
 const generateRace = (event)=>{
     const sideColor = "#45b6fe";
-    const racers = Object.keys(event.raceData).map(r=>{
+    const racers = Object.keys(event.raceDataCopy).map(r=>{
         let finishTile = "🏁";
-        let { dotsLength } = event.raceData[r];
+        let { dotsLength } = event.raceDataCopy[r];
         if (dotsLength < 1) {
             finishTile = r;
             dotsLength = 1;
@@ -22,9 +22,9 @@ const generateRace = (event)=>{
 
     let leadingCharacter;
     let fewestDots = 30;
-    Object.keys(event.raceData).forEach(r=>{
-        if (event.raceData[r].dotsLength < fewestDots) {
-            fewestDots = event.raceData[r].dotsLength;
+    Object.keys(event.raceDataCopy).forEach(r=>{
+        if (event.raceDataCopy[r].dotsLength < fewestDots) {
+            fewestDots = event.raceDataCopy[r].dotsLength;
             leadingCharacter = r;
         }
     });
@@ -55,7 +55,7 @@ const generateRace = (event)=>{
         return embedRace;
     };
 
-    const generateEndResult = (event, raceData)=> {
+    const generateEndResult = (event, raceDataCopy)=> {
         const sideColor = "#45b6fe";
         const winners = [];
         const losers = [];
@@ -69,7 +69,7 @@ const generateRace = (event)=>{
         });
         const winningCharacter = event.winner;
 
-        let weightedMultiplier = 20 - raceData[event.winner].weight;
+        let weightedMultiplier = 20 - raceDataCopy[event.winner].weight;
         weightedMultiplier = weightedMultiplier ? weightedMultiplier : 1;
 
         const reward = weightedMultiplier * GOLDPRIZE + 500;
@@ -104,13 +104,13 @@ const generateRace = (event)=>{
         return winningResults;
     };
 
-    const createRaceInvitation = (user, raceData, state = null)=>{
+    const createRaceInvitation = (user, raceDataCopy, state = null)=>{
         const sideColor = "#45b6fe";
         const username = user.account.username;
 
 
-            const racers = Object.keys(raceData).map(r=>{
-                let weightedMultiplier = 20 - raceData[r].weight;
+            const racers = Object.keys(raceDataCopy).map(r=>{
+                let weightedMultiplier = 20 - raceDataCopy[r].weight;
                 weightedMultiplier = weightedMultiplier ? weightedMultiplier : 1;
                 return `${r} --- ${getResourceIcon("gold")} ${(weightedMultiplier * GOLDPRIZE) + 500}`;
             });

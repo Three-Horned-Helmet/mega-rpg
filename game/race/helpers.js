@@ -20,24 +20,24 @@ const deepCopyFunction = (inObject) => {
     return outObject;
   };
 
-const createChanceArray = (raceData)=> {
+const createChanceArray = (raceDataCopy)=> {
     const result = [];
-    for (const key of Object.keys(raceData)) {
-        for (let i = 0; i < raceData[key].weight; i += 1) {
+    for (const key of Object.keys(raceDataCopy)) {
+        for (let i = 0; i < raceDataCopy[key].weight; i += 1) {
           result.push(key);
         }
     }
     return result;
 };
 
-const racePayOut = async (event, raceData) =>{
+const racePayOut = async (event, raceDataCopy) =>{
     const winnersDiscordId = [];
     event.participants.forEach((betInfo)=>{
         if (betInfo.racer === event.winner) {
             winnersDiscordId.push(betInfo.userId);
         }
     });
-    let weightedMultiplier = 20 - raceData[event.winner].weight;
+    let weightedMultiplier = 20 - raceDataCopy[event.winner].weight;
     weightedMultiplier = weightedMultiplier ? weightedMultiplier : 1;
 
     const reward = weightedMultiplier * GOLDPRIZE + 500;
