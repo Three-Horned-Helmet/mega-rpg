@@ -118,6 +118,10 @@ const statistics = {
         type: Number,
         default:0,
     },
+    race: {
+        type: Number,
+        default:0,
+    },
     raid: {
         type: Number,
         default:0,
