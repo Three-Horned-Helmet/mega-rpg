@@ -27,7 +27,6 @@ const racePayOut = async (event, raceData) =>{
 
     if (winners.length) {
         await asyncForEach(winners, async w=>{
-            console.log(w, "w");
             w.gainManyResources({ gold: reward });
             await w.save();
         });
