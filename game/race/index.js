@@ -7,17 +7,18 @@ const sleep = require("util").promisify(setTimeout);
 
 const GOLDPRIZE = 500;
 const { raceData } = require("../_CONSTS/race.js");
-const raceDataCopy = (deepCopyFunction(raceData));
+
 
 const handleRace = async (message, user)=>{
     const cooldownInfo = onCooldown("race", user);
     if (cooldownInfo.response) {
         return cooldownInfo.embed;
     }
+    const raceDataCopy = (deepCopyFunction(raceData));
+
     const generatedInvitation = createRaceInvitation(user, raceDataCopy);
 
     const raceInvitation = await message.channel.send(generatedInvitation);
-
     await asyncForEach(Object.keys(raceDataCopy), async (r, i)=>{
         if (i === 5) {
             await raceInvitation.edit(createRaceInvitation(user, raceDataCopy, "ready"));
@@ -74,8 +75,8 @@ const handleRace = async (message, user)=>{
             progress = await message.channel.send(raceEmbed);
         }
         if (event.winner) {
-            const gameOverResults = generateEndResult(event, raceDataCopy);
-            await racePayOut(event, raceDataCopy);
+            const gameOverResults = generateEndResult(event);
+            await racePayOut(event);
             return await message.channel.send(gameOverResults);
         }
 

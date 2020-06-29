@@ -30,14 +30,14 @@ const createChanceArray = (raceDataCopy)=> {
     return result;
 };
 
-const racePayOut = async (event, raceDataCopy) =>{
+const racePayOut = async (event) =>{
     const winnersDiscordId = [];
     event.participants.forEach((betInfo)=>{
         if (betInfo.racer === event.winner) {
             winnersDiscordId.push(betInfo.userId);
         }
     });
-    let weightedMultiplier = 20 - raceDataCopy[event.winner].weight;
+    let weightedMultiplier = 20 - event.raceDataCopy[event.winner].weight;
     weightedMultiplier = weightedMultiplier ? weightedMultiplier : 1;
 
     const reward = weightedMultiplier * GOLDPRIZE + 500;

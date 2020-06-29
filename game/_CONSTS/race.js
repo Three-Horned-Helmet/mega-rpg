@@ -4,25 +4,25 @@ const raceData = {
         icon : "🐎",
         weight: 20,
         dotsLength: DEFAULT_LENGTH,
-        jump: () => Math.floor(Math.random() * 3.25) + 1,
+        jump: () => Math.floor(Math.random() * 3.65) + 1,
     },
     "🚴": {
         icon : "🚴",
         weight: 18,
         dotsLength: DEFAULT_LENGTH,
-        jump: ()=> Math.floor(Math.random() * 3.35) + 1,
+        jump: ()=> Math.floor(Math.random() * 3.85) + 1,
     },
     "🚣": {
         icon : "🚣",
         weight: 17,
         dotsLength: DEFAULT_LENGTH,
-        jump: ()=> Math.floor(Math.random() * 2.55) + 2,
+        jump: ()=> Math.floor(Math.random() * 2.40) + 2,
     },
     "🦇": {
         icon : "🦇",
         weight: 15,
         dotsLength: DEFAULT_LENGTH,
-        jump: ()=> Math.floor(Math.random() * 2.05) + 3,
+        jump: ()=> Math.floor(Math.random() * 1.95) + 3,
     },
     "🐪": {
         icon : "🐪",
@@ -34,7 +34,7 @@ const raceData = {
         icon : "👩‍🦼",
         weight: 8,
         dotsLength: DEFAULT_LENGTH,
-        jump: ()=> Math.floor(Math.random() * 3.35) + 3,
+        jump: ()=> Math.floor(Math.random() * 2.55) + 3,
     },
     "🐢": {
         icon : "🐢",

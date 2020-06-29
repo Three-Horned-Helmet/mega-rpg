@@ -55,7 +55,7 @@ const generateRace = (event)=>{
         return embedRace;
     };
 
-    const generateEndResult = (event, raceDataCopy)=> {
+    const generateEndResult = (event)=> {
         const sideColor = "#45b6fe";
         const winners = [];
         const losers = [];
@@ -69,7 +69,7 @@ const generateRace = (event)=>{
         });
         const winningCharacter = event.winner;
 
-        let weightedMultiplier = 20 - raceDataCopy[event.winner].weight;
+        let weightedMultiplier = 20 - event.raceDataCopy[event.winner].weight;
         weightedMultiplier = weightedMultiplier ? weightedMultiplier : 1;
 
         const reward = weightedMultiplier * GOLDPRIZE + 500;
