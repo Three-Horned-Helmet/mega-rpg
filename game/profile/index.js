@@ -3,13 +3,13 @@ const { determineSupporterTitle, getAllSoldiers, getPlayerPosition } = require("
 const { getDungeonKeyIcon } = require("../_CONSTS/icons");
 const calculateStats = require("../../combat/calculate-stats");
 
-const prettifyUser = async (message, user) => {
+const prettifyUser = async (message, user, avatar) => {
 
 	const sideColor = "#45b6fe";
 	const patreonSupporter = determineSupporterTitle(user.account.patreon);
 
 	const patreonUrl = "https://www.patreon.com/megarpg";
-	const username = `${user.account.username}'s profile`;
+	const username = [`${user.account.username}'s profile`];
 
 	const { hero } = user;
 	const heroRank = hero.rank;
@@ -73,6 +73,10 @@ const prettifyUser = async (message, user) => {
 		)
 
 		.setFooter(`Ranking: PVP: ${pvpRank} ~~~ Total: #${totalRank}`);
+
+		if (avatar) {
+			embedUser.setThumbnail(avatar);
+		}
 
 	return embedUser;
 };
