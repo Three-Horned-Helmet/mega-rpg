@@ -72,7 +72,6 @@ describe("miniboss command", () => {
 		const miniboss = createMinibossEvent(testUser);
 		miniboss.helpers.push(helper0.account.userId);
 		const result = await calculateMinibossResult(miniboss);
-		// cleanup todo: why doesn't the function clean itself?
 		expect(result.win).to.be.equal(true);
 
 	});

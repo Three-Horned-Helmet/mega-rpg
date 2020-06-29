@@ -27,20 +27,25 @@ const handleHunt = async (user, place = null) => {
     const userExploredPlaces = user.world.locations[currentLocation].explored;
 
     const userExploredHuntPlaces = userExploredPlaces
-    .filter(p=> placesInCurrentWorld[p].type === "hunt")
-    .map(p=> p.replace(/\s/g, "").toLowerCase());
+        .filter(p=> placesInCurrentWorld[p].type === "hunt")
+        .map(p=> p.replace(/\s/g, "").toLowerCase());
 
     // checks if user has explored any huntable places in current location
     if (!userExploredHuntPlaces.length) {
         return `You have not explored any place to hunt in ${locationIcon} ${currentLocation}, try \`!explore\` to find a place to hunt`;
     }
 
-     const userExploredNotHuntPlaces = userExploredPlaces
-     .filter(p=>placesInCurrentWorld[p].type !== "hunt")
-     .map(p=> p.replace(/\s/g, "").toLowerCase());
+     const notHuntPlaces = Object.keys(placesInCurrentWorld)
+        .filter(p=> {
+            const notHuntPlace = placesInCurrentWorld[p].type !== "hunt";
+            if (notHuntPlace) {
+                return placesInCurrentWorld[p];
+            }
+        })
+        .map(p=> p.replace(/\s/g, "").toLowerCase());
 
     // if user tries to hunt a place that is not huntable
-    if (userExploredNotHuntPlaces.includes(place)) {
+    if (notHuntPlaces.includes(place.replace(/\s/g, "").toLowerCase())) {
         return "This place cannot be hunted";
     }
 
@@ -50,7 +55,7 @@ const handleHunt = async (user, place = null) => {
     if (place) {
         placeInfo = Object.values(placesInCurrentWorld).find(p=>{
         const friendlyFormat = p.name.replace(/\s/g, "").toLowerCase();
-        return friendlyFormat === place;
+        return friendlyFormat === place.replace(/\s/g, "");
 
         // if we want to make it user friendly
         // and let the user type in the first 4 letters of the place
