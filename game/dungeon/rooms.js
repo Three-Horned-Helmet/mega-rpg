@@ -39,7 +39,7 @@ if (raidResult.win) {
     await user.gainManyResources(raidResult.resourceReward);
 }
 // generates a Discord embed
-const raidEmbed = generateEmbedPveFullArmy(user, placeInfo, raidResult, true);
+const raidEmbed = generateEmbedPveFullArmy(user, placeInfo, raidResult, false, true);
 const msg = await message.channel.send(raidEmbed);
 try {
     await msg.react("✅");

@@ -3,6 +3,7 @@ const { worldLocations } = require("../_CONSTS/explore");
 
 const { createDungeonBossInvitation, generateDungeonBossRound, generateDungeonBossResult } = require("./embedGenerator");
 const { getWeaponInfo, dungeonStartAllowed, validateHelper, randomIntBetweenMinMax } = require("./helper");
+const { asyncForEach, deepCopyFunction } = require("../_GLOBAL_HELPERS");
 
 const handleDungeonBoss = async (message, user)=>{
     // cooldown, health, explored dungeon and dungeon key
@@ -24,7 +25,7 @@ const handleDungeonBoss = async (message, user)=>{
         return reaction.emoji.name === "🗺";
     };
 
-    const collector = await invitation.createReactionCollector(reactionFilter, { time: 1000 * 4, errors: ["time"] });
+    const collector = await invitation.createReactionCollector(reactionFilter, { time: 1000 * 20, errors: ["time"] });
     collector.on("collect", async (result, rUser) => {
         if (rUser.bot || dungeon.boss.helpers.length > 4) {
             return;
@@ -50,7 +51,7 @@ const createDungeonBossEvent = (user) =>{
     const dungeonName = Object.keys(worldLocations[currentLocation].places).find(p=>{
         return worldLocations[currentLocation].places[p].type === "dungeon";
     });
-    const dungeon = worldLocations[currentLocation].places[dungeonName];
+    const dungeon = deepCopyFunction(worldLocations[currentLocation].places[dungeonName]);
     dungeon.boss.helpers.unshift(user.account.userId);
     return dungeon;
 };
@@ -92,7 +93,7 @@ const createDungeonBossRound = async (message, progress)=>{
             return progress.weaponAnswer.has(response.author.id) === false && progress.dungeon.boss.helpers.includes(response.author.id) && weaponAnswerFilter.some(alternative => alternative === response.content.toLowerCase());
         };
 
-        const collector = await message.channel.createMessageCollector(filter, { time: 1000 * 4, errors: ["time"] });
+        const collector = await message.channel.createMessageCollector(filter, { time: 1000 * 15, errors: ["time"] });
         collector.on("collect", async (result)=>{
             if (result.author.bot) {
                 return;
@@ -312,12 +313,6 @@ const calculateDungeonBossRewards = async progress => {
     });
     return rewards;
 };
-
-async function asyncForEach(array, callback) {
-    for (let index = 0; index < array.length; index += 1) {
-      await callback(array[index], index, array);
-    }
-  }
 
 
 module.exports = { handleDungeonBoss, createDungeonBossEvent, calculateDungeonResult };

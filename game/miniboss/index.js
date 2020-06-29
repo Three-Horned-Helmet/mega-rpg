@@ -2,6 +2,7 @@ const { onCooldown } = require("../_CONSTS/cooldowns");
 const { worldLocations } = require("../_CONSTS/explore");
 const { getLocationIcon } = require("../_CONSTS/icons");
 const { createMinibossInvitation, createMinibossResult } = require("./embedGenerator");
+const { asyncForEach, deepCopyFunction } = require("../_GLOBAL_HELPERS");
 
 const User = require("../../models/User");
 
@@ -11,11 +12,10 @@ const handleMiniboss = async (message, user)=>{
     // cooldown, health, explored miniboss
     const disallowed = minibossStartAllowed(user);
 		if (disallowed) {
-			return disallowed;
+			message.channel.send(disallowed);
         }
 
     const miniboss = createMinibossEvent(user);
-
     const now = new Date();
     await user.setNewCooldown("miniboss", now);
 
@@ -82,7 +82,7 @@ const createMinibossEvent = (user) =>{
     const minibossname = Object.keys(worldLocations[currentLocation].places).find(p=>{
         return worldLocations[currentLocation].places[p].type === "miniboss";
     });
-    const miniboss = worldLocations[currentLocation].places[minibossname];
+    const miniboss = deepCopyFunction(worldLocations[currentLocation].places[minibossname]);
     miniboss.helpers.push(user.account.userId);
     return miniboss;
 };
@@ -173,13 +173,6 @@ const calculateMinibossResult = async (miniboss)=>{
     }
     return result;
 };
-
-
-async function asyncForEach(array, callback) {
-    for (let index = 0; index < array.length; index += 1) {
-      await callback(array[index], index, array);
-    }
-  }
 
 
 module.exports = { handleMiniboss, createMinibossEvent, minibossStartAllowed, createMinibossResult, calculateMinibossResult };

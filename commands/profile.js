@@ -13,7 +13,8 @@ module.exports = {
 		}
 		if (userIdFromArgs) {
 			try {
-				dbUser = await User.findOne({ "account.userId": userIdFromArgs[0] }); // retrieves the user mentioned in as argument eg: !profile @Ignore
+				// retrieves the user mentioned in as argument eg: !profile @Ignore
+				dbUser = await User.findOne({ "account.userId": userIdFromArgs[0] });
 			}
 			catch (err) {
 				console.error("error: ", err);
