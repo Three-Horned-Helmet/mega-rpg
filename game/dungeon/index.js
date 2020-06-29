@@ -3,7 +3,7 @@ const { worldLocations } = require("../_CONSTS/explore");
 
 const { createDungeonBossInvitation, generateDungeonBossRound, generateDungeonBossResult } = require("./embedGenerator");
 const { getWeaponInfo, dungeonStartAllowed, validateHelper, randomIntBetweenMinMax } = require("./helper");
-const { asyncForEach } = require("../_GLOBAL_HELPERS");
+const { asyncForEach, deepCopyFunction } = require("../_GLOBAL_HELPERS");
 
 const handleDungeonBoss = async (message, user)=>{
     // cooldown, health, explored dungeon and dungeon key
@@ -51,7 +51,7 @@ const createDungeonBossEvent = (user) =>{
     const dungeonName = Object.keys(worldLocations[currentLocation].places).find(p=>{
         return worldLocations[currentLocation].places[p].type === "dungeon";
     });
-    const dungeon = worldLocations[currentLocation].places[dungeonName];
+    const dungeon = deepCopyFunction(worldLocations[currentLocation].places[dungeonName]);
     dungeon.boss.helpers.unshift(user.account.userId);
     return dungeon;
 };

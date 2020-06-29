@@ -2,7 +2,7 @@ const { onCooldown } = require("../_CONSTS/cooldowns");
 const { worldLocations } = require("../_CONSTS/explore");
 const { getLocationIcon } = require("../_CONSTS/icons");
 const { createMinibossInvitation, createMinibossResult } = require("./embedGenerator");
-const { asyncForEach } = require("../_GLOBAL_HELPERS");
+const { asyncForEach, deepCopyFunction } = require("../_GLOBAL_HELPERS");
 
 const User = require("../../models/User");
 
@@ -82,7 +82,7 @@ const createMinibossEvent = (user) =>{
     const minibossname = Object.keys(worldLocations[currentLocation].places).find(p=>{
         return worldLocations[currentLocation].places[p].type === "miniboss";
     });
-    const miniboss = worldLocations[currentLocation].places[minibossname];
+    const miniboss = deepCopyFunction(worldLocations[currentLocation].places[minibossname]);
     miniboss.helpers.push(user.account.userId);
     return miniboss;
 };

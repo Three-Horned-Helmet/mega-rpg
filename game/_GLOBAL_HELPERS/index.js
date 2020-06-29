@@ -5,7 +5,7 @@ async function asyncForEach(array, callback) {
     }
   }
 
-  // deeo copies an array or object
+  // deep copies an array or object
   // https://medium.com/javascript-in-plain-english/how-to-deep-copy-objects-and-arrays-in-javascript-7c911359b089
 const deepCopyFunction = (inObject) => {
     let value, key;
