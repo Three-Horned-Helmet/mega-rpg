@@ -1,16 +1,12 @@
 /* eslint-disable no-undef */
 
 const { expect } = require("chai");
-const User = require("../../models/User");
 const exploreCommand = require("../../commands/explore");
 const { createTestUser, generateDiscordMessage } = require("../helper");
 const { worldLocations } = require("../../game/_CONSTS/explore");
 
 
 describe("explore command", () => {
-	beforeEach("beforeEach, cleaning db", async ()=>{
-		await User.deleteMany();
-	});
 	it("should exist", () => {
 		expect(exploreCommand).to.not.equal(undefined);
 	});

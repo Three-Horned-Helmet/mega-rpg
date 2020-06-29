@@ -1,15 +1,11 @@
 /* eslint-disable no-undef */
 
 const { expect } = require("chai");
-const User = require("../../models/User");
 const dailyPrizeCommand = require("../../commands/dailyPrize");
 const weeklyPrizeCommand = require("../../commands/weeklyPrize");
 const { createTestUser, generateDiscordMessage, mockDays } = require("../helper");
 
 describe("consecutive prizes commands", () => {
-	beforeEach("beforeEach, cleaning db", async ()=>{
-		await User.deleteMany();
-	});
 	it("daily prize should exist", () => {
 		expect(dailyPrizeCommand).to.not.equal(undefined);
 	});

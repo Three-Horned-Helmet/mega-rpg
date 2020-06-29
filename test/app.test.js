@@ -10,6 +10,10 @@ const { expect } = chai;
 
 const mongodbUri = process.env.TEST_MONGODB_URI;
 
+function importTest(name, path) {
+    describe(name, ()=>require(path));
+}
+
 describe("test suite", () => {
 	before("connect", (done)=> {
 		mongoose.connect(mongodbUri, { useUnifiedTopology: true, useNewUrlParser: true });
@@ -27,6 +31,16 @@ describe("test suite", () => {
 	});
 	beforeEach("beforeEach, cleaning db", async ()=>{
 		await User.deleteMany();
+	});
+	importTest("explore", "./explore/index.test.js");
+	importTest("fish", "./fish/index.test.js");
+	importTest("hunt", "./hunt/index.test.js");
+	importTest("miniboss", "./miniboss/index.test.js");
+	importTest("prize", "./prize/index.test.js");
+	importTest("raid", "./raid/index.test.js");
+
+	after(done => {
+		return mongoose.disconnect(done);
 	});
 	describe("database helper functions", ()=>{
 

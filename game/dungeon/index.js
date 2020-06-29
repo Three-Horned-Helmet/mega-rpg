@@ -56,8 +56,6 @@ const createDungeonBossEvent = (user) =>{
     return dungeon;
 };
 
-
-// c
 const startDungeonBossEvent = async (message, dungeon) => {
     const users = await User.find({ "account.userId": dungeon.boss.helpers });
     const initiativeTaker = users.filter(u=> u.account.userId === dungeon.boss.helpers[0]);

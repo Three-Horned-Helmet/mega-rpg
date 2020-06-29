@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 
 const { expect } = require("chai");
-const User = require("../../models/User");
 const raidCommand = require("../../commands/raid");
 const { createTestUser, generateDiscordMessage, mockDays } = require("../helper");
 
@@ -27,9 +26,7 @@ const opTestStats = {
 
 
 describe("raid command", () => {
-	beforeEach("beforeEach, cleaning db", async ()=>{
-		await User.deleteMany();
-	});
+
 	it("should exist", () => {
 		expect(raidCommand).to.not.equal(undefined);
     });

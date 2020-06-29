@@ -1,15 +1,11 @@
 /* eslint-disable no-undef */
 
 const { expect } = require("chai");
-const User = require("../../models/User");
 const fishingCommand = require("../../commands/fish");
 const { createTestUser, generateDiscordMessage, mockDays } = require("../helper");
 
 
 describe("fish commands", () => {
-	beforeEach("beforeEach, cleaning db", async ()=>{
-		await User.deleteMany();
-	});
 	it("fishing should exist", () => {
 		expect(fishingCommand).to.not.equal(undefined);
     });
