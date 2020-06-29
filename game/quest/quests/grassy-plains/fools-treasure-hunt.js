@@ -118,7 +118,7 @@ packOfImplings: {
 
     // Returns false if the quest description is shown, or true if the quest is being completed
     execute: async function(user) {
-        const questResponse = questHelper(user, this.name, "Grassy Plains", "Pack of Implings");
+        const questResponse = questHelper(user, this.name, [{ currentLocation: "Grassy Plains", place: "Pack of Implings" }]);
         if(!questResponse) return false;
 
         // Has the user completed the PvE requirements?

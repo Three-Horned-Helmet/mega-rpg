@@ -65,18 +65,159 @@ module.exports = {
 
         // Returns false if the quest description is shown, or true if the quest is being completed
         execute: async function(user) {
+            const newQuests = [{
+                name: "Finding Morith",
+                started: false,
+                questKeySequence: ["Building Quests", "findingMorith"],
+                pve: [{
+                    name: "Cave",
+                    completed: false,
+                    chance: 0.2,
+                }],
+            }];
+            const questResponse = questHelper(user, this.name, false, newQuests);
+            if(!questResponse) return false;
+
+            // Has the user completed the two quests
+            if(!(user.completedQuests.includes("Melting Obsidian")) && !(user.completedQuests.includes("Grethel's Mission"))) return false;
+
+            user.removeQuest(this.name);
+
+            user.save();
+
+            return true;
+        },
+    },
+
+    // A QUEST FOR OBSIDIAN
+    findingMorith: {
+        name: "Finding Morith",
+        pve: [{
+            name: "Cave",
+            completed: false,
+            chance: 0.2,
+        }],
+        found: "While venturing into the Cave you find an old bulky gentalman inspecting some rocks",
+        description: "You need to find Morith the Blacksmith, the only smith in the area that is able to craft Obsidian Bars. He is an old bulky man, last seen a few weeks ago.",
+        objective: "Find Morith",
+        reward: false,
+        winDescription: "'Hello there! Are you by any chance Morith the Blacksmith?'\n\n*\\*The old man turned around, clearly baffled by the pressence of others\\**\n\n'Oh hello... Yes, I am Morith, who are you?'\n'I need your help! Ahred needs some Obsidian to craft a key, and he told me you are the only person in this area that knows how to melt Obsidian!'\n\n*\\*Morith sends you a judging look\\**\n\n'It must be a pretty special key he is crafting, huh?'\n\n*\\*You decides to not answer the question and Morith breaks the silence.\\**\n\n'I assume I can help you, but  I need some help from you first!'\n**A new quest is available**",
+        questKeySequence: ["Grassy Plains", "findingMorith"],
+
+        // Returns false if the quest description is shown, or true if the quest is being completed
+        execute: async function(user) {
             const questResponse = questHelper(user, this.name);
             if(!questResponse) return false;
 
 
-            // Has the user completed the two quests
-            if(!(user.completedQuests.includes("Melting Obsidian")) && !(user.completedQuests.includes("Grethel's Mission"))) return false;
+            // Has the user completed the PvE requirements?
+            const userQuest = user.quests.find(q => q.name === this.name);
+            if(userQuest.pve.find(raid => !raid.completed)) return false;
+
 
             // Get reward
             // await user.gainManyResources({
             //     gold: 300,
             // });
 
+            // Add next quest
+            const newQuest = {
+                name: "Rubinite",
+                started: false,
+                questKeySequence: ["Grassy Plains", "rubinite"],
+                pve: [{
+                    name: "Cave",
+                    completed: false,
+                    chance: 0.25,
+                }],
+            };
+
+            user.addNewQuest(newQuest);
+            user.removeQuest(this.name);
+
+            user.save();
+
+            return true;
+        },
+    },
+
+    rubinite: {
+        name: "Rubinite",
+        pve: [{
+            name: "Cave",
+            completed: false,
+            chance: 0.25,
+        }],
+        found: "You notice a glimmer of red by some rocks.",
+        description: "'I am looking for a new type of ore called Rubinite. It is  shiny red with a shade of black and should be present in this Cave. If you help me find it, then I will help you with the Obsidian.'",
+        objective: "Find Rubinite in the Cave",
+        reward: false,
+        winDescription: "You go to inspect the rocks, and there is no doubt Rubinite with its shiny red glimmer and a tint of black. As you head back to Morith you notice that you are in a familiar place. \n\nThere are Mens clothing around the rocky floor, and food in the process of rotting. You take a good look around to see if you can find anything of value. You find some papers with scribings and arrows and it seems to be of a large Courtyard with a building in the middle. You look further around but find nothing of interest and decides to get back to Morith.\n\n*\\*A while later you meet Morith by the entrance of the Cave\\**\n\n'Oh good, you found some Rubinite where did you find it?'\n'I found it by a room in the Cave that seemed abandoned a while ago. Now that you have your Rubinite, will you help me get some Obsidian Bars?'\n'Yes of course, I always keep my promises!'\n**A new quest is available**",
+        questKeySequence: ["Grassy Plains", "rubinite"],
+
+        // Returns false if the quest description is shown, or true if the quest is being completed
+        execute: async function(user) {
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse) return false;
+
+
+            // Has the user completed the PvE requirements?
+            const userQuest = user.quests.find(q => q.name === this.name);
+            if(userQuest.pve.find(raid => !raid.completed)) return false;
+
+
+            // Get reward
+            // await user.gainManyResources({
+            //     gold: 300,
+            // });
+
+            // Add next quest
+            const newQuest = {
+                name: "Moriths Hidden Mine",
+                started: false,
+                questKeySequence: ["Grassy Plains", "morithsHiddenMine"],
+            };
+
+            user.addNewQuest(newQuest);
+            user.removeQuest(this.name);
+
+            user.save();
+
+            return true;
+        },
+    },
+
+    morithsHiddenMine: {
+        name: "Moriths Hidden Mine",
+        description: "",
+        objective: "",
+        reward: false,
+        winDescription: "",
+        questKeySequence: ["Grassy Plains", "morithsHiddenMine"],
+
+        // Returns false if the quest description is shown, or true if the quest is being completed
+        execute: async function(user) {
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse) return false;
+
+            // Get reward
+            // await user.gainManyResources({
+            //     gold: 300,
+            // });
+
+            // Add next quest
+            // const newQuest = {
+            //     name: "Rubinite",
+            //     started: false,
+            //     questKeySequence: ["Grassy Plains", "rubinite"],
+            //     pve: [{
+            //         name: "Cave",
+            //         completed: false,
+            //         chance: 0.25,
+            //     }],
+            // };
+
+            // user.addNewQuest(newQuest);
             user.removeQuest(this.name);
 
             user.save();

@@ -153,7 +153,7 @@ module.exports = {
 
             // Returns false if the quest description is shown, or true if the quest is being completed
             execute: async function(user) {
-                const questResponse = questHelper(user, this.name, "Grassy Plains", "Pack of Wolves");
+                const questResponse = questHelper(user, this.name, [{ currentLocation: "Grassy Plains", place: "Pack of Wolves" }]);
                 if(!questResponse) return false;
 
                 // Does user have the pre-req?
@@ -190,7 +190,7 @@ module.exports = {
 
             // Returns false if the quest description is shown, or true if the quest is being completed
             execute: async function(user) {
-                const questResponse = questHelper(user, this.name, "Grassy Plains", "The Alpha Wolf");
+                const questResponse = questHelper(user, this.name, [{ currentLocation: "Grassy Plains", place: "The Alpha Wolf" }]);
                 if(!questResponse) return false;
 
                 // Does user have the pre-req?

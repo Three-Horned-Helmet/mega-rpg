@@ -268,7 +268,7 @@ module.exports = {
 
         // Returns false if the quest description is shown, or true if the quest is being completed
         execute: async function(user, choice) {
-            const questResponse = await questHelper(user, this.name, "Grassy Plains", "Wood Elves");
+            const questResponse = await questHelper(user, this.name, [{ currentLocation: "Grassy Plains", place:"Wood Elves" }]);
             if(!questResponse || !choice) return false;
 
        // Has the user completed the PvE requirements?
