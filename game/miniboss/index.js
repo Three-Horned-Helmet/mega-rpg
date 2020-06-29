@@ -2,6 +2,7 @@ const { onCooldown } = require("../_CONSTS/cooldowns");
 const { worldLocations } = require("../_CONSTS/explore");
 const { getLocationIcon } = require("../_CONSTS/icons");
 const { createMinibossInvitation, createMinibossResult } = require("./embedGenerator");
+const { asyncForEach } = require("../_GLOBAL_HELPERS");
 
 const User = require("../../models/User");
 
@@ -172,13 +173,6 @@ const calculateMinibossResult = async (miniboss)=>{
     }
     return result;
 };
-
-
-async function asyncForEach(array, callback) {
-    for (let index = 0; index < array.length; index += 1) {
-      await callback(array[index], index, array);
-    }
-  }
 
 
 module.exports = { handleMiniboss, createMinibossEvent, minibossStartAllowed, createMinibossResult, calculateMinibossResult };

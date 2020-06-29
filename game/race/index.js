@@ -1,7 +1,8 @@
 const User = require("../../models/User");
 
 const { generateRace, generateEndResult, createRaceInvitation } = require("./embedGenerators");
-const { createChanceArray, racePayOut, asyncForEach, validateUser, deepCopyFunction } = require("./helpers");
+const { createChanceArray, racePayOut, validateUser } = require("./helpers");
+const { asyncForEach, deepCopyFunction } = require("../_GLOBAL_HELPERS");
 const { onCooldown } = require("../_CONSTS/cooldowns");
 const sleep = require("util").promisify(setTimeout);
 

@@ -3,6 +3,7 @@ const { worldLocations } = require("../_CONSTS/explore");
 
 const { createDungeonBossInvitation, generateDungeonBossRound, generateDungeonBossResult } = require("./embedGenerator");
 const { getWeaponInfo, dungeonStartAllowed, validateHelper, randomIntBetweenMinMax } = require("./helper");
+const { asyncForEach } = require("../_GLOBAL_HELPERS");
 
 const handleDungeonBoss = async (message, user)=>{
     // cooldown, health, explored dungeon and dungeon key
@@ -312,12 +313,6 @@ const calculateDungeonBossRewards = async progress => {
     });
     return rewards;
 };
-
-async function asyncForEach(array, callback) {
-    for (let index = 0; index < array.length; index += 1) {
-      await callback(array[index], index, array);
-    }
-  }
 
 
 module.exports = { handleDungeonBoss, createDungeonBossEvent, calculateDungeonResult };
