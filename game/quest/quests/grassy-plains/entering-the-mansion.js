@@ -57,7 +57,7 @@ module.exports = {
      // ENTERING THE MANSION
      keyToMansion: {
         name: "The Key to the Mansion",
-        description: "'You know... I once knew Julius Banethus, the person now known as the Bandit King.He used to be an honorable man, who cared about his people! Julius and his wife Migreth used to come by me quite frequently back in the days to get keys crafted, and we ended up becoming quite good friends!'\n\n*\\*A smile appeared accross his face, but when he continued his face turned dark\\**\n\n'This was when Migreth was still alive. She was expecting a child and was going to conceive it out in the Forest where they had a magnificent Cabin together. No one knows what really happened there, but the Cabin got set on fire and Migreth nor the child made it out alive. Poor Julius was devastated and after a while he could not stand it anymore and left the country for a long time. When he came back...'\n\n*\\*He paused and the look on his face was that of a broken man\\**\n\n'Oh well, you told me you wanted that key made, huh? I need a few things for that to happen. First of all I need some Obsidian bars to craft the key, but only Morith the Blacksmith knows the craft, he is an older man, but still very sharp and daring. Unfortuneatly, no one has seen him for quite a while so you better get prepared for a little searching\nSecondly, I need the key Mold. This one will also be a bit tricky, but you can talk with Grethel, she may know how to get it. Good luck!'\n\n*\\*You thank the Blacksmith and leaves the blacksmith\\**\n**Two new quests are available**",
+        description: "'You know... I once knew Julius Banethus, the person now known as the Bandit King.He used to be an honorable man, who cared about his people! Julius and his wife Migreth used to come by me quite frequently back in the days to get keys crafted, and we ended up becoming quite good friends!'\n\n*\\*A smile appeared accross his face, but when he continued his face turned dark\\**\n\n'This was when Migreth was still alive. She was expecting a child and was going to conceive it out in the Forest where they had a magnificent Cabin together. No one knows what really happened there, but the Cabin got set on fire and Migreth nor the child made it out alive. Poor Julius was devastated and after a while he could not stand it anymore and left the country for a long time. When he came back...'\n\n*\\*He paused and the look on his face was that of a broken man\\**\n\n'Oh well, you told me you wanted that key made, huh? I need a few things for that to happen. First of all I need some Obsidian bars to craft the key, but only Morith the Blacksmith knows the craft, he is an older man, but still very sharp and daring. Unfortuneatly, no one has seen him for quite a while so you better get prepared for a little searching\nSecondly, I need the key Mold. This one will also be a bit tricky, but you can talk with Grethel. She lives by the river here in the Fishing Village, and may know how to get the Mold. Good luck!'\n\n*\\*You thank Ahred and leaves the blacksmith\\**\n**Two new quests are available**",
         objective: "Get the Key Mold and the Obsidian bars",
         reward: "Key to the Mansion: 1",
         winDescription: "'Perfect! This is exactly what I need to create the key! Feel free to sit and wait while I carft it.'\n\n*\\*You sat down by an old table in the corner of the house and watched for a few hours while Ahred crafted the key\\**'There we go, this should do it!'\n\n*\\*Ahred hands you the key\\**'Careful, it is still a bit hot!'\n\n*\\*You take the key deeply impressed. It is really a beautiful key!\\**\n\n'Thank you so much for your help, Ahred! If I can ever repay you, please let me know!'\n\n'Oh, don't worry about that! Just remember, I don't know what business you have with the Bandit King, but don't forget that he was once a very king and honorable man, and I believe that man is still there inside of him somewhere!'\n\n*\\*You shake Ahreds hand in gratitude and leave the locksmith with a shiny freshly-made obsidian key. Now it's time to see if it actually works!\\**",
@@ -74,7 +74,13 @@ module.exports = {
                     completed: false,
                     chance: 0.2,
                 }],
+            },
+            {
+                name: "Grethels Mission",
+                started: false,
+                questKeySequence: ["Building Quests", "grethelsMission"],
             }];
+
             const questResponse = questHelper(user, this.name, false, newQuests);
             if(!questResponse) return false;
 
@@ -209,6 +215,102 @@ module.exports = {
                 "steel bar": 40,
             });
 
+            user.removeQuest(this.name);
+
+            user.save();
+
+            return true;
+        },
+    },
+
+
+    // GRETHELS MISSION
+    grethelsMission: {
+        name: "Grethels Mission",
+        description: "You head over to Grethel's house in the outskirts of the Fishing Village, right by the river. It is old and broken-down. You knock on the door, and is greeted by an old woman who seems to be doing fairly well for her old age.\n\n'Are you Grethel by any chance? I was sent here by Ahred, he told me that you can help me craft a Key Mold to get into the Bandits Mansion.'\n'So you have business with the King, huh?'\n\n*\\*Grethel does not seem too pleased but she moves to the side and lets you into her home. After several minutes of silence she decides to speak.\\**\n\n'I understand that a lot of people has an issue with Julius nowadays, you should know that he was once a nice and charming man, and I believe that he is still that same good man that he once once. He didn't turn evil until that...'\n\n*\\*She stoped her self, and with a shrug on her shoulder she continues\\**\n\n'Oh well, I can help you get the Key Mold but it will not be easy! We need resources to craft the Key Mold, if you can fetch that, then I will plan out how to do this. Meet me here with the resources tonight!'\n\n*\\*You nod affirmatively\\**",
+        objective: "Bring Grethel the following resources:\nGold: 200\nIron Bars: 40\nYew wood: 50",
+        reward: false,
+        winDescription: "We would have to get into the Mansion's Courtyard and Mold the lock to the Mansion directly. The place is heavely guarded so it will be dangerous, but if we are lucky it will be less guarded at night! When we get to the Mansion's Main Door you need to create a Mold of the lock while I will keep a lookout for guards. I am more familiar with the place and know where the Guards can come from if they spot us. So let us get to it!'\n**A new quest is available**",
+        questKeySequence: ["Grassy Plains", "grethelsMission"],
+
+        // Returns false if the quest description is shown, or true if the quest is being completed
+        execute: async function(user) {
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse) return false;
+
+            // Does the user have the resources?
+            if(!(user.resources.gold >= 200)) return false;
+            if(!(user.resources["iron bar"] >= 40)) return false;
+            if(!(user.resources["yew wood"] >= 50)) return false;
+
+            // Get reward
+            // await user.gainManyResources({
+            //     gold: 300,
+            // });
+
+            // Add next quest
+            const newQuest = {
+                name: "Entering the Courtyard",
+                started: false,
+                questKeySequence: ["Grassy Plains", "enteringCourtyard"],
+                pve: [{
+                    name: "Mansion's Courtyard",
+                    completed: false,
+                    chance: 1,
+                }],
+            };
+
+            user.addNewQuest(newQuest);
+            user.removeQuest(this.name);
+
+            user.save();
+
+            return true;
+        },
+    },
+
+    enteringCourtyard: {
+        name: "Entering the Courtyard",
+        pve: [{
+            name: "Mansion's Courtyard",
+            completed: false,
+            chance: 1,
+        }],
+        found: "You approach the door to the Mansion.",
+        description: "",
+        objective: "",
+        reward: false,
+        winDescription: "",
+        questKeySequence: ["Grassy Plains", "enteringCourtyard"],
+
+        // Returns false if the quest description is shown, or true if the quest is being completed
+        execute: async function(user) {
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse) return false;
+
+
+            // Has the user completed the PvE requirements?
+            const userQuest = user.quests.find(q => q.name === this.name);
+            if(userQuest.pve.find(raid => !raid.completed)) return false;
+
+            // Get reward
+            // await user.gainManyResources({
+            //     gold: 300,
+            // });
+
+            // Add next quest
+            // const newQuest = {
+            //     name: "Rubinite",
+            //     started: false,
+            //     questKeySequence: ["Grassy Plains", "rubinite"],
+            //     pve: [{
+            //         name: "Cave",
+            //         completed: false,
+            //         chance: 0.25,
+            //     }],
+            // };
+
+            // user.addNewQuest(newQuest);
             user.removeQuest(this.name);
 
             user.save();

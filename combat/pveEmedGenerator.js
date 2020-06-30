@@ -59,6 +59,7 @@ function generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro, dun
     ];
 
     if(questIntro) {
+        console.log("QUEST INTRO", questIntro);
         fields.push({
             name: "Quest",
             value: questIntro,

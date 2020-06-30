@@ -119,7 +119,7 @@ const worldLocations = {
 				requires: "CM key",
 				rooms:[
 					{
-						name: "Mansion Courtyard",
+						name: "Mansion's Courtyard",
 						type: "raid",
 						stats:{
 							attack: 200,

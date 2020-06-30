@@ -1,5 +1,6 @@
 const { worldLocations } = require("../_CONSTS/explore");
 const { dungeonStartAllowed } = require("./helper");
+const { checkQuest } = require("../quest/quest-utils");
 
 const { calculatePveFullArmyResult } = require("../../combat/combat");
 const { generateEmbedPveFullArmy } = require("../../combat/pveEmedGenerator");
@@ -35,11 +36,15 @@ const raidResult = calculatePveFullArmyResult(user, placeInfo);
  // saves to database
 await user.unitLoss(raidResult.lossPercentage);
 await user.alternativeGainXp(raidResult.expReward);
+let questIntro;
 if (raidResult.win) {
     await user.gainManyResources(raidResult.resourceReward);
+
+    const { currentLocation } = user.world;
+    questIntro = await checkQuest(user, placeInfo, currentLocation);
 }
 // generates a Discord embed
-const raidEmbed = generateEmbedPveFullArmy(user, placeInfo, raidResult, false, true);
+const raidEmbed = generateEmbedPveFullArmy(user, placeInfo, raidResult, questIntro, true);
 const msg = await message.channel.send(raidEmbed);
 try {
     await msg.react("✅");
@@ -72,7 +77,7 @@ msg.awaitReactions(filter, { max: 1, time: 1000 * 20, errors: ["time"] })
 		}
 	})
 	.catch(() => {
-    return msg.reply("You did not choose anything and therefor fled the dungeon");
+    return msg.reply("You did not choose anything and therefore fled the dungeon");
     });
 };
 
