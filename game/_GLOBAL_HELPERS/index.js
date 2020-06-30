@@ -25,4 +25,23 @@ const deepCopyFunction = (inObject) => {
     return outObject;
   };
 
-  module.exports = { asyncForEach, deepCopyFunction };
+  // fightResult: [1, 0.5, 0] (1 means that playerRating won the fight)
+  // eloCalculations(1000,1500,1) --> { delta: 30, newRating: 1030 }
+  const eloCalculations = (playerRating, opponentRating, fightResult)=>{
+    if (![0, 0.5, 1].includes(fightResult)) {
+      console.error("fightResult must be either 1, 0.5 or 0 (Number)");
+      return null;
+    }
+
+    const chanceToWin = 1 / (1 + Math.pow(10, (opponentRating - playerRating) / 400));
+    const delta = Math.round(32 * (fightResult - chanceToWin));
+    const newRating = playerRating + delta;
+
+    return {
+      delta,
+      newRating,
+    };
+  };
+
+
+  module.exports = { asyncForEach, deepCopyFunction, eloCalculations };

@@ -9,7 +9,12 @@ const prettifyUser = async (message, user) => {
 	const patreonSupporter = determineSupporterTitle(user.account.patreon);
 
 	const patreonUrl = "https://www.patreon.com/megarpg";
-	const username = `${user.account.username}'s profile`;
+	const userElo = user.hero.elo || 1200;
+
+	const eloPosition = await getPlayerPosition(message.author.id, "hero.elo");
+	// const xpRank = await getPlayerPosition(message.author.id);
+
+	const username = `( ${eloPosition} ) ${user.account.username}'s profile `;
 
 	const { hero } = user;
 	const heroRank = hero.rank;
@@ -59,20 +64,16 @@ const prettifyUser = async (message, user) => {
 		fields.splice(2, 0, dungeonKeys);
 	}
 
-	// todo, fix this
-	const pvpRank = "provisional";
-	const totalRank = await getPlayerPosition(message.author.id);
-
 	const embedUser = new Discord.MessageEmbed()
 		.setTitle(patreonSupporter)
+		.setDescription(`_Elo: ${userElo}_`)
 		.setURL(patreonUrl)
 		.setAuthor(username)
 		.setColor(sideColor)
 		.addFields(
 			...fields,
-		)
-
-		.setFooter(`Ranking: PVP: ${pvpRank} ~~~ Total: #${totalRank}`);
+		);
+		// .setFooter(`Ranking: PVP Elo: ${eloPosition} ~~~ XP: #${xpRank}`);
 
 	return embedUser;
 };

@@ -2,14 +2,16 @@ const Discord = require("discord.js");
 const icons = require("../../icons/icons");
 const allItems = require("../items/all-items");
 
-const stakeEmbed = (winner, loser, battleStats, exp, item) => {
+const stakeEmbed = (winner, loser, battleStats, exp, item, elo) => {
 	const { username } = winner.account;
     const { username: oppUsername } = loser.account;
     const itemName = item.split(" ").map(i => i.capitalize()).join(" ");
 
 	const title = `${username} battled against ${oppUsername} and won **${itemName}**!`;
     const sideColor = "#9c2200";
-    const { win, winMargin, uModifier, oModifier, winnerStats, loserStats } = battleStats;
+	const { win, winMargin, uModifier, oModifier, winnerStats, loserStats } = battleStats;
+
+	const footer = `${username} +${elo.eloForWinner.delta} elo\n${oppUsername} ${elo.eloForLoser.delta} elo`;
 
 	const fields = [
 		{
@@ -72,9 +74,8 @@ const stakeEmbed = (winner, loser, battleStats, exp, item) => {
 		.setColor(sideColor)
 		.addFields(
 			...fields,
-		);
-
-	// .setFooter(`PVP: #${pvpRank} ~~~ Total: #${totalRank}`);
+		)
+	.setFooter(footer);
 	return embedStake;
 };
 
