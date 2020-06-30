@@ -64,6 +64,10 @@ const userSchema = new Schema({
 		["bronze bar"]: Number,
 		["iron bar"]: Number,
 		["steel bar"]: Number,
+		["obsidian ore"]: {
+			type: Number,
+			default: 0,
+		},
 	},
 
 	army: {

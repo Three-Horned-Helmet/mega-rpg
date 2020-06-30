@@ -198,6 +198,21 @@ const worldLocations = {
 			},
 
 			// Questmobs
+			"Moriths Mine": {
+				name: "Moriths Mine",
+				type: "raid",
+				notExplorable: true,
+				stats:{
+					attack: 600,
+					health: 600,
+				},
+				rewards:{
+					"copper ore": 4,
+					"iron ore": 3,
+					"obsidian ore": 2,
+				},
+			},
+
 			"Confront Bandits": {
 				name: "Confront Bandits",
 				type: "raid",

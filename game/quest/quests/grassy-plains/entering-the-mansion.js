@@ -189,35 +189,26 @@ module.exports = {
 
     morithsHiddenMine: {
         name: "Moriths Hidden Mine",
-        description: "",
-        objective: "",
-        reward: false,
-        winDescription: "",
+        description: "'To craft Obsidian Bars I need Obsidian Ore and Steel Bars. The Steel Bars should be rather easy to get, however the Obsidian Ore can only be found in a special Mine that I found on one of my adventures. Let me show you where it is.\n\n*\\*You have explored Moriths Mine\\**\n\n'It is a dangerous Mine and you may find some vile creatures in there, but you will also be able to find Obsidian ore there. Bring me some of that Ore and I will help you convert them into Obsidian Bars.'",
+        objective: "Give 10 Obsidian Ore and 40 Steel Bars to Morith",
+        reward: "Access to Moriths Mine\n\nObsidian Bars: 10",
+        winDescription: "'Perfect! Let us head back to the Fishing Village to my workshop'\n\n*\\*You follow Morith back to his workshop, and watches as he crafts the Obsidian Bars\\**\n\n'Here they are, 10 Obsidian Bars of the finest quality! I am not sure what you will need them for, but in these strange times it is best not to ask too many questions. Good luck with them anyways.'\n\n*\\*You wave goodbye and leave Moriths Workshop with the 10 Obsidian Bars\\**",
         questKeySequence: ["Grassy Plains", "morithsHiddenMine"],
 
         // Returns false if the quest description is shown, or true if the quest is being completed
         execute: async function(user) {
-            const questResponse = questHelper(user, this.name);
+            const questResponse = questHelper(user, this.name, [{ currentLocation: "Grassy Plains", place: "Moriths Mine" }]);
             if(!questResponse) return false;
 
-            // Get reward
-            // await user.gainManyResources({
-            //     gold: 300,
-            // });
+            if(!(user.resources["obsidian ore"] >= 10)) return false;
+            if(!(user.resources["steel bar"] >= 40)) return false;
 
-            // Add next quest
-            // const newQuest = {
-            //     name: "Rubinite",
-            //     started: false,
-            //     questKeySequence: ["Grassy Plains", "rubinite"],
-            //     pve: [{
-            //         name: "Cave",
-            //         completed: false,
-            //         chance: 0.25,
-            //     }],
-            // };
+            // Remove resources
+            user.removeManyResources({
+                "obsidian ore": 10,
+                "steel bar": 40,
+            });
 
-            // user.addNewQuest(newQuest);
             user.removeQuest(this.name);
 
             user.save();
