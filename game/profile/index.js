@@ -1,9 +1,9 @@
 const Discord = require("discord.js");
-const { determineSupporterTitle, getAllSoldiers, getPlayerPosition } = require("./helper");
+const { generateTip, determineSupporterTitle, getAllSoldiers, getPlayerPosition } = require("./helper");
 const { getDungeonKeyIcon } = require("../_CONSTS/icons");
 const calculateStats = require("../../combat/calculate-stats");
 
-const prettifyUser = async (message, user) => {
+const prettifyUser = async (message, user, avatar) => {
 
 	const sideColor = "#45b6fe";
 	const patreonSupporter = determineSupporterTitle(user.account.patreon);
@@ -73,7 +73,13 @@ const prettifyUser = async (message, user) => {
 		.addFields(
 			...fields,
 		);
-		// .setFooter(`Ranking: PVP Elo: ${eloPosition} ~~~ XP: #${xpRank}`);
+
+		if (avatar) {
+			embedUser.setThumbnail(avatar);
+		}
+		if (Math.random() > 0.66) {
+			embedUser.setFooter(generateTip());
+		}
 
 	return embedUser;
 };

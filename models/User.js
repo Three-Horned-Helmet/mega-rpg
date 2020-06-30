@@ -714,7 +714,6 @@ userSchema.methods.giveDungeonKey = async function(key = "Ogre tooth") {
 	return this.save();
 };
 userSchema.methods.changeElo = async function(newElo) {
-	console.log("hello,", newElo);
 	if (typeof newElo !== "number") {
 		console.error("elo must be Number", newElo);
 		return;

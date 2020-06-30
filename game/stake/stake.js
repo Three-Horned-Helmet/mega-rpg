@@ -29,7 +29,7 @@ const stakePlayer = async (user, opponent, stakedItems, msg) =>{
     const totalValue = Object.values(totalStats).reduce((acc, cur) => acc + cur);
     const winnerUnitLoss = 1 - ((totalValue - winMargin) / totalValue) * 0.2;
 
-    // winner.changeElo(elo.eloForWinner.newRating);
+    winner.changeElo(elo.eloForWinner.newRating);
     await winner.unitLoss(winnerUnitLoss);
     await loser.unitLoss(0.8);
 
@@ -41,7 +41,6 @@ const stakePlayer = async (user, opponent, stakedItems, msg) =>{
         const wonItem = loserItems[Math.floor(Math.random() * loserItems.length)];
 
         loser.removeItem(artifactItems[wonItem], true);
-        console.log(elo.eloForLoser.newRating);
         loser.changeElo(elo.eloForLoser.newRating);
         await loser.save();
         await winner.addItem(artifactItems[wonItem], 1);
@@ -78,7 +77,7 @@ const checkIfStakeIsPossible = (user, opponent, stakedItems) =>{
         });
     });
 
-    /* if(doesOwnArtifact.filter((u, i) => doesOwnArtifact.indexOf(u) === i).length !== 2) {
+    if(doesOwnArtifact.filter((u, i) => doesOwnArtifact.indexOf(u) === i).length !== 2) {
         const doesNotOwnArtifact = [username, oppUsername].filter(u => !doesOwnArtifact.includes(u));
         return {
             response: false,
@@ -86,7 +85,7 @@ const checkIfStakeIsPossible = (user, opponent, stakedItems) =>{
                 doesNotOwnArtifact.join(", ")
             }`,
         };
-    } */
+    }
 
 
     // Check if a player has changed out his artifacts between the challenge and the battle start
