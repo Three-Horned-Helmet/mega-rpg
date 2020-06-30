@@ -20,7 +20,6 @@ module.exports = {
 			}
 		}
  else {
-			console.log("display");
 			avatar = message.author.displayAvatarURL({ format: "png", dynamic: true, size: 1024 });
 		}
 		if (!dbUser) {
