@@ -60,10 +60,22 @@ const userSchema = new Schema({
 			type: Number,
 			default: 5,
 		},
-		["iron ore"]: Number,
-		["bronze bar"]: Number,
-		["iron bar"]: Number,
-		["steel bar"]: Number,
+		["iron ore"]: {
+			type: Number,
+			default: 5,
+		},
+		["bronze bar"]: {
+			type: Number,
+			default: 5,
+		},
+		["iron bar"]: {
+			type: Number,
+			default: 5,
+		},
+		["steel bar"]: {
+			type: Number,
+			default: 5,
+		},
 		["obsidian ore"]: {
 			type: Number,
 			default: 0,
@@ -304,7 +316,6 @@ userSchema.methods.gainManyResources = function(obj) {
 	Object.keys(obj).forEach(r=>{
 		this.resources[r] += obj[r];
 	});
-	return this.save();
 };
 
 userSchema.methods.removeManyResources = function(obj) {
@@ -317,7 +328,6 @@ userSchema.methods.removeManyResources = function(obj) {
 
 userSchema.methods.setNewCooldown = function(type, now) {
 	this.cooldowns[type] = now;
-	return this.save();
 };
 
 userSchema.methods.handleExplore = function(now, currentLocation, place) {
@@ -489,7 +499,6 @@ userSchema.methods.handleFishResult = function(goldresult, now) {
 	if(goldresult > 0) {
 		this.resources.gold += goldresult;
 	}
-	return this.save();
 };
 
 userSchema.methods.equipItem = function(item, currentItem) {
@@ -545,8 +554,6 @@ userSchema.methods.unitLoss = function(lossPercentage) {
 		this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
 		this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] || 50;
 	}
-
-	return this.save();
 };
 
 userSchema.methods.heroHpLoss = function(lossPercentage) {
@@ -560,7 +567,6 @@ userSchema.methods.heroHpLoss = function(lossPercentage) {
 			this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
 			this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] || 50;
 	}
-	return this.save();
 };
 
 userSchema.methods.heroHpLossFixedAmount = function(damage) {
@@ -689,7 +695,6 @@ userSchema.methods.alternativeGainXp = async function(xp = 0) {
 				});
 			}
 	}
-	return this.save();
 };
 
 userSchema.methods.unlockNewLocation = async function(location) {

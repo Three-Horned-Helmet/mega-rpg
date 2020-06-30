@@ -85,14 +85,21 @@ client.on("message", async (message) => {
 		userProfile = await createNewUser(author);
 	}
 
+	// adds command to statistics
+	if (Object.keys(userProfile.statistics).includes(command.name)) {
+		userProfile.statistics[command.name] += 1;
+	}
+
 	// executes the command
-	try {
+	{
+try {
 		command.execute(message, updatedArgs, userProfile);
 	}
 	catch (error) {
 		console.error(error);
 		message.reply("there was an error trying to execute that command!");
 	}
+}
 });
 
 client.login(token);

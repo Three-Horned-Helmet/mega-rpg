@@ -113,8 +113,8 @@ const worldLocations = {
 				},
 				helpers:[],
 			},
-			"Bandits Mansion": {
-				name: "Bandits Mansion",
+			"Bandit's Mansion": {
+				name: "Bandit's Mansion",
 				type: "dungeon",
 				requires: "CM key",
 				rooms:[

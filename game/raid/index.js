@@ -24,12 +24,8 @@ const handleRaid = async (user, place = null) => {
 
     const userExploredPlaces = user.world.locations[currentLocation].explored;
     const userExploredRaidPlaces = userExploredPlaces
-    .filter(p=>{
-        return placesInCurrentWorld[p].type === "raid";
-    })
-    .map(p=>{
-        return p.replace(/\s/g, "").toLowerCase();
-    });
+        .filter(p=> placesInCurrentWorld[p].type === "raid")
+        .map(p=>p.replace(/\s/g, "").toLowerCase());
 
     // checks if user has explored any raidable place in current location
     if (!userExploredRaidPlaces.length) {
@@ -38,12 +34,8 @@ const handleRaid = async (user, place = null) => {
 
 
      const userExploredNotRaidPlaces = userExploredPlaces
-     .filter(p=>{
-        return placesInCurrentWorld[p].type !== "raid";
-    })
-     .map(p=>{
-        return p.replace(/\s/g, "").toLowerCase();
-    });
+        .filter(p=> placesInCurrentWorld[p].type !== "raid")
+        .map(p=> p.replace(/\s/g, "").toLowerCase());
 
     // if user tries to raid a place that is not raidable
     if (userExploredNotRaidPlaces.includes(place)) {
@@ -93,13 +85,14 @@ if (!userExploredPlaces.includes(placeInfo.name)) {
  // saves to database
  let questIntro;
  const now = new Date();
-await user.setNewCooldown("raid", now);
-await user.unitLoss(raidResult.lossPercentage);
-await user.alternativeGainXp(raidResult.expReward);
+user.setNewCooldown("raid", now);
+user.unitLoss(raidResult.lossPercentage);
+user.alternativeGainXp(raidResult.expReward);
 if (raidResult.win) {
-    await user.gainManyResources(raidResult.resourceReward);
+    user.gainManyResources(raidResult.resourceReward);
     questIntro = await checkQuest(user, placeInfo.name, currentLocation);
 }
+await user.save();
 
 // generates a Discord embed
     const raidEmbed = generateEmbedPveFullArmy(user, placeInfo, raidResult, questIntro);
