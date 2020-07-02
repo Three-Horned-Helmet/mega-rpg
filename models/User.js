@@ -26,10 +26,6 @@ const userSchema = new Schema({
 			enum: ["", "Bronze", "Silver", "Gold", "Platinum"],
 			default: "",
 		},
-		testAccount:{
-			type: Boolean,
-			default: false,
-		},
 	},
 	maxPop: {
 		type: Number,
@@ -165,6 +161,10 @@ const userSchema = new Schema({
 		default: [],
 	},
 	hero: {
+		elo:{
+			type: Number,
+			default: 1200,
+		},
 		health: {
 			type: Number,
 			default: 100,
@@ -712,6 +712,13 @@ userSchema.methods.giveDungeonKey = async function(key = "Ogre tooth") {
 	this.hero.dungeonKeys[key] += 1;
 
 	return this.save();
+};
+userSchema.methods.changeElo = async function(newElo) {
+	if (typeof newElo !== "number") {
+		console.error("elo must be Number", newElo);
+		return;
+	}
+	this.hero.elo = newElo;
 };
 
 
