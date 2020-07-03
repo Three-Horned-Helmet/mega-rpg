@@ -58,7 +58,7 @@ const minibossStartAllowed = (user)=>{
     if (user.hero.currentHealth < user.hero.health * 0.05) {
         let feedback = `Your hero's health is too low (**${user.hero.currentHealth}**)`;
         if (user.hero.rank < 2) {
-            feedback += "\n You can `!build` a shop and `!build` potions";
+            feedback += "\n You can `!build` a shop and `!buy` potions";
         }
         return feedback;
     }

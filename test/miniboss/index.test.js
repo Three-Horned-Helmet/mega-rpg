@@ -77,7 +77,7 @@ describe("miniboss command", () => {
 		miniboss.helpers.push(helper0.account.userId);
 		const result = await calculateMinibossResult(miniboss);
 		// cleanup todo: why doesn't the function clean itself?
-		miniboss.helpers = [];
+
 		expect(result.win).to.be.equal(true);
 
 	});
@@ -135,7 +135,6 @@ describe("miniboss command", () => {
 		expect(h.hero.rank).to.be.equal(4);
 		expect(h.hero.dungeonKeys["Ogre tooth"]).to.be.equal(0);
 		});
-		miniboss.helpers = [];
 	});
 
 	it("should succeed together with low rank and  helpers with high rank", async ()=>{
@@ -158,7 +157,6 @@ describe("miniboss command", () => {
 		miniboss.helpers.push(helper1.account.userId);
 
 		const result = await calculateMinibossResult(miniboss);
-		miniboss.helpers = [];
 		expect(result.win).to.be.equal(true);
 
 	});
@@ -177,7 +175,6 @@ describe("miniboss command", () => {
 		const miniboss = createMinibossEvent(testUser);
 
 		const result = await calculateMinibossResult(miniboss);
-		miniboss.helpers = [];
 		expect(result.win).to.be.equal(false);
 
 	});
@@ -200,7 +197,6 @@ describe("miniboss command", () => {
 		miniboss.helpers.push(helper1.account.userId);
 
 		const result = await calculateMinibossResult(miniboss);
-		miniboss.helpers = [];
 		expect(result.win).to.be.equal(false);
 
 	});
@@ -223,7 +219,6 @@ describe("miniboss command", () => {
 		miniboss.helpers.push(helper1.account.userId);
 
 		const result = await calculateMinibossResult(miniboss);
-		miniboss.helpers = [];
 		expect(result.win).to.be.equal(false);
 	});
 
@@ -264,7 +259,6 @@ describe("miniboss command", () => {
 		result.helpers.forEach(h=>{
 			expect(h.hero.currentHealth < hero.currentHealth).to.be.equal(true);
 		});
-		miniboss.helpers = [];
 	});
 });
 
