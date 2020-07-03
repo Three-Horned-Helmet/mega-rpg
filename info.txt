@@ -38,6 +38,7 @@ __Collect:__
 `!collect` => Collects all collectable resources
 `!collect [building]` => Collects the resources from these specific buildings (!collect mine)
 Æ
+
 __Craft:__
 `!craft` => Returns all available items that you can craft and their costs
 `!craft [item]` => Crafts 1 of the specified item (!craft bronze sword)
@@ -79,6 +80,7 @@ __Produce:__
 __Profile:__
 `!profile` => Returns a overview of your profile
 Æ
+
 __Race:__
 `!race` => Triggers a race where players can win money
 
