@@ -5,8 +5,6 @@ const { getLocationIcon, getStatsIcon, getWeaponIcon, getPlaceIcon, getGreenRedI
 const createDungeonInvitation = (dungeon, user)=>{
     const sideColor = "#45b6fe";
     const username = user.account.username;
-    // const { currentLocation } = user.world;
-    // const locationIcon = getLocationIcon(currentLocation);
     const dungeonIcon = getPlaceIcon("dungeon");
         const rules = `\` ${dungeon.rooms.length} Rooms\`\n ${getGreenRedIcon(dungeon.boss.rules.canKill)} \`Dungeon deadly\`\n${getGreenRedIcon(dungeon.boss.rules.allowhelpers)} \`helpers allowed\`\n\n**Unclocks**: ${getLocationIcon(dungeon.boss.unlocks)} **${dungeon.boss.unlocks}**\n`;
         const dungeonStats = `${getStatsIcon("health")} \`Health: ${dungeon.boss.stats.health}\`\n ${getStatsIcon("attack")} \`Attack: ${dungeon.boss.stats.attack}\`\n ${getGreenRedIcon(dungeon.boss.stats.healing)} \`Healing\`\n`;
@@ -203,6 +201,7 @@ const createDungeonInvitation = (dungeon, user)=>{
 
 
     const createDungeonBossResultLoss = (progress) =>{
+
         const initiativeTakerName = progress.initiativeTaker.account.username;
         const sideColor = "#45b6fe";
 
@@ -229,7 +228,7 @@ const createDungeonInvitation = (dungeon, user)=>{
         const bossName = progress.dungeon.boss.name;
         const title = `${bossName} defeated ${initiativeTakerName}!`;
 
-        const description = `${initiativeTakerName} did **not** unlock ${locationIcon} ${unlockedLocation}`;
+        const description = `${initiativeTakerName} did **not** unlock a new world`;
 
         const embedResult = new Discord.MessageEmbed()
             .setTitle(title)

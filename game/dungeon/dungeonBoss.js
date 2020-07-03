@@ -9,7 +9,6 @@ const createDungeonBossRound = async (message, progress)=>{
     progress.dungeon.boss.allowedWeapons = threeRandomWeapons;
     const weaponAnswerFilter = Object.keys(threeRandomWeapons).map(w=> [threeRandomWeapons[w].answer, threeRandomWeapons[w].name]).flat();
 
-    // send a nice embed here
     const dungeonRound = generateDungeonBossRound(progress);
     await message.channel.send(dungeonRound);
 
