@@ -585,7 +585,6 @@ userSchema.methods.heroHpLossFixedAmount = function(damage) {
 	if (this.hero.currentHealth < 0) {
 		this.hero.currentHealth = 0;
 	}
-	return this.save();
 };
 
 // Takes a number, and heals the hero for that much hp
@@ -716,8 +715,6 @@ userSchema.methods.giveDungeonKey = async function(key = "Ogre tooth") {
 		return;
 	}
 	this.hero.dungeonKeys[key] += 1;
-
-	return this.save();
 };
 userSchema.methods.changeElo = async function(newElo) {
 	if (typeof newElo !== "number") {

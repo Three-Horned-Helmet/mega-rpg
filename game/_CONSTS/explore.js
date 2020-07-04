@@ -111,7 +111,7 @@ const worldLocations = {
 					allowHelpers:true,
 					minRankToGetKey: 2,
 				},
-				helpers:[],
+				helperIds:[],
 			},
 			"Bandit's Mansion": {
 				name: "Bandit's Mansion",
