@@ -27,15 +27,20 @@ const handleDungeon = async (message, user)=>{
 
     const collector = await invitation.createReactionCollector(reactionFilter, { time: 1000 * 20, errors: ["time"] });
     collector.on("collect", async (result, rUser) => {
-        if (rUser.bot || dungeon.helperIds.length > 4) {
+        if (rUser.bot) {
+            console.error("no bots allowed");
             return;
         }
+        if (dungeon.helperIds.length >= 5) {
+            collector.stop();
+        }
         if (dungeon.helperIds.includes(rUser.id)) {
+            console.error("User is already participating");
             return;
         }
         const allowedHelper = await validateHelper(rUser.id);
         if (!allowedHelper) {
-            return;
+            return message.channel.send("Your HP is too low");
         }
         dungeon.helperIds.push(rUser.id);
     });

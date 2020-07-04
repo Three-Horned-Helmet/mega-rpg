@@ -198,7 +198,7 @@ const userSchema = new Schema({
 			},
 		},
 		dungeonKeys:{
-			["Ogre tooth"]:{
+			["CM Key"]:{
 				type: Number,
 				default: 0,
 			},
@@ -710,7 +710,7 @@ userSchema.methods.locationTravel = async function(location) {
 };
 
 
-userSchema.methods.giveDungeonKey = async function(key = "Ogre tooth") {
+userSchema.methods.giveDungeonKey = async function(key = "CM Key") {
 	if (this.hero.dungeonKeys[key]) {
 		return;
 	}
