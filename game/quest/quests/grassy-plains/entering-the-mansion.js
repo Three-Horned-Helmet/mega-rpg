@@ -85,7 +85,7 @@ module.exports = {
             if(!questResponse) return false;
 
             // Has the user completed the two quests
-            if(!(user.completedQuests.includes("Melting Obsidian")) && !(user.completedQuests.includes("Grethel's Mission"))) return false;
+            if(!(user.completedQuests.includes("Moriths Hidden Mine")) && !(user.completedQuests.includes("The End of Grethels Mission"))) return false;
 
             user.removeQuest(this.name);
 
@@ -227,7 +227,7 @@ module.exports = {
     // GRETHELS MISSION
     grethelsMission: {
         name: "Grethels Mission",
-        description: "You head over to Grethel's house in the outskirts of the Fishing Village, right by the river. It is old and broken-down. You knock on the door, and is greeted by an old woman who seems to be doing fairly well for her old age.\n\n'Are you Grethel by any chance? I was sent here by Ahred, he told me that you can help me craft a Key Mold to get into the Bandits Mansion.'\n'So you have business with the King, huh?'\n\n*\\*Grethel does not seem too pleased but she moves to the side and lets you into her home. After several minutes of silence she decides to speak.\\**\n\n'I understand that a lot of people has an issue with Julius nowadays, you should know that he was once a nice and charming man, and I believe that he is still that same good man that he once once. He didn't turn evil until that...'\n\n*\\*She stoped her self, and with a shrug on her shoulder she continues\\**\n\n'Oh well, I can help you get the Key Mold but it will not be easy! We need resources to craft the Key Mold, if you can fetch that, then I will plan out how to do this. Meet me here with the resources tonight!'\n\n*\\*You nod affirmatively\\**",
+        description: "You head over to Grethel's house in the outskirts of the Fishing Village, right by the river. It is an old and broken-down building. You knock on the door, and is greeted by an old woman who seems to be doing fairly well for her old age.\n\n'Are you Grethel by any chance? I was sent here by Ahred, he told me that you can help me craft a Key Mold to get into the Bandits Mansion.'\n'So you have business with the King, huh?'\n\n*\\*Grethel does not seem too pleased but she moves to the side and lets you into her home. After several minutes of silence she decides to speak.\\**\n\n'I understand that a lot of people has an issue with Julius nowadays, you should know that he was once a nice and charming man, and I believe that he is still that same good man that he once once. He didn't turn evil until that...'\n\n*\\*She stoped her self, and with a shrug on her shoulder she continues\\**\n\n'Oh well, I can help you get the Key Mold but it will not be easy! We need resources to craft the Key Mold, if you can fetch that, then I will plan out how to do this. Meet me here with the resources tonight!'\n\n*\\*You nod affirmatively\\**",
         objective: "Bring Grethel the following resources:\nGold: 200\nIron Bars: 40\nYew wood: 50",
         reward: false,
         winDescription: "'This is perfect!'\n\n*\\*Grethel creates an unfinished Key Mold and hands it to you\\**\n\n'We will use this to create a Mold of the Key to the Mansion, I hope you are ready?'\n**A new quest is available**",
@@ -330,7 +330,7 @@ module.exports = {
         description: "Four Mansion Guards are rushing aggressivly towards you with a grin on their faces!\n\n'HEEY! What you are you doing here on the King's property?!'\n\nYou quickly decides that there will be no way that you can come up with an excuse and pull up your weapon to prepare for battle!",
         objective: "Defeat the Courtyard Guards. (`!raid courtyard guards`)",
         reward: false,
-        winDescription: "Grethel comes running around the corner with a horn-like item in her hands.\n\n'RUN! QUICKLY! I think it may heard all the noise you were making!'\n\n*\\*You decides to take on her advice and starts running towards the gate out from the Masion. As you leave the gate you turn around and see a small red impling with a green tail flying above the Mansion observing you fleeing the gates. You eventually get back to Grethels house.\n\n'What the fuck where you doing, Grethel? Why did you suddenly run off?!'\n\n*\\*She looks at you with a worried gaze\\**\n\n'I... I just needed to get something. Don't worry about it! Give me the Mold and I will complete it for you. Come back tomorrow morning and it should be finished!'\n**A new quest is available**",
+        winDescription: "Grethel comes running around the corner with a horn-like item in her hands.\n\n'RUN! QUICKLY! I think it may heard all the noise you were making!'\n\n*\\*You decides to take on her advice and starts running towards the gate out from the Masion. As you leave the gate you turn around and see a small red impling with a green tail rushing towards you. His mouth turns red, preparing to spit a fireball on you.\n\n'GRETHEL WATCHOU..!'\n\n*\\*Out of nowhere another smaller impling comes out from the forest and flies in front of the fireball. You hear a screech but decides to not turn around but rather run as fast as your legs can carry you!\n\nYou eventually get back to Grethels house.\n\n'What the fuck where you doing, Grethel?! Why did you suddenly burst off??'\n\n*\\*She looks at you with a worried gaze\\**\n\n'I... I just needed to get something. Don't worry about it! Give me the Mold and I will complete it for you. Come back tomorrow morning and it should be finished!'\n**A new quest is available**",
         questKeySequence: ["Grassy Plains", "courtyardGuards"],
 
         // Returns false if the quest description is shown, or true if the quest is being completed
@@ -349,18 +349,39 @@ module.exports = {
             // });
 
             // Add next quest
-            // const newQuest = {
-            //     name: "Rubinite",
-            //     started: false,
-            //     questKeySequence: ["Grassy Plains", "rubinite"],
-            //     pve: [{
-            //         name: "Cave",
-            //         completed: false,
-            //         chance: 0.25,
-            //     }],
-            // };
+            const newQuest = {
+                name: "The End of Grethels Mission",
+                started: false,
+                questKeySequence: ["Grassy Plains", "endOfGrethelsMission"],
+            };
 
-            // user.addNewQuest(newQuest);
+            user.addNewQuest(newQuest);
+            user.removeQuest(this.name);
+
+            user.save();
+
+            return true;
+        },
+    },
+
+    endOfGrethelsMission: {
+        name: "The End of Grethels Mission",
+        description: "You return the next day to a worried sight. Grethels house is smashed and there are burnmarks everywhere. You enter the house and see a large whole through the roof, and two big holes through the floor. There are blood stains and burnmarks everywhere, and a dagger is laying on the floor. You see no signs of Grethel.",
+        objective: "Search Grethels house for the Key Mold. (`!quest the end of grethels mission`)",
+        reward: "Gold: 500\nFinished Key Mold: 1",
+        winDescription: "You search the house and find the Key Mold hidden in one of the drawers of a broken desk. With the Finished Key Mold you leave the house.",
+        questKeySequence: ["Grassy Plains", "endOfGrethelsMission"],
+
+        // Returns false if the quest description is shown, or true if the quest is being completed
+        execute: async function(user) {
+            const questResponse = questHelper(user, this.name);
+            if(!questResponse) return false;
+
+            // Get reward
+            await user.gainManyResources({
+                gold: 500,
+            });
+
             user.removeQuest(this.name);
 
             user.save();
