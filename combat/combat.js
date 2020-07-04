@@ -62,6 +62,7 @@ const calculatePveFullArmyResult = (user, npc) => {
 	const win = losses > 0;
 	let lossPercentage = ((userHp + userAt) - (oppHp + oppAt)) / (userHp + userAt);
 	lossPercentage = lossPercentage < 0 ? 0 : lossPercentage;
+	const { username, userId } = user.account;
 
 	const pveResult = {
 		combatModifier,
@@ -71,6 +72,8 @@ const calculatePveFullArmyResult = (user, npc) => {
 		lossPercentage: 1 - lossPercentage,
 		resourceReward:{},
 		win,
+		username,
+		userId,
 	};
 
 	// generates a random reward number
@@ -116,6 +119,7 @@ const duelFullArmy = (user, opp) => {
 
 	// Determine winner
 	const win = winMargin > 0;
+
 
 	return { win, winMargin: Math.abs(winMargin), uModifier, oModifier };
 };

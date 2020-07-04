@@ -1,4 +1,4 @@
-const { handleDungeonRooms } = require("../game/dungeon/rooms");
+const { handleDungeon } = require("../game/dungeon");
 // Possible issues with !dungeon commnd
 /*
 - Other people interfering with the dungeon run
@@ -10,6 +10,6 @@ module.exports = {
 	name: "dungeon",
 	description: "Let's the player trigger a dungeon with n rooms and a final boss in the end",
 	async execute(message, args, user) {
-		await handleDungeonRooms(message, user);
+		await handleDungeon(message, user);
 		},
 	};

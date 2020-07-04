@@ -3,6 +3,7 @@ const { gainHeroExp, removeHeroExp } = require("../_CONSTS/hero-exp");
 const artifactItems = require("../items/artifact-blacksmith/artifact-blacksmith");
 const calculateStats = require("../../combat/calculate-stats");
 const stakeEmbed = require("./stake-embed");
+const { eloCalculations } = require("../_GLOBAL_HELPERS");
 
 const stakePlayer = async (user, opponent, stakedItems, msg) =>{
    const { response, message } = checkIfStakeIsPossible(user, opponent, stakedItems);
@@ -15,6 +16,11 @@ const stakePlayer = async (user, opponent, stakedItems, msg) =>{
     const winner = win ? user : opponent;
     const loser = win ? opponent : user;
 
+    const elo = {
+		eloForWinner: eloCalculations(winner.hero.elo, loser.hero.elo, 1),
+		eloForLoser: eloCalculations(loser.hero.elo, winner.hero.elo, 0),
+	};
+
     const { totalStats } = calculateStats(winner);
     const { totalStats: loserStats } = calculateStats(loser);
     battleStats.winnerStats = totalStats;
@@ -23,6 +29,7 @@ const stakePlayer = async (user, opponent, stakedItems, msg) =>{
     const totalValue = Object.values(totalStats).reduce((acc, cur) => acc + cur);
     const winnerUnitLoss = 1 - ((totalValue - winMargin) / totalValue) * 0.2;
 
+    winner.changeElo(elo.eloForWinner.newRating);
     await winner.unitLoss(winnerUnitLoss);
     await loser.unitLoss(0.8);
 
@@ -34,6 +41,7 @@ const stakePlayer = async (user, opponent, stakedItems, msg) =>{
         const wonItem = loserItems[Math.floor(Math.random() * loserItems.length)];
 
         loser.removeItem(artifactItems[wonItem], true);
+        loser.changeElo(elo.eloForLoser.newRating);
         await loser.save();
         await winner.addItem(artifactItems[wonItem], 1);
 
@@ -43,7 +51,7 @@ const stakePlayer = async (user, opponent, stakedItems, msg) =>{
     await gainHeroExp(winner, expWon, msg);
     await removeHeroExp(loser, expWon, msg);
 
-    return stakeEmbed(winner, loser, battleStats, expWon, wonItem);
+    return stakeEmbed(winner, loser, battleStats, expWon, wonItem, elo);
   // return `${winner.account.username} won the battle with modifiers of ${uModifier} and ${oModifier}. The item won is ${capitalize(wonItem)} and exp won is ${expWon}`;
 };
 

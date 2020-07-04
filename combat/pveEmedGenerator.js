@@ -1,9 +1,9 @@
 const Discord = require("discord.js");
 const { getResourceIcon, getPlaceIcon } = require("../game/_CONSTS/icons");
 
-function generateEmbedPveFullArmy(user, placeInfo, pveResult, questIntro = false, dungeonRaid = false) {
+function generateEmbedPveFullArmy(user, placeInfo, pveResult, questIntro = false) {
     if (pveResult.win) {
-        return generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro, dungeonRaid);
+        return generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro);
     }
     return generateEmbedPveFullArmyLoss(user, placeInfo, pveResult);
 }
@@ -17,7 +17,7 @@ function generateEmbedPveHero(user, placeInfo, pveResult, questIntro = false) {
 
 }
 
-function generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro, dungeonRaid) {
+function generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro) {
     const sideColor = "#45b6fe";
     const placeName = placeInfo.name;
     const placeIcon = getPlaceIcon(placeInfo.type);
@@ -72,9 +72,6 @@ function generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro, dun
     .addFields(
         ...fields,
     );
-    if (dungeonRaid) {
-        embedWin.footer = { text:"Proceed to the next room? ✅ / 🚫" };
-    }
 return embedWin;
 }
 
@@ -296,4 +293,4 @@ function generateHeroRankLoss() {
 }
 
 
-module.exports = { generateEmbedPveFullArmy, generateEmbedPveHero };
+module.exports = { generateEmbedPveFullArmy, generateEmbedPveHero, generateArmyLossStatus, generateHeroRankLoss, generateHeroCasulty, generateArmyCasultyString };

@@ -101,7 +101,7 @@ const worldLocations = {
 					difficulty: 10,
 				},
 				rewards:{
-					dungeonKey: "CM key",
+					dungeonKey: "CM Key",
 					gold: 2222,
 					xp: 500,
 				},
@@ -111,15 +111,18 @@ const worldLocations = {
 					allowHelpers:true,
 					minRankToGetKey: 2,
 				},
-				helpers:[],
+				helperIds:[],
 			},
 			"Bandit's Mansion": {
 				name: "Bandit's Mansion",
 				type: "dungeon",
-				requires: "CM key",
+				requires: "CM Key",
+				helperIds:[],
 				rooms:[
 					{
 						name: "Mansion's Courtyard",
+						description:
+							"You enter the mansion and a beautiful courtyard stands before your eyes. A couple of trees and a bush surrounds what seems to be a seating area. You must have lost your mind because you hear murmuring from the bushes",
 						type: "raid",
 						stats:{
 							attack: 200,
@@ -133,6 +136,8 @@ const worldLocations = {
 					},
 					{
 						name: "Mansion Hallway",
+						description:
+							"You bravely fought through the courtyard and enter the hallway. It's long and narrow. At the very end you see someone who's not happy to see you",
 						type: "raid",
 						stats:{
 							attack: 200,
@@ -145,7 +150,9 @@ const worldLocations = {
 						},
 					},
 					{
-						name: "Mansion Trophey Room",
+						name: "Mansion Trophy Room",
+						description:
+							"You make it through the hallway and enter what seems to be a trophy room. Heads from all creatures are plated to the wall as a decoration. You see the head of a bear, deer, impling and .",
 						type: "raid",
 						stats:{
 							attack: 200,
@@ -184,7 +191,6 @@ const worldLocations = {
 						healing:true,
 					},
 					bossWeapons:["slash", "strike", "heal"],
-					helpers:[],
 					numOfAllowedWeapons: 3,
 					allowedWeapons:[],
 					unlocks: "Misty Mountains",
@@ -491,7 +497,7 @@ const worldLocations = {
 						healing:true,
 					},
 					bossWeapons:["slash", "strike", "heal"],
-					helpers:[],
+					helperIds:[],
 					numOfAllowedWeapons: 3,
 					allowedWeapons:[],
 					unlocks: "Deep Caves",
@@ -637,7 +643,7 @@ const worldLocations = {
 					gold:5000,
 					xp:1100,
 				},
-				helpers:[],
+				helperIds:[],
 				stats:{
 					attack: 500,
 					health:500,

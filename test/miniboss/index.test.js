@@ -74,10 +74,10 @@ describe("miniboss command", () => {
 		const testUser = await createTestUser({ world, hero });
 		const helper0 = await createTestUser({ hero:{ rank:3 } });
 		const miniboss = createMinibossEvent(testUser);
-		miniboss.helpers.push(helper0.account.userId);
+		miniboss.helperIds.push(helper0.account.userId);
 		const result = await calculateMinibossResult(miniboss);
 		// cleanup todo: why doesn't the function clean itself?
-		miniboss.helpers = [];
+
 		expect(result.win).to.be.equal(true);
 
 	});
@@ -112,9 +112,9 @@ describe("miniboss command", () => {
 		const helper1 = await createTestUser({ hero });
 		const helper2 = await createTestUser({ hero });
 
-		miniboss.helpers.push(helper0.account.userId);
-		miniboss.helpers.push(helper1.account.userId);
-		miniboss.helpers.push(helper2.account.userId);
+		miniboss.helperIds.push(helper0.account.userId);
+		miniboss.helperIds.push(helper1.account.userId);
+		miniboss.helperIds.push(helper2.account.userId);
 
 		const result = await calculateMinibossResult(miniboss);
 
@@ -127,18 +127,17 @@ describe("miniboss command", () => {
 		expect(result.initiativeTaker.hero.dungeonKeys["CM key"]).to.be.equal(1);
 
 
-		result.helpers.forEach(h=>{
-		expect(h.resources.gold > 100).to.be.equal(true);
-		expect(h.hero.health > 100).to.be.equal(true);
-		expect(h.hero.attack > 1).to.be.equal(true);
-		expect(h.hero.currentExp > 100).to.be.equal(true);
-		expect(h.hero.rank).to.be.equal(4);
-		expect(h.hero.dungeonKeys["CM key"]).to.be.equal(0);
+		result.helpers.forEach(helper=>{
+		expect(helper.resources.gold > 100).to.be.equal(true);
+		expect(helper.hero.health > 100).to.be.equal(true);
+		expect(helper.hero.attack > 1).to.be.equal(true);
+		expect(helper.hero.currentExp > 100).to.be.equal(true);
+		expect(helper.hero.rank).to.be.equal(4);
+		expect(helper.hero.dungeonKeys["Ogre tooth"]).to.be.equal(0);
 		});
-		miniboss.helpers = [];
 	});
 
-	it("should succeed together with low rank and  helpers with high rank", async ()=>{
+	it("should succeed together with low rank and  helperIds with high rank", async ()=>{
 		const world = {
 			currentLocation:"Grassy Plains",
 			locations:{
@@ -154,11 +153,10 @@ describe("miniboss command", () => {
 		const helper0 = await createTestUser({ world, hero:{ rank:5 } });
 		const helper1 = await createTestUser({ world, hero:{ rank:5 } });
 
-		miniboss.helpers.push(helper0.account.userId);
-		miniboss.helpers.push(helper1.account.userId);
+		miniboss.helperIds.push(helper0.account.userId);
+		miniboss.helperIds.push(helper1.account.userId);
 
 		const result = await calculateMinibossResult(miniboss);
-		miniboss.helpers = [];
 		expect(result.win).to.be.equal(true);
 
 	});
@@ -177,11 +175,10 @@ describe("miniboss command", () => {
 		const miniboss = createMinibossEvent(testUser);
 
 		const result = await calculateMinibossResult(miniboss);
-		miniboss.helpers = [];
 		expect(result.win).to.be.equal(false);
 
 	});
-	it("should lose with together and low rank and many helpers with low rank", async ()=>{
+	it("should lose with together and low rank and many helperIds with low rank", async ()=>{
 		const world = {
 			currentLocation:"Grassy Plains",
 			locations:{
@@ -196,15 +193,14 @@ describe("miniboss command", () => {
 		const helper1 = await createTestUser({ world });
 
 		const miniboss = createMinibossEvent(testUser);
-		miniboss.helpers.push(helper0.account.userId);
-		miniboss.helpers.push(helper1.account.userId);
+		miniboss.helperIds.push(helper0.account.userId);
+		miniboss.helperIds.push(helper1.account.userId);
 
 		const result = await calculateMinibossResult(miniboss);
-		miniboss.helpers = [];
 		expect(result.win).to.be.equal(false);
 
 	});
-	it("should lose with helpers who have low rank", async ()=>{
+	it("should lose with helperIds who have low rank", async ()=>{
 		const world = {
 			currentLocation:"Grassy Plains",
 			locations:{
@@ -219,11 +215,10 @@ describe("miniboss command", () => {
 		const helper1 = await createTestUser({ world });
 
 		const miniboss = createMinibossEvent(testUser);
-		miniboss.helpers.push(helper0.account.userId);
-		miniboss.helpers.push(helper1.account.userId);
+		miniboss.helperIds.push(helper0.account.userId);
+		miniboss.helperIds.push(helper1.account.userId);
 
 		const result = await calculateMinibossResult(miniboss);
-		miniboss.helpers = [];
 		expect(result.win).to.be.equal(false);
 	});
 
@@ -254,17 +249,16 @@ describe("miniboss command", () => {
 		const helper1 = await createTestUser({ hero });
 		const helper2 = await createTestUser({ hero });
 
-		miniboss.helpers.push(helper0.account.userId);
-		miniboss.helpers.push(helper1.account.userId);
-		miniboss.helpers.push(helper2.account.userId);
+		miniboss.helperIds.push(helper0.account.userId);
+		miniboss.helperIds.push(helper1.account.userId);
+		miniboss.helperIds.push(helper2.account.userId);
 
 		const result = await calculateMinibossResult(miniboss);
 
 		expect(result.initiativeTaker.hero.currentHealth < hero.currentHealth).to.be.equal(true);
-		result.helpers.forEach(h=>{
-			expect(h.hero.currentHealth < hero.currentHealth).to.be.equal(true);
+		result.helpers.forEach(helper=>{
+			expect(helper.hero.currentHealth < hero.currentHealth).to.be.equal(true);
 		});
-		miniboss.helpers = [];
 	});
 });
 

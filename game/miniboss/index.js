@@ -30,14 +30,14 @@ const handleMiniboss = async (message, user)=>{
 
     const collector = await invitation.createReactionCollector(reactionFilter, { time: 1000 * 20, errors: ["time"] });
     collector.on("collect", async (result, rUser) => {
-        if (rUser.bot || miniboss.helpers.length > 9) {
+        if (rUser.bot || miniboss.helperIds.length > 9) {
             return;
         }
         const allowedHelper = await validateHelper(rUser.id);
         if (!allowedHelper) {
             return;
         }
-        miniboss.helpers.push(rUser.id);
+        miniboss.helperIds.push(rUser.id);
     });
 
      collector.on("end", async () => {
@@ -58,22 +58,19 @@ const minibossStartAllowed = (user)=>{
     if (user.hero.currentHealth < user.hero.health * 0.05) {
         let feedback = `Your hero's health is too low (**${user.hero.currentHealth}**)`;
         if (user.hero.rank < 2) {
-            feedback += "\n You can `!build` a shop and `!build` potions";
+            feedback += "\n You can `!build` a shop and `!buy` potions";
         }
         return feedback;
     }
 
     const { currentLocation } = user.world;
-    const minibossInformation = Object.values(worldLocations[currentLocation].places).find(p=>{
-        return p.type === "miniboss";
-    });
+    const minibossInformation = Object.values(worldLocations[currentLocation].places).find(p=>p.type === "miniboss");
 
 
     const locationIcon = getLocationIcon(currentLocation);
     if (!user.world.locations[currentLocation].explored.includes([minibossInformation.name])) {
         return `You haven't found any miniboss in ${locationIcon} ${currentLocation}`;
     }
-
     return null;
 };
 
@@ -83,7 +80,7 @@ const createMinibossEvent = (user) =>{
         return worldLocations[currentLocation].places[p].type === "miniboss";
     });
     const miniboss = deepCopyFunction(worldLocations[currentLocation].places[minibossname]);
-    miniboss.helpers.push(user.account.userId);
+    miniboss.helperIds.push(user.account.userId);
     return miniboss;
 };
 
@@ -94,14 +91,10 @@ const validateHelper = async discordId =>{
 
 
 const calculateMinibossResult = async (miniboss)=>{
-    const users = await User.find({ "account.userId": miniboss.helpers });
+    const users = await User.find({ "account.userId": miniboss.helperIds });
 
-    const initiativeTaker = users.filter(u=>{
-        return u.account.userId === miniboss.helpers[0];
-    });
-    const helpers = users.filter(u=>{
-        return u.account.userId !== miniboss.helpers[0];
-    });
+    const initiativeTaker = users.filter(user=>user.account.userId === miniboss.helperIds[0]);
+    const helpers = users.filter(user=>user.account.userId !== miniboss.helperIds[0]);
 
     let chanceForSuccess = helpers.reduce((acc, cur)=>{
         return acc + cur.hero.rank;
@@ -132,24 +125,30 @@ const calculateMinibossResult = async (miniboss)=>{
                 helpers:[],
             },
     };
+    // checks if initativetaker is dead
     if (result.damageDealt.initiativeTaker >= result.initiativeTaker.hero.currentHealth) {
         result.damageDealt.initiativeTakerDead = true;
     }
+
+    // checks for success
     if (chanceForSuccess > difficulty) {
         result.win = true;
+
         if(result.initiativeTaker.hero.rank >= 2) {
             result.rewards.initiativeTaker.dungeonKey = miniboss.rewards.dungeonKey;
         }
-        await result.initiativeTaker.alternativeGainXp(result.rewards.initiativeTaker.xp);
-        await result.initiativeTaker.gainManyResources({ gold: result.rewards.initiativeTaker.gold });
-        await result.initiativeTaker.giveDungeonKey(result.rewards.initiativeTaker.dungeonKey);
-        await asyncForEach(result.helpers, async (h) => {
+
+        result.initiativeTaker.alternativeGainXp(result.rewards.initiativeTaker.xp);
+        result.initiativeTaker.gainManyResources({ gold: result.rewards.initiativeTaker.gold });
+        result.initiativeTaker.giveDungeonKey(result.rewards.initiativeTaker.dungeonKey);
+
+        result.helpers.forEach(helper => {
             const randomHelperXp = Math.round((Math.random() * miniboss.rewards.xp) / helpers.length);
             const randomHelperGold = Math.round((Math.random() * miniboss.rewards.gold) / helpers.length);
-            const helperName = h.account.username;
-            const helperLeveledUp = randomHelperXp + h.hero.currentExp > h.hero.expToNextRank;
-            await h.alternativeGainXp(randomHelperXp);
-            await h.gainManyResources({ gold:randomHelperGold });
+            const helperName = helper.account.username;
+            const helperLeveledUp = randomHelperXp + helper.hero.currentExp > helper.hero.expToNextRank;
+            helper.alternativeGainXp(randomHelperXp);
+            helper.gainManyResources({ gold:randomHelperGold });
             result.rewards.helpers.push({
                 randomHelperXp,
                 randomHelperGold,
@@ -159,18 +158,24 @@ const calculateMinibossResult = async (miniboss)=>{
         });
     }
  else {
-    await result.initiativeTaker.heroHpLossFixedAmount(result.damageDealt.initiativeTaker);
-
-    await asyncForEach(result.helpers, async (h)=>{
+    result.initiativeTaker.heroHpLossFixedAmount(result.damageDealt.initiativeTaker);
+    result.helpers.forEach(helper=>{
         const randomHelperDamage = Math.round(Math.random() * miniboss.stats.attack) ;
-        const helperDead = h.hero.currentHealth - randomHelperDamage <= 0;
-        await h.heroHpLossFixedAmount(randomHelperDamage);
+        const helperDead = helper.hero.currentHealth - randomHelperDamage <= 0;
+        helper.heroHpLossFixedAmount(randomHelperDamage);
         result.rewards.helpers.push({
             randomHelperDamage,
             helperDead,
         });
     });
     }
+    // saves to db
+
+    await asyncForEach(result.helpers, async (helper) =>{
+            await helper.save();
+    });
+    await result.initiativeTaker.save();
+
     return result;
 };
 

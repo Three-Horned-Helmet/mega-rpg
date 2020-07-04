@@ -1,84 +1,129 @@
-const { worldLocations } = require("../_CONSTS/explore");
+// const { worldLocations } = require("../_CONSTS/explore");
+const sleep = require("util").promisify(setTimeout);
 const { dungeonStartAllowed } = require("./helper");
 const { checkQuest } = require("../quest/quest-utils");
 
+const { createDungeonBossRound } = require("./dungeonBoss");
 const { calculatePveFullArmyResult } = require("../../combat/combat");
-const { generateEmbedPveFullArmy } = require("../../combat/pveEmedGenerator");
+const { generateRoomEmbed, generateRoomDescriptionEmbed } = require("./embedGenerator");
+const { asyncForEach } = require("../_GLOBAL_HELPERS/");
 
-const { handleDungeonBoss } = require("./index");
-
-const handleDungeonRooms = async (message, user)=>{
-    const { currentLocation } = user.world;
-    const dungeonInformation = Object.values(worldLocations[currentLocation].places).find(p=>{
-        return p.type === "dungeon";
-    });
-    const { rooms } = dungeonInformation;
-    const progress = {
-        user,
-        currentRoom:0,
-        rooms,
-    };
-    await startDungeonRooms(message, progress);
-};
+const ICON_FORBIDDEN = "🚫";
+const ICON_CHECK = "✅";
 
 const startDungeonRooms = async (message, progress)=>{
-    const { user } = progress;
+    const { initiativeTaker } = progress;
 
-    const disallowed = dungeonStartAllowed(user);
+    const disallowed = dungeonStartAllowed(initiativeTaker);
 		if (disallowed) {
             return message.channel.send(disallowed);
         }
 
+const placeInfo = progress.dungeon.rooms[progress.currentRoom];
+
+
+const roomDescription = await message.channel.send(generateRoomDescriptionEmbed(progress, placeInfo, 1));
+
+    await sleep(3000);
+    await roomDescription.edit(generateRoomDescriptionEmbed(progress, placeInfo, 2));
+    await sleep(3000);
+    await roomDescription.edit(generateRoomDescriptionEmbed(progress, placeInfo, 3));
+    await sleep(4500);
+
 // perform raid
-const placeInfo = progress.rooms[progress.currentRoom];
-const raidResult = calculatePveFullArmyResult(user, placeInfo);
+const raidResults = progress.players.map(player=>{
+    const balancedPlaceInfo = placeInfo;
+    balancedPlaceInfo.stats.attack = balancedPlaceInfo.stats.attack / progress.players.length;
+    balancedPlaceInfo.stats.health = balancedPlaceInfo.stats.health / progress.players.length;
+    return calculatePveFullArmyResult(player, balancedPlaceInfo);
+    });
 
  // saves to database
-await user.unitLoss(raidResult.lossPercentage);
-await user.alternativeGainXp(raidResult.expReward);
+await asyncForEach(progress.players, async (player, i)=>{
+player.unitLoss(raidResults[i].lossPercentage);
+player.alternativeGainXp(raidResults[i].expReward);
 let questIntro;
-if (raidResult.win) {
-    await user.gainManyResources(raidResult.resourceReward);
 
-    const { currentLocation } = user.world;
-    questIntro = await checkQuest(user, placeInfo, currentLocation);
+if (raidResults[i].win) {
+     player.gainManyResources(raidResults[i].resourceReward);
+     const { currentLocation } = user.world;
+     questIntro = await checkQuest(user, placeInfo, currentLocation);
 }
+await player.save();
+});
+
+// removes dead players from event
+progress.players = progress.players.filter((player, i) => {
+    if (raidResults[i].win) {
+        return player;
+    }
+        else {
+        const playerIndex = progress.dungeon.helperIds.indexOf(player.account.userId);
+            progress.dungeon.helperIds.splice(playerIndex, 1);
+    }
+});
+
 // generates a Discord embed
-const raidEmbed = generateEmbedPveFullArmy(user, placeInfo, raidResult, questIntro, true);
+const raidEmbed = generateRoomEmbed(initiativeTaker, placeInfo, raidResults, questIntro, true);
 const msg = await message.channel.send(raidEmbed);
 try {
-    await msg.react("✅");
-    await msg.react("🚫");
+    await msg.react(ICON_FORBIDDEN);
+    await msg.react(ICON_CHECK);
 }
 catch (err) {
     console.error("error: ", err);
 }
 
-
 const filter = (reaction, rUser) => {
-	return rUser.id === progress.user.account.userId;
+    const emoji = reaction.emoji.name;
+	return progress.dungeon.helperIds.includes(rUser.id + "") && (emoji === ICON_CHECK || emoji === ICON_FORBIDDEN);
 };
+const acceptedPlayers = new Set();
+const maxPlayers = progress.dungeon.helperIds.length;
 
-msg.awaitReactions(filter, { max: 1, time: 1000 * 20, errors: ["time"] })
-	.then(collected => {
-		const reaction = collected.first();
-		if (reaction.emoji.name === "✅") {
-            progress.currentRoom += 1;
+const collector = await msg.createReactionCollector(filter, { max: maxPlayers, time: 1000 * 20, errors: ["time"] });
+collector.on("collect", async (result, rUser)=>{
+    const emoji = result._emoji.name;
+    if (emoji === ICON_FORBIDDEN) {
+        // Player chose not to continue the dungeon
+        // and are kicked out of group
+        const playerIndex = progress.dungeon.helperIds.indexOf(rUser.id);
+        progress.dungeon.helperIds.splice(playerIndex, 1);
+        progress.players.filter(p=>{
+            return progress.dungeon.helperIds.includes(p.account.userId);
+        });
+    }
+    if (emoji === ICON_CHECK) {
+        acceptedPlayers.add(rUser.id);
+        // stops if all players have accepted
+        if (acceptedPlayers.size === progress.dungeon.helperIds.length) {
+            collector.stop();
+        }
+    }
+});
 
-            if (progress.currentRoom > 2) {
-                return handleDungeonBoss(message, user);
-            }
- else {
-                startDungeonRooms(message, progress);
-            }
-		}
-        else {
-        return msg.reply("you chose to flee");
-		}
-	})
-	.catch(() => {
-    return msg.reply("You did not choose anything and therefore fled the dungeon");
+collector.on("end", async () => {
+    const newHelpers = Array.from(acceptedPlayers);
+
+    // if someone dropped did not react, they are kicked out
+    if (newHelpers.length !== progress.players.length) {
+        progress.players.filter(p=>{
+            return newHelpers.includes(p.account.userId);
+        });
+    }
+    // noone wanted to proceed
+    if (!newHelpers.length) {
+        return message.channel.send("Dungeon raid ended");
+    }
+    progress.dungeon.helperIds = newHelpers;
+    if (progress.currentRoom >= 2) {
+        return await createDungeonBossRound(message, progress);
+    }
+
+    progress.currentRoom += 1;
+    startDungeonRooms(message, progress);
+
     });
 };
 
-module.exports = { handleDungeonRooms };
+module.exports = { startDungeonRooms };

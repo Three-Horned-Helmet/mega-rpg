@@ -37,17 +37,21 @@ __Cooldowns:__
 __Collect:__
 `!collect` => Collects all collectable resources
 `!collect [building]` => Collects the resources from these specific buildings (!collect mine)
+Æ
 
 __Craft:__
 `!craft` => Returns all available items that you can craft and their costs
 `!craft [item]` => Crafts 1 of the specified item (!craft bronze sword)
 `!craft [item] [amount]` => Crafts the x amount of the specified item (!craft bronze sword 5)
-Æ
+
 __Dailyprize:__
 `!dailyprize` => A daily prize that could be collected every 24 hours
 
 __Duel:__
 `!duel [@user]` => Duels the user in a friendly full army battle without losses (!duel @SpinningSiri)
+
+__Dungeon:__
+`!dungeon` => Triggers a dungeon run
 
 __Equip:__
 `!equip` => Returns all available equipment and their stats that you have in your armory
@@ -75,6 +79,13 @@ __Produce:__
 
 __Profile:__
 `!profile` => Returns a overview of your profile
+Æ
+
+__Race:__
+`!race` => Triggers a race where players can win money
+
+__Rank:__
+`!rank` => Let's you see who has the most xp on whole Mega RPG
 
 __Quest:__
 `!quest` => Returns the quest's description/winDescription if you only have 1 quest available, otherwise returns all available quests
@@ -92,7 +103,7 @@ __Recruit:__
 
 __Resources:__
 `!resources` => Returns all your resources (!resources)
-Æ
+
 __Stake:__
 `!stake [@player]` => Stakes another player that must accept the challenge. Loser loses an aritfact item and 20% hero exp, winner gets it. (!stake @SpinningSiri)
 

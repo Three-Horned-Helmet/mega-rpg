@@ -1,7 +1,13 @@
 require("dotenv").config();
 
 const mongoose = require("mongoose");
-mongoose.connect(process.env.MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true });
+
+if (process.env.NODE_ENV === "test") {
+	mongoose.connect(process.env.TEST_MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true });
+}
+ else {
+	mongoose.connect(process.env.MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true });
+}
 
 const { Schema } = mongoose;
 
@@ -25,10 +31,6 @@ const userSchema = new Schema({
 			type: String,
 			enum: ["", "Bronze", "Silver", "Gold", "Platinum"],
 			default: "",
-		},
-		testAccount:{
-			type: Boolean,
-			default: false,
 		},
 	},
 	maxPop: {
@@ -169,6 +171,10 @@ const userSchema = new Schema({
 		default: [],
 	},
 	hero: {
+		elo:{
+			type: Number,
+			default: 1200,
+		},
 		health: {
 			type: Number,
 			default: 100,
@@ -583,7 +589,6 @@ userSchema.methods.heroHpLossFixedAmount = function(damage) {
 	if (this.hero.currentHealth < 0) {
 		this.hero.currentHealth = 0;
 	}
-	return this.save();
 };
 
 // Takes a number, and heals the hero for that much hp
@@ -714,8 +719,13 @@ userSchema.methods.giveDungeonKey = async function(key = "CM key") {
 		return;
 	}
 	this.hero.dungeonKeys[key] += 1;
-
-	return this.save();
+};
+userSchema.methods.changeElo = async function(newElo) {
+	if (typeof newElo !== "number") {
+		console.error("elo must be Number", newElo);
+		return;
+	}
+	this.hero.elo = newElo;
 };
 
 
