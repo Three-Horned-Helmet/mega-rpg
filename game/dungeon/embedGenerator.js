@@ -2,13 +2,11 @@ const Discord = require("discord.js");
 const { getLocationIcon, getStatsIcon, getWeaponIcon, getPlaceIcon, getGreenRedIcon, getResourceIcon } = require("../_CONSTS/icons");
 
 // Dungeon boss invitation
-const createDungeonBossInvitation = (dungeon, user)=>{
+const createDungeonInvitation = (dungeon, user)=>{
     const sideColor = "#45b6fe";
     const username = user.account.username;
-    const { currentLocation } = user.world;
-    const locationIcon = getLocationIcon(currentLocation);
     const dungeonIcon = getPlaceIcon("dungeon");
-        const rules = `${getGreenRedIcon(dungeon.boss.rules.allowArmy)} \`Army allowed\`\n ${getGreenRedIcon(dungeon.boss.rules.canKill)} \`Dungeon deadly\`\n${getGreenRedIcon(dungeon.boss.rules.allowHelpers)} \`Helpers allowed\`\n\n**Unclocks**: ${getLocationIcon(dungeon.boss.unlocks)} **${dungeon.boss.unlocks}**\n`;
+        const rules = `\` ${dungeon.rooms.length} Rooms\`\n ${getGreenRedIcon(dungeon.boss.rules.canKill)} \`Dungeon deadly\`\n${getGreenRedIcon(dungeon.boss.rules.allowhelpers)} \`helpers allowed\`\n\n**Unclocks**: ${getLocationIcon(dungeon.boss.unlocks)} **${dungeon.boss.unlocks}**\n`;
         const dungeonStats = `${getStatsIcon("health")} \`Health: ${dungeon.boss.stats.health}\`\n ${getStatsIcon("attack")} \`Attack: ${dungeon.boss.stats.attack}\`\n ${getGreenRedIcon(dungeon.boss.stats.healing)} \`Healing\`\n`;
         const bossRewards = `${getResourceIcon("gold")} \`Gold: ${dungeon.boss.rewards.gold}\`\n ${getResourceIcon("xp")} \`XP: ${dungeon.boss.rewards.xp}\`\n${getGreenRedIcon(dungeon.boss.rewards.drop)} \`Loot drop\`\n\n   `;
         const bossWeapons = dungeon.boss.bossWeapons.map(w=>{
@@ -44,8 +42,8 @@ const createDungeonBossInvitation = (dungeon, user)=>{
         }];
 
         const embedInvitation = new Discord.MessageEmbed()
-            .setTitle(`${username} is going for the dungeon boss!!`)
-            .setDescription(`Help taking out ${dungeonIcon} **${dungeon.boss.name}** in ${locationIcon} ${currentLocation}!`)
+            .setTitle(`${username} is going for the dungeon !!`)
+            .setDescription(`Help taking out ${dungeonIcon} **${dungeon.boss.name}** in ${dungeon.name}!`)
             .setColor(sideColor)
             .addFields(
                 ...fields,
@@ -76,7 +74,7 @@ const createDungeonBossInvitation = (dungeon, user)=>{
 
         const bossName = progress.dungeon.boss.name;
         const dungeonHp = getDungeonHp(progress.dungeon.boss.stats);
-        const playersHp = getPlayersHp(progress.players, progress.dungeon.boss.helpers);
+        const playersHp = getPlayersHp(progress.players, progress.dungeon.helperIds);
 
         const weaponsTitle = "Choose your weapon:";
         const weaponsOverview = Object.keys(weapons).map(w=>{
@@ -159,8 +157,8 @@ const createDungeonBossInvitation = (dungeon, user)=>{
         if (initiativeTakerAlive) {
             rewards.push(`${initiativeTakerName}\n ${getResourceIcon("gold")} Gold: ${progress.rewards.initiativeTaker.gold}\n ${getResourceIcon("xp")}Xp: ${progress.rewards.initiativeTaker.xp} \n 🎲Drop: ${progress.rewards.initiativeTaker.drop}`);
         }
-        if (progress.rewards.helpers.length) {
-            progress.rewards.helpers.length.forEach(r=>{
+        if (progress.rewards.helperIds.length) {
+            progress.rewards.helperIds.length.forEach(r=>{
                 rewards.push(`${r.name}\n ${getResourceIcon("gold")} Gold: ${r.gold}\n ${getResourceIcon("xp")}Xp: ${r.xp} \n 🎲Drop: ${r.drop}`);
             });
         }
@@ -203,6 +201,7 @@ const createDungeonBossInvitation = (dungeon, user)=>{
 
 
     const createDungeonBossResultLoss = (progress) =>{
+
         const initiativeTakerName = progress.initiativeTaker.account.username;
         const sideColor = "#45b6fe";
 
@@ -229,10 +228,7 @@ const createDungeonBossInvitation = (dungeon, user)=>{
         const bossName = progress.dungeon.boss.name;
         const title = `${bossName} defeated ${initiativeTakerName}!`;
 
-        const unlockedLocation = progress.dungeon.boss.unlocks;
-        const locationIcon = getLocationIcon(unlockedLocation);
-        const description = `${initiativeTakerName} has unlocked ${locationIcon} ${unlockedLocation}`;
-
+        const description = `${initiativeTakerName} did **not** unlock a new world`;
 
         const embedResult = new Discord.MessageEmbed()
             .setTitle(title)
@@ -266,4 +262,64 @@ const createDungeonBossInvitation = (dungeon, user)=>{
         };
 
 
-            module.exports = { createDungeonBossInvitation, generateDungeonBossRound, generateDungeonBossResult };
+function generateRoomEmbed(user, placeInfo, results) {
+    const sideColor = "#45b6fe";
+    const placeName = placeInfo.name;
+    const placeIcon = getPlaceIcon(placeInfo.type);
+
+
+    const fields = results.map(result=>{
+        const casualtiesPercentage = (result.lossPercentage * 100).toFixed(2);
+        const rewards = Object.keys(result.resourceReward).map(r=>{
+                return `${getResourceIcon(r)} ${r}: **${result.resourceReward[r]}**`;
+            });
+            rewards.push(`\n+ **${result.expReward}** xp`);
+            rewards.push(`Casulty: **${casualtiesPercentage}**% \n`);
+
+        let { username } = result;
+        if (result.levelUp) {
+               username += " 💪 ";
+        }
+        if (!result.win) {
+                username += " ☠️ ";
+        }
+        return {
+            name: username,
+            value: rewards,
+            inline: true,
+        };
+    });
+
+    const title = `${user.account.username}'s entourage raided ${placeIcon} ${placeName}`;
+
+    const embedWin = new Discord.MessageEmbed()
+    .setTitle(title)
+    .setColor(sideColor)
+    .addFields(
+        ...fields,
+    )
+    .setFooter("Proceed? 🚫 / ✅");
+return embedWin;
+}
+
+const generateRoomDescriptionEmbed = (progress, placeInfo, dots)=>{
+    const sideColor = "#45b6fe";
+    const placeName = placeInfo.name;
+    const placeIcon = getPlaceIcon(placeInfo.type);
+
+    const fields = [{
+        name:`${placeIcon} ${placeName}`,
+        value:`${placeInfo.description}${".".repeat(dots)}`,
+        inline: true,
+    }];
+
+    const embedWin = new Discord.MessageEmbed()
+    .setColor(sideColor)
+    .addFields(
+        ...fields,
+    );
+return embedWin;
+};
+
+
+            module.exports = { createDungeonInvitation, generateDungeonBossRound, generateDungeonBossResult, generateRoomEmbed, generateRoomDescriptionEmbed };
