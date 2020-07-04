@@ -291,6 +291,19 @@ const worldLocations = {
 					gold: 400,
 				},
 			},
+			"Courtyard Bandits": {
+				name: "Courtyard Bandits",
+				type: "raid",
+				notExplorable: true,
+				stats:{
+					attack: 1800,
+					health: 1800,
+				},
+				rewards:{
+					"steel bar": 40,
+					gold: 400,
+				},
+			},
 		},
 	},
 	"Misty Mountains":{
