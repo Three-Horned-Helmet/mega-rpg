@@ -38,16 +38,16 @@ const raidResults = progress.players.map(player=>{
     return calculatePveFullArmyResult(player, balancedPlaceInfo);
     });
 
+let questIntro;
  // saves to database
 await asyncForEach(progress.players, async (player, i)=>{
 player.unitLoss(raidResults[i].lossPercentage);
 player.alternativeGainXp(raidResults[i].expReward);
-let questIntro;
 
 if (raidResults[i].win) {
      player.gainManyResources(raidResults[i].resourceReward);
-     const { currentLocation } = user.world;
-     questIntro = await checkQuest(user, placeInfo, currentLocation);
+     const { currentLocation } = player.world;
+     questIntro = await checkQuest(player, placeInfo.name, currentLocation);
 }
 await player.save();
 });

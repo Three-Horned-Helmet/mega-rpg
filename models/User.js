@@ -202,7 +202,7 @@ const userSchema = new Schema({
 			},
 		},
 		dungeonKeys:{
-			["CM key"]:{
+			["CM Key"]:{
 				type: Number,
 				default: 0,
 			},
@@ -283,7 +283,6 @@ const userSchema = new Schema({
 }));
 	this.quests[foundIndex].started = true;
 	this.markModified(`quests.${foundIndex}.started`);
-	return this.save();
 };
 
 userSchema.methods.addNewQuest = async function(quest) {

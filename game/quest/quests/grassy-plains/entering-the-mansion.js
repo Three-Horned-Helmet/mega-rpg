@@ -17,9 +17,9 @@ module.exports = {
         }],
         found: "While looking through the Village for someone who knows how to get into the Mansion, you stumble upon a sign with the text 'Locksmith Ahred'",
         intro: "You try to open the door into the Mansion, but it is locked.",
-        description: "With the help of your soldiers you try to open the door into the Masion with brute force, but it does not bulge. It must be stronger forces keeping the door shut. You command your men to surround the Mansion to find an alternative way in, but without any luck.\n\n'There must be someone who knows how to get into the Mansion, but who?'",
+        description: "With the help of your soldiers you try to open the Mansion's door using brute force, but it does not bulge. It must be stronger forces keeping the door shut. You command your men to surround the Mansion to find an alternative way in, but without any luck.\n\n'There must be someone who knows how to get into the Mansion, but who?'",
         objective: "Find someone who knows how to get into the Mansion",
-        reward: "Gold: 300",
+        reward: "Gold: 200",
         winDescription: "You open the door into the Locksmith and find a tall slim man with a long beard sitting behnd the counter. He seems quite old.\n\n'Good day to you Sir! My name is Ahred, and what brings you to my Locksmith?'\n\n'I was looking for a way to get into the Bandits Mansion and was wondering if you would be able to help out?'\n\n*\\*Ahred meets you with a surprised look\\**'Oooh, so you are going to pick a bone with the Bandit King, huh? It is about time! I may be able to help you out, but it will not be easy!'\n**A new quest is available**",
         questKeySequence: ["Grassy Plains", "enteringMansion"],
 
@@ -36,7 +36,7 @@ module.exports = {
 
             // Get reward
             await user.gainManyResources({
-                gold: 300,
+                gold: 200,
             });
 
             // Add next quest
