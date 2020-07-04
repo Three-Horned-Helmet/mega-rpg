@@ -32,13 +32,17 @@ const handleRaid = async (user, place = null) => {
         return `You have not explored any place to raid in ${locationIcon} ${currentLocation}, try \`!explore\` to find a place to raid`;
     }
 
-
-     const userExploredNotRaidPlaces = userExploredPlaces
-        .filter(p=> placesInCurrentWorld[p].type !== "raid")
+    const notHuntPlaces = Object.keys(placesInCurrentWorld)
+        .filter(p=> {
+            const notHuntPlace = placesInCurrentWorld[p].type !== "raid";
+            if (notHuntPlace) {
+                return placesInCurrentWorld[p];
+            }
+        })
         .map(p=> p.replace(/\s/g, "").toLowerCase());
 
     // if user tries to raid a place that is not raidable
-    if (userExploredNotRaidPlaces.includes(place)) {
+    if (notHuntPlaces.includes(place.replace(/\s/g, "").toLowerCase())) {
         return "This place cannot be raided";
     }
 
@@ -48,7 +52,7 @@ const handleRaid = async (user, place = null) => {
     if (place) {
         placeInfo = Object.values(placesInCurrentWorld).find(p=>{
         const friendlyFormat = p.name.replace(/\s/g, "").toLowerCase();
-        return friendlyFormat === place;
+        return friendlyFormat === place.replace(/\s/g, "");
 
         // if we want to make it user friendly
         // and let the user type in the first 4 letters of the place
