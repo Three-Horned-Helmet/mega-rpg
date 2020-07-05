@@ -49,7 +49,7 @@ const getTop5Quest = async (user)=>{
     const allUsers = await User
         .find({})
         .select(["account", "quests"])
-        .sort({ "quests":-1 })
+        .sort({ "completedQuests":-1 })
         .lean();
 
     const top5 = allUsers.slice(0, 5);
