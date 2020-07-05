@@ -74,8 +74,8 @@ const worldLocations = {
 				name: "Forest",
 				type: "hunt",
 				stats:{
-					attack: 30,
-					health: 30,
+					attack: 25,
+					health: 25,
 				},
 				rewards:{
 					gold: 5,
@@ -87,8 +87,8 @@ const worldLocations = {
 				name: "Cave",
 				type: "hunt",
 				stats:{
-					attack: 50,
-					health: 50,
+					attack: 40,
+					health: 40,
 				},
 				rewards:{
 					gold: 40,

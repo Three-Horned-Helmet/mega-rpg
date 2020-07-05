@@ -10,8 +10,8 @@ module.exports = {
 			level: 0,
 		},
 		stats: {
-			health: 13,
-			attack: 9,
+			health: 22,
+			attack: 10,
 		},
 	},
 	archer: {
@@ -25,8 +25,8 @@ module.exports = {
 			level: 1,
 		},
 		stats: {
-			health: 30,
-			attack: 25,
+			health: 45,
+			attack: 35,
 		},
 	},
 	ranger: {

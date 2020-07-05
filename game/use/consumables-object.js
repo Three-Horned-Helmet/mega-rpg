@@ -2,7 +2,7 @@ const consumablesObject = {
 	["Small Heal Potion"]: {
 		name: "Small Heal Potion",
 		healingValue: 100,
-		price: 10,
+		price: 5,
 		requirement: {
 			building: "shop",
 			level: 0,
@@ -14,7 +14,7 @@ const consumablesObject = {
 	["Large Heal Potion"]: {
 		name: "Large Heal Potion",
 		healingValue: 400,
-		price: 37,
+		price: 30,
 		requirement: {
 			building: "shop",
 			level: 1,
