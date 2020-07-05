@@ -92,7 +92,7 @@ describe("miniboss command", () => {
 			},
 		};
 		const hero = {
-			rank:3,
+			rank:10,
 			currentExp: 99.99,
 			expToNextRank: 100,
 			stats:{
