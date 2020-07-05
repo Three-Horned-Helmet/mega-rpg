@@ -26,6 +26,7 @@ const calculateStats = (user) => {
 	});
 
 	// Add the stats from the items
+	console.log(armory, "?", user.account);
 	for(const slot in armory.toJSON()) {
 		let slotsTaken = 0;
 		const allSlotItems = Object.keys(armory[slot]).map(item => allItems[item]);
