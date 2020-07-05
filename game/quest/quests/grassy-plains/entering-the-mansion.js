@@ -118,7 +118,7 @@ module.exports = {
         description: "Head to the Bandits Mansion and defeat The Bandit King.",
         objective: "Kill The Bandit King",
         reward: "Bandits Bandana: 1",
-        winDescription: "You walk over to The Bandit King and pickup his Bandana and decides to take it with you.",
+        winDescription: "The Bandit King lies on the floor soaked in blood. The impling with the green tail looks at him with disgust. As you walk over to The Bandit King he starts whispering something. You bend down to listen to what it is.\n\n'Help... Me... Mephisto...'\n\nThe Bandit King is suddenly set on fire as the impling gets a terrified look on his face and flies away!",
         questKeySequence: ["Grassy Plains", "endingReignOfBanditKing"],
 
         // Returns false if the quest description is shown, or true if the quest is being completed

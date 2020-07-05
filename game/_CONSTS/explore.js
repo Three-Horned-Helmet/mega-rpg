@@ -174,7 +174,7 @@ const worldLocations = {
 						allowHelpers: true,
 					},
 					roundDescriptions:[
-						"You enter the very last room of the castle, seing the very foe you came to seek. Your personal army shivers in fear in the face of the Castle's Monarch, they can't help you fight this boss. Choose your weapon wisely to defeat the **Bandit King**!",
+						"You enter the very last room of the castle, seing the very foe you came to seek, The Bandit King with a green tailed impling sitting on his shoulder. Your personal army shivers in fear in the face of the Castle's Monarch, they can't help you fight this boss. Choose your weapon wisely to defeat the **Bandit King**!",
 						"Choose your weapon wisely!",
 						"Choose your weapon wisely!",
 						"Choose your weapon wisely!",

@@ -1,5 +1,5 @@
 const User = require("../../models/User");
-const GOLDPRIZE = 500;
+const GOLDPRICE = 40;
 const { asyncForEach } = require("../_GLOBAL_HELPERS");
 
 const createChanceArray = (raceDataCopy)=> {
@@ -22,7 +22,7 @@ const racePayOut = async (event) =>{
     let weightedMultiplier = 20 - event.raceDataCopy[event.winner].weight;
     weightedMultiplier = weightedMultiplier ? weightedMultiplier : 1;
 
-    const reward = weightedMultiplier * GOLDPRIZE + 500;
+    const reward = weightedMultiplier * GOLDPRICE + 40;
 
     const winners = await User.find({ "account.userId":winnersDiscordId });
 
@@ -37,7 +37,7 @@ const racePayOut = async (event) =>{
 
     const validateUser = async (discordId) =>{
         const user = await User.findOne({ "account.userId": discordId }).lean();
-        return user.resources.gold >= GOLDPRIZE;
+        return user.resources.gold >= GOLDPRICE;
     };
 
 
