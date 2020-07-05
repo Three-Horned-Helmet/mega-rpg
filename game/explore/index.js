@@ -43,6 +43,7 @@ const exploreArea = async (user, places, currentLocation, now)=>{
 
 	if(previouslyExploredPlaces.includes(newlyExploredPlaceName) || places[newlyExploredPlaceName].notExplorable) {
 		msg = generateFailExploreMessage(currentLocation);
+		user.setNewCooldown("explore", now);
 	}
 	else {
 		msg = generateSuccessExploreMessage(currentLocation, newlyExploredPlaceName, user.hero.rank);

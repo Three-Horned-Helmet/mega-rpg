@@ -12,7 +12,7 @@ const handleMiniboss = async (message, user)=>{
     // cooldown, health, explored miniboss
     const disallowed = minibossStartAllowed(user);
 		if (disallowed) {
-			message.channel.send(disallowed);
+			return message.channel.send(disallowed);
         }
 
     const miniboss = createMinibossEvent(user);
