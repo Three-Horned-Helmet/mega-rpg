@@ -159,9 +159,9 @@ module.exports = {
     recruitArmy: {
         name: "Recruit an Army",
         description: "With the exploration of the nearby areas you will find animals to hunt, hostile encampments, minibosses, dungeons or even new quests areas! To prepare you for the enemies around your empire you will have to recruit an army to deal with these dangers. Your objective is to build a Forge, Blacksmith and Barracks to produce an army that can raid nearby encampments. \n\nYou can build Forge, Blacksmith and Barracks with `!build forge`, `!build blacksmith` and `!build barracks`, respectively. A Forge enables you to can craft bronze bars `!craft bronze bar 1`, Blacksmith can use the bronze bars to craft weaponry `!craft bronze sword 1` and a Barracks can be used to produce soldiers that can use the crafted equipment `!recruit peasant 1`",
-        objective: "Craft 10 Bronze Swords\nGet an army of 10 Peasants",
+        objective: "Craft 3 Bronze Swords\nGet an army of 10 Peasants",
         reward: "Peasant: 5\nBronze Helmet: 5\nBronze Leggings: 5",
-        winDescription: "The weaponry is automatically worn by your army so you dont have to worry about that, just make sure you have enough equipment for all your units to improve their fighting capabilities. Don't forget to also build some farms to increase your max population allowing more units to be recruited. With an army well prepared you can `!explore` until you find an encampment to `!raid` and gain valuable resources and experience!",
+        winDescription: "The weaponry is automatically worn by your army so you dont have to worry about that, just make sure you have enough equipment for all your units to improve their fighting capabilities. You can equip an item on the Hero with the command `!equip bronze sword`. Equiping an item on a Hero makes the item more powerful as your Hero is a more experienced fighter than your army. Don't forget to also build some farms to increase your max population allowing more units to be recruited. With an army well prepared you can `!explore` until you find an encampment to `!raid` and gain valuable resources and experience!",
         questKeySequence: ["gettingStarted", "recruitArmy"],
 
         // Returns false if the quest description is shown, or true if the quest is being completed
@@ -170,7 +170,7 @@ module.exports = {
             if(!questResponse) return false;
 
             // Does the user have the enough bronze swords
-            if(!(user.army.armory.weapon["bronze sword"] >= 10)) return false;
+            if(!(user.army.armory.weapon["bronze sword"] >= 3)) return false;
 
             // Does the user have the enough peasants
             if(!(user.army.units.barracks.peasant >= 10)) return false;

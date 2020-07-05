@@ -37,22 +37,22 @@ const worldLocations = {
 				name: "Bandit Camp",
 				type: "raid",
 				stats:{
-					attack: 500,
-					health: 300,
+					attack: 200,
+					health: 200,
 				},
 				rewards:{
-					gold: 39,
+					gold: 45,
 				},
 			},
 			"Fishing village": {
 				name: "Fishing village",
 				type: "raid",
 				stats:{
-					attack: 200,
-					health: 300,
+					attack: 80,
+					health: 120,
 				},
 				rewards:{
-					gold: 35,
+					gold: 20,
 					"oak wood": 5,
 					"yew wood": 2,
 				},
@@ -61,8 +61,8 @@ const worldLocations = {
 				name: "Collapsed Mine",
 				type: "raid",
 				stats:{
-					attack: 200,
-					health: 200,
+					attack: 100,
+					health: 100,
 				},
 				rewards:{
 					gold: 15,
@@ -80,6 +80,7 @@ const worldLocations = {
 				rewards:{
 					gold: 5,
 					"oak wood": 8,
+					"copper ore": 3,
 					"yew wood": 4,
 				},
 			},
