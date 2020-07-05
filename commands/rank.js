@@ -1,21 +1,21 @@
-const User = require("../models/User");
+const { handleRank } = require("../game/rank");
+
 
 module.exports = {
 	name: "rank",
-	description: "Returns best players based upon their rank",
-	async execute(message) {
-        const top5 = await User
-            .find({})
-            .select(["account", "hero"])
-            .sort({ "hero.currentExp":-1 })
-            .limit(5)
-            .lean();
+	description: "Shows best players based upon various ranking systems",
+	async execute(message, args, user) {
+        const allowedTypes = ["xp", "elo", "army", "quest"];
+        let rankType;
+            if (allowedTypes.includes(args.join(""))) {
+                rankType = args.join("");
+            }
+ else {
+                rankType = "xp";
+            }
+            const result = await handleRank(rankType, user);
 
-        const formatted = top5.map((p, i)=>{
-            const first = i === 0 ? "💎" : "";
-            return `\`#${i + 1}: ${first}${p.account.username}${first} --- hero lvl: ${p.hero.rank} - ${p.hero.currentExp} XP\``;
-        });
 
-		return message.channel.send(formatted);
+		return message.channel.send(result);
 	},
 };

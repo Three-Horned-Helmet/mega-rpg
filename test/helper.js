@@ -32,6 +32,12 @@ const createTestUser = ({
 	},
 	maxPop = 10,
 	army = {
+		armory: {
+			helmet: {},
+			chest: {},
+			legging: {},
+			weapon: {},
+		},
 		units:{
 			archery:{
 				huntsman:0,
