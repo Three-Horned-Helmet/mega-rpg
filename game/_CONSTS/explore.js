@@ -41,7 +41,7 @@ const worldLocations = {
 					health: 200,
 				},
 				rewards:{
-					gold: 45,
+					gold: 90,
 				},
 			},
 			"Fishing village": {
@@ -52,7 +52,7 @@ const worldLocations = {
 					health: 120,
 				},
 				rewards:{
-					gold: 20,
+					gold: 45,
 					"oak wood": 5,
 					"yew wood": 2,
 				},
@@ -65,9 +65,9 @@ const worldLocations = {
 					health: 100,
 				},
 				rewards:{
-					gold: 15,
-					"copper ore": 8,
-					"iron ore": 4,
+					gold: 35,
+					"copper ore": 3,
+					"iron ore": 2,
 				},
 			},
 			Forest: {
@@ -78,10 +78,10 @@ const worldLocations = {
 					health: 25,
 				},
 				rewards:{
-					gold: 5,
-					"oak wood": 8,
-					"copper ore": 3,
-					"yew wood": 4,
+					gold: 15,
+					"oak wood": 3,
+					"copper ore": 2,
+					"yew wood": 2,
 				},
 			},
 			Cave: {
@@ -92,7 +92,7 @@ const worldLocations = {
 					health: 40,
 				},
 				rewards:{
-					gold: 40,
+					gold: 45,
 				},
 			},
 			"C'Thun": {
@@ -278,8 +278,8 @@ const worldLocations = {
 				type: "hunt",
 				notExplorable: true,
 				stats:{
-					attack: 300,
-					health: 450,
+					attack: 100,
+					health: 100,
 				},
 				rewards:{
 					"yew wood": 20,
@@ -291,8 +291,8 @@ const worldLocations = {
 				type: "hunt",
 				notExplorable: true,
 				stats:{
-					attack: 400,
-					health: 500,
+					attack: 200,
+					health: 200,
 				},
 				rewards:{
 					"yew wood": 35,
