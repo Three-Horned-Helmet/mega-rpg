@@ -12,28 +12,28 @@ const handleExplore = async (user) => {
 	}
 	const { currentLocation } = user.world;
 
-	const chanceForRandomEvent = 0.05;
-	const randomNumber = Math.random();
+	/* const chanceForRandomEvent = 0.05;
+	const randomNumber = Math.random(); */
 
 	const now = new Date();
 
 	// triggers randomevent 5%
-	if (chanceForRandomEvent > randomNumber) {
+	/* if (chanceForRandomEvent > randomNumber) {
 		const { randomEvents } = worldLocations[currentLocation];
 		user.setNewCooldown("explore", now);
 		return handleRandomEvent(randomEvents);
-	}
+	} */
 
 	const places = worldLocations[currentLocation].places;
 	const exploreResult = exploreArea(user, places, currentLocation, now);
 	return exploreResult;
 };
 
-const handleRandomEvent = (randomEvents) => {
+/* const handleRandomEvent = (randomEvents) => {
 	const randomEventNames = Object.keys(randomEvents);
 	const randomEvent = randomEventNames[Math.floor(Math.random() * randomEventNames.length)];
 	return `randomEvent triggered --> ${randomEvent} - not yet done`;
-};
+}; */
 
 const exploreArea = async (user, places, currentLocation, now)=>{
 	const placeNames = Object.keys(places);
