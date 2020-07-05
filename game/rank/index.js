@@ -47,7 +47,7 @@ const getTop5Army = async (user)=>{
 const getTop5Quest = async (user)=>{
     const allUsers = await User
         .find({})
-        .select(["account", "quests"])
+        .select(["account", "completedQuests"])
         .sort({ "completedQuests":-1 })
         .lean();
 
@@ -55,7 +55,7 @@ const getTop5Quest = async (user)=>{
 
     const formatted = top5.map((p, i)=>{
         const first = i === 0 ? "🔥" : "";
-            return `\`#${i + 1}: ${first}${p.account.username}${first} --- ${p.quests.length} \``;
+            return `\`#${i + 1}: ${first}${p.account.username}${first} --- ${p.completedQuests.length} \``;
         });
     if (!top5.some(player=> player.account.userId === user.account.userId)) {
         let playerPosition;
@@ -64,7 +64,7 @@ const getTop5Quest = async (user)=>{
                 playerPosition = i + 1;
             }
         });
-        formatted.push(`\`#${playerPosition}: ${user.account.username} --- ${user.quests.length} \``);
+        formatted.push(`\`#${playerPosition}: ${user.account.username} --- ${user.completedQuests.length} \``);
     }
     return formatted;
 };
