@@ -92,7 +92,7 @@ describe("miniboss command", () => {
 			},
 		};
 		const hero = {
-			rank:10,
+			rank:3,
 			currentExp: 99.99,
 			expToNextRank: 100,
 			stats:{
@@ -117,7 +117,6 @@ describe("miniboss command", () => {
 		miniboss.helperIds.push(helper2.account.userId);
 
 		const result = await calculateMinibossResult(miniboss);
-
 
 		expect(result.initiativeTaker.resources.gold > 100).to.be.equal(true);
 		expect(result.initiativeTaker.hero.health > 100).to.be.equal(true);
