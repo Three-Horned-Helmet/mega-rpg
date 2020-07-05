@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const { getResourceIcon } = require("../_CONSTS/icons");
-const GOLDPRIZE = 500;
+const GOLDPRICE = 40;
 
 const generateRace = (event)=>{
     const sideColor = "#45b6fe";
@@ -72,7 +72,7 @@ const generateRace = (event)=>{
         let weightedMultiplier = 20 - event.raceDataCopy[event.winner].weight;
         weightedMultiplier = weightedMultiplier ? weightedMultiplier : 1;
 
-        const reward = weightedMultiplier * GOLDPRIZE + 500;
+        const reward = weightedMultiplier * GOLDPRICE + 40;
 
         const winningTitle = `\n Every winner get ${getResourceIcon("gold")} ${reward}:`;
         const losingTitle = "\n Losers get nothin':";
@@ -112,7 +112,7 @@ const generateRace = (event)=>{
             const racers = Object.keys(raceDataCopy).map(r=>{
                 let weightedMultiplier = 20 - raceDataCopy[r].weight;
                 weightedMultiplier = weightedMultiplier ? weightedMultiplier : 1;
-                return `${r} --- ${getResourceIcon("gold")} ${(weightedMultiplier * GOLDPRIZE) + 500}`;
+                return `${r} --- ${getResourceIcon("gold")} ${(weightedMultiplier * GOLDPRICE) + 40}`;
             });
             let bettingState = "```diff\n- PLEASE WAIT ```";
             let footer = "Please wait until all racers are ready!";
@@ -126,7 +126,7 @@ const generateRace = (event)=>{
 
             const embedInvitation = new Discord.MessageEmbed()
                 .setTitle(`🏇 ${username} is inviting to a race!! 🏇`)
-                .setDescription(`Costs ${getResourceIcon("gold")} ${GOLDPRIZE} to participate!`)
+                .setDescription(`Costs ${getResourceIcon("gold")} ${GOLDPRICE} to participate!`)
                 .setColor(sideColor)
                 .addFields(
                     {

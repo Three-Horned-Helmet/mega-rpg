@@ -139,7 +139,7 @@ const worldLocations = {
 					{
 						name: "Mansion Hallway",
 						description:
-							"You bravely fought through the courtyard and enter the hallway. It's long and narrow. At the very end you see someone who's not happy to see you",
+							"You bravely fought through the courtyard and enter the hallway. It's long and narrow and you notice 3 scorched corpses by one of the walls, they seem oddly familiar. At the very end you see someone who's not happy to see you",
 						type: "raid",
 						stats:{
 							attack: 1400,
@@ -175,7 +175,7 @@ const worldLocations = {
 						allowHelpers: true,
 					},
 					roundDescriptions:[
-						"You enter the very last room of the castle, seing the very foe you came to seek. Your personal army shivers in fear in the face of the Castle's Monarch, they can't help you fight this boss. Choose your weapon wisely to defeat the **Bandit King**!",
+						"You enter the very last room of the castle, seing the very foe you came to seek, The Bandit King with a green tailed impling sitting on his shoulder. Your personal army shivers in fear in the face of the Castle's Monarch, they can't help you fight this boss. Choose your weapon wisely to defeat the **Bandit King**!",
 						"Choose your weapon wisely!",
 						"Choose your weapon wisely!",
 						"Choose your weapon wisely!",

@@ -6,7 +6,7 @@ const { asyncForEach, deepCopyFunction } = require("../_GLOBAL_HELPERS");
 const { onCooldown } = require("../_CONSTS/cooldowns");
 const sleep = require("util").promisify(setTimeout);
 
-const GOLDPRIZE = 500;
+const GOLDPRICE = 40;
 const { raceData } = require("../_CONSTS/race.js");
 
 
@@ -46,7 +46,7 @@ const handleRace = async (message, user)=>{
         }
             else {
             const participater = await User.findOne({ "account.userId":rUser.id });
-            participater.removeManyResources({ gold:GOLDPRIZE });
+            participater.removeManyResources({ gold:GOLDPRICE });
             await participater.save();
         }
         participants.set(rUser.username, { racer:result._emoji.name, userId:rUser.id });

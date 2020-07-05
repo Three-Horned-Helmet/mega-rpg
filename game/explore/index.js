@@ -49,7 +49,6 @@ const exploreArea = async (user, places, currentLocation, now)=>{
 		user.handleExplore(now, currentLocation, newlyExploredPlaceName);
 	}
 	await user.save();
-
 	return msg;
 };
 
