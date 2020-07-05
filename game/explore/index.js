@@ -37,8 +37,11 @@ const handleExplore = async (user) => {
 
 const exploreArea = async (user, places, currentLocation, now)=>{
 	const placeNames = Object.keys(places);
-	const newlyExploredPlaceName = placeNames[Math.floor(Math.random() * placeNames.length)];
+	let newlyExploredPlaceName = placeNames[Math.floor(Math.random() * placeNames.length)];
 	const previouslyExploredPlaces = user.world.locations[currentLocation].explored;
+	if (previouslyExploredPlaces.length === 0 && currentLocation === "Grassy Plains") {
+		newlyExploredPlaceName = "River";
+	}
 	let msg;
 
 	if(previouslyExploredPlaces.includes(newlyExploredPlaceName) || places[newlyExploredPlaceName].notExplorable) {
