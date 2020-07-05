@@ -297,8 +297,8 @@ const worldLocations = {
 					gold: 400,
 				},
 			},
-			"Courtyard Bandits": {
-				name: "Courtyard Bandits",
+			"Courtyard Guards": {
+				name: "Courtyard Guards",
 				type: "raid",
 				notExplorable: true,
 				stats:{

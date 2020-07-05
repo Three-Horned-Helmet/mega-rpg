@@ -1,9 +1,6 @@
 const allQuests = require("./all-quests");
 
 const checkRaidAndHuntQuest = async (user, place, currentLocation) => {
-    console.log("CHECK QUEST CURRENT:", currentLocation);
-    console.log("CHECK QUEST PLACE:", place);
-
     // Does the user have a quest here
     const currentQuest = user.quests.find(q => q.pve ? q.pve.find(raid => raid.name === place && !raid.completed) && q.started : false);
 
@@ -49,7 +46,6 @@ const checkRaidAndHuntQuest = async (user, place, currentLocation) => {
     // Is there a quest for the location, and has it been started/found already?
     const quest = Object.values(allQuests[currentLocation]).find(q => q.obtaining && q.obtaining.area === place && !user.completedQuests.includes(q.name) && !user.quests.find(startedQuests => startedQuests.name === q.name));
 
-    console.log("QUEST");
     if(!quest) return;
 
     // Are you able to obtain the quest

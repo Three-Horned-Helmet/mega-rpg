@@ -51,6 +51,7 @@ const getResourceIcon = (type)=>{
 	["yew wood"]: ":deciduous_tree:",
 	["copper ore"]: ":orange_circle:",
 	["iron ore"]: ":white_circle:",
+	["obsidian ore"]: ":black_circle:",
 	["bronze bar"]: ":orange_square:",
 	["iron bar"]: ":white_large_square:",
 	["steel bar"]: ":brown_square:",

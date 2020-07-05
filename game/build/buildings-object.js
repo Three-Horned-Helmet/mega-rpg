@@ -120,6 +120,15 @@ module.exports = {
 				produce: "iron ore",
 				productionRate: 2,
 			},
+			{
+				cost: {
+					gold: 200,
+					["bronze bar"]: 20,
+				},
+				level: 999,
+				produce: "obsidian ore",
+				productionRate: 0,
+			},
 		],
 		execute: async function(user) {
 			// Add the lastCollected and producing to new mine
