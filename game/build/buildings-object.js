@@ -141,7 +141,7 @@ module.exports = {
 		],
 		execute: async function(user) {
 			// Add the lastCollected and producing to new mine
-			return await user.updateNewProduction("mine", "copper ore", new Date());
+			return await user.updateNewProduction("mine", new Date(), "copper ore");
 		},
 	},
 	lumbermill: {
@@ -179,7 +179,7 @@ module.exports = {
 		],
 		execute: async function(user) {
 			// Add the lastCollected and producing to new mine
-			return await user.updateNewProduction("lumbermill", new Date());
+			return await user.updateNewProduction("lumbermill", new Date(), "oak wood");
 		},
 	},
 	forge: {
