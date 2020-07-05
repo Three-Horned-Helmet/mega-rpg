@@ -29,7 +29,6 @@ const getTop5Army = async (user)=>{
 
 
     const formatted = top5.map((p, i)=>{
-        console.log(p, "p");
         const first = i === 0 ? "👮‍♀️" : "";
             return `\`#${i + 1}: ${first}${p.name}${first} --- ${p.total} soldiers\``;
         });

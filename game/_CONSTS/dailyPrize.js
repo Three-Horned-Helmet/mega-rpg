@@ -3,22 +3,22 @@ const dailyPrizes = {
         gold: 50,
     },
     1: {
-        gold: 110,
-        ["oak wood"]: 50,
+        gold: 100,
+        ["oak wood"]: 15,
     },
     2: {
-        gold: 250,
-        ["oak wood"]: 110,
+        gold: 200,
+        ["oak wood"]: 25,
     },
     3: {
-        gold: 500,
-        ["oak wood"]: 250,
-        ["copper ore"]: 50,
+        gold: 280,
+        ["oak wood"]: 20,
+        ["copper ore"]: 20,
     },
     4: {
-        gold: 1200,
-        ["oak wood"]: 500,
-        ["copper ore"]: 110,
+        gold: 350,
+        ["oak wood"]: 25,
+        ["copper ore"]: 25,
         ["yew wood"]: 10,
     },
 };

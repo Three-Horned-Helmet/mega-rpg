@@ -25,7 +25,7 @@ module.exports = {
 		name: "steel bar",
 		typeSequence: ["resources"],
 		cost: {
-			["bronze ore"]: 2,
+			["copper ore"]: 2,
 			["iron ore"]: 2,
 		},
 		requirement: {

@@ -87,6 +87,11 @@ __Race:__
 __Rank:__
 `!rank` => Let's you see who has the most xp on whole Mega RPG
 
+__Quest:__
+`!quest` => Returns the quest's description/winDescription if you only have 1 quest available, otherwise returns all available quests
+`!quest [questIndex]` => Returns the quest with the corresponding index's description/winDescription
+`!quest [questName]` => Returns the quest with the given name's description/winDescription
+
 __Raid:__
 `!raid` => Allows the player to raid a random, already explored, 'raiding place'. Raiding is usually more difficult than hunting and is done with your whole army.
 `!raid [placeName]` => Raids the specific place that was entered if it has been explored

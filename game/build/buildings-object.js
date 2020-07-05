@@ -7,22 +7,26 @@ module.exports = {
 		levels: [
 			{
 				cost: {
-					gold: 15,
-					 ["oak wood"]: 5,
+					gold: 30,
+					["oak wood"]: 10,
 				},
 				level: 0,
 			},
 			{
 				cost: {
-					gold: 100,
-					 ["oak wood"]: 20,
+					gold: 450,
+					["oak wood"]: 150,
+					["yew wood"]: 150,
 				},
 				level: 1,
 			},
 			{
 				cost: {
-					gold: 200,
-					["yew wood"]: 20,
+					gold: 1600,
+					["oak wood"]: 480,
+					["yew wood"]: 300,
+					["barlind wood"]: 300,
+					["obsidian ore"]: 50,
 				},
 				level: 2,
 			},
@@ -33,27 +37,29 @@ module.exports = {
 		levels: [
 			{
 				cost: {
-					gold: 15,
-					 ["oak wood"]: 10,
+					gold: 80,
+					["oak wood"]: 20,
 				},
 				level: 0,
 			},
 			{
 				cost: {
-					gold: 100,
-					["yew wood"]: 20,
-					["bronze bar"]: 20,
-					["iron bar"]: 20,
+					gold: 500,
+					["yew wood"]: 160,
+					["bronze bar"]: 120,
+					["iron bar"]: 90,
 				},
 				level: 1,
 			},
 			{
 				cost: {
-					gold: 200,
-					["yew wood"]: 50,
-					["bronze bar"]: 20,
-					["iron bar"]: 20,
-					["steel bar"]: 50,
+					gold: 1800,
+					["yew wood"]: 500,
+					["barlind wood"]: 250,
+					["bronze bar"]: 250,
+					["iron bar"]: 190,
+					["steel bar"]: 100,
+					["obsidian ore"]: 30,
 				},
 				level: 2,
 			},
@@ -64,24 +70,27 @@ module.exports = {
 		levels: [
 			{
 				cost: {
-					gold: 15,
-					 ["oak wood"]: 5,
+					gold: 90,
+					["oak wood"]: 35,
 				},
 				level: 0,
 				popIncrease: 200,
 			},
 			{
 				cost: {
-					gold: 100,
-					 ["oak wood"]: 20,
+					gold: 500,
+					["oak wood"]: 210,
+					["yew wood"]: 145,
 				},
 				level: 1,
 				popIncrease: 300,
 			},
 			{
 				cost: {
-					gold: 200,
-					 ["oak wood"]: 30,
+					gold: 1600,
+					["oak wood"]: 450,
+					["yew wood"]: 390,
+					["barlind wood"]: 210,
 				},
 				level: 2,
 				popIncrease: 300,
@@ -113,12 +122,21 @@ module.exports = {
 			},
 			{
 				cost: {
-					gold: 200,
-					["bronze bar"]: 20,
+					gold: 340,
+					["bronze bar"]: 120,
 				},
 				level: 1,
 				produce: "iron ore",
 				productionRate: 2,
+			},
+			{
+				cost: {
+					gold: 540,
+					["bronze bar"]: 100,
+				},
+				level: 999,
+				produce: "obsidian ore",
+				productionRate: 0,
 			},
 		],
 		execute: async function(user) {
@@ -140,8 +158,9 @@ module.exports = {
 			},
 			{
 				cost: {
-					gold: 150,
-					 ["oak wood"]: 30,
+					gold: 290,
+					["oak wood"]: 160,
+					["copper ore"]: 95,
 				},
 				level: 1,
 				produce: "yew wood",
@@ -149,9 +168,9 @@ module.exports = {
 			},
 			{
 				cost: {
-					gold: 600,
-					 ["oak wood"]: 100,
-					 ["yew wood"]: 100,
+					gold: 1800,
+					["oak wood"]: 250,
+					["yew wood"]: 250,
 				},
 				level: 2,
 				produce: "barlind wood",
@@ -168,29 +187,29 @@ module.exports = {
 		levels: [
 			{
 				cost: {
-					gold: 15,
-					 ["oak wood"]: 5,
-					["copper ore"]: 5,
+					gold: 25,
+					["oak wood"]: 10,
+					["copper ore"]: 10,
 				},
 				level: 0,
 				craftables: ["bronze bar"],
 			},
 			{
 				cost: {
-					gold: 100,
-					["oak wood"]: 20,
-					["bronze bar"]: 20,
+					gold: 440,
+					["oak wood"]: 150,
+					["bronze bar"]: 85,
 				},
 				level: 1,
 				craftables: ["iron bar"],
 			},
 			{
 				cost: {
-					gold: 200,
-					 ["oak wood"]: 50,
-					["yew wood"]: 30,
-					["bronze bar"]: 40,
-					["iron bar"]: 40,
+					gold: 1650,
+					["oak wood"]: 190,
+					["yew wood"]: 175,
+					["bronze bar"]: 120,
+					["iron bar"]: 90,
 				},
 				level: 2,
 				craftables: ["steel bar"],
@@ -203,7 +222,7 @@ module.exports = {
 			{
 				cost: {
 					gold: 30,
-					 ["oak wood"]: 5,
+					["oak wood"]: 5,
 					["bronze bar"]: 20,
 				},
 				level: 0,
@@ -212,9 +231,9 @@ module.exports = {
 			},
 			{
 				cost: {
-					gold: 100,
-					["yew wood"]: 20,
-					["iron bar"]: 40,
+					gold: 650,
+					["yew wood"]: 190,
+					["iron bar"]: 160,
 				},
 				level: 1,
 				craftables: ["iron sword", "yew shortbow",
@@ -222,12 +241,14 @@ module.exports = {
 			},
 			{
 				cost: {
-					gold: 200,
-					 ["oak wood"]: 50,
-					["yew wood"]: 30,
-					["bronze bar"]: 40,
-					["iron bar"]: 40,
-					["steel bar"]: 40,
+					gold: 2100,
+					["oak wood"]: 350,
+					["yew wood"]: 290,
+					["barlind wood"]: 290,
+					["bronze bar"]: 145,
+					["iron bar"]: 145,
+					["steel bar"]: 180,
+					["obsidian ore"]: 70,
 				},
 				level: 2,
 				craftables: ["steel sword", "northern shortbow",
@@ -241,19 +262,21 @@ module.exports = {
 			{
 				cost: {
 					gold: 150,
-					 ["oak wood"]: 50,
+					["oak wood"]: 50,
 					["bronze bar"]: 30,
 				},
 				level: 0,
 			},
 			{
 				cost: {
-					gold: 500,
-					["yew wood"]: 150,
-					 ["oak wood"]: 150,
-					["bronze bar"]: 50,
-					["iron bar"]: 50,
-					["steel bar"]: 30,
+					gold: 2900,
+					["oak wood"]: 450,
+					["yew wood"]: 350,
+					["barlind wood"]: 240,
+					["bronze bar"]: 350,
+					["iron bar"]: 290,
+					["steel bar"]: 200,
+					["obsidian ore"]: 100,
 				},
 				level: 1,
 			},
@@ -271,9 +294,9 @@ module.exports = {
 			},
 			{
 				cost: {
-					gold: 200,
-					["yew wood"]: 20,
-					["iron bar"]: 20,
+					gold: 330,
+					["yew wood"]: 180,
+					["iron bar"]: 180,
 				},
 				level: 1,
 			},

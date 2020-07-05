@@ -60,11 +60,11 @@ const userSchema = new Schema({
 
 		["copper ore"]: {
 			type: Number,
-			default: 5,
+			default: 10,
 		},
 		["iron ore"]: {
 			type: Number,
-			default: 5,
+			default: 0,
 		},
 		["bronze bar"]: {
 			type: Number,
@@ -72,11 +72,15 @@ const userSchema = new Schema({
 		},
 		["iron bar"]: {
 			type: Number,
-			default: 5,
+			default: 0,
 		},
 		["steel bar"]: {
 			type: Number,
-			default: 5,
+			default: 0,
+		},
+		["obsidian ore"]: {
+			type: Number,
+			default: 0,
 		},
 	},
 
@@ -279,7 +283,6 @@ const userSchema = new Schema({
 }));
 	this.quests[foundIndex].started = true;
 	this.markModified(`quests.${foundIndex}.started`);
-	return this.save();
 };
 
 userSchema.methods.addNewQuest = async function(quest) {

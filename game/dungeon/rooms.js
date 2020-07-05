@@ -1,6 +1,8 @@
 // const { worldLocations } = require("../_CONSTS/explore");
 const sleep = require("util").promisify(setTimeout);
 const { dungeonStartAllowed } = require("./helper");
+const { checkQuest } = require("../quest/quest-utils");
+
 const { createDungeonBossRound } = require("./dungeonBoss");
 const { calculatePveFullArmyResult } = require("../../combat/combat");
 const { generateRoomEmbed, generateRoomDescriptionEmbed } = require("./embedGenerator");
@@ -36,6 +38,7 @@ const raidResults = progress.players.map(player=>{
     return calculatePveFullArmyResult(player, balancedPlaceInfo);
     });
 
+let questIntro;
  // saves to database
 await asyncForEach(progress.players, async (player, i)=>{
 player.unitLoss(raidResults[i].lossPercentage);
@@ -43,6 +46,8 @@ player.alternativeGainXp(raidResults[i].expReward);
 
 if (raidResults[i].win) {
      player.gainManyResources(raidResults[i].resourceReward);
+     const { currentLocation } = player.world;
+     questIntro = await checkQuest(player, placeInfo.name, currentLocation);
 }
 await player.save();
 });
@@ -59,7 +64,7 @@ progress.players = progress.players.filter((player, i) => {
 });
 
 // generates a Discord embed
-const raidEmbed = generateRoomEmbed(initiativeTaker, placeInfo, raidResults);
+const raidEmbed = generateRoomEmbed(initiativeTaker, placeInfo, raidResults, questIntro, true);
 const msg = await message.channel.send(raidEmbed);
 try {
     await msg.react(ICON_FORBIDDEN);
