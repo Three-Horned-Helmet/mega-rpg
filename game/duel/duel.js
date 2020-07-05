@@ -31,7 +31,7 @@ const duelPlayer = async (user, opponent, msg) =>{
 };
 
 const checkIfDuelIsPossible = (user, opponent) =>{
-    if(!opponent) {
+    if(!opponent || user.account.userId === opponent.account.userId) {
         return {
             response: false,
             message: "Invalid opponent to duel. Usage `!duel @player`. Remember the '@' before the name of the player.",
