@@ -7,10 +7,10 @@ const worldLocations = {
 				type: "raid",
 				stats:{
 					attack: 300,
-					health:100,
+					health: 100,
 				},
 				rewards:{
-					gold: 100,
+					gold: 25,
 				},
 			},
 			Wolves: {
@@ -21,14 +21,14 @@ const worldLocations = {
 					health:50,
 				},
 				rewards:{
-					gold: 50,
+					gold: 20,
 				},
 			},
 			Chest: {
 				name: "Chest",
 				type: "luck",
 				rewards:{
-					gold: 500,
+					gold: 100,
 				},
 			},
 		},
@@ -37,24 +37,24 @@ const worldLocations = {
 				name: "Bandit Camp",
 				type: "raid",
 				stats:{
-					attack: 300,
-					health:200,
+					attack: 500,
+					health: 300,
 				},
 				rewards:{
-					gold: 70,
+					gold: 39,
 				},
 			},
 			"Fishing village": {
 				name: "Fishing village",
 				type: "raid",
 				stats:{
-					attack: 100,
-					health:300,
+					attack: 200,
+					health: 300,
 				},
 				rewards:{
-					gold: 100,
-					"oak wood": 50,
-					"yew wood": 20,
+					gold: 35,
+					"oak wood": 15,
+					"yew wood": 7,
 				},
 			},
 			"Collapsed Mine": {
@@ -62,34 +62,36 @@ const worldLocations = {
 				type: "raid",
 				stats:{
 					attack: 200,
-					health:200,
+					health: 200,
 				},
 				rewards:{
-					gold: 50,
-					"copper ore": 100,
-					"iron ore": 60,
+					gold: 15,
+					"copper ore": 25,
+					"iron ore": 15,
 				},
 			},
 			Forest: {
 				name: "Forest",
 				type: "hunt",
 				stats:{
-					attack: 10,
-					health:10,
+					attack: 30,
+					health: 30,
 				},
 				rewards:{
-					gold: 40,
+					gold: 5,
+					"oak wood": 25,
+					"yew wood": 17,
 				},
 			},
 			Cave: {
 				name: "Cave",
 				type: "hunt",
 				stats:{
-					attack: 20,
-					health:15,
+					attack: 50,
+					health: 50,
 				},
 				rewards:{
-					gold: 50,
+					gold: 40,
 				},
 			},
 			"C'Thun": {
@@ -102,7 +104,7 @@ const worldLocations = {
 				},
 				rewards:{
 					dungeonKey: "CM Key",
-					gold: 2222,
+					gold: 120,
 					xp: 500,
 				},
 				rules: {
@@ -125,13 +127,13 @@ const worldLocations = {
 							"You enter the mansion and a beautiful courtyard stands before your eyes. A couple of trees and a bush surrounds what seems to be a seating area. You must have lost your mind because you hear murmuring from the bushes",
 						type: "raid",
 						stats:{
-							attack: 200,
-							health:200,
+							attack: 1000,
+							health: 1000,
 						},
 						rewards:{
-							gold: 50,
-							"copper ore": 100,
-							"iron ore": 60,
+							gold: 45,
+							"copper ore": 30,
+							"iron ore": 23,
 						},
 					},
 					{
@@ -140,13 +142,13 @@ const worldLocations = {
 							"You bravely fought through the courtyard and enter the hallway. It's long and narrow and you notice 3 scorched corpses by one of the walls, they seem oddly familiar. At the very end you see someone who's not happy to see you",
 						type: "raid",
 						stats:{
-							attack: 200,
-							health:200,
+							attack: 1400,
+							health: 1400,
 						},
 						rewards:{
-							gold: 50,
-							"copper ore": 100,
-							"iron ore": 60,
+							gold: 45,
+							"copper ore": 30,
+							"iron ore": 23,
 						},
 					},
 					{
@@ -155,13 +157,12 @@ const worldLocations = {
 							"You make it through the hallway and enter what seems to be a trophy room. Heads from all creatures are plated to the wall as a decoration. You see the head of a bear, deer, impling and .",
 						type: "raid",
 						stats:{
-							attack: 200,
-							health:200,
+							attack: 1800,
+							health: 1800,
 						},
 						rewards:{
 							gold: 50,
-							"copper ore": 100,
-							"iron ore": 60,
+							"yew wood": 45,
 						},
 					},
 				],
@@ -180,13 +181,13 @@ const worldLocations = {
 						"Choose your weapon wisely!",
 					],
 					rewards:{
-						gold:5000,
+						gold:600,
 						xp:1100,
 						drop: ["greatsword of the spring", "bauxite daggers", "Large Heal Potion", "Small Heal Potion"],
 					},
 					stats:{
 						attack: 500,
-						health:2000,
+						health: 2000,
 						currentHealth:2000,
 						healing:true,
 					},
@@ -224,13 +225,13 @@ const worldLocations = {
 				type: "raid",
 				notExplorable: true,
 				stats:{
-					attack: 2000,
-					health: 2000,
+					attack: 700,
+					health: 800,
 				},
 				rewards:{
-					gold: 1000,
-					"iron bar": 30,
-					"yew wood": 60,
+					gold: 170,
+					"iron bar": 20,
+					"yew wood": 40,
 				},
 			},
 			"Pack of Implings": {
@@ -238,12 +239,12 @@ const worldLocations = {
 				type: "hunt",
 				notExplorable: true,
 				stats:{
-					attack: 700,
-					health: 700,
+					attack: 300,
+					health: 200,
 				},
 				rewards:{
-					gold: 500,
-					"yew wood": 100,
+					gold: 185,
+					"yew wood": 60,
 				},
 			},
 			"Bugbear": {
@@ -255,7 +256,7 @@ const worldLocations = {
 					health: 1350,
 				},
 				rewards:{
-					gold: 350,
+					gold: 170,
 				},
 			},
 			"Wood Elves": {
@@ -267,8 +268,8 @@ const worldLocations = {
 					health: 800,
 				},
 				rewards:{
-					"oak wood": 100,
-					"yew wood": 100,
+					"oak wood": 60,
+					"yew wood": 60,
 				},
 			},
 			"Pack of Wolves": {
@@ -276,12 +277,12 @@ const worldLocations = {
 				type: "hunt",
 				notExplorable: true,
 				stats:{
-					attack: 600,
-					health: 600,
+					attack: 300,
+					health: 450,
 				},
 				rewards:{
 					"yew wood": 20,
-					gold: 200,
+					gold: 110,
 				},
 			},
 			"The Alpha Wolf": {
@@ -289,12 +290,12 @@ const worldLocations = {
 				type: "hunt",
 				notExplorable: true,
 				stats:{
-					attack: 800,
-					health: 800,
+					attack: 400,
+					health: 500,
 				},
 				rewards:{
-					"yew wood": 40,
-					gold: 400,
+					"yew wood": 35,
+					gold: 150,
 				},
 			},
 			"Courtyard Guards": {
@@ -307,7 +308,7 @@ const worldLocations = {
 				},
 				rewards:{
 					"steel bar": 40,
-					gold: 400,
+					gold: 220,
 				},
 			},
 		},

@@ -118,7 +118,6 @@ describe("miniboss command", () => {
 
 		const result = await calculateMinibossResult(miniboss);
 
-
 		expect(result.initiativeTaker.resources.gold > 100).to.be.equal(true);
 		expect(result.initiativeTaker.hero.health > 100).to.be.equal(true);
 		expect(result.initiativeTaker.hero.attack > 1).to.be.equal(true);
