@@ -21,7 +21,6 @@ const collectResources = async (user, collect) => {
 };
 
 const checkIfPossibleToCollect = (user, collect) => {
-
 	// Check if you have mine or lumbermill
 	if(!user.empire.find(building => building.name === collect || collect === "all")) {
 		let message;

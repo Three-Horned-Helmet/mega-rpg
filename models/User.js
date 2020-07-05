@@ -68,7 +68,7 @@ const userSchema = new Schema({
 		},
 		["bronze bar"]: {
 			type: Number,
-			default: 5,
+			default: 0,
 		},
 		["iron bar"]: {
 			type: Number,
@@ -397,14 +397,14 @@ userSchema.methods.addOrRemoveUnits = function(unit, amount, free) {
 	// this.markModified(`army.units.${unit.requirement.building}.${unit.name}`);
 };
 
-userSchema.methods.updateNewProduction = function(productionName, now) {
+userSchema.methods.updateNewProduction = function(productionName, now, producing) {
 	const foundIndex = this.empire.findIndex(building => building.name === productionName && !building.lastCollected);
 	if (foundIndex === -1) {
 		return;
 	}
 	this.empire[foundIndex].lastCollected = now;
 
-	if(!this.empire[foundIndex].producing) this.empire[foundIndex].producing = "oak wood";
+	if(!this.empire[foundIndex].producing) this.empire[foundIndex].producing = producing;
 
 	this.markModified(`empire.${foundIndex}.lastCollected`);
 	this.markModified(`empire.${foundIndex}.producing`);
