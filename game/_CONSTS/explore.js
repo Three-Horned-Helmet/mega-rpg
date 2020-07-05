@@ -53,8 +53,8 @@ const worldLocations = {
 				},
 				rewards:{
 					gold: 35,
-					"oak wood": 15,
-					"yew wood": 7,
+					"oak wood": 5,
+					"yew wood": 2,
 				},
 			},
 			"Collapsed Mine": {
@@ -66,8 +66,8 @@ const worldLocations = {
 				},
 				rewards:{
 					gold: 15,
-					"copper ore": 25,
-					"iron ore": 15,
+					"copper ore": 8,
+					"iron ore": 4,
 				},
 			},
 			Forest: {
@@ -79,8 +79,8 @@ const worldLocations = {
 				},
 				rewards:{
 					gold: 5,
-					"oak wood": 25,
-					"yew wood": 17,
+					"oak wood": 8,
+					"yew wood": 4,
 				},
 			},
 			Cave: {
