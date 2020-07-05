@@ -713,7 +713,7 @@ userSchema.methods.locationTravel = async function(location) {
 };
 
 
-userSchema.methods.giveDungeonKey = async function(key = "CM key") {
+userSchema.methods.giveDungeonKey = async function(key = "CM Key") {
 	if (this.hero.dungeonKeys[key]) {
 		return;
 	}
