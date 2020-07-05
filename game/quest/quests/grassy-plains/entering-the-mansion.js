@@ -19,7 +19,7 @@ module.exports = {
         intro: "You try to open the door into the Mansion, but it is locked.",
         description: "With the help of your soldiers you try to open the Mansion's door using brute force, but it does not bulge. It must be stronger forces keeping the door shut. You command your men to surround the Mansion to find an alternative way in, but without any luck.\n\n'There must be someone who knows how to get into the Mansion, but who?'",
         objective: "Find someone who knows how to get into the Mansion",
-        reward: "Gold: 200",
+        reward: "Gold: 230",
         winDescription: "You open the door into the Locksmith and find a tall slim man with a long beard sitting behind the counter. He seems quite old.\n\n'Good day to you Sir! My name is Ahred, and what brings you to my Locksmith?'\n\n'I was looking for a way to get into the Bandits Mansion and was wondering if you would be able to help out?'\n\n*\\*Ahred meets you with a surprised look\\**\n\n'Oooh, so you are going to pick a bone with The Bandit King, huh? It's about time! I may be able to help you out, but it will not be easy!'\n**A new quest is available**",
         questKeySequence: ["Grassy Plains", "enteringMansion"],
 
@@ -36,7 +36,7 @@ module.exports = {
 
             // Get reward
             await user.gainManyResources({
-                gold: 200,
+                gold: 230,
             });
 
             // Add next quest
@@ -377,7 +377,7 @@ module.exports = {
         found: "You hear some light footsteps running towards you!",
         description: "Four Mansion Guards are rushing aggressivly towards you with a grin on their faces!\n\n'HEEY! What you are you doing here on the King's property?!'\n\nYou quickly realise that there will be no way that you can come up with an excuse and decides to draw your weapon to prepare for battle!",
         objective: "Defeat the Courtyard Guards. (`!raid courtyard guards`)",
-        reward: false,
+        reward: "Gold: 240",
         winDescription: "*\\*Grethel comes running around the corner with a horn-like item in her hands.\\**\n\n'RUN! QUICKLY! I think it may have heard all the noise you were making!'\n\n*\\*You follow her advice and start running towards the Mansion's Gate. As you leave you turn around and see a small red impling with a green tail rushing towards you. His mouth turns red, preparing to spit a fireball towards you!\n\n'GRETHEL WATC..!'\n\n*\\*Out of nowhere another smaller impling comes out from the forest and flies in front of the fireball. You hear a screech and it falls to the ground. You run as fast as your legs can carry you into the woods and away from the Mansion!\n\n*\\*You eventually get back to Grethels house.\\**\n\n'What the fuck where you doing, Grethel?! Why did you suddenly burst off??'\n\n*\\*She looks at you with a worried gaze\\**\n\n'I... I just needed to get something. Don't worry about it! Give me the Mold and I will complete it for you. Come back tomorrow morning and it should be finished!'\n**A new quest is available**",
         questKeySequence: ["Grassy Plains", "courtyardGuards"],
 
@@ -392,9 +392,9 @@ module.exports = {
             if(userQuest.pve.find(raid => !raid.completed)) return false;
 
             // Get reward
-            // await user.gainManyResources({
-            //     gold: 300,
-            // });
+            await user.gainManyResources({
+                gold: 240,
+            });
 
             // Add next quest
             const newQuest = {
