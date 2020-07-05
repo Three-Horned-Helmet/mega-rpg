@@ -122,9 +122,8 @@ collector.on("end", async () => {
     const requiredQuest = "The Key to the Mansion";
     if (!progress.initiativeTaker.completedQuests.includes(requiredQuest)) {
         const username = progress.initiativeTaker.account;
-        return message.channel.send(`${username} has not completed the quest **${requiredQuest}**`);
+        return message.channel.send(`${username} has not completed the required quest to proceed`);
     }
-
     progress.currentRoom += 1;
     startDungeonRooms(message, progress);
 
