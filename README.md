@@ -1,3 +1,5 @@
+Come play with us for free [https://discord.gg/32KMfY](https://discord.gg/32KMfY)
+
 # MEGA RPG
 
 [![Build Status](https://travis-ci.org/Three-Horned-Helmet/mega-rpg.svg?branch=master)](https://travis-ci.org/Three-Horned-Helmet/mega-rpg)
