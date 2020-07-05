@@ -6,7 +6,7 @@ const { asyncForEach, deepCopyFunction } = require("../_GLOBAL_HELPERS");
 const { onCooldown } = require("../_CONSTS/cooldowns");
 const sleep = require("util").promisify(setTimeout);
 
-const GOLDPRIZE = 500;
+const GOLDPRIZE = 40;
 const { raceData } = require("../_CONSTS/race.js");
 
 

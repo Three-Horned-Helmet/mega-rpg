@@ -262,7 +262,7 @@ const createDungeonInvitation = (dungeon, user)=>{
         };
 
 
-function generateRoomEmbed(user, placeInfo, results) {
+function generateRoomEmbed(user, placeInfo, results, questIntro = false) {
     const sideColor = "#45b6fe";
     const placeName = placeInfo.name;
     const placeIcon = getPlaceIcon(placeInfo.type);
@@ -289,6 +289,13 @@ function generateRoomEmbed(user, placeInfo, results) {
             inline: true,
         };
     });
+
+    if(questIntro) {
+        fields.push({
+            name: "Quest",
+            value: questIntro,
+        });
+    }
 
     const title = `${user.account.username}'s entourage raided ${placeIcon} ${placeName}`;
 

@@ -137,7 +137,7 @@ const worldLocations = {
 					{
 						name: "Mansion Hallway",
 						description:
-							"You bravely fought through the courtyard and enter the hallway. It's long and narrow. At the very end you see someone who's not happy to see you",
+							"You bravely fought through the courtyard and enter the hallway. It's long and narrow and you notice 3 scorched corpses by one of the walls, they seem oddly familiar. At the very end you see someone who's not happy to see you",
 						type: "raid",
 						stats:{
 							attack: 200,
