@@ -42,7 +42,7 @@ const handleRace = async (message, user)=>{
         }
         const allowedParticipater = await validateUser(rUser.id);
         if (!allowedParticipater) {
-            return;
+            return message.channel.send(`<@${rUser.id}>: Insufficent gold!`);
         }
             else {
             const participater = await User.findOne({ "account.userId":rUser.id });
