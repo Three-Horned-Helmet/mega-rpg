@@ -81,7 +81,7 @@ function generateEmbedPveFullArmyLoss(user, placeInfo, pveResult) {
     const placeIcon = getPlaceIcon(placeInfo.type);
 
     const { username } = user.account;
-    const title = `${username}'s army failed to raid ${placeIcon} ${placeName} `;
+    const title = `${username} failed to raid ${placeIcon} ${placeName} `;
 
     let expReward = `+ **${pveResult.expReward}** exp\n`;
 

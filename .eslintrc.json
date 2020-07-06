@@ -1,5 +1,5 @@
 {
-  "extends": "eslint:recommended",
+  "extends": ["eslint:recommended", "plugin:prettier/recommended", "prettier"],
   "env": {
     "node": true,
     "es6": true
@@ -8,6 +8,7 @@
     "ecmaVersion": 2019
   },
   "rules": {
+    "prettier/prettier": "error",
     "brace-style": [
       "error",
       "stroustrup",
@@ -15,21 +16,11 @@
         "allowSingleLine": true
       }
     ],
-    "comma-dangle": [
-      "error",
-      "always-multiline"
-    ],
+    "comma-dangle": ["error", "always-multiline"],
     "comma-spacing": "error",
     "comma-style": "error",
-    "curly": [
-      "error",
-      "multi-line",
-      "consistent"
-    ],
-    "dot-location": [
-      "error",
-      "property"
-    ],
+    "curly": ["error", "multi-line", "consistent"],
+    "dot-location": ["error", "property"],
     "handle-callback-err": "off",
     "max-nested-callbacks": [
       "error",
@@ -60,30 +51,15 @@
     "no-shadow": [
       "error",
       {
-        "allow": [
-          "err",
-          "resolve",
-          "reject"
-        ]
+        "allow": ["err", "resolve", "reject"]
       }
     ],
-    "no-trailing-spaces": [
-      "error"
-    ],
+    "no-trailing-spaces": ["error"],
     "no-var": "error",
-    "object-curly-spacing": [
-      "error",
-      "always"
-    ],
+    "object-curly-spacing": ["error", "always"],
     "prefer-const": "error",
-    "quotes": [
-      "error",
-      "double"
-    ],
-    "semi": [
-      "error",
-      "always"
-    ],
+    "quotes": ["error", "double"],
+    "semi": ["error", "always"],
     "space-before-blocks": "error",
     "space-before-function-paren": [
       "error",
@@ -98,5 +74,6 @@
     "space-unary-ops": "error",
     "spaced-comment": "error",
     "yoda": "error"
-  }
+  },
+  "plugins": ["prettier"]
 }
