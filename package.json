@@ -19,7 +19,6 @@
     "mongoose": "^5.9.16"
   },
   "devDependencies": {
-    "eslint-config-prettier": "^6.11.0",
     "mocha": "^7.2.0"
   }
 }
