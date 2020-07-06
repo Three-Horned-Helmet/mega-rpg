@@ -44,7 +44,8 @@ const createDungeonBossRound = async (message, progress) => {
     // adds answer to progress object
     if (Object.keys(threeRandomWeapons).includes(answer)) {
       progress.weaponAnswer.set(result.author.id, answer);
-    } else {
+    }
+    else {
       const weaponInformation = Object.values(threeRandomWeapons).find(
         (w) => w.answer === answer
       );
@@ -60,7 +61,8 @@ const createDungeonBossRound = async (message, progress) => {
     if (result.finish) {
       const finalResult = await generateDungeonBossResult(progress);
       message.channel.send(finalResult);
-    } else {
+    }
+    else {
       return await createDungeonBossRound(message, result);
     }
   });
@@ -118,7 +120,8 @@ const calculateDungeonResult = async (progress) => {
         // todo, same thing here as other object
         if (awaitHealPromises[playerHealedName]) {
           awaitHealPromises[playerHealedName].healGiven += healGiven;
-        } else {
+        }
+        else {
           awaitHealPromises[playerHealedName] = {
             user: playerWithLowestHp,
             damage: healGiven,
@@ -157,7 +160,7 @@ const calculateDungeonResult = async (progress) => {
 
     const randomWeaponName =
       progress.dungeon.boss.bossWeapons[
-        Math.floor(Math.random() * progress.dungeon.boss.bossWeapons.length)
+      Math.floor(Math.random() * progress.dungeon.boss.bossWeapons.length)
       ];
     const weaponInfo = getWeaponInfo(randomWeaponName);
     const { stats } = progress.dungeon.boss;
@@ -173,7 +176,8 @@ const calculateDungeonResult = async (progress) => {
           awaitDamagePromises[
             randomPlayer.account.username
           ].damage += tempDamageGiven;
-        } else {
+        }
+        else {
           awaitDamagePromises[randomPlayer.account.username] = {
             user: randomPlayer,
             damage: tempDamageGiven,
@@ -323,7 +327,7 @@ const calculateDungeonBossRewards = async (progress) => {
       xp: Math.round(staticRewards.xp / helperIds),
       drop:
         staticRewards.drop[
-          Math.floor(Math.random() * staticRewards.drop.length)
+        Math.floor(Math.random() * staticRewards.drop.length)
         ],
     };
     await p.alternativeGainXp(helperReward.xp);

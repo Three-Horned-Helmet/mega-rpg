@@ -66,7 +66,8 @@ const startDungeonRooms = async (message, progress) => {
   progress.players = progress.players.filter((player, i) => {
     if (raidResults[i].win) {
       return player;
-    } else {
+    }
+    else {
       const playerIndex = progress.dungeon.helperIds.indexOf(
         player.account.userId
       );
@@ -86,7 +87,8 @@ const startDungeonRooms = async (message, progress) => {
   try {
     await msg.react(ICON_FORBIDDEN);
     await msg.react(ICON_CHECK);
-  } catch (err) {
+  }
+  catch (err) {
     console.error("error: ", err);
   }
 

@@ -36,7 +36,8 @@ const calculatePveHero = (user, npc) => {
     pveResult.expReward = Math.ceil(
       (Math.random() * (npc.stats.attack + npc.stats.health)) / 2
     );
-  } else {
+  }
+  else {
     pveResult.expReward = Math.ceil(Math.random() * 5);
     if (user.hero.rank > 0 && lossPercentage === 0) {
       pveResult.levelUp = false;
@@ -91,7 +92,8 @@ const calculatePveFullArmyResult = (user, npc) => {
     pveResult.expReward = Math.ceil(
       (Math.random() * (npc.stats.attack + npc.stats.health)) / 2
     );
-  } else {
+  }
+  else {
     pveResult.expReward = Math.ceil(Math.random() * 10);
     if (user.hero.rank > 0 && lossPercentage === 0) {
       pveResult.levelUp = false;
