@@ -3,31 +3,31 @@ const icons = require("../../icons/icons");
 const allItems = require("../items/all-items");
 
 const craftsEmbed = (user) => {
-    const title = `${user.account.username}'s available crafts (usage: \`!craft <itemName> <amount>\`):`;
-    const sideColor = "#45b6fe";
+	const title = `${user.account.username}'s available crafts (usage: \`!craft <itemName> <amount>\`):`;
+	const sideColor = "#45b6fe";
 
-    const fields = Object.values(allItems).filter(item => {
-        if(!item.requirement) return false;
-        const { building, level } = item.requirement;
-        return user.empire.find(b => b.name === building && b.level >= level);
-    }).map(item => {
-        return addCraftsField(item);
-   });
+	const fields = Object.values(allItems).filter(item => {
+		if(!item.requirement) return false;
+		const { building, level } = item.requirement;
+		return user.empire.find(b => b.name === building && b.level >= level);
+	}).map(item => {
+		return addCraftsField(item);
+	});
 
-    if(fields.length === 0) {
-        fields.push({
-            name: "You need a building like blacksmith, armorer or forge to craft items",
-            value: "Try `!build forge` followed by `!craft bronze bar 2` to get started",
-        });
-    }
+	if(fields.length === 0) {
+		fields.push({
+			name: "You need a building like blacksmith, armorer or forge to craft items",
+			value: "Try `!build forge` followed by `!craft bronze bar 2` to get started",
+		});
+	}
 
-    if((fields.length + 2) % 3) {
-        fields.push({
-            name: "\u200B",
-            value: "\u200B",
-            inline: true,
-        });
-    }
+	if((fields.length + 2) % 3) {
+		fields.push({
+			name: "\u200B",
+			value: "\u200B",
+			inline: true,
+		});
+	}
 
 	const embedCrafts = new Discord.MessageEmbed()
 		.setTitle(title)
@@ -41,15 +41,15 @@ const craftsEmbed = (user) => {
 };
 
 const addCraftsField = (item) => {
-    const { name, typeSequence, cost, stats } = item;
+	const { name, typeSequence, cost, stats } = item;
 
-    const field = {
-        name: name.capitalize(),
-        value: `${typeSequence[typeSequence.length - 1].capitalize()} \n ${objectMessage(stats)} ${objectMessage(stats) ? "\n" : ""} ${objectMessage(cost)}`,
-        inline: true,
-    };
+	const field = {
+		name: name.capitalize(),
+		value: `${typeSequence[typeSequence.length - 1].capitalize()} \n ${objectMessage(stats)} ${objectMessage(stats) ? "\n" : ""} ${objectMessage(cost)}`,
+		inline: true,
+	};
 
-    return field;
+	return field;
 };
 
 const objectMessage = (costs) => {

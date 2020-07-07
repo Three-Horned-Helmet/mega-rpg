@@ -84,10 +84,10 @@ const generateDiscordMessage = (user = isRequired())=>{
 };
 
 const mockDays = (d = 1) => {
-    // one day + 1 minute to ensure to bypass cooldown
-    const ms = (1000 * 60 * 60 * 24 * d) + 60000;
-    const now = new Date(Date.now() + ms);
-    return now;
+	// one day + 1 minute to ensure to bypass cooldown
+	const ms = (1000 * 60 * 60 * 24 * d) + 60000;
+	const now = new Date(Date.now() + ms);
+	return now;
 };
 
 module.exports = { createTestUser, generateDiscordMessage, mockDays };
