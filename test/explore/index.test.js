@@ -8,13 +8,13 @@ const { worldLocations } = require("../../game/_CONSTS/explore");
 
 
 describe("explore command", () => {
-	beforeEach("beforeEach, cleaning db", async ()=>{
+	beforeEach("beforeEach, cleaning db", async () => {
 		await User.deleteMany();
 	});
 	it("should exist", () => {
 		expect(exploreCommand).to.not.equal(undefined);
 	});
-	it("should run into cooldown if triggered too fast", async ()=>{
+	it("should run into cooldown if triggered too fast", async () => {
 		const testUser = await createTestUser();
 		const mockMessage = generateDiscordMessage(testUser);
 		const result = await exploreCommand.execute(mockMessage, null, testUser);
@@ -24,7 +24,7 @@ describe("explore command", () => {
 		expect(result2.fields[0].name.startsWith("You can't use this command for")).to.be.equal(true);
 	});
 
-	it("should have instance of newly explored places in user", async ()=>{
+	it("should have instance of newly explored places in user", async () => {
 		const users = [];
 		const mockMessages = [];
 		const results = [];
@@ -41,13 +41,13 @@ describe("explore command", () => {
 		}
 
 		let howManyPlacesFound = 0;
-		allUsers.forEach(d=>{
+		allUsers.forEach(d => {
 			howManyPlacesFound += d.world.locations["Grassy Plains"].explored.length;
 		});
 		expect(howManyPlacesFound).to.not.be.equal(0);
 		expect(howManyPlacesFound > 3).to.be.equal(true);
 	});
-	it("should not add more places if everything is explored", async ()=>{
+	it("should not add more places if everything is explored", async () => {
 		const allPlaces = Object.keys(worldLocations["Grassy Plains"].places);
 		const users = [];
 		const mockMessages = [];
@@ -69,7 +69,7 @@ describe("explore command", () => {
 		const allUsers = await Promise.all(users);
 
 		// ensure that all places has safely been placed into all users
-		allUsers.forEach(u=>{
+		allUsers.forEach(u => {
 			expect(u.world.locations["Grassy Plains"].explored.length).to.be.equal(allPlaces.length);
 		});
 
@@ -79,7 +79,7 @@ describe("explore command", () => {
 		}
 
 		// counts each user after exploring one time
-		allUsers.forEach(u=>{
+		allUsers.forEach(u => {
 			expect(u.world.locations["Grassy Plains"].explored.length).to.be.equal(allPlaces.length);
 		});
 	});

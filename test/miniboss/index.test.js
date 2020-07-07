@@ -127,12 +127,12 @@ describe("miniboss command", () => {
 
 
 		result.helpers.forEach(helper=>{
-		expect(helper.resources.gold > 100).to.be.equal(true);
-		expect(helper.hero.health > 100).to.be.equal(true);
-		expect(helper.hero.attack > 1).to.be.equal(true);
-		expect(helper.hero.currentExp > 100).to.be.equal(true);
-		expect(helper.hero.rank).to.be.equal(4);
-		expect(helper.hero.dungeonKeys["CM Key"]).to.be.equal(0);
+			expect(helper.resources.gold > 100).to.be.equal(true);
+			expect(helper.hero.health > 100).to.be.equal(true);
+			expect(helper.hero.attack > 1).to.be.equal(true);
+			expect(helper.hero.currentExp > 100).to.be.equal(true);
+			expect(helper.hero.rank).to.be.equal(4);
+			expect(helper.hero.dungeonKeys["CM Key"]).to.be.equal(0);
 		});
 	});
 
