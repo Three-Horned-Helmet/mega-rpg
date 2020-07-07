@@ -114,10 +114,10 @@ const createRaceInvitation = (user, raceDataCopy, state = null)=>{
 		weightedMultiplier = weightedMultiplier ? weightedMultiplier : 1;
 		return `${r} --- ${getResourceIcon("gold")} ${(weightedMultiplier * GOLDPRICE) + 40}`;
 	});
-	let bettingState = "```diff\n- PLEASE WAIT ```";
+	let bettingState = "```diff\n- HOLD YOUR BETS! ```";
 	let footer = "Please wait until all racers are ready!";
 	if (state === "ready") {
-		bettingState = "```fix\n GET READY! \n```";
+		bettingState = "```fix\n HOLD YOUR BETS! \n```";
 	}
 	if (state === "go") {
 		bettingState = "```diff\n+ PLACE YOUR BETS! ```";
