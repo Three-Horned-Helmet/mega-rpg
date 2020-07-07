@@ -14,7 +14,7 @@ const { raceData } = require("../_CONSTS/race.js");
 const handleRace = async (message, user)=>{
 	const cooldownInfo = onCooldown("race", user);
 	if (cooldownInfo.response) {
-		return cooldownInfo.embed;
+		return message.channel.send(cooldownInfo.embed);
 	}
 
 	if (user.resources.gold <= GOLDPRICE) {
