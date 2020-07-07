@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 if (process.env.NODE_ENV === "test") {
 	mongoose.connect(process.env.TEST_MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true });
 }
- else {
+else {
 	mongoose.connect(process.env.MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true });
 }
 
@@ -251,36 +251,36 @@ const userSchema = new Schema({
 	// Array of Objects.
 	// quests: [{started: Bolean, questKeySequence: Array, name: String}]
 	quests: {
-			type: [
-				{
-					type: Object,
-				},
-			],
-			default: [{
-				started: false,
-				questKeySequence: ["gettingStarted", "buildMine"],
-				name: "Build a Mine",
-				// pve: [{ // Raid is optional
-				// 	name: String, // e.g: "Collapsed Mine"
-				//	completed: Bolean,
-				// chance: Number, // e.g. 0.5 chance to get it (50%)
-				// },]
-			}],
+		type: [
+			{
+				type: Object,
+			},
+		],
+		default: [{
+			started: false,
+			questKeySequence: ["gettingStarted", "buildMine"],
+			name: "Build a Mine",
+			// pve: [{ // Raid is optional
+			// 	name: String, // e.g: "Collapsed Mine"
+			//	completed: Bolean,
+			// chance: Number, // e.g. 0.5 chance to get it (50%)
+			// },]
+		}],
 	},
 	completedQuests: [String],
 	// object too big, moved to ./uservalues/default
 	statistics,
 }, {
-    timestamps: {
-      createdAt: "createdAt",
-      updatedAt: "updatedAt",
-    },
-  });
+	timestamps: {
+		createdAt: "createdAt",
+		updatedAt: "updatedAt",
+	},
+});
 
-  userSchema.methods.startQuest = async function(questName) {
+userSchema.methods.startQuest = async function(questName) {
 	const foundIndex = this.quests.indexOf(this.quests.find(q => {
 		return q.name === questName;
-}));
+	}));
 	this.quests[foundIndex].started = true;
 	this.markModified(`quests.${foundIndex}.started`);
 };
@@ -569,8 +569,8 @@ userSchema.methods.heroHpLoss = function(lossPercentage) {
 			this.hero[s] -= heroStatIncreaseOnLevel[this.hero.rank][s];
 		});
 		this.hero.rank -= 1;
-			this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
-			this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] || 50;
+		this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
+		this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] || 50;
 	}
 };
 
@@ -582,8 +582,8 @@ userSchema.methods.heroHpLossFixedAmount = function(damage) {
 			this.hero[s] -= heroStatIncreaseOnLevel[this.hero.rank][s];
 		});
 		this.hero.rank -= 1;
-			this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
-			this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] || 50;
+		this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
+		this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] || 50;
 	}
 	if (this.hero.currentHealth < 0) {
 		this.hero.currentHealth = 0;
@@ -694,10 +694,10 @@ userSchema.methods.alternativeGainXp = async function(xp = 0) {
 		if (heroExpToNextLevel.length > this.hero.rank + 1) {
 			this.hero.rank += 1;
 			this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
-				Object.keys(heroStatIncreaseOnLevel[this.hero.rank]).forEach(s=>{
-					this.hero[s] += heroStatIncreaseOnLevel[this.hero.rank][s];
-				});
-			}
+			Object.keys(heroStatIncreaseOnLevel[this.hero.rank]).forEach(s=>{
+				this.hero[s] += heroStatIncreaseOnLevel[this.hero.rank][s];
+			});
+		}
 	}
 };
 

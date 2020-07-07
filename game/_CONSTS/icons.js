@@ -46,25 +46,25 @@ const getGreenRedIcon = (bool)=>{
 
 const getResourceIcon = (type)=>{
 	const lexicon = {
-	["gold"]: ":moneybag:",
-	["oak wood"]: ":evergreen_tree:",
-	["yew wood"]: ":deciduous_tree:",
-	["copper ore"]: ":orange_circle:",
-	["iron ore"]: ":white_circle:",
-	["obsidian ore"]: ":black_circle:",
-	["bronze bar"]: ":orange_square:",
-	["iron bar"]: ":white_large_square:",
-	["steel bar"]: ":brown_square:",
-	["xp"]: "🎓",
+		["gold"]: ":moneybag:",
+		["oak wood"]: ":evergreen_tree:",
+		["yew wood"]: ":deciduous_tree:",
+		["copper ore"]: ":orange_circle:",
+		["iron ore"]: ":white_circle:",
+		["obsidian ore"]: ":black_circle:",
+		["bronze bar"]: ":orange_square:",
+		["iron bar"]: ":white_large_square:",
+		["steel bar"]: ":brown_square:",
+		["xp"]: "🎓",
 	};
 	return lexicon[type];
 };
 
 const getStatsIcon = (type)=>{
 	const lexicon = {
-	["health"]: ":heart:",
-	["attack"]: ":crossed_swords:",
-	["defense"]: ":shield:",
+		["health"]: ":heart:",
+		["attack"]: ":crossed_swords:",
+		["defense"]: ":shield:",
 	};
 	return lexicon[type];
 };

@@ -4,11 +4,11 @@ const allItems = require("../items/all-items");
 
 const stakeEmbed = (winner, loser, battleStats, exp, item, elo) => {
 	const { username } = winner.account;
-    const { username: oppUsername } = loser.account;
-    const itemName = item.split(" ").map(i => i.capitalize()).join(" ");
+	const { username: oppUsername } = loser.account;
+	const itemName = item.split(" ").map(i => i.capitalize()).join(" ");
 
 	const title = `${username} battled against ${oppUsername} and won **${itemName}**!`;
-    const sideColor = "#9c2200";
+	const sideColor = "#9c2200";
 	const { win, winMargin, uModifier, oModifier, winnerStats, loserStats } = battleStats;
 
 	const footer = `${username} +${elo.eloForWinner.delta} elo\n${oppUsername} ${elo.eloForLoser.delta} elo`;
@@ -21,23 +21,23 @@ const stakeEmbed = (winner, loser, battleStats, exp, item, elo) => {
 		{
 			name: itemName + ":",
 			value: statsMessage(allItems[item].stats),
-        },
-        {
+		},
+		{
 			name: "\u200B",
 			value: `\`\`\`fix\n${username}:\n\`\`\``,
-            inline:true,
-        },
-        {
+			inline:true,
+		},
+		{
 			name: "\u200B",
 			value: `\`\`\`fix\n${oppUsername}:\n\`\`\``,
-            inline:true,
+			inline:true,
 		},
 		{
 			name: "\u200B",
 			value: "\u200B",
-            inline:true,
-        },
-        {
+			inline:true,
+		},
+		{
 			name: "Battle Modifier",
 			value: Math.floor(uModifier * 100) + "%",
 			inline: true,
@@ -50,8 +50,8 @@ const stakeEmbed = (winner, loser, battleStats, exp, item, elo) => {
 		{
 			name: "\u200B",
 			value: "\u200B",
-            inline:true,
-        },
+			inline:true,
+		},
 		{
 			name: "Total army",
 			value: statsMessage(winnerStats),
@@ -65,8 +65,8 @@ const stakeEmbed = (winner, loser, battleStats, exp, item, elo) => {
 		{
 			name: "\u200B",
 			value: "\u200B",
-            inline:true,
-        },
+			inline:true,
+		},
 	];
 
 	const embedStake = new Discord.MessageEmbed()
@@ -75,7 +75,7 @@ const stakeEmbed = (winner, loser, battleStats, exp, item, elo) => {
 		.addFields(
 			...fields,
 		)
-	.setFooter(footer);
+		.setFooter(footer);
 	return embedStake;
 };
 

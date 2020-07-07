@@ -74,12 +74,12 @@ const prettifyUser = async (message, user, avatar) => {
 			...fields,
 		);
 
-		if (avatar) {
-			embedUser.setThumbnail(avatar);
-		}
-		if (Math.random() > 0.66) {
-			embedUser.setFooter(generateTip());
-		}
+	if (avatar) {
+		embedUser.setThumbnail(avatar);
+	}
+	if (Math.random() > 0.66) {
+		embedUser.setFooter(generateTip());
+	}
 
 	return embedUser;
 };

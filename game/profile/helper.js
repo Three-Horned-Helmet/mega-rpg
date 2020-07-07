@@ -24,16 +24,16 @@ const determineSupporterTitle = (subscription) => {
 };
 
 const getPlayerPosition = async (discordId, criteria = "hero.currentExp")=>{
-    const bestPlayers = await User
-    .find({})
-    .select("account")
-    .sort({ [criteria]:-1 })
-    .lean();
+	const bestPlayers = await User
+		.find({})
+		.select("account")
+		.sort({ [criteria]:-1 })
+		.lean();
 	const position = bestPlayers.findIndex(p=> p.account.userId === discordId) + 1;
 	if (position > 100) {
 		return ">100";
 	}
-    return position;
+	return position;
 };
 
 const generateTip = ()=> {

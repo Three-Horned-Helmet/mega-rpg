@@ -513,10 +513,10 @@ const worldLocations = {
 			},
 		},
 		["Cold Boiling Lake"]: {
-				name: "Cold Boiling Lake",
-				type: "fish",
-				fish: ["Cod", "Trout", "Swordfish", "Salmon", "Macrel"],
-			},
+			name: "Cold Boiling Lake",
+			type: "fish",
+			fish: ["Cod", "Trout", "Swordfish", "Salmon", "Macrel"],
+		},
 	},
 	"Deep Caves":{
 		description: "You're in one of the darkest and most forgotten places of Mega RPG",
@@ -651,7 +651,7 @@ const worldLocations = {
 					health:500,
 				},
 			},
-		["Subterranean Spring"]: {
+			["Subterranean Spring"]: {
 				name: "Subterranean Spring",
 				type: "fish",
 				fish: ["Cod", "Trout", "Swordfish", "Salmon", "Macrel", "Bass", "Eel"],

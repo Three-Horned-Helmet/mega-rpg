@@ -13,7 +13,7 @@ const getWorld = (user) => {
 
 	const exploredPlaces = user.world.locations[currentLocation].explored;
 	const exploredPlacesWithIcons = exploredPlaces.length ? exploredPlaces.map(place=>{
-		const type = worldLocations[currentLocation].places[place].type;
+		const { type } = worldLocations[currentLocation].places[place];
 		return `${getPlaceIcon(type)} ${place}`;
 	}) : defaultNonExplored;
 
@@ -22,7 +22,7 @@ const getWorld = (user) => {
 	const legend = new Set();
 
 	Object.keys(worldLocations[currentLocation].places).map(p=>{
-		const type = worldLocations[currentLocation].places[p].type;
+		const { type } = worldLocations[currentLocation].places[p];
 		legend.add(`${getPlaceIcon(type)}: !${type} - `);
 	});
 	const footerFriendlyLegend = Array.from(legend).join("");

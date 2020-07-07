@@ -35,9 +35,7 @@ client.on("message", async (message) => {
 	// looks for command or the alias of a command
 	const command =
     client.commands.get(commandName) ||
-    client.commands.find(
-    	(cmd) => cmd.aliases && cmd.aliases.includes(commandName),
-    );
+    client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName),);
 
 	// if not found, do nothing
 	if (!command) return;
@@ -92,14 +90,14 @@ client.on("message", async (message) => {
 
 	// executes the command
 	{
-try {
-		command.execute(message, updatedArgs, userProfile);
+		try {
+			command.execute(message, updatedArgs, userProfile);
+		}
+		catch (error) {
+			console.error(error);
+			message.reply("there was an error trying to execute that command!");
+		}
 	}
-	catch (error) {
-		console.error(error);
-		message.reply("there was an error trying to execute that command!");
-	}
-}
 });
 
 client.login(token);

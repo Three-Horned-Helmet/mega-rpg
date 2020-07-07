@@ -4,51 +4,51 @@ const { getDailyPrize } = require("../_CONSTS/dailyPrize");
 const { getResourceIcon } = require("../_CONSTS/icons");
 
 const handleDaily = async (user) => {
-    const onCooldownInfo = onCooldown("dailyPrize", user);
-    if (onCooldownInfo.response) {
-        return onCooldownInfo.embed;
-    }
-    const now = new Date();
-    const lastClaimLessThanTwoDays = user.cooldowns.dailyPrize + 1000 * 60 * 60 * 48 >= now;
+	const onCooldownInfo = onCooldown("dailyPrize", user);
+	if (onCooldownInfo.response) {
+		return onCooldownInfo.embed;
+	}
+	const now = new Date();
+	const lastClaimLessThanTwoDays = user.cooldowns.dailyPrize + 1000 * 60 * 60 * 48 >= now;
 
-    let consecutiveDay = user.consecutivePrizes.dailyPrize;
+	let consecutiveDay = user.consecutivePrizes.dailyPrize;
 
-    if (lastClaimLessThanTwoDays) {
-        consecutiveDay = 0;
-    }
-    if (consecutiveDay >= 4) {
-        consecutiveDay = 4;
-    }
+	if (lastClaimLessThanTwoDays) {
+		consecutiveDay = 0;
+	}
+	if (consecutiveDay >= 4) {
+		consecutiveDay = 4;
+	}
 
-    const dailyPrizeResult = getDailyPrize(consecutiveDay);
-    await user.handleConsecutive(dailyPrizeResult, (consecutiveDay + 1), now, "dailyPrize");
+	const dailyPrizeResult = getDailyPrize(consecutiveDay);
+	await user.handleConsecutive(dailyPrizeResult, (consecutiveDay + 1), now, "dailyPrize");
 
 
-     const embededResult = generatePrizeEmbed(dailyPrizeResult, consecutiveDay);
-     return embededResult;
+	const embededResult = generatePrizeEmbed(dailyPrizeResult, consecutiveDay);
+	return embededResult;
 };
 
 const generatePrizeEmbed = (result, consecutiveDay)=>{
-    getResourceIcon();
+	getResourceIcon();
 
-    const sideColor = "#45b6fe";
+	const sideColor = "#45b6fe";
 
-    const preTitle = " DAILY PRIZE  ";
-    const consecutiveStars = "⭐️".repeat(consecutiveDay + 1);
+	const preTitle = " DAILY PRIZE  ";
+	const consecutiveStars = "⭐️".repeat(consecutiveDay + 1);
 
-    let title = consecutiveStars;
-    title += preTitle;
-    title += consecutiveStars;
-    // "⭐️⭐️⭐️ DAILY PRIZE ⭐️⭐️⭐️"
+	let title = consecutiveStars;
+	title += preTitle;
+	title += consecutiveStars;
+	// "⭐️⭐️⭐️ DAILY PRIZE ⭐️⭐️⭐️"
 
-    let valueField = "";
+	let valueField = "";
 
-            Object.keys(result).forEach(r=>{
-                valueField += `${getResourceIcon(r)} ${r}: ${result[r]}\n`;
-            });
+	Object.keys(result).forEach(r=>{
+		valueField += `${getResourceIcon(r)} ${r}: ${result[r]}\n`;
+	});
 
-    const lexicon = ["first", "second", "third", "fourth", "fifth (max)"];
-    const embedUser = new Discord.MessageEmbed()
+	const lexicon = ["first", "second", "third", "fourth", "fifth (max)"];
+	const embedUser = new Discord.MessageEmbed()
 		.setTitle(title)
 		.setColor(sideColor)
 		.addFields(
@@ -56,11 +56,11 @@ const generatePrizeEmbed = (result, consecutiveDay)=>{
 				name: "Reward:",
 				value:valueField,
 				inline: true,
-            },
+			},
 		)
 		.setFooter(`This is your ${lexicon[consecutiveDay]} consecutive day!`);
 
-    return embedUser;
+	return embedUser;
 };
 
 

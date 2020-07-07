@@ -24,7 +24,7 @@ const handleExplore = async (user) => {
 		return handleRandomEvent(randomEvents);
 	} */
 
-	const places = worldLocations[currentLocation].places;
+	const { places } = worldLocations[currentLocation];
 	const exploreResult = exploreArea(user, places, currentLocation, now);
 	return exploreResult;
 };
