@@ -4,6 +4,7 @@ const { generateRace, generateEndResult, createRaceInvitation } = require("./emb
 const { createChanceArray, racePayOut, validateUser } = require("./helpers");
 const { asyncForEach, deepCopyFunction } = require("../_GLOBAL_HELPERS");
 const { onCooldown } = require("../_CONSTS/cooldowns");
+const { getResourceIcon } = require("../_CONSTS/icons");
 const sleep = require("util").promisify(setTimeout);
 
 const GOLDPRICE = 40;
@@ -15,9 +16,13 @@ const handleRace = async (message, user)=>{
 	if (cooldownInfo.response) {
 		return cooldownInfo.embed;
 	}
+
+	if (user.resources.gold <= GOLDPRICE) {
+		return message.channel.send(`You need at least ${getResourceIcon("gold")} **${GOLDPRICE}** gold to trigger the race. You have ${getResourceIcon("gold")} **${user.resources.gold}** gold `);
+	}
 	const now = new Date();
 	user.setNewCooldown(now, "race");
-	user.save();
+	await user.save();
 
 	const raceDataCopy = (deepCopyFunction(raceData));
 	const generatedInvitation = createRaceInvitation(user, raceDataCopy);
