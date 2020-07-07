@@ -562,7 +562,8 @@ userSchema.methods.unitLoss = function(lossPercentage) {
 };
 
 userSchema.methods.heroHpLoss = function(lossPercentage) {
-	this.hero.currentHealth = this.hero.currentHealth - Math.floor(this.hero.currentHealth * lossPercentage);
+
+	this.hero.currentHealth = Math.floor(this.hero.currentHealth * lossPercentage);
 	// if the hero dies
 	if (this.hero.currentHealth <= 0 && this.hero.rank > 0) {
 		Object.keys(heroStatIncreaseOnLevel[this.hero.rank]).forEach(s=>{

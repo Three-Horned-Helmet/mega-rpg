@@ -67,8 +67,9 @@ const handleHunt = async (user, place = null) => {
 		// if user doesn't provide a specific place to hunt, the user will be given a random place
 
 		const listOfPlaces = Object.values(placesInCurrentWorld).filter(p=>{
+
 			const friendlyFormat = p.name.replace(/\s/g, "").toLowerCase();
-			return userExploredHuntPlaces.includes(friendlyFormat);
+			return userExploredHuntPlaces.includes(friendlyFormat) && !p.notExplorable;
 		});
 		placeInfo = listOfPlaces[Math.floor(Math.random() * listOfPlaces.length)];
 
@@ -93,6 +94,7 @@ const handleHunt = async (user, place = null) => {
 	let questIntro;
 	const now = new Date();
 	user.setNewCooldown("hunt", now);
+	const huntEmbed = generateEmbedPveHero(user, placeInfo, huntResult, questIntro);
 	user.heroHpLoss(huntResult.lossPercentage);
 	user.alternativeGainXp(huntResult.expReward);
 
@@ -102,7 +104,6 @@ const handleHunt = async (user, place = null) => {
 	}
 	await user.save();
 	// generates a Discord embed
-	const huntEmbed = generateEmbedPveHero(user, placeInfo, huntResult, questIntro);
 
 	return huntEmbed;
 

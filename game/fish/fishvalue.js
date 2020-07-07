@@ -21,7 +21,7 @@ const calculateFishResult = (fish, chance = (1 / 3)) => {
 		return result;
 	}
 	const fishCaught = fish[Math.floor(Math.random() * fish.length)];
-	result.gold = Math.ceil(Math.random() * fishPrices[fishCaught]);
+	result.gold = Math.ceil(Math.random() * (fishPrices[fishCaught] - (fishPrices[fishCaught] / 2)) + (fishPrices[fishCaught] / 2));
 	result.response = generateSucceedFishSentence(result.gold, fishCaught);
 	return result;
 };
@@ -32,7 +32,7 @@ const generateFailFishSentence = () => {
 		"You lost your bait while fishing",
 		"You caught an old boot",
 		"You put your fishing rod down and took a swim instead",
-		"A mermaid spotted you while fishing, distracting you with suggestive sea shell bikini",
+		"A mermaid spotted you while fishing, distracting you with a suggestive sea shell bikini",
 		"After fishing for hours, your rod broke while swinging it",
 	];
 	return sentences[Math.floor(Math.random() * sentences.length)];

@@ -5,7 +5,7 @@ const calculateStats = require("./calculate-stats");
 // Returns win (bolean), lossPercentage (1 = 100% loss of hero hp), and the combat modifier
 const calculatePveHero = (user, npc) => {
 	const { heroStats } = calculateStats(user);
-	const combatModifier = 1 - Math.random() / 3;
+	const combatModifier = 1 - Math.random() / 4;
 	const userHp = heroStats.currentHealth * combatModifier;
 	const userAt = heroStats.attack * combatModifier;
 	const { health: oppHp, attack: oppAt } = npc.stats;
@@ -50,6 +50,7 @@ const calculatePveHero = (user, npc) => {
 	if (pveResult.expReward + user.hero.currentExp >= user.hero.expToNextRank) {
 		pveResult.levelUp = true;
 	}
+
 	return pveResult;
 };
 
