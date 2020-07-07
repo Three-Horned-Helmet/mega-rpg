@@ -43,7 +43,7 @@ const calculatePveHero = (user, npc) => {
 	}
 	else {
 		pveResult.expReward = Math.ceil(Math.random() * 5);
-		if (user.hero.rank > 0 && damageLost + user.hero.currentHealth >= user.hero.currentHealth) {
+		if (user.hero.rank > 0 && damageLost + user.hero.currentHealth >= user.hero.health) {
 			pveResult.levelUp = false;
 			pveResult.expReward = 0;
 			pveResult.heroDemote = true;
