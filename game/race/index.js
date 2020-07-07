@@ -21,7 +21,7 @@ const handleRace = async (message, user)=>{
 		return message.channel.send(`You need at least ${getResourceIcon("gold")} **${GOLDPRICE}** gold to trigger the race. You have ${getResourceIcon("gold")} **${user.resources.gold}** gold `);
 	}
 	const now = new Date();
-	user.setNewCooldown(now, "race");
+	user.setNewCooldown("race", now);
 	await user.save();
 
 	const raceDataCopy = (deepCopyFunction(raceData));
