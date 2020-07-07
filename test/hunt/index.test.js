@@ -47,7 +47,7 @@ describe("hunt command", () => {
 		expect(result).to.be.equal("You haven't explored this place yet. Try `!explore` in order to find it!");
 	});
 	it("should be able to hunt if a hunting place is explored", async ()=>{
-		const testUser = await createTestUser({ hero:{ currentHealth:500, health:500, attack:500 }, world:{ locations:{ "Grassy Plains":{ explored:["Cave", "Forest"] } } } });
+		const testUser = await createTestUser({ hero:{ currentHealth:1000, health:1000, attack:1000 }, world:{ locations:{ "Grassy Plains":{ explored:["Cave", "Forest"] } } } });
 		const mockMessage = generateDiscordMessage(testUser);
 		const result = await huntCommand.execute(mockMessage, [], testUser);
 		expect(result.title.startsWith("Anniken Avisbud's hero hunted 🐸")).to.be.equal(true);
