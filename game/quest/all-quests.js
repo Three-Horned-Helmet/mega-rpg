@@ -13,9 +13,9 @@ const foolsTreasureHunt = require("./quests/grassy-plains/fools-treasure-hunt");
 const enteringMansion = require("./quests/grassy-plains/entering-the-mansion");
 
 const allQuests = {
-    gettingStarted,
-    "Building Quests": { ...footprintsInTheDark },
-    "Grassy Plains": { ...childSupport, ...missingDaughter, ...refugeesInTheForest, ...mysteryMine, ...foolsTreasureHunt, ...enteringMansion },
+	gettingStarted,
+	"Building Quests": { ...footprintsInTheDark },
+	"Grassy Plains": { ...childSupport, ...missingDaughter, ...refugeesInTheForest, ...mysteryMine, ...foolsTreasureHunt, ...enteringMansion },
 };
 
 module.exports = allQuests;
