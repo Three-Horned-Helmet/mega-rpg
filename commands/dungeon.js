@@ -11,5 +11,5 @@ module.exports = {
 	description: "Let's the player trigger a dungeon with n rooms and a final boss in the end",
 	async execute(message, args, user) {
 		await handleDungeon(message, user);
-		},
-	};
+	},
+};

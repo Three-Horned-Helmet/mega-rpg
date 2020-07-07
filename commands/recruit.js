@@ -7,11 +7,11 @@ module.exports = {
 	aliases: ["r"],
 	shortcuts: {
 		pe: "peasant",
-        mi: "militia",
-        gu: "guardsman",
-        hu: "huntsman",
-        ar: "archer",
-        ra: "ranger",
+		mi: "militia",
+		gu: "guardsman",
+		hu: "huntsman",
+		ar: "archer",
+		ra: "ranger",
 	},
 	execute(message, args, user) {
 		if(args.length === 0) return message.channel.send(showRecruitsEmbed(user));

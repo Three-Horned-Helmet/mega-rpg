@@ -13,10 +13,10 @@ const calculateStats = (user) => {
 
 	// Get stats from units
 	Object.values(units).forEach(unitType => {
-		Object.keys(unitType).forEach(unit =>{
-			if(!unit.startsWith("$")) {
+		Object.keys(unitType).forEach(unit => {
+			if (!unit.startsWith("$")) {
 				const { stats } = allUnits[unit];
-				for(const stat in stats) {
+				for (const stat in stats) {
 					unitStats[stat] = unitStats[stat] && unitStats[stat] !== 0 ? (unitStats[stat] + stats[stat] * unitType[unit]) : stats[stat] * unitType[unit];
 				}
 
@@ -26,12 +26,12 @@ const calculateStats = (user) => {
 	});
 
 	// Add the stats from the items
-	for(const slot in armory.toJSON()) {
+	for (const slot in armory.toJSON()) {
 		let slotsTaken = 0;
 		const allSlotItems = Object.keys(armory[slot]).map(item => allItems[item]);
 
 		// Sorts depending on what item that gives the most stats
-		const sortHelper = (a) =>{
+		const sortHelper = (a) => {
 			return Object.values(a.stats).reduce((acc, cur) => acc + cur);
 		};
 
@@ -39,13 +39,13 @@ const calculateStats = (user) => {
 
 		// Add the stats of up to the amount of units that you have (e.g. 60 units can onlyuse 60 helmets)
 		allSlotItems.forEach((item) => {
-			if(slotsTaken >= totalUnits) return false;
+			if (slotsTaken >= totalUnits) return false;
 
 			const iQuantity = armory[slot][item.name];
 			const iToAdd = totalUnits - slotsTaken - iQuantity;
 			const itemAdded = iToAdd < 0 ? totalUnits - slotsTaken : iQuantity;
 
-			for(const stat in item.stats) {
+			for (const stat in item.stats) {
 				unitStats[stat] += item.stats[stat] * itemAdded;
 			}
 

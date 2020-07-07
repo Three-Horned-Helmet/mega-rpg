@@ -8,8 +8,8 @@ module.exports = {
 	args: true,
 	description: "Duel other players with stakes. The loser loses a % of the hero exp and an armorer item, while the winner gets the exp and item",
 	async execute(message, args, user) {
-        if(args.length === 0) return message.channel.send("You need to apply arguments");
-        const opponentUserId = args[0].slice(3, args[0].length - 1);
+		if(args.length === 0) return message.channel.send("You need to apply arguments");
+		const opponentUserId = args[0].slice(3, args[0].length - 1);
 		const opponent = await User.findOne({ "account.userId":  opponentUserId });
 
 		const answer = checkIfStakeIsPossible(user, opponent);
@@ -25,25 +25,25 @@ module.exports = {
 				if(["✅"].includes(reaction.emoji.name) && reactUser.id === opponent.account.userId) {
 					return true;
 				}
-		};
+			};
 
-		msg.awaitReactions(filter, { max: 1, time: 1000 * 60 * 1, errors: ["time"] })
-	.then(async (collected) => {
-		const reaction = collected.first();
+			msg.awaitReactions(filter, { max: 1, time: 1000 * 60 * 1, errors: ["time"] })
+				.then(async (collected) => {
+					const reaction = collected.first();
 
-		if (reaction.emoji.name === "✅") {
-			msg.reply(`${opponent.account.username} accepted the duel`);
-			const updatedUser = await User.findOne({ "account.userId": user.account.userId });
-			const updatedOpponent = await User.findOne({ "account.userId": opponent.account.userId });
-			const stakeResults = await stakePlayer(updatedUser, updatedOpponent, stakedItems.flat(), message);
+					if (reaction.emoji.name === "✅") {
+						msg.reply(`${opponent.account.username} accepted the duel`);
+						const updatedUser = await User.findOne({ "account.userId": user.account.userId });
+						const updatedOpponent = await User.findOne({ "account.userId": opponent.account.userId });
+						const stakeResults = await stakePlayer(updatedUser, updatedOpponent, stakedItems.flat(), message);
 
-			return message.channel.send(stakeResults);
-		}
-	})
-	.catch((error) => {
-		console.error(error);
-		msg.reply(`Stake declined between ${user.account.username} and ${opponent.account.username}`);
-	});
+						return message.channel.send(stakeResults);
+					}
+				})
+				.catch((error) => {
+					console.error(error);
+					msg.reply(`Stake declined between ${user.account.username} and ${opponent.account.username}`);
+				});
 		});
 
 	},

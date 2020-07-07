@@ -5,8 +5,8 @@ const duelEmbed = (user, opponent, battleStats, exp, gold) => {
 	const { username } = user.account;
 	const { username: oppUsername } = opponent.account;
 	const title = `${username} dueled ${oppUsername}`;
-    const sideColor = "#45b6fe";
-    const { win, winMargin, uModifier, oModifier, userStats, oppStats } = battleStats;
+	const sideColor = "#45b6fe";
+	const { win, winMargin, uModifier, oModifier, userStats, oppStats } = battleStats;
 
 	const fields = [
 		{
@@ -16,23 +16,23 @@ const duelEmbed = (user, opponent, battleStats, exp, gold) => {
 		{
 			name: "\u200B",
 			value: "\u200B",
-        },
-        {
+		},
+		{
 			name: "\u200B",
 			value: `\`\`\`fix\n${username}:\n\`\`\``,
-            inline:true,
-        },
-        {
+			inline:true,
+		},
+		{
 			name: "\u200B",
 			value: `\`\`\`fix\n${oppUsername}:\n\`\`\``,
-            inline:true,
+			inline:true,
 		},
 		{
 			name: "\u200B",
 			value: "\u200B",
-            inline:true,
-        },
-        {
+			inline:true,
+		},
+		{
 			name: "Battle Modifier",
 			value: Math.floor(uModifier * 100) + "%",
 			inline: true,
@@ -45,8 +45,8 @@ const duelEmbed = (user, opponent, battleStats, exp, gold) => {
 		{
 			name: "\u200B",
 			value: "\u200B",
-            inline:true,
-        },
+			inline:true,
+		},
 		{
 			name: "Total army",
 			value: statsMessage(userStats),
@@ -60,8 +60,8 @@ const duelEmbed = (user, opponent, battleStats, exp, gold) => {
 		{
 			name: "\u200B",
 			value: "\u200B",
-            inline:true,
-        },
+			inline:true,
+		},
 	];
 
 	const embedDuel = new Discord.MessageEmbed()

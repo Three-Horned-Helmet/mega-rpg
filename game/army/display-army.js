@@ -52,20 +52,20 @@ const displayArmy = (user) => {
 	return embedArmy;
 };
 
-const createMessage = (mainCategory) =>{
+const createMessage = (mainCategory) => {
 	const messageArray = [];
 
-	for(const category in mainCategory) {
+	for (const category in mainCategory) {
 		let message = "";
 
-		Object.keys(mainCategory[category]).forEach(subCategory =>{
-			if(mainCategory[category][subCategory] && !subCategory.startsWith("$")) {
+		Object.keys(mainCategory[category]).forEach(subCategory => {
+			if (mainCategory[category][subCategory] && !subCategory.startsWith("$")) {
 				const iValue = mainCategory[category][subCategory];
 				message += `${subCategory.capitalize()}: ${typeof iValue === "string" ? iValue.capitalize() : iValue} \n`;
 			}
 		});
 
-		if(message) {
+		if (message) {
 			messageArray.push({
 				name: `${icons[category]} ${category.capitalize()}`,
 				value: message,
@@ -80,8 +80,8 @@ const createMessage = (mainCategory) =>{
 const addObjectToMessage = (obj) => {
 	let message = "";
 
-	for(const key in obj) {
-		if(key !== "currentHealth") {
+	for (const key in obj) {
+		if (key !== "currentHealth") {
 			message += `${icons[key]} ${key.capitalize()}: ${(obj.currentHealth && key === "health") ?
 				obj.currentHealth + "/" : ""}${obj[key]} \n`;
 		}
