@@ -135,8 +135,8 @@ function generateEmbedPveHeroWin(user, placeInfo, pveResult, questIntro) {
 
 	let expReward = `+ **${pveResult.expReward}** exp\n`;
 
-	const heroHpLoss = user.hero.currentHealth - Math.floor(user.hero.currentHealth * pveResult.lossPercentage);
-
+	// const heroHpLoss = user.hero.currentHealth - Math.floor(user.hero.currentHealth * pveResult.lossPercentage);
+	const heroHpLoss = pveResult.damageLost;
 	const heroCasulty = generateHeroCasulty(heroHpLoss, placeName);
 
 	if (pveResult.levelUp) {

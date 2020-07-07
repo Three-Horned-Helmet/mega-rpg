@@ -95,7 +95,9 @@ const handleHunt = async (user, place = null) => {
 	const now = new Date();
 	user.setNewCooldown("hunt", now);
 	const huntEmbed = generateEmbedPveHero(user, placeInfo, huntResult, questIntro);
-	user.heroHpLoss(huntResult.lossPercentage);
+	user.heroHpLossFixedAmount(huntResult.damageLost);
+
+	// user.heroHpLoss(huntResult.lossPercentage);
 	user.alternativeGainXp(huntResult.expReward);
 
 	if (huntResult.win) {

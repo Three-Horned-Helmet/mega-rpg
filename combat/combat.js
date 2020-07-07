@@ -15,6 +15,9 @@ const calculatePveHero = (user, npc) => {
 	let lossPercentage = (userHp + userAt - (oppHp + oppAt)) / (userHp + userAt);
 	lossPercentage = lossPercentage < 0 ? 0 : lossPercentage;
 
+	// new fixed damage
+	const damageLost = Math.round(Math.random() * (oppAt - (oppAt / 2)) + (oppAt / 2));
+
 	const pveResult = {
 		combatModifier,
 		expReward: 0,
@@ -23,6 +26,7 @@ const calculatePveHero = (user, npc) => {
 		lossPercentage: 1 - lossPercentage,
 		resourceReward: {},
 		win,
+		damageLost,
 	};
 
 	if (win) {
@@ -39,7 +43,7 @@ const calculatePveHero = (user, npc) => {
 	}
 	else {
 		pveResult.expReward = Math.ceil(Math.random() * 5);
-		if (user.hero.rank > 0 && lossPercentage === 0) {
+		if (user.hero.rank > 0 && damageLost + user.hero.currentHealth >= user.hero.currentHealth) {
 			pveResult.levelUp = false;
 			pveResult.expReward = 0;
 			pveResult.heroDemote = true;
