@@ -9,7 +9,7 @@ module.exports = {
 
 		// easter egg
 		if (args.length && ["tits", "boobies", "boobs"].some(xxx=> lookArgument.includes(xxx))) {
-			const pairs = ["1(o)(o)", "2( + )( + )", "4(@)(@)", "5{ O }{ O }", "6(oYo)", "7( ^ )( ^ )", "8(o)(O)", "(      )  (      )\n (    )    (    ) \n  (  )      (  )  \n    *         *   \n"];
+			const pairs = ["(o)(o)", "( + )( + )", "(@)(@)", "{ O }{ O }", "(oYo)", "( ^ )( ^ )", "(o)(O)", "(      )  (      )\n (    )    (    ) \n  (  )      (  )  \n    *         *   \n"];
 			return message.channel.send(pairs[Math.floor(Math.random() * pairs.length)]);
 		}
 
