@@ -1,4 +1,4 @@
-const questHelper = require("../../quest-helper");
+const { questHelper } = require("../../quest-helper");
 // const allItems = require("../../items/all-items");
 
 module.exports = {
