@@ -90,11 +90,11 @@ client.on("message", async (message) => {
 	}
 
 	// triggers captcha if:
-	// - only for 3% of times
-	// - not a testuser (used for unit tests)
+	// - only for 3% of all commands
+	// - not for testusers (unit tests)
 	// - !hunt, !collect, !raid or !fish is being triggered
 
-	if (Math.random() >= 0.03 && userProfile.account.testUser === false && ["hunt", "collect", "raid", "fish"].includes(command.name)) {
+	if (Math.random() <= 0.03 && userProfile.account.testUser === false && ["hunt", "collect", "raid", "fish"].includes(command.name)) {
 		return handleCaptcha(message, userProfile);
 	}
 
