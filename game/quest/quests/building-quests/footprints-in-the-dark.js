@@ -60,7 +60,7 @@ module.exports = {
 		pve: [{
 			name: "Forest",
 			completed: false,
-			chance: 0.25,
+			chance: 0.35,
 		}],
 		found: "While following the trail you hear a twig cracking",
 		notFound: "You lost track of the footsteps and got lost. Maybe it is better to go back and try again?",

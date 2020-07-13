@@ -8,7 +8,7 @@ module.exports = {
 		name: "A Meeting with Bugbear",
 		obtaining: {
 			area: "Collapsed Mine",
-			chance: 0.3,
+			chance: 0.4,
 		},
 		intro: "As you venture deeper into the Collapsed Mine you hear some strange squeals.",
 		pve: [{

@@ -12,7 +12,7 @@ module.exports = {
 		pve: [{
 			name: "Bandit Camp",
 			completed: false,
-			chance: 0.2,
+			chance: 0.40,
 		}],
 		found: "You found the second half of the Treasure Map",
 		notFound: "You look around for the second half of the Treasure Map, but found nothing",
@@ -56,7 +56,7 @@ module.exports = {
 		pve: [{
 			name: "Forest",
 			completed: false,
-			chance: 0.25,
+			chance: 0.35,
 		}],
 		found: "You found an old hut in the middle of the darkest part of the Forest",
 		notFound: "You search around but find no signs of the building",
