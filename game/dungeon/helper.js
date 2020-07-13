@@ -115,8 +115,4 @@ const validateHelper = async discordId =>{
 	return user.hero.currentHealth > user.hero.health * 0.05;
 };
 
-const randomIntBetweenMinMax = (min, max) => {
-	return Math.floor(Math.random() * (max - min + 1) + min);
-};
-
-module.exports = { getWeaponInfo, dungeonStartAllowed, validateHelper, randomIntBetweenMinMax };
+module.exports = { getWeaponInfo, dungeonStartAllowed, validateHelper };
