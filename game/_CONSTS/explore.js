@@ -10,7 +10,7 @@ const worldLocations = {
 					health: 100,
 				},
 				rewards:{
-					gold: 25,
+					gold: 135,
 				},
 			},
 			Wolves: {
@@ -33,17 +33,6 @@ const worldLocations = {
 			},
 		},
 		places:{
-			"Bandit Camp": {
-				name: "Bandit Camp",
-				type: "raid",
-				stats:{
-					attack: 200,
-					health: 200,
-				},
-				rewards:{
-					gold: 90,
-				},
-			},
 			"Fishing village": {
 				name: "Fishing village",
 				type: "raid",
@@ -52,22 +41,44 @@ const worldLocations = {
 					health: 120,
 				},
 				rewards:{
-					gold: 45,
-					"oak wood": 5,
-					"yew wood": 2,
+					gold: 100,
+					"oak wood": 15,
+					"yew wood": 10,
 				},
 			},
 			"Collapsed Mine": {
 				name: "Collapsed Mine",
 				type: "raid",
 				stats:{
-					attack: 100,
-					health: 100,
+					attack: 160,
+					health: 160,
 				},
 				rewards:{
-					gold: 35,
-					"copper ore": 3,
-					"iron ore": 2,
+					gold: 150,
+					"copper ore": 20,
+					"iron ore": 12,
+				},
+			},
+			"Bandit Camp": {
+				name: "Bandit Camp",
+				type: "raid",
+				stats:{
+					attack: 250,
+					health: 250,
+				},
+				rewards:{
+					gold: 280,
+				},
+			},
+			"Bandit Vault": {
+				name: "Bandit Vault",
+				type: "raid",
+				stats:{
+					attack: 350,
+					health: 350,
+				},
+				rewards:{
+					gold: 370,
 				},
 			},
 			Forest: {
@@ -78,10 +89,9 @@ const worldLocations = {
 					health: 25,
 				},
 				rewards:{
-					gold: 15,
-					"oak wood": 3,
-					"copper ore": 2,
-					"yew wood": 2,
+					gold: 16,
+					"oak wood": 2,
+					"yew wood": 1,
 				},
 			},
 			Cave: {
@@ -92,7 +102,19 @@ const worldLocations = {
 					health: 40,
 				},
 				rewards:{
-					gold: 45,
+					gold: 22,
+					"copper ore": 2,
+				},
+			},
+			Hills: {
+				name: "Hills",
+				type: "hunt",
+				stats:{
+					attack: 75,
+					health: 75,
+				},
+				rewards:{
+					gold: 42,
 				},
 			},
 			"C'Thun": {
@@ -211,8 +233,8 @@ const worldLocations = {
 				type: "raid",
 				notExplorable: true,
 				stats:{
-					attack: 600,
-					health: 600,
+					attack: 500,
+					health: 500,
 				},
 				rewards:{
 					"copper ore": 4,
@@ -226,8 +248,8 @@ const worldLocations = {
 				type: "raid",
 				notExplorable: true,
 				stats:{
-					attack: 700,
-					health: 800,
+					attack: 300,
+					health: 300,
 				},
 				rewards:{
 					gold: 170,
@@ -253,20 +275,20 @@ const worldLocations = {
 				type: "raid",
 				notExplorable: true,
 				stats:{
-					attack: 1350,
-					health: 1350,
+					attack: 850,
+					health: 850,
 				},
 				rewards:{
-					gold: 170,
+					gold: 470,
 				},
 			},
 			"Wood Elves": {
 				name: "Wood Elves",
 				type: "raid",
 				notExplorable: true,
-				stats:{
-					attack: 800,
-					health: 800,
+				stats: {
+					attack: 600,
+					health: 600,
 				},
 				rewards:{
 					"oak wood": 60,
@@ -282,8 +304,8 @@ const worldLocations = {
 					health: 100,
 				},
 				rewards:{
-					"yew wood": 20,
 					gold: 110,
+					"yew wood": 20,
 				},
 			},
 			"The Alpha Wolf": {
@@ -304,12 +326,12 @@ const worldLocations = {
 				type: "raid",
 				notExplorable: true,
 				stats:{
-					attack: 1800,
-					health: 1800,
+					attack: 1100,
+					health: 1100,
 				},
 				rewards:{
 					"steel bar": 40,
-					gold: 220,
+					gold: 720,
 				},
 			},
 		},

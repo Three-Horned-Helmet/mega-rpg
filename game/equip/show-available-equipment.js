@@ -3,7 +3,7 @@ const icons = require("../../icons/icons");
 const allItems = require("../items/all-items");
 
 const equipmentEmbed = (user) => {
-	const title = `${user.account.username}'s available equipment (usage: \`!equip <itemName\`):`;
+	const title = `${user.account.username}'s available equipment (usage: \`!equip <itemName>\`):`;
 	const sideColor = "#45b6fe";
 
 	const fields = Object.keys(user.army.armory).filter(el => !el.startsWith("$")).map(iType => {

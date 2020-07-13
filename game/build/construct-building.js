@@ -41,10 +41,10 @@ const checkIfBuildIsPossible = (user, building, coordinates) => {
 	}
 
 	// Checks if the building- and coordinates command is valid
-	if(coordinates.find(cord => cord > 3 || cord < 0) || coordinates.length !== 2) {
+	if(coordinates.find(cord => cord > 2 || cord < 0) || coordinates.length !== 2) {
 		return {
 			response: false,
-			message:"Please enter two coordinates between 0-3 divided by a punctuation, e.g: !build barracks 1.1 ",
+			message:"Please enter two coordinates between 0-2 divided by a punctuation, e.g: !build barracks 1.1 ",
 		};
 	}
 	else if(!building) {
@@ -86,8 +86,8 @@ const checkIfBuildIsPossible = (user, building, coordinates) => {
 };
 
 const findAvailableSpot = (user) => {
-	for(let y = 0; y < 4; y++) {
-		for(let x = 0; x < 4; x++) {
+	for(let y = 0; y < 3; y++) {
+		for(let x = 0; x < 3; x++) {
 			if(!user.empire.find(b => b.position[0] === x && b.position[1] === y)) {
 				return [x, y];
 			}

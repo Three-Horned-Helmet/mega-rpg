@@ -94,7 +94,6 @@ const handleHunt = async (user, place = null) => {
 	let questIntro;
 	const now = new Date();
 	user.setNewCooldown("hunt", now);
-	const huntEmbed = generateEmbedPveHero(user, placeInfo, huntResult, questIntro);
 	user.heroHpLossFixedAmount(huntResult.damageLost);
 
 	// user.heroHpLoss(huntResult.lossPercentage);
@@ -106,6 +105,7 @@ const handleHunt = async (user, place = null) => {
 	}
 	await user.save();
 	// generates a Discord embed
+	const huntEmbed = generateEmbedPveHero(user, placeInfo, huntResult, questIntro);
 
 	return huntEmbed;
 
