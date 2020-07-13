@@ -86,7 +86,7 @@ client.on("message", async (message) => {
 
 	// stops banned players
 	if (userProfile.account.banned) {
-		return message.reply(`<@${message.author.id}> - You are banned from Mega-RPG. You can plead for an unban at our support servers`);
+		return message.reply("You are banned from Mega-RPG. You can plead for an unban at our support servers");
 	}
 
 	// triggers captcha if:
