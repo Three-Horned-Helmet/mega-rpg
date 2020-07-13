@@ -17,7 +17,7 @@ const handleCaptcha = async (message, user, tries = 3)=> {
 		collector.stop();
 	});
 
-	collector.on("end", async collected => {
+	collector.on("end", async () => {
 		console.log(userAnswer, "useranswer");
 
 
