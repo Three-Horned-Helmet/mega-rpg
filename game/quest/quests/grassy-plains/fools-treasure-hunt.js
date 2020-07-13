@@ -12,7 +12,7 @@ module.exports = {
 		pve: [{
 			name: "Bandit Camp",
 			completed: false,
-			chance: 0.2,
+			chance: 0.4,
 		}],
 		found: "You found the second half of the Treasure Map",
 		notFound: "You look around for the second half of the Treasure Map, but found nothing",
@@ -40,7 +40,7 @@ module.exports = {
 				pve: [{
 					name: "Forest",
 					completed: false,
-					chance: 0.25,
+					chance: 0.30,
 				}],
 			};
 			user.addNewQuest(newQuest);
@@ -56,13 +56,13 @@ module.exports = {
 		pve: [{
 			name: "Forest",
 			completed: false,
-			chance: 0.25,
+			chance: 0.30,
 		}],
 		found: "You found an old hut in the middle of the darkest part of the Forest",
 		notFound: "You search around but find no signs of the building",
 		description: "The Treasure Map is in very rough shape making it diffcult to read the faded directions. After careful investigation, you figure out it leads to some sort of building deep inside of the **Forest**, however its exact location is not possible to understand.",
 		objective: "Search the **Forest** for the building drawn on the map",
-		reward: "Oak wood: 25\nYew wood: 25",
+		reward: "Oak wood: 40\nYew wood: 40",
 		winDescription: "The old hut is in terrible shape, and it is obvious that no one has been taking care of the surrounding overgrowth for years. As you make your way towards the hut you hear noises inside of it. Not human voices, but small screeches and rattle noises. You sneak up to a small dusty window and peak through it.\n**A new quest is available**",
 		questKeySequence: ["Grassy Plains", "lostMap"],
 
@@ -77,8 +77,8 @@ module.exports = {
 
 			// Get reward
 			await user.gainManyResources({
-				["oak wood"]: 25,
-				["yew wood"]: 25,
+				["oak wood"]: 40,
+				["yew wood"]: 40,
 			});
 
 			// Add next quest
@@ -112,7 +112,7 @@ module.exports = {
 		found: "You enter the main room in the hut",
 		description: "The hut is filled with several implings, small vile creatures made by the devil himself! The treasure must be inside of the hut, but there is no way to sneak in unnoticed... \n\nThere is only one solution to get to the treasure!",
 		objective: "Defeat the Pack of Implings! (`!hunt pack of implings`)",
-		reward: "Gold: 90",
+		reward: "Gold: 390",
 		winDescription: "The dead Implings are soaked in blood and spread across the floor. Exhausted from the battle you start looking around the old hut for signs of the treasure. \n\nThere are scratches along the walls, shattered vials on the shelves and blood stained on the floor. Somehow everything seems burnt... It must've been the implings. Surprisingly, the house has not been burned down.\n\nAs you strafe across the floor you stumble on a piece of wood sticking up from the floor. You lift it up and notice someone has been digging in the dirt underneath.\n**A new quest is available**",
 		questKeySequence: ["Grassy Plains", "packOfImplings"],
 
@@ -127,7 +127,7 @@ module.exports = {
 
 			// Get reward
 			await user.gainManyResources({
-				gold: 90,
+				gold: 390,
 			});
 
 			// Add next quest
