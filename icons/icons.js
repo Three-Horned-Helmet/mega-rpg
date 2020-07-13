@@ -4,6 +4,8 @@ module.exports = {
 
 	["oak wood"]: ":evergreen_tree:",
 	["yew wood"]: ":deciduous_tree:",
+	["barlind wood"]: ":tanabata_tree:",
+
 	["copper ore"]: ":orange_circle:",
 	["iron ore"]: ":white_circle:",
 	["obsidian ore"]: ":black_circle:",
