@@ -11,11 +11,11 @@ const heroExpToNextLevel = [
 	4200,
 	5000,
 	6200,
-	7800,
-	9000,
-	11500,
-	14500,
-	19000
+	8800,
+	12000,
+	17500,
+	25000,
+	39000
 ];
 
 const heroStatIncreaseOnLevel = [

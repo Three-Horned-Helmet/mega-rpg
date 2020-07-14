@@ -1,9 +1,9 @@
 const { handleHunt } = require("../game/hunt");
-const { getPlaceIcon } = require("../game/_CONSTS/icons");
+const { getIcon } = require("../game/_CONSTS/icons");
 
 module.exports = {
 	name: "hunt",
-	description: `Let's the player hunt the previously explored ${getPlaceIcon("hunt")}'hunt areas'`,
+	description: `Let's the player hunt the previously explored ${getIcon("hunt")}'hunt areas'`,
 	async execute(message, args, user) {
 		// trigger captcha 1% of time
 		const place = args.join("").toLowerCase();

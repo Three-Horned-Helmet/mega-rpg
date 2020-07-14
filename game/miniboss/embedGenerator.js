@@ -1,19 +1,17 @@
 const Discord = require("discord.js");
-const { getLocationIcon, getPlaceIcon, getDungeonKeyIcon, getGreenRedIcon, getResourceIcon } = require("../_CONSTS/icons");
+const { getIcon } = require("../_CONSTS/icons");
 
 const createMinibossInvitation = (miniboss, user)=>{
 	const sideColor = "#45b6fe";
 	const { username } = user.account;
 	const { currentLocation } = user.world;
-	const locationIcon = getLocationIcon(currentLocation);
-	const minibossIcon = getPlaceIcon("miniboss");
 
-	const rules = `\`Army allowed: ${getGreenRedIcon(miniboss.rules.allowArmy)}\`\n \`Miniboss deadly: ${getGreenRedIcon(miniboss.rules.canKill)}\`\n \`Helpers allowed: ${getGreenRedIcon(miniboss.rules.allowHelpers)}\``;
-	const rewards = `${getResourceIcon("gold")} \`Gold: ${miniboss.rewards.gold}\`\n ${getResourceIcon("xp")} \`XP: ${miniboss.rewards.xp}\` \n ${getDungeonKeyIcon(miniboss.rewards.dungeonKey)} \` Key: ${miniboss.rewards.dungeonKey}\``;
+	const rules = `\`Army allowed: ${getIcon(miniboss.rules.allowArmy)}\`\n \`Miniboss deadly: ${getIcon(miniboss.rules.canKill)}\`\n \`Helpers allowed: ${getIcon(miniboss.rules.allowHelpers)}\``;
+	const rewards = `${getIcon("gold")} \`Gold: ${miniboss.rewards.gold}\`\n ${getIcon("xp")} \`XP: ${miniboss.rewards.xp}\` \n ${getIcon(miniboss.rewards.dungeonKey)} \` Key: ${miniboss.rewards.dungeonKey}\``;
 
 	const embedInvitation = new Discord.MessageEmbed()
 		.setTitle(`A Miniboss has been triggered by ${username}!`)
-		.setDescription(`Help to defeat ${minibossIcon} ${miniboss.name} from ${locationIcon} ${currentLocation} `)
+		.setDescription(`Help to defeat ${getIcon("miniboss")} ${miniboss.name} from ${getIcon(currentLocation)} ${currentLocation} `)
 		.setColor(sideColor)
 		.addFields(
 			{
@@ -27,7 +25,7 @@ const createMinibossInvitation = (miniboss, user)=>{
 				inline: false,
 			},
 		)
-		.setFooter(`React with a ${getPlaceIcon("miniboss")} within 20 seconds to participate! (max 10!)`);
+		.setFooter(`React with a ${getIcon("miniboss")} within 20 seconds to participate! (max 10!)`);
 
 	return embedInvitation;
 };
@@ -45,7 +43,7 @@ const createMiniBossResultLoss = (result, minibossEvent) =>{
 
 	const initiativeTakerDamage = `-${result.damageDealt.initiativeTaker} HP`;
 
-	const minibossIcon = getPlaceIcon("miniboss");
+	const minibossIcon = getIcon("miniboss");
 	const fields = [
 		{
 			name: `${initiativeTaker}`,
@@ -80,11 +78,11 @@ const createMiniBossResultWin = (result, minibossEvent) =>{
 	const sideColor = "#45b6fe";
 	const initiativeTaker = result.initiativeTaker.account.username;
 
-	let initiativeTakerRewards = `${getResourceIcon("gold")} Gold: ${result.rewards.initiativeTaker.gold} \n\n ${getResourceIcon("xp")} XP: ${result.rewards.initiativeTaker.xp}`;
+	let initiativeTakerRewards = `${getIcon("gold")} Gold: ${result.rewards.initiativeTaker.gold} \n\n ${getIcon("xp")} XP: ${result.rewards.initiativeTaker.xp}`;
 	if (result.rewards.initiativeTaker.dungeonKey) {
-		initiativeTakerRewards += `\n\n ${getDungeonKeyIcon(result.rewards.initiativeTaker.dungeonKey)} ${result.rewards.initiativeTaker.dungeonKey} !`;
+		initiativeTakerRewards += `\n\n ${getIcon(result.rewards.initiativeTaker.dungeonKey)} ${result.rewards.initiativeTaker.dungeonKey} !`;
 	}
-	const minibossIcon = getPlaceIcon("miniboss");
+	const minibossIcon = getIcon("miniboss");
 	const fields = [
 		{
 			name: `${initiativeTaker} rewards`,
@@ -95,7 +93,7 @@ const createMiniBossResultWin = (result, minibossEvent) =>{
 	if (result.helpers.length) {
 		fields.push({
 			name: "Helpers rewards",
-			value: result.helpers.map((h, i)=> `${result.rewards.helpers[i].helperName}:\n${getResourceIcon("gold")} Gold: ${result.rewards.helpers[i].randomHelperGold} \n ${getResourceIcon("xp")} XP: ${result.rewards.helpers[i].randomHelperXp}${result.rewards.helpers[i].helperLeveledUp ? " 💪" : ""}\n\n`),
+			value: result.helpers.map((h, i)=> `${result.rewards.helpers[i].helperName}:\n${getIcon("gold")} Gold: ${result.rewards.helpers[i].randomHelperGold} \n ${getIcon("xp")} XP: ${result.rewards.helpers[i].randomHelperXp}${result.rewards.helpers[i].helperLeveledUp ? " 💪" : ""}\n\n`),
 			inline: true,
 		});
 	}

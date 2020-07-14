@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const { getResourceIcon, getPlaceIcon } = require("../game/_CONSTS/icons");
+const { getIcon } = require("../game/_CONSTS/icons");
 
 function generateEmbedPveFullArmy(user, placeInfo, pveResult, questIntro = false) {
 	if (pveResult.win) {
@@ -20,13 +20,13 @@ function generateEmbedPveHero(user, placeInfo, pveResult, questIntro = false) {
 function generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro) {
 	const sideColor = "#45b6fe";
 	const placeName = placeInfo.name;
-	const placeIcon = getPlaceIcon(placeInfo.type);
+	const placeIcon = getIcon(placeInfo.type);
 
 	const { username } = user.account;
 	const title = `${username}'s army raided ${placeIcon} ${placeName}`;
 
 	const resourceReward = Object.keys(pveResult.resourceReward).map(r=>{
-		return `${getResourceIcon(r)} ${r}: **${pveResult.resourceReward[r]}**`;
+		return `${getIcon(r)} ${r}: **${pveResult.resourceReward[r]}**`;
 	});
 
 	let expReward = `+ **${pveResult.expReward}** exp\n`;
@@ -78,7 +78,7 @@ function generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro) {
 function generateEmbedPveFullArmyLoss(user, placeInfo, pveResult) {
 	const sideColor = "#45b6fe";
 	const placeName = placeInfo.name;
-	const placeIcon = getPlaceIcon(placeInfo.type);
+	const placeIcon = getIcon(placeInfo.type);
 
 	const { username } = user.account;
 	const title = `${username} failed to raid ${placeIcon} ${placeName} `;
@@ -124,13 +124,13 @@ function generateEmbedPveFullArmyLoss(user, placeInfo, pveResult) {
 function generateEmbedPveHeroWin(user, placeInfo, pveResult, questIntro) {
 	const sideColor = "#45b6fe";
 	const placeName = placeInfo.name;
-	const placeIcon = getPlaceIcon(placeInfo.type);
+	const placeIcon = getIcon(placeInfo.type);
 
 	const { username } = user.account;
 	const title = `${username}'s hero hunted ${placeIcon} ${placeName}`;
 
 	const resourceReward = Object.keys(pveResult.resourceReward).map(r=>{
-		return `${getResourceIcon(r)} ${r}: **${pveResult.resourceReward[r]}**`;
+		return `${getIcon(r)} ${r}: **${pveResult.resourceReward[r]}**`;
 	});
 
 	let expReward = `+ **${pveResult.expReward}** exp\n`;
@@ -181,7 +181,7 @@ function generateEmbedPveHeroWin(user, placeInfo, pveResult, questIntro) {
 function generateEmbedPveHeroLoss(user, placeInfo, pveResult) {
 	const sideColor = "#45b6fe";
 	const placeName = placeInfo.name;
-	const placeIcon = getPlaceIcon(placeInfo.type);
+	const placeIcon = getIcon(placeInfo.type);
 
 	const { username } = user.account;
 	const title = `${username}'s army failed to hunt ${placeIcon} ${placeName} `;

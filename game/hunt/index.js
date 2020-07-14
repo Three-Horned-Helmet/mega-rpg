@@ -1,6 +1,6 @@
 const { onCooldown } = require("../_CONSTS/cooldowns");
 const { worldLocations } = require("../_CONSTS/explore");
-const { getLocationIcon } = require("../_CONSTS/icons");
+const { getIcon } = require("../_CONSTS/icons");
 const { calculatePveHero } = require("../../combat/combat");
 const { generateEmbedPveHero } = require("../../combat/pveEmedGenerator");
 const { checkQuest } = require("../quest/quest-utils");
@@ -23,7 +23,7 @@ const handleHunt = async (user, place = null) => {
 
 	const { currentLocation } = user.world;
 	const placesInCurrentWorld = worldLocations[currentLocation].places;
-	const locationIcon = getLocationIcon(currentLocation);
+	const locationIcon = getIcon(currentLocation);
 	const userExploredPlaces = user.world.locations[currentLocation].explored;
 
 	const userExploredHuntPlaces = userExploredPlaces

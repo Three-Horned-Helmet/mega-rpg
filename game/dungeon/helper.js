@@ -1,5 +1,5 @@
 const User = require("../../models/User");
-const { getLocationIcon, getDungeonKeyIcon } = require("../_CONSTS/icons");
+const { getIcon } = require("../_CONSTS/icons");
 const { worldLocations } = require("../_CONSTS/explore");
 const { onCooldown } = require("../_CONSTS/cooldowns");
 const getWeaponInfo = (weapon, num = null)=>{
@@ -82,7 +82,7 @@ const dungeonStartAllowed = (user)=>{
 	}
 
 	const { currentLocation } = user.world;
-	const locationIcon = getLocationIcon(currentLocation);
+	const locationIcon = getIcon(currentLocation);
 	const dungeonInformation = Object.values(worldLocations[currentLocation].places).find(p=>{
 		return p.type === "dungeon";
 	});
@@ -94,7 +94,7 @@ const dungeonStartAllowed = (user)=>{
 	// Checks if user has the correct key
 	const requiredDungeonKey = dungeonInformation.requires;
 	if (!user.hero.dungeonKeys[requiredDungeonKey]) {
-		let response = `You try to enter ${dungeonInformation.name}, but you don't have the required ${getDungeonKeyIcon(requiredDungeonKey)} ${requiredDungeonKey} to proceed. `;
+		let response = `You try to enter ${dungeonInformation.name}, but you don't have the required ${getIcon(requiredDungeonKey)} ${requiredDungeonKey} to proceed. `;
 		if (user.hero.rank < 2) {
 			response += `Try defeating the miniboss in ${locationIcon} ${currentLocation} to obtain the required dungeon key`;
 		}

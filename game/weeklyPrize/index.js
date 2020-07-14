@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const { onCooldown } = require("../_CONSTS/cooldowns");
 const { getWeeklyPrize } = require("../_CONSTS/weeklyPrize");
-const { getResourceIcon } = require("../_CONSTS/icons");
+const { getIcon } = require("../_CONSTS/icons");
 
 const handleWeekly = async (user) => {
 	const onCooldownInfo = onCooldown("weeklyPrize", user);
@@ -28,7 +28,7 @@ const handleWeekly = async (user) => {
 };
 
 const generatePrizeEmbed = (result, consecutiveWeek)=>{
-	getResourceIcon();
+	getIcon();
 
 	const sideColor = "#45b6fe";
 
@@ -44,7 +44,7 @@ const generatePrizeEmbed = (result, consecutiveWeek)=>{
 	let valueField = "";
 
 	Object.keys(result).forEach(r=>{
-		valueField += `${getResourceIcon(r)} ${r}: ${result[r]}\n`;
+		valueField += `${getIcon(r)} ${r}: ${result[r]}\n`;
 	});
 
 	const lexicon = ["first", "second", "third", "fourth", "fifth (max)"];

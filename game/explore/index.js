@@ -1,6 +1,6 @@
 const { onCooldown } = require("../_CONSTS/cooldowns");
 const { worldLocations } = require("../_CONSTS/explore");
-const { getLocationIcon, getPlaceIcon } = require("../_CONSTS/icons");
+const { getIcon } = require("../_CONSTS/icons");
 
 // TODO: finish handleRandomEvent
 // needed: a battlefunction
@@ -60,7 +60,7 @@ module.exports = { handleExplore };
 // user.setNewCooldown("explore", now);
 
 const generateFailExploreMessage = (currentLocation) => {
-	const worldIcon = getLocationIcon(currentLocation);
+	const worldIcon = getIcon(currentLocation);
 	const responses = [
 		"After a long adventure, you came back exploring nothing new",
 		`You walked around in ${worldIcon} ${currentLocation} finding nothing you haven't seen before`,
@@ -73,9 +73,9 @@ const generateFailExploreMessage = (currentLocation) => {
 	return response;
 };
 const generateSuccessExploreMessage = (currentLocation, place, heroRank) => {
-	const worldIcon = getLocationIcon(currentLocation);
+	const worldIcon = getIcon(currentLocation);
 	const placeType = worldLocations[currentLocation].places[place].type;
-	const placeIcon = getPlaceIcon(placeType);
+	const placeIcon = getIcon(placeType);
 	const strings = [
 		`You went onto a new path and found a ${placeIcon} **${place}**`,
 		`You explored for hours and upon your return you found a ${placeIcon} **${place}** behind your empire`,

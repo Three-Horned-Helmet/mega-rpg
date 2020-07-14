@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const getStats = require("../../combat/calculate-stats");
-const icons = require("../../icons/icons");
+const { getIcon } = require("../_CONSTS/icons");
 
 const stakeInviteEmbed = (user, opponent, stakedItems) => {
 	const { username } = user.account;
@@ -51,8 +51,6 @@ const stakeInviteEmbed = (user, opponent, stakedItems) => {
 		.addFields(
 			...fields,
 		);
-
-	// .setFooter(`PVP: #${pvpRank} ~~~ Total: #${totalRank}`);
 	return embedDuel;
 };
 
@@ -60,7 +58,7 @@ const statsMessage = (stats) => {
 	let message = "";
 
 	for(const stat in stats) {
-		message += `${icons[stat]} ${stat.capitalize()}: ${stats[stat]} \n`;
+		message += `${getIcon(stat)} ${stat.capitalize()}: ${stats[stat]} \n`;
 	}
 
 	return message;

@@ -2,6 +2,7 @@
 const sleep = require("util").promisify(setTimeout);
 const { dungeonStartAllowed } = require("./helper");
 const { checkQuest } = require("../quest/quest-utils");
+const { getIcon } = require("../_CONSTS/icons");
 
 const { createDungeonBossRound } = require("./dungeonBoss");
 const { calculatePveFullArmyResult } = require("../../combat/combat");
@@ -11,8 +12,8 @@ const {
 } = require("./embedGenerator");
 const { asyncForEach } = require("../_GLOBAL_HELPERS/");
 
-const ICON_FORBIDDEN = "🚫";
-const ICON_CHECK = "✅";
+const ICON_FORBIDDEN = getIcon("false");
+const ICON_CHECK = getIcon("true");
 
 const startDungeonRooms = async (message, progress) => {
 	const { initiativeTaker } = progress;
