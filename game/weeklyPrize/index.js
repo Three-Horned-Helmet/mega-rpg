@@ -28,16 +28,12 @@ const handleWeekly = async (user) => {
 };
 
 const generatePrizeEmbed = (result, consecutiveWeek)=>{
-	getIcon();
-
 	const sideColor = "#45b6fe";
 
 	const preTitle = " WEEKLY PRIZE  ";
 	const consecutiveStars = "🌟".repeat(consecutiveWeek + 1);
 
-	let title = consecutiveStars;
-	title += preTitle;
-	title += consecutiveStars;
+	const title = `${consecutiveStars} ${preTitle} ${consecutiveStars}`;
 	// "🌟🌟🌟 WEEKLY PRIZE 🌟🌟🌟"
 
 

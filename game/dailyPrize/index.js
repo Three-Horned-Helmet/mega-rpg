@@ -29,16 +29,12 @@ const handleDaily = async (user) => {
 };
 
 const generatePrizeEmbed = (result, consecutiveDay)=>{
-	getIcon();
-
 	const sideColor = "#45b6fe";
 
 	const preTitle = " DAILY PRIZE  ";
 	const consecutiveStars = "⭐️".repeat(consecutiveDay + 1);
 
-	let title = consecutiveStars;
-	title += preTitle;
-	title += consecutiveStars;
+	const title = `${consecutiveStars} ${preTitle} ${consecutiveStars}`;
 	// "⭐️⭐️⭐️ DAILY PRIZE ⭐️⭐️⭐️"
 
 	let valueField = "";
