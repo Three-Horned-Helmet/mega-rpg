@@ -362,6 +362,10 @@ userSchema.methods.buyBuilding = function(building, buildingCost) {
 	return this.save();
 };
 
+userSchema.methods.destroyBuilding = function(building) {
+	this.empire = this.empire.filter(structure => !(structure.position[0] === building.position[0] && structure.position[1] === building.position[1]));
+};
+
 userSchema.methods.changeBuildingLevel = function(buildingName, buildingLevel, level) {
 	let buildingIndex = -1;
 	const userBuilding = this.empire.find((structure, i) =>{
