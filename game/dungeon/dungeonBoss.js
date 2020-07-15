@@ -2,8 +2,8 @@ const {
 	generateDungeonBossRound,
 	generateDungeonBossResult,
 } = require("./embedGenerator");
-const { getWeaponInfo, randomIntBetweenMinMax } = require("./helper");
-const { asyncForEach } = require("../_GLOBAL_HELPERS/");
+const { getWeaponInfo } = require("./helper");
+const { asyncForEach, randomIntBetweenMinMax } = require("../_GLOBAL_HELPERS/");
 
 const createDungeonBossRound = async (message, progress) => {
 	const { numOfAllowedWeapons } = progress.dungeon.boss;

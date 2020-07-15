@@ -234,6 +234,7 @@ describe("miniboss command", () => {
 
 			currentHealth: 100,
 			health:100,
+			rank:-1,
 			stats:{
 				attack:1,
 				defense:1,

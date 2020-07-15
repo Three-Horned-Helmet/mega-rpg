@@ -43,5 +43,9 @@ const eloCalculations = (playerRating, opponentRating, fightResult)=>{
 	};
 };
 
+const randomIntBetweenMinMax = (min, max) => {
+	return Math.floor(Math.random() * (max - min + 1) + min);
+};
 
-module.exports = { asyncForEach, deepCopyFunction, eloCalculations };
+
+module.exports = { asyncForEach, deepCopyFunction, eloCalculations, randomIntBetweenMinMax };

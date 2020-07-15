@@ -54,7 +54,7 @@ const statistics = {
 		type: Number,
 		default:0,
 	},
-	cooldowns: {
+	cooldown: {
 		type: Number,
 		default:0,
 	},
@@ -62,7 +62,7 @@ const statistics = {
 		type: Number,
 		default:0,
 	},
-	dailyPrize: {
+	daily: {
 		type: Number,
 		default:0,
 	},
@@ -154,7 +154,7 @@ const statistics = {
 		type: Number,
 		default:0,
 	},
-	weeklyPrize:{
+	weekly:{
 		type: Number,
 		default:0,
 	},

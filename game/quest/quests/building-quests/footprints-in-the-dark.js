@@ -67,7 +67,7 @@ module.exports = {
 		description: "The footprints lead away from the Lumbermill, and you decide to follow them alone to make sure the lumberjacks were telling the truth and they had nothing to do with destruction. You bring your equipment and set out into the forest.",
 		winDescription: "You turn to the noise, quickly drawing your weapon! Walking a step toward the source of the sound you feel a sharp pain at the back of the head. The world turns black as you lose consciousness.\n**A new quest is available**",
 		objective: "Follow the footsteps into the **Forest**",
-		reward: "Oak wood: 30\n",
+		reward: "Oak wood: 40\n",
 		questKeySequence: ["Building Quests", "findingSaboteurs"],
 
 		// Returns false if the quest description is shown, or true if the quest is being completed
@@ -81,7 +81,7 @@ module.exports = {
 
 			// Get reward
 			await user.gainManyResources({
-				"oak wood": 30,
+				"oak wood": 40,
 			});
 
 			// Add next quest
