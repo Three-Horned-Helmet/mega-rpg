@@ -1,4 +1,4 @@
-const destroyHandler = require("../game/destroy/destroy");
+const { destroyHandler } = require("../game/destroy/destroy");
 
 module.exports = {
 	name: "destroy",

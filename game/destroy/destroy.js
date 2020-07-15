@@ -38,4 +38,4 @@ const checkIfDestroyIsPossible = (user, arg) => {
 	};
 };
 
-module.exports = destroyHandler;
+module.exports = { destroyHandler, checkIfDestroyIsPossible };
