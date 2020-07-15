@@ -1,74 +1,76 @@
-/* eslint-disable no-inline-comments */
 const icons = {
 	// Resources
-	"gold": ":moneybag:", // 💰
+	"gold": { name:":moneybag:", icon:"💰" },
 
-	"oak wood": ":evergreen_tree:", // 🌳
-	"yew wood": ":deciduous_tree:",
-	"barlind wood": ":tanabata_tree:", // 🎋
+	"oak wood":{ name: ":evergreen_tree:", icon: "🌲" },
+	"yew wood":{ name: ":deciduous_tree:", icon: "🌳" },
+	"barlind wood":{ name: ":tanabata_tree:", icon: "🎋" },
 
-	"copper ore": ":orange_circle:",
-	"iron ore": ":white_circle:",
-	"obsidian ore": ":black_circle:",
+	"copper ore":{ name: ":orange_circle:", icon: "🟠" },
+	"iron ore":{ name: ":white_circle:", icon: "⚪️" },
+	"obsidian ore":{ name: ":black_circle:", icon: "⚫️" },
 
-	"bronze bar": ":orange_square:",
-	"iron bar": ":white_large_square:",
-	"steel bar": ":brown_square:",
+	"bronze bar":{ name: ":orange_square:", icon: "🟧" },
+	"iron bar":{ name: ":white_large_square:", icon: "⬜️" },
+	"steel bar":{ name: ":brown_square:", icon: "🟫" },
 
 	// Universe
-	"Grassy Plains" : ":deciduous_tree:", // 🌳
-	"Misty Mountains" : ":mountain_snow:", // 🏔
-	"Deep Caves" : ":volcano:", // 🌋
+	"Grassy Plains" :{ name: ":deciduous_tree:", icon: "🌳" },
+	"Misty Mountains" :{ name: ":mountain_snow:", icon: "🏔" },
+	"Deep Caves" :{ name: ":volcano:", icon: "🌋" },
 
 	// actions
-	"raid": ":man_supervillain:", // 🦹‍♂️
-	"hunt": ":frog:", // 🐸
-	"miniboss": ":zombie:", // 🧟
-	"fish": ":blowfish:", // 🐡
-	"dungeon": ":map:", // 🗺
+	"raid":{ name: ":man_supervillain:", icon: "🦹‍♂️" },
+	"hunt":{ name: ":frog:", icon: "🐸" },
+	"miniboss":{ name: ":zombie:", icon: "🧟" },
+	"fish":{ name: ":blowfish:", icon: "🐡" },
+	"dungeon":{ name: ":map:", icon: "🗺" },
 
 	// dungeon keys
-	"CM Key":":key2:", // 🗝
-	"The One Shell":":shell:", // 🐚
-	"Eridian Vase": ":amphora:", // 🏺
+	"CM Key":{ name: ":key2:", icon: "🗝" },
+	"The One Shell":{ name: ":shell:", icon: "🐚" },
+	"Eridian Vase":{ name: ":amphora:", icon: "🏺" },
 
 	// Military units
-	"archery":":archery:",
-	"barracks": ":crossed_swords:",
+	"archery":{ name: ":archery:", icon: "🏹" },
+	"barracks":{ name: ":crossed_swords:", icon: "⚔️" },
 
 	// Equipment Types
-	"weapon": ":probing_cane:",
-	"helmet": ":helmet_with_cross:",
-	"chest": ":womans_clothes:",
-	"legging": ":jeans:",
+	"weapon":{ name: ":probing_cane:", icon: "🦯" },
+	"helmet":{ name: ":helmet_with_cross:", icon: "⛑" },
+	"chest":{ name: ":womans_clothes:", icon: "👚" },
+	"legging":{ name: ":jeans:", icon: "👖" },
 
 	// Stats
-	"xp": ":mortar_board:", // 🎓
-	"health": ":heart:", // ❤️
-	"attack": ":crossed_swords:", // ⚔️
-	"defense": ":shield:", // 🛡
+	"xp":{ name: ":mortar_board:", icon: "🎓" },
+	"health":{ name: ":heart:", icon: "❤️" },
+	"attack":{ name: ":crossed_swords:", icon: "⚔️" },
+	"defense":{ name: ":shield:", icon: "🛡" },
 
 	// Hero
-	"armor": ":martial_arts_uniform:",
-	"inventory": ":school_satchel:",
+	"armor":{ name: ":martial_arts_uniform:", icon: "🥋" },
+	"inventory":{ name: ":school_satchel:", icon: "🎒" },
 
 	// dungeon weapons
-	"strike": ":knife:", // 🔪
-	"critical": ":bangbang:", // ‼️
-	"slash": ":dagger:", // 🗡
-	"disarm": ":dove:", // 🕊
-	"heal": ":test_tube:", // 🧪
-	"poke": ":point_right:", // 👉
+	"strike":{ name: ":knife:", icon: "🔪" },
+	"critical":{ name: ":bangbang:", icon: "‼️" },
+	"slash":{ name: ":dagger:", icon: "🗡" },
+	"disarm":{ name: ":dove:", icon: "🕊" },
+	"heal":{ name: ":test_tube:", icon: "🧪" },
+	"poke":{ name: ":point_right:", icon: "👉" },
 
 	// Misc
-	"false": ":x:", // ❌
-	"true": ":white_check_mark:" // ✅
+	"false":{ name: ":x:", icon: "❌" },
+	"true":{ name: ":white_check_mark:", icon: "✅" },
 };
 /**
  * Returns an emoji if configured in icons-object or a danger symbol if missing
  * @param {string} type - eg: "gold", "copper ore" or "true"
+ * @param {string} style - enum: "name" (":knife:") or "icon" ("🔪")
+ * NOTE: message.react and icons in footer of embeds needs to be icon and not name.
  **/
-const getIcon = (type)=> icons[type] || "⚠️";
+
+const getIcon = (type, style = "name")=> icons[type] ? icons[type][style] : "⚠️";
 
 
 module.exports = { getIcon };

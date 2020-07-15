@@ -23,7 +23,7 @@ const getWorld = (user) => {
 
 	Object.keys(worldLocations[currentLocation].places).map(p=>{
 		const { type } = worldLocations[currentLocation].places[p];
-		legend.add(`${getIcon(type)}: !${type} - `);
+		legend.add(`${getIcon(type, "icon")} : !${type} - `);
 	});
 	const footerFriendlyLegend = Array.from(legend).join("");
 	const fields = [

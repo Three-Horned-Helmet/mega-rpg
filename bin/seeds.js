@@ -59,6 +59,7 @@ for (let i = 0; i < 20; i++) {
 				},
 			},
 		},
+		completedQuests: Array.from({ length:Math.floor(Math.random() * 12) }, (n, j)=> `myFakeQuest${j}`)
 	});
 }
 

@@ -47,5 +47,14 @@ const randomIntBetweenMinMax = (min, max) => {
 	return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
+// works as .filter for arrays, but objects
+// https://stackoverflow.com/questions/5072136/javascript-filter-for-objects
+// usage: objectFilter(someObject, x => x > 1);
+const objectFilter = (obj, predicate) => {
+	return Object.keys(obj)
+		.filter(key => predicate(obj[key]))
+		.reduce((res, key) => (res[key] = obj[key], res), {});
+};
 
-module.exports = { asyncForEach, deepCopyFunction, eloCalculations, randomIntBetweenMinMax };
+
+module.exports = { asyncForEach, deepCopyFunction, eloCalculations, randomIntBetweenMinMax, objectFilter };

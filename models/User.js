@@ -335,8 +335,7 @@ userSchema.methods.setNewCooldown = function(type, now) {
 	this.cooldowns[type] = now;
 };
 
-userSchema.methods.handleExplore = function(now, currentLocation, place) {
-	this.cooldowns.explore = now;
+userSchema.methods.handleExplore = function(currentLocation, place) {
 	if (!this.world.locations[currentLocation].explored.includes(place)) {
 		this.world.locations[currentLocation].explored.push(place);
 		this.markModified(this.world.locations[currentLocation].explored);

@@ -45,11 +45,27 @@ const getTop5Army = async (user)=>{
 };
 
 const getTop5Quest = async (user)=>{
-	const allUsers = await User
-		.find({})
-		.select(["account", "completedQuests"])
-		.sort({ "completedQuests":-1 })
-		.lean();
+
+	const allUsers = await User.aggregate([
+		{
+			$addFields: {
+				completedQuestsLength: {
+					$size: "$completedQuests"
+				}
+			}
+		},
+		{ $project:{
+			account:1,
+			completedQuestsLength:1,
+			completedQuests: 1
+		}
+		},
+		{
+			$sort: {
+				completedQuestsLength: -1
+			}
+		}
+	]);
 
 	const top5 = allUsers.slice(0, 5);
 

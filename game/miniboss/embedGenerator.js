@@ -78,9 +78,9 @@ const createMiniBossResultWin = (result, minibossEvent) =>{
 	const sideColor = "#45b6fe";
 	const initiativeTaker = result.initiativeTaker.account.username;
 
-	let initiativeTakerRewards = `${getIcon("gold")} Gold: ${result.rewards.initiativeTaker.gold} \n\n ${getIcon("xp")} XP: ${result.rewards.initiativeTaker.xp}`;
+	let initiativeTakerRewards = `${getIcon("gold")} Gold: ${result.rewards.initiativeTaker.gold} \n ${getIcon("xp")} XP: ${result.rewards.initiativeTaker.xp}`;
 	if (result.rewards.initiativeTaker.dungeonKey) {
-		initiativeTakerRewards += `\n\n ${getIcon(result.rewards.initiativeTaker.dungeonKey)} ${result.rewards.initiativeTaker.dungeonKey} !`;
+		initiativeTakerRewards += `\n ${getIcon(result.rewards.initiativeTaker.dungeonKey)} ${result.rewards.initiativeTaker.dungeonKey} !`;
 	}
 	const minibossIcon = getIcon("miniboss");
 	const fields = [
