@@ -53,6 +53,17 @@ describe("destroy commands", () => {
 		expect(result.response).to.be.equal(false);
 	});
 
+	it("should have barracks at position 0.0 as default for testUser", async ()=>{
+		const testUser = await createTestUser({ empire });
+
+		const check = (user) => {
+			if(user.empire.length === 1 && user.empire[0].name === "barracks" && user.empire[0].position[0] === 0 && user.empire[0].position[1] === 0) return true;
+			return false;
+		};
+
+		expect(check(testUser)).to.be.equal(true);
+	});
+
 	it("should remove a building if the correct coordinates are applied", async ()=>{
 		const testUser = await createTestUser({ empire });
 
