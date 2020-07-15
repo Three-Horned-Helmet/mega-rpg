@@ -54,7 +54,7 @@ describe("destroy commands", () => {
 	});
 
 	it("should have barracks at position 0.0 as default for testUser", async ()=>{
-		const testUser = await createTestUser({ empire });
+		const testUser = await createTestUser();
 
 		expect(testUser.empire.length).to.be.equal(0);
 	});
