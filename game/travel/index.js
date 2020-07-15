@@ -1,5 +1,5 @@
 const { worldLocations } = require("../_CONSTS/explore");
-const { getLocationIcon } = require("../_CONSTS/icons");
+const { getIcon } = require("../_CONSTS/icons");
 const handleTravel = async (user, travelDestination) => {
 	const { currentLocation } = user.world;
 
@@ -8,7 +8,7 @@ const handleTravel = async (user, travelDestination) => {
 		.map(location=> location.split(" ").join("").toLowerCase("").substring(0, 4));
 
 	if (playerUnlockedLocations.length < 2) {
-		return `You haven't unlocked anything but ${getLocationIcon(currentLocation)} ${currentLocation}`;
+		return `You haven't unlocked anything but ${getIcon(currentLocation)} ${currentLocation}`;
 	}
 	const shortAnswer = travelDestination.substring(0, 4);
 	// allows the player to not type out the ful name
@@ -18,7 +18,7 @@ const handleTravel = async (user, travelDestination) => {
 		});
 		const worldDescription = worldLocations[newDestination[0]].description;
 		await user.locationTravel(newDestination[0]);
-		return `You traveled to ${getLocationIcon(newDestination)} ${newDestination[0]}\n${worldDescription}`;
+		return `You traveled to ${getIcon(newDestination)} ${newDestination[0]}\n${worldDescription}`;
 	}
 
 	return "You can't travel there. Try ` !look ` to see your available locations - if any..";

@@ -1,12 +1,12 @@
 const Discord = require("discord.js");
 
 const { worldLocations } = require("../_CONSTS/explore");
-const { getLocationIcon, getPlaceIcon } = require("../_CONSTS/icons");
+const { getIcon } = require("../_CONSTS/icons");
 
 const getWorld = (user) => {
 
 	const { currentLocation } = user.world;
-	const currentLocationWithIcon = `${getLocationIcon(currentLocation)} ${currentLocation}`;
+	const currentLocationWithIcon = `${getIcon(currentLocation)} ${currentLocation}`;
 
 	const exploreCommand = "```!explore```";
 	const defaultNonExplored = `You have not explored anything in ${currentLocation}\ntry: ${exploreCommand}`;
@@ -14,7 +14,7 @@ const getWorld = (user) => {
 	const exploredPlaces = user.world.locations[currentLocation].explored;
 	const exploredPlacesWithIcons = exploredPlaces.length ? exploredPlaces.map(place=>{
 		const { type } = worldLocations[currentLocation].places[place];
-		return `${getPlaceIcon(type)} ${place}`;
+		return `${getIcon(type)} ${place}`;
 	}) : defaultNonExplored;
 
 	const sideColor = "#45b6fe";
@@ -23,7 +23,7 @@ const getWorld = (user) => {
 
 	Object.keys(worldLocations[currentLocation].places).map(p=>{
 		const { type } = worldLocations[currentLocation].places[p];
-		legend.add(`${getPlaceIcon(type)}: !${type} - `);
+		legend.add(`${getIcon(type)}: !${type} - `);
 	});
 	const footerFriendlyLegend = Array.from(legend).join("");
 	const fields = [
@@ -42,7 +42,7 @@ const getWorld = (user) => {
 
 	const availableLocations = Object.keys(user.world.locations)
 		.filter(l=> user.world.locations[l].available === true && l !== currentLocation)
-		.map(l=> `${getLocationIcon(l)} ${l}`);
+		.map(l=> `${getIcon(l)} ${l}`);
 
 	if (availableLocations.length) {
 		fields.splice(1, 0, {

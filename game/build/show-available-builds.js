@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const icons = require("../../icons/icons");
+const { getIcon } = require("../_CONSTS/icons");
 const buildingsObj = require("./buildings-object");
 
 const buildingEmbed = (user) => {
@@ -35,7 +35,6 @@ const buildingEmbed = (user) => {
 			...fields,
 		);
 
-	// .setFooter(`PVP: #${pvpRank} ~~~ Total: #${totalRank}`);
 	return embedBuilding;
 };
 
@@ -63,7 +62,7 @@ const costsMessage = (costs) => {
 	let message = "";
 
 	for(const cost in costs) {
-		message += `${icons[cost] || ""} ${cost.capitalize()}: ${costs[cost]} \n`;
+		message += `${getIcon[cost] || ""} ${cost.capitalize()}: ${costs[cost]} \n`;
 	}
 
 	return message;

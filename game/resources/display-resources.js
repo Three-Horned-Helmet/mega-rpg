@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const buildingsObject = require("../build/buildings-object");
-const icons = require("../../icons/icons");
+const { getIcon } = require("../_CONSTS/icons");
 
 const displayResources = (user) => {
 	const username = `${user.account.username}'s resources`;
@@ -44,8 +44,6 @@ const displayResources = (user) => {
 		.addFields(
 			...fields,
 		);
-
-	// .setFooter(`PVP: #${pvpRank} ~~~ Total: #${totalRank}`);
 	return embedResources;
 };
 
@@ -55,7 +53,7 @@ const getProductionResourceValue = (user, resource) => {
 	let message = "";
 	resources.forEach(res => {
 		if(user.resources[res]) {
-			message += `${icons[res]} ${Math.floor(user.resources[res])} ${res.split(" ")[0]} \n`;
+			message += `${getIcon(res)} ${Math.floor(user.resources[res])} ${res.split(" ")[0]} \n`;
 		}
 	});
 

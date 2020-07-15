@@ -1,6 +1,6 @@
 const { onCooldown } = require("../_CONSTS/cooldowns");
 const { worldLocations } = require("../_CONSTS/explore");
-const { getLocationIcon } = require("../_CONSTS/icons");
+const { getIcon } = require("../_CONSTS/icons");
 const { createMinibossInvitation, createMinibossResult } = require("./embedGenerator");
 const { asyncForEach, deepCopyFunction } = require("../_GLOBAL_HELPERS");
 
@@ -67,7 +67,7 @@ const minibossStartAllowed = (user)=>{
 	const minibossInformation = Object.values(worldLocations[currentLocation].places).find(p=>p.type === "miniboss");
 
 
-	const locationIcon = getLocationIcon(currentLocation);
+	const locationIcon = getIcon(currentLocation);
 	if (!user.world.locations[currentLocation].explored.includes([minibossInformation.name])) {
 		return `You haven't found any miniboss in ${locationIcon} ${currentLocation}`;
 	}

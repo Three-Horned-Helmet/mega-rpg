@@ -1,6 +1,6 @@
 const { onCooldown } = require("../_CONSTS/cooldowns");
 const { worldLocations } = require("../_CONSTS/explore");
-const { getLocationIcon } = require("../_CONSTS/icons");
+const { getIcon } = require("../_CONSTS/icons");
 const { calculatePveFullArmyResult } = require("../../combat/combat");
 const { generateEmbedPveFullArmy } = require("../../combat/pveEmedGenerator");
 const { checkQuest } = require("../quest/quest-utils");
@@ -20,7 +20,7 @@ const handleRaid = async (user, place = null) => {
 
 	const { currentLocation } = user.world;
 	const placesInCurrentWorld = worldLocations[currentLocation].places;
-	const locationIcon = getLocationIcon(currentLocation);
+	const locationIcon = getIcon(currentLocation);
 
 	const userExploredPlaces = user.world.locations[currentLocation].explored;
 	const userExploredRaidPlaces = userExploredPlaces

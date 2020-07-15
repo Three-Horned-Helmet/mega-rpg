@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const { onCooldown } = require("../_CONSTS/cooldowns");
 const { getDailyPrize } = require("../_CONSTS/dailyPrize");
-const { getResourceIcon } = require("../_CONSTS/icons");
+const { getIcon } = require("../_CONSTS/icons");
 
 const handleDaily = async (user) => {
 	const onCooldownInfo = onCooldown("dailyPrize", user);
@@ -29,22 +29,18 @@ const handleDaily = async (user) => {
 };
 
 const generatePrizeEmbed = (result, consecutiveDay)=>{
-	getResourceIcon();
-
 	const sideColor = "#45b6fe";
 
 	const preTitle = " DAILY PRIZE  ";
 	const consecutiveStars = "⭐️".repeat(consecutiveDay + 1);
 
-	let title = consecutiveStars;
-	title += preTitle;
-	title += consecutiveStars;
+	const title = `${consecutiveStars} ${preTitle} ${consecutiveStars}`;
 	// "⭐️⭐️⭐️ DAILY PRIZE ⭐️⭐️⭐️"
 
 	let valueField = "";
 
 	Object.keys(result).forEach(r=>{
-		valueField += `${getResourceIcon(r)} ${r}: ${result[r]}\n`;
+		valueField += `${getIcon(r)} ${r}: ${result[r]}\n`;
 	});
 
 	const lexicon = ["first", "second", "third", "fourth", "fifth (max)"];

@@ -4,7 +4,7 @@ const { generateRace, generateEndResult, createRaceInvitation } = require("./emb
 const { createChanceArray, racePayOut, validateUser } = require("./helpers");
 const { asyncForEach, deepCopyFunction } = require("../_GLOBAL_HELPERS");
 const { onCooldown } = require("../_CONSTS/cooldowns");
-const { getResourceIcon } = require("../_CONSTS/icons");
+const { getIcon } = require("../_CONSTS/icons");
 const sleep = require("util").promisify(setTimeout);
 
 const GOLDPRICE = 40;
@@ -18,7 +18,7 @@ const handleRace = async (message, user)=>{
 	}
 
 	if (user.resources.gold <= GOLDPRICE) {
-		return message.channel.send(`You need at least ${getResourceIcon("gold")} **${GOLDPRICE}** gold to trigger the race. You have ${getResourceIcon("gold")} **${user.resources.gold}** gold `);
+		return message.channel.send(`You need at least ${getIcon("gold")} **${GOLDPRICE}** gold to trigger the race. You have ${getIcon("gold")} **${user.resources.gold}** gold `);
 	}
 	const now = new Date();
 	user.setNewCooldown("race", now);
@@ -29,24 +29,23 @@ const handleRace = async (message, user)=>{
 
 	const raceInvitation = await message.channel.send(generatedInvitation);
 
-	await asyncForEach(Object.keys(raceDataCopy), async (r, i)=>{
-		if (i === 5) {
-			await raceInvitation.edit(createRaceInvitation(user, raceDataCopy, "ready"));
-		}
-		await raceInvitation.react(r);
-	});
-
-	await raceInvitation.edit(createRaceInvitation(user, raceDataCopy, "go"));
-
 	const reactionFilter = (reaction) => {
 		return Object.keys(raceDataCopy).some(r=> r === reaction.emoji.name);
 	};
 
+	const collector = await raceInvitation.createReactionCollector(reactionFilter, { max:15, time: 1000 * 15, errors: ["time"] });
+
+	await asyncForEach(Object.keys(raceDataCopy), async (r)=>{
+		await raceInvitation.react(r);
+	});
+
 	const participants = new Map();
 
-	const collector = await raceInvitation.createReactionCollector(reactionFilter, { time: 1000 * 10, errors: ["time"] });
 	collector.on("collect", async (result, rUser) => {
-		if (rUser.bot || participants.size > 9 || participants.has(rUser.id)) {
+		if (rUser.bot) {
+			return;
+		}
+		if (participants.size > 9 || participants.has(rUser.id)) {
 			return message.channel.send(`<@${rUser.id}>: You can only do one bet!`);
 		}
 		const participater = await User.findOne({ "account.userId": rUser.id });

@@ -1,16 +1,15 @@
 const Discord = require("discord.js");
-const { getLocationIcon, getStatsIcon, getWeaponIcon, getPlaceIcon, getGreenRedIcon, getResourceIcon } = require("../_CONSTS/icons");
-
+const { getIcon } = require("../_CONSTS/icons");
 // Dungeon boss invitation
 const createDungeonInvitation = (dungeon, user) => {
 	const sideColor = "#45b6fe";
 	const { username } = user.account;
-	const dungeonIcon = getPlaceIcon("dungeon");
-	const rules = `\` ${dungeon.rooms.length} Rooms\`\n ${getGreenRedIcon(dungeon.boss.rules.canKill)} \`Dungeon deadly\`\n${getGreenRedIcon(dungeon.boss.rules.allowhelpers)} \`helpers allowed\`\n\n**Unclocks**: ${getLocationIcon(dungeon.boss.unlocks)} **${dungeon.boss.unlocks}**\n`;
-	const dungeonStats = `${getStatsIcon("health")} \`Health: ${dungeon.boss.stats.health}\`\n ${getStatsIcon("attack")} \`Attack: ${dungeon.boss.stats.attack}\`\n ${getGreenRedIcon(dungeon.boss.stats.healing)} \`Healing\`\n`;
-	const bossRewards = `${getResourceIcon("gold")} \`Gold: ${dungeon.boss.rewards.gold}\`\n ${getResourceIcon("xp")} \`XP: ${dungeon.boss.rewards.xp}\`\n${getGreenRedIcon(dungeon.boss.rewards.drop)} \`Loot drop\`\n\n   `;
+	const dungeonIcon = getIcon("dungeon");
+	const rules = `\` ${dungeon.rooms.length} Rooms\`\n ${getIcon(dungeon.boss.rules.canKill)} \`Dungeon deadly\`\n${getIcon(dungeon.boss.rules.allowhelpers)} \`helpers allowed\`\n\n**Unclocks**: ${getIcon(dungeon.boss.unlocks)} **${dungeon.boss.unlocks}**\n`;
+	const dungeonStats = `${getIcon("health")} \`Health: ${dungeon.boss.stats.health}\`\n ${getIcon("attack")} \`Attack: ${dungeon.boss.stats.attack}\`\n ${getIcon(dungeon.boss.stats.healing)} \`Healing\`\n`;
+	const bossRewards = `${getIcon("gold")} \`Gold: ${dungeon.boss.rewards.gold}\`\n ${getIcon("xp")} \`XP: ${dungeon.boss.rewards.xp}\`\n${getIcon(dungeon.boss.rewards.drop)} \`Loot drop\`\n\n   `;
 	const bossWeapons = dungeon.boss.bossWeapons.map(w => {
-		return `${getWeaponIcon(w)} \`${w}\``;
+		return `${getIcon(w)} \`${w}\``;
 	});
 
 	const fields = [{
@@ -48,7 +47,7 @@ const createDungeonInvitation = (dungeon, user) => {
 		.addFields(
 			...fields,
 		)
-		.setFooter(`React with a ${getPlaceIcon("dungeon")} within 20 seconds to participate! (max 5!)`);
+		.setFooter(`React with a ${getIcon("dungeon")} within 20 seconds to participate! (max 5!)`);
 	return embedInvitation;
 };
 
@@ -70,7 +69,7 @@ const generateDungeonBossRound = (progress) => {
 		bottomLeft.push(roundResults);
 	}
 	const dungeonName = progress.dungeon.name;
-	const dungeonIcon = getPlaceIcon("dungeon");
+	const dungeonIcon = getIcon("dungeon");
 
 	const bossName = progress.dungeon.boss.name;
 	const dungeonHp = getDungeonHp(progress.dungeon.boss.stats);
@@ -79,7 +78,7 @@ const generateDungeonBossRound = (progress) => {
 	const weaponsTitle = "Choose your weapon:";
 	const weaponsOverview = Object.keys(weapons).map(w => {
 		const { answer, name, description } = weapons[w];
-		return `${getWeaponIcon(name)} ${answer}) **${name}** ${description}\n`;
+		return `${getIcon(name)} ${answer}) **${name}** ${description}\n`;
 	});
 	const title = `${dungeonIcon} ${dungeonName}  ~~~  BOSS FIGHT \nround ${progress.bossAttempts + 1}`;
 	const sideColor = "#45b6fe";
@@ -155,11 +154,11 @@ const createDungeonBossResultWin = (progress) => {
 	const rewards = [];
 
 	if (initiativeTakerAlive) {
-		rewards.push(`${initiativeTakerName}\n ${getResourceIcon("gold")} Gold: ${progress.rewards.initiativeTaker.gold}\n ${getResourceIcon("xp")}Xp: ${progress.rewards.initiativeTaker.xp} \n 🎲Drop: ${progress.rewards.initiativeTaker.drop}`);
+		rewards.push(`${initiativeTakerName}\n ${getIcon("gold")} Gold: ${progress.rewards.initiativeTaker.gold}\n ${getIcon("xp")}Xp: ${progress.rewards.initiativeTaker.xp} \n 🎲Drop: ${progress.rewards.initiativeTaker.drop}`);
 	}
 	if (progress.rewards.helperIds.length) {
 		progress.rewards.helperIds.length.forEach(r => {
-			rewards.push(`${r.name}\n ${getResourceIcon("gold")} Gold: ${r.gold}\n ${getResourceIcon("xp")}Xp: ${r.xp} \n 🎲Drop: ${r.drop}`);
+			rewards.push(`${r.name}\n ${getIcon("gold")} Gold: ${r.gold}\n ${getIcon("xp")}Xp: ${r.xp} \n 🎲Drop: ${r.drop}`);
 		});
 	}
 
@@ -180,7 +179,7 @@ const createDungeonBossResultWin = (progress) => {
 	const title = `${bossName} defeated!`;
 
 	const unlockedLocation = progress.dungeon.boss.unlocks;
-	const locationIcon = getLocationIcon(unlockedLocation);
+	const locationIcon = getIcon(unlockedLocation);
 	let description = `${initiativeTakerName} `;
 	if (initiativeTakerAlive) {
 		description += `has unlocked ${locationIcon} ${unlockedLocation}`;
@@ -265,13 +264,13 @@ const getDungeonHp = (stats) => {
 function generateRoomEmbed(user, placeInfo, results, questIntro = false) {
 	const sideColor = "#45b6fe";
 	const placeName = placeInfo.name;
-	const placeIcon = getPlaceIcon(placeInfo.type);
+	const placeIcon = getIcon(placeInfo.type);
 
 
 	const fields = results.map(result => {
 		const casualtiesPercentage = (result.lossPercentage * 100).toFixed(2);
 		const rewards = Object.keys(result.resourceReward).map(r => {
-			return `${getResourceIcon(r)} ${r}: **${result.resourceReward[r]}**`;
+			return `${getIcon(r)} ${r}: **${result.resourceReward[r]}**`;
 		});
 		rewards.push(`\n+ **${result.expReward}** xp`);
 		rewards.push(`Casulty: **${casualtiesPercentage}**% \n`);
@@ -312,7 +311,7 @@ function generateRoomEmbed(user, placeInfo, results, questIntro = false) {
 const generateRoomDescriptionEmbed = (progress, placeInfo, dots) => {
 	const sideColor = "#45b6fe";
 	const placeName = placeInfo.name;
-	const placeIcon = getPlaceIcon(placeInfo.type);
+	const placeIcon = getIcon(placeInfo.type);
 
 	const fields = [{
 		name: `${placeIcon} ${placeName}`,

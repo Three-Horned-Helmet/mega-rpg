@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const icons = require("../../icons/icons");
+const { getIcon } = require("../_CONSTS/icons");
 const buildingsObj = require("../build/buildings-object");
 
 const produceEmbed = (user) => {
@@ -50,14 +50,13 @@ const produceEmbed = (user) => {
 			...currentProdField, availableProdFields,
 		);
 
-	// .setFooter(`PVP: #${pvpRank} ~~~ Total: #${totalRank}`);
 	return produceRecruit;
 };
 
 const resourceMessage = (buildObj) => {
 	let message = "";
 
-	message += `${icons[buildObj.producing]} ${buildObj.producing.capitalize()}\n`;
+	message += `${getIcon(buildObj.producing)} ${buildObj.producing.capitalize()}\n`;
 
 	return message;
 };
@@ -66,7 +65,7 @@ const produceMessage = (prod) => {
 	let message = "";
 
 	prod.forEach(p => {
-		message += ` ${icons[p.produce]} ${p.produce.capitalize()}\n`;
+		message += ` ${getIcon(p.produce)} ${p.produce.capitalize()}\n`;
 	});
 
 	return message;

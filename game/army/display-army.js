@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const icons = require("../../icons/icons");
+const { getIcon } = require("../_CONSTS/icons");
 const calculateStats = require("../../combat/calculate-stats");
 
 const displayArmy = (user) => {
@@ -67,7 +67,7 @@ const createMessage = (mainCategory) => {
 
 		if (message) {
 			messageArray.push({
-				name: `${icons[category]} ${category.capitalize()}`,
+				name: `${getIcon(category)} ${category.capitalize()}`,
 				value: message,
 				inline: true,
 			});
@@ -82,7 +82,7 @@ const addObjectToMessage = (obj) => {
 
 	for (const key in obj) {
 		if (key !== "currentHealth") {
-			message += `${icons[key]} ${key.capitalize()}: ${(obj.currentHealth && key === "health") ?
+			message += `${getIcon(key)} ${key.capitalize()}: ${(obj.currentHealth && key === "health") ?
 				obj.currentHealth + "/" : ""}${obj[key]} \n`;
 		}
 	}

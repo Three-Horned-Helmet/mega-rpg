@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const icons = require("../../icons/icons");
+const { getIcon } = require("../_CONSTS/icons");
 const allItems = require("../items/all-items");
 
 const stakeEmbed = (winner, loser, battleStats, exp, item, elo) => {
@@ -83,7 +83,7 @@ const statsMessage = (stats) => {
 	let message = "";
 
 	for(const stat in stats) {
-		message += `${icons[stat]} ${stat.capitalize()}: ${stats[stat]} \n`;
+		message += `${getIcon(stat)} ${stat.capitalize()}: ${stats[stat]} \n`;
 	}
 
 	return message;
