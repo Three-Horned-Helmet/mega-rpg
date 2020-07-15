@@ -34,20 +34,23 @@ describe("destroy commands", () => {
 
 	it("should be denied if the arguments match no buildings of the user", async ()=>{
 		const testUser = await createTestUser({ empire });
-		const { response } = checkIfDestroyIsPossible(testUser, "yolo");
-		expect(response).to.be.equal(false);
+		const result = checkIfDestroyIsPossible(testUser, "yolo");
+		expect(result.message).to.be.equal("There are no buildings with the coordinates or name 'yolo' in your empire.");
+		expect(result.response).to.be.equal(false);
 	});
 
 	it("should be denied if the argument coordinates match no building coordinates of the user", async ()=>{
 		const testUser = await createTestUser({ empire });
-		const { response } = checkIfDestroyIsPossible(testUser, "1.1");
-		expect(response).to.be.equal(false);
+		const result = checkIfDestroyIsPossible(testUser, "1.1");
+		expect(result.message).to.be.equal("There are no buildings with the coordinates or name '1.1' in your empire.");
+		expect(result.response).to.be.equal(false);
 	});
 
 	it("should be denied if the argument name match no building name of the user", async ()=>{
 		const testUser = await createTestUser({ empire });
-		const { response } = checkIfDestroyIsPossible(testUser, "farm");
-		expect(response).to.be.equal(false);
+		const result = checkIfDestroyIsPossible(testUser, "farm");
+		expect(result.message).to.be.equal("There are no buildings with the coordinates or name 'farm' in your empire.");
+		expect(result.response).to.be.equal(false);
 	});
 
 	it("should remove a building if the correct coordinates are applied", async ()=>{
