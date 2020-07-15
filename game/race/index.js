@@ -29,24 +29,23 @@ const handleRace = async (message, user)=>{
 
 	const raceInvitation = await message.channel.send(generatedInvitation);
 
-	await asyncForEach(Object.keys(raceDataCopy), async (r, i)=>{
-		if (i === 5) {
-			await raceInvitation.edit(createRaceInvitation(user, raceDataCopy, "ready"));
-		}
-		await raceInvitation.react(r);
-	});
-
-	await raceInvitation.edit(createRaceInvitation(user, raceDataCopy, "go"));
-
 	const reactionFilter = (reaction) => {
 		return Object.keys(raceDataCopy).some(r=> r === reaction.emoji.name);
 	};
 
+	const collector = await raceInvitation.createReactionCollector(reactionFilter, { max:15, time: 1000 * 15, errors: ["time"] });
+
+	await asyncForEach(Object.keys(raceDataCopy), async (r)=>{
+		await raceInvitation.react(r);
+	});
+
 	const participants = new Map();
 
-	const collector = await raceInvitation.createReactionCollector(reactionFilter, { time: 1000 * 10, errors: ["time"] });
 	collector.on("collect", async (result, rUser) => {
-		if (rUser.bot || participants.size > 9 || participants.has(rUser.id)) {
+		if (rUser.bot) {
+			return;
+		}
+		if (participants.size > 9 || participants.has(rUser.id)) {
 			return message.channel.send(`<@${rUser.id}>: You can only do one bet!`);
 		}
 		const participater = await User.findOne({ "account.userId": rUser.id });

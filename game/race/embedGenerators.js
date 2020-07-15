@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const { getResourceIcon } = require("../_CONSTS/icons");
+const { getIcon } = require("../_CONSTS/icons");
 const GOLDPRICE = 40;
 
 const generateRace = (event)=>{
@@ -74,7 +74,7 @@ const generateEndResult = (event)=> {
 
 	const reward = weightedMultiplier * GOLDPRICE + 40;
 
-	const winningTitle = `\n Every winner get ${getResourceIcon("gold")} ${reward}:`;
+	const winningTitle = `\n Every winner get ${getIcon("gold")} ${reward}:`;
 	const losingTitle = "\n Losers get nothin':";
 
 	const fields = [];
@@ -104,7 +104,7 @@ const generateEndResult = (event)=> {
 	return winningResults;
 };
 
-const createRaceInvitation = (user, raceDataCopy, state = null)=>{
+const createRaceInvitation = (user, raceDataCopy)=>{
 	const sideColor = "#45b6fe";
 	const { username } = user.account;
 
@@ -112,21 +112,15 @@ const createRaceInvitation = (user, raceDataCopy, state = null)=>{
 	const racers = Object.keys(raceDataCopy).map(r=>{
 		let weightedMultiplier = 20 - raceDataCopy[r].weight;
 		weightedMultiplier = weightedMultiplier ? weightedMultiplier : 1;
-		return `${r} --- ${getResourceIcon("gold")} ${(weightedMultiplier * GOLDPRICE) + 40}`;
+		return `${r} --- ${getIcon("gold")} ${(weightedMultiplier * GOLDPRICE) + 40}`;
 	});
-	let bettingState = "```diff\n- HOLD YOUR BETS! ```";
-	let footer = "Please wait until all racers are ready!";
-	if (state === "ready") {
-		bettingState = "```fix\n HOLD YOUR BETS! \n```";
-	}
-	if (state === "go") {
-		bettingState = "```diff\n+ PLACE YOUR BETS! ```";
-		footer = "Click the racer you think will win!";
-	}
+	const bettingState = "```diff\n+ PLACE YOUR BETS! ```";
+	const footer = "Click the racer you think will win!";
+
 
 	const embedInvitation = new Discord.MessageEmbed()
 		.setTitle(`🏇 ${username} is inviting to a race!! 🏇`)
-		.setDescription(`Costs ${getResourceIcon("gold")} ${GOLDPRICE} to participate!`)
+		.setDescription(`Costs ${getIcon("gold")} ${GOLDPRICE} to participate!`)
 		.setColor(sideColor)
 		.addFields(
 			{
