@@ -51,13 +51,6 @@ const createTestUser = ({
 			},
 		},
 	},
-	empire = [
-		{
-			name: "barracks",
-			level: 0,
-			position: [0, 0]
-		}
-	],
 	...otherParams
 } = {}) => {
 
@@ -67,7 +60,6 @@ const createTestUser = ({
 		world,
 		maxPop,
 		army,
-		empire,
 		...otherParams,
 	});
 	return user.save();
