@@ -48,16 +48,17 @@ describe("destroy commands", () => {
 	it("should have barracks at position 0.0 as default for testUser", async ()=>{
 		const testUser = await createTestUser();
 
-		const check = (user) => {
-			if(user.empire.length === 1 && user.empire[0].name === "barracks" && user.empire[0].position[0] === 0 && user.empire[0].position[1] === 0) return true;
-			return false;
-		};
-
-		expect(check(testUser)).to.be.equal(true);
+		expect(testUser.empire.length).to.be.equal(0);
 	});
 
 	it("should remove a building if the correct coordinates are applied", async ()=>{
-		const testUser = await createTestUser();
+		const testUser = await createTestUser({ empire: [
+			{
+				name: "barracks",
+				level: 0,
+				position: [0, 0]
+			}
+		] });
 
 		const mockMessage = generateDiscordMessage(testUser);
 
@@ -67,7 +68,13 @@ describe("destroy commands", () => {
 	});
 
 	it("should remove a building if the correct name is applied", async ()=>{
-		const testUser = await createTestUser();
+		const testUser = await createTestUser({ empire: [
+			{
+				name: "barracks",
+				level: 0,
+				position: [0, 0]
+			}
+		] });
 
 		const mockMessage = generateDiscordMessage(testUser);
 
@@ -77,7 +84,13 @@ describe("destroy commands", () => {
 	});
 
 	it("should not remove building if no arguments are applied", async ()=>{
-		const testUser = await createTestUser();
+		const testUser = await createTestUser({ empire: [
+			{
+				name: "barracks",
+				level: 0,
+				position: [0, 0]
+			}
+		] });
 
 		const mockMessage = generateDiscordMessage(testUser);
 
@@ -87,7 +100,13 @@ describe("destroy commands", () => {
 	});
 
 	it("should not remove building if incorrect name is applied", async ()=>{
-		const testUser = await createTestUser();
+		const testUser = await createTestUser({ empire: [
+			{
+				name: "barracks",
+				level: 0,
+				position: [0, 0]
+			}
+		] });
 
 		const mockMessage = generateDiscordMessage(testUser);
 
