@@ -21,7 +21,7 @@ const icons = {
 	"Deep Caves" : ":volcano:", // 🌋
 
 	// actions
-	"raid": ":man_supervillain", // 🦹‍♂️
+	"raid": ":man_supervillain:", // 🦹‍♂️
 	"hunt": ":frog:", // 🐸
 	"miniboss": ":zombie:", // 🧟
 	"fish": ":blowfish:", // 🐡

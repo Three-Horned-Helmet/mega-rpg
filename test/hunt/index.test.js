@@ -17,7 +17,7 @@ describe("hunt command", () => {
 		const testUser = await createTestUser();
 		const mockMessage = generateDiscordMessage(testUser);
 		const result = await huntCommand.execute(mockMessage, [], testUser);
-		expect(result).to.be.equal("You have not explored any place to hunt in 🌳 Grassy Plains, try `!explore` to find a place to hunt");
+		expect(result).to.be.equal("You have not explored any place to hunt in :deciduous_tree: Grassy Plains, try `!explore` to find a place to hunt");
 	});
 	it("should run into cooldown if triggered too fast", async ()=>{
 		const testUser = await createTestUser({ world:{ locations:{ "Grassy Plains":{ explored:["Forest"] } } } });
@@ -50,10 +50,10 @@ describe("hunt command", () => {
 		const testUser = await createTestUser({ hero:{ currentHealth:500, health:500, attack:500 }, world:{ locations:{ "Grassy Plains":{ explored:["Cave", "Forest"] } } } });
 		const mockMessage = generateDiscordMessage(testUser);
 		const result = await huntCommand.execute(mockMessage, [], testUser);
-		expect(result.title.startsWith("Anniken Avisbud's hero hunted 🐸")).to.be.equal(true);
+		expect(result.title.startsWith("Anniken Avisbud's hero hunted :frog:")).to.be.equal(true);
 		await testUser.setNewCooldown("hunt", mockDays(1));
 		const result2 = await huntCommand.execute(mockMessage, ["Cave"], testUser);
-		expect(result2.title).to.be.equal("Anniken Avisbud's hero hunted 🐸 Cave");
+		expect(result2.title).to.be.equal("Anniken Avisbud's hero hunted :frog: Cave");
 
 	});
 	it("should gain resources when when hunting successfully", async ()=>{

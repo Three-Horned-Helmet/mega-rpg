@@ -18,7 +18,7 @@ describe("fish commands", () => {
 		const mockMessage = generateDiscordMessage(testUser);
 		const result = await fishingCommand.execute(mockMessage, null, testUser);
 
-		expect(result).to.be.equal("You haven't found any place to 🐡 fish in 🌳 Grassy Plains");
+		expect(result).to.be.equal("You haven't found any place to :blowfish: fish in :deciduous_tree: Grassy Plains");
 	});
 
 	it("should run into cooldown if triggered too fast", async ()=>{
