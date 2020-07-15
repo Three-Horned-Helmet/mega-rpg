@@ -68,7 +68,7 @@ const icons = {
  * Returns an emoji if configured in icons-object or a danger symbol if missing
  * @param {string} type - eg: "gold", "copper ore" or "true"
  **/
-const getIcon = (type)=> Object.keys(icons).includes(type.toString()) ? icons[type.toString()] : "⚠️";
+const getIcon = (type)=> icons[type] || "⚠️";
 
 
 module.exports = { getIcon };
