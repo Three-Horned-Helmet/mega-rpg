@@ -33,19 +33,19 @@ describe("destroy commands", () => {
 	});
 
 	it("should be denied if the arguments match no buildings of the user", async ()=>{
-		const testUser = await createTestUser();
+		const testUser = await createTestUser({ empire });
 		const { response } = checkIfDestroyIsPossible(testUser, "yolo");
 		expect(response).to.be.equal(false);
 	});
 
 	it("should be denied if the argument coordinates match no building coordinates of the user", async ()=>{
-		const testUser = await createTestUser();
+		const testUser = await createTestUser({ empire });
 		const { response } = checkIfDestroyIsPossible(testUser, "1.1");
 		expect(response).to.be.equal(false);
 	});
 
 	it("should be denied if the argument name match no building name of the user", async ()=>{
-		const testUser = await createTestUser();
+		const testUser = await createTestUser({ empire });
 		const { response } = checkIfDestroyIsPossible(testUser, "farm");
 		expect(response).to.be.equal(false);
 	});
