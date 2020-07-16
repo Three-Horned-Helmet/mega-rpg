@@ -4,8 +4,18 @@ const { expect } = require("chai");
 const User = require("../../models/User");
 const minibossCommand = require("../../commands/miniboss");
 const { createTestUser } = require("../helper");
+const sleep = require("util").promisify(setTimeout);
 
 const { minibossStartAllowed, createMinibossEvent, calculateMinibossResult } = require("../../game/miniboss");
+
+const world = {
+	currentLocation:"Grassy Plains",
+	locations:{
+		"Grassy Plains":{
+			available:true,
+			explored:["C'Thun"] },
+	},
+};
 
 
 describe("miniboss command", () => {
@@ -16,14 +26,7 @@ describe("miniboss command", () => {
 		expect(minibossCommand).to.not.equal(undefined);
 	});
 	it("should run into cooldown if triggered too fast", async ()=>{
-		const world = {
-			currentLocation:"Grassy Plains",
-			locations:{
-				"Grassy Plains":{
-					available:true,
-					explored:["C'Thun"] },
-			},
-		};
+
 		const now = new Date();
 		const testUser = await createTestUser({ world });
 		await testUser.setNewCooldown("miniboss", now);
@@ -38,14 +41,7 @@ describe("miniboss command", () => {
 		expect(result.startsWith("You haven't found any miniboss in")).to.be.equal(true);
 	});
 	it("should not be triggered if hp too low", async ()=>{
-		const world = {
-			currentLocation:"Grassy Plains",
-			locations:{
-				"Grassy Plains":{
-					available:true,
-					explored:["C'Thun"] },
-			},
-		};
+
 		const hero = {
 			currentHealth : 1,
 			health:100,
@@ -56,14 +52,7 @@ describe("miniboss command", () => {
 
 	});
 	it("should succeed when initativetaker has higher rank than helper", async ()=>{
-		const world = {
-			currentLocation:"Grassy Plains",
-			locations:{
-				"Grassy Plains":{
-					available:true,
-					explored:["C'Thun"] },
-			},
-		};
+
 		const hero = {
 			rank:9,
 			stats:{
@@ -75,22 +64,19 @@ describe("miniboss command", () => {
 		const helper0 = await createTestUser({ hero:{ rank:3 } });
 		const miniboss = createMinibossEvent(testUser);
 		miniboss.helperIds.push(helper0.account.userId);
-		const result = await calculateMinibossResult(miniboss);
-		// cleanup todo: why doesn't the function clean itself?
-
+		let looping = true;
+		let result;
+		for (let i = 0; i < 10 && looping; i++) {
+			result = await calculateMinibossResult(miniboss);
+			if (result.win) looping = false;
+		}
+		await sleep(200);
 		expect(result.win).to.be.equal(true);
 
 	});
 
 	it("should be rewarded with gold, dungeonkey, xp (and level up) win", async ()=>{
-		const world = {
-			currentLocation:"Grassy Plains",
-			locations:{
-				"Grassy Plains":{
-					available:true,
-					explored:["C'Thun"] },
-			},
-		};
+
 		const hero = {
 			rank:3,
 			currentExp: 99.99,
@@ -107,7 +93,6 @@ describe("miniboss command", () => {
 		const testUser = await createTestUser({ world, hero });
 		const miniboss = createMinibossEvent(testUser);
 
-
 		const helper0 = await createTestUser({ hero });
 		const helper1 = await createTestUser({ hero });
 		const helper2 = await createTestUser({ hero });
@@ -116,8 +101,13 @@ describe("miniboss command", () => {
 		miniboss.helperIds.push(helper1.account.userId);
 		miniboss.helperIds.push(helper2.account.userId);
 
-		const result = await calculateMinibossResult(miniboss);
-
+		let looping = true;
+		let result;
+		for (let i = 0; i < 10 && looping; i++) {
+			result = await calculateMinibossResult(miniboss);
+			if (result.win) looping = false;
+		}
+		await sleep(200);
 		expect(result.initiativeTaker.resources.gold > 100).to.be.equal(true);
 		expect(result.initiativeTaker.hero.health > 100).to.be.equal(true);
 		expect(result.initiativeTaker.hero.attack > 1).to.be.equal(true);
@@ -137,55 +127,54 @@ describe("miniboss command", () => {
 	});
 
 	it("should succeed together with low rank and  helperIds with high rank", async ()=>{
-		const world = {
-			currentLocation:"Grassy Plains",
-			locations:{
-				"Grassy Plains":{
-					available:true,
-					explored:["C'Thun"] },
-			},
-		};
+
 
 		const testUser = await createTestUser({ world, hero:{ rank:1 } });
 		const miniboss = createMinibossEvent(testUser);
 
 		const helper0 = await createTestUser({ world, hero:{ rank:5 } });
 		const helper1 = await createTestUser({ world, hero:{ rank:5 } });
+		const helper2 = await createTestUser({ world, hero:{ rank:5 } });
+		const helper3 = await createTestUser({ world, hero:{ rank:5 } });
+		const helper4 = await createTestUser({ world, hero:{ rank:5 } });
+		const helper5 = await createTestUser({ world, hero:{ rank:5 } });
 
 		miniboss.helperIds.push(helper0.account.userId);
 		miniboss.helperIds.push(helper1.account.userId);
+		miniboss.helperIds.push(helper2.account.userId);
+		miniboss.helperIds.push(helper3.account.userId);
+		miniboss.helperIds.push(helper4.account.userId);
+		miniboss.helperIds.push(helper5.account.userId);
 
-		const result = await calculateMinibossResult(miniboss);
+		let looping = true;
+		let result;
+		for (let i = 0; i < 10 && looping; i++) {
+			result = await calculateMinibossResult(miniboss);
+			if (result.win) looping = false;
+		}
+		await sleep(200);
 		expect(result.win).to.be.equal(true);
 
 	});
 
 	it("should lose with solo and low rank", async ()=>{
-		const world = {
-			currentLocation:"Grassy Plains",
-			locations:{
-				"Grassy Plains":{
-					available:true,
-					explored:["C'Thun"] },
-			},
-		};
+
 
 		const testUser = await createTestUser({ world });
 		const miniboss = createMinibossEvent(testUser);
 
-		const result = await calculateMinibossResult(miniboss);
+		let looping = true;
+		let result;
+		for (let i = 0; i < 10 && looping; i++) {
+			result = await calculateMinibossResult(miniboss);
+			if (!result.win) looping = false;
+		}
+		await sleep(200);
 		expect(result.win).to.be.equal(false);
 
 	});
 	it("should lose with together and low rank and many helperIds with low rank", async ()=>{
-		const world = {
-			currentLocation:"Grassy Plains",
-			locations:{
-				"Grassy Plains":{
-					available:true,
-					explored:["C'Thun"] },
-			},
-		};
+
 
 		const testUser = await createTestUser({ world });
 		const helper0 = await createTestUser({ world });
@@ -195,19 +184,18 @@ describe("miniboss command", () => {
 		miniboss.helperIds.push(helper0.account.userId);
 		miniboss.helperIds.push(helper1.account.userId);
 
-		const result = await calculateMinibossResult(miniboss);
+		let looping = true;
+		let result;
+		for (let i = 0; i < 10 && looping; i++) {
+			result = await calculateMinibossResult(miniboss);
+			if (!result.win) looping = false;
+		}
+		await sleep(200);
 		expect(result.win).to.be.equal(false);
 
 	});
 	it("should lose with helperIds who have low rank", async ()=>{
-		const world = {
-			currentLocation:"Grassy Plains",
-			locations:{
-				"Grassy Plains":{
-					available:true,
-					explored:["C'Thun"] },
-			},
-		};
+
 
 		const testUser = await createTestUser({ world });
 		const helper0 = await createTestUser({ world });
@@ -217,19 +205,18 @@ describe("miniboss command", () => {
 		miniboss.helperIds.push(helper0.account.userId);
 		miniboss.helperIds.push(helper1.account.userId);
 
-		const result = await calculateMinibossResult(miniboss);
+		let looping = true;
+		let result;
+		for (let i = 0; i < 10 && looping; i++) {
+			result = await calculateMinibossResult(miniboss);
+			if (!result.win) looping = false;
+		}
+		await sleep(200);
 		expect(result.win).to.be.equal(false);
 	});
 
 	it("should cause damage when losing", async ()=>{
-		const world = {
-			currentLocation:"Grassy Plains",
-			locations:{
-				"Grassy Plains":{
-					available:true,
-					explored:["C'Thun"] },
-			},
-		};
+
 		const hero = {
 
 			currentHealth: 100,
@@ -254,7 +241,7 @@ describe("miniboss command", () => {
 		miniboss.helperIds.push(helper2.account.userId);
 
 		const result = await calculateMinibossResult(miniboss);
-
+		await sleep(200);
 		expect(result.initiativeTaker.hero.currentHealth < hero.currentHealth).to.be.equal(true);
 		result.helpers.forEach(helper=>{
 			expect(helper.hero.currentHealth < hero.currentHealth).to.be.equal(true);

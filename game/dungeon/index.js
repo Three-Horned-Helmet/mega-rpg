@@ -4,6 +4,7 @@ const { startDungeonRooms } = require("./rooms");
 const { createDungeonInvitation } = require("./embedGenerator");
 const { dungeonStartAllowed, validateHelper } = require("./helper");
 const { deepCopyFunction } = require("../_GLOBAL_HELPERS/");
+const { getIcon } = require("../_CONSTS/icons");
 
 const handleDungeon = async (message, user)=>{
 	// cooldown, health, explored dungeon and dungeon key
@@ -19,10 +20,12 @@ const handleDungeon = async (message, user)=>{
 
 	const dungeonInvitation = createDungeonInvitation(dungeon, user);
 	const invitation = await message.channel.send(dungeonInvitation);
-	await invitation.react("🗺");
+	const dungeonIcon = getIcon("dungeon", "icon");
+
+	await invitation.react(dungeonIcon);
 
 	const reactionFilter = (reaction) => {
-		return reaction.emoji.name === "🗺";
+		return reaction.emoji.name === dungeonIcon;
 	};
 
 	const collector = await invitation.createReactionCollector(reactionFilter, { time: 1000 * 20, errors: ["time"] });

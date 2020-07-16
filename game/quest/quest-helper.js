@@ -10,11 +10,10 @@ const questHelper = (user, questName, newPlaces, newQuests) => {
 
 		// If a new PvM location is required for the quest
 		if(newPlaces) {
-			const now = new Date();
 			newPlaces.forEach(newPlace => {
 				const { currentLocation, place: newlyExploredPlaceName } = newPlace;
 
-				user.handleExplore(now, currentLocation, newlyExploredPlaceName);
+				user.handleExplore(currentLocation, newlyExploredPlaceName);
 			});
 		}
 

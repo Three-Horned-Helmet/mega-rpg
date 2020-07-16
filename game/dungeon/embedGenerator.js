@@ -47,7 +47,7 @@ const createDungeonInvitation = (dungeon, user) => {
 		.addFields(
 			...fields,
 		)
-		.setFooter(`React with a ${getIcon("dungeon")} within 20 seconds to participate! (max 5!)`);
+		.setFooter(`React with a ${getIcon("dungeon", "icon")} within 20 seconds to participate! (max 5!)`);
 	return embedInvitation;
 };
 
@@ -304,7 +304,7 @@ function generateRoomEmbed(user, placeInfo, results, questIntro = false) {
 		.addFields(
 			...fields,
 		)
-		.setFooter("Proceed? 🚫 / ✅");
+		.setFooter(`Proceed? ${getIcon(false, "icon")} / ${getIcon(true, "icon")}`);
 	return embedWin;
 }
 

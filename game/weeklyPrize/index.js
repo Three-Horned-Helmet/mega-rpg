@@ -31,7 +31,8 @@ const generatePrizeEmbed = (result, consecutiveWeek)=>{
 	const sideColor = "#45b6fe";
 
 	const preTitle = " WEEKLY PRIZE  ";
-	const consecutiveStars = "🌟".repeat(consecutiveWeek + 1);
+	const star = getIcon("weeklyPrizeStar", "icon");
+	const consecutiveStars = star.repeat(consecutiveWeek + 1);
 
 	const title = `${consecutiveStars} ${preTitle} ${consecutiveStars}`;
 	// "🌟🌟🌟 WEEKLY PRIZE 🌟🌟🌟"

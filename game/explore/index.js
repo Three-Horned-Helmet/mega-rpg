@@ -1,9 +1,9 @@
 const { onCooldown } = require("../_CONSTS/cooldowns");
+const { objectFilter } = require("../_GLOBAL_HELPERS");
 const { worldLocations } = require("../_CONSTS/explore");
 const { getIcon } = require("../_CONSTS/icons");
 
-// TODO: finish handleRandomEvent
-// needed: a battlefunction
+const CHANCE_FOR_SUCCESS = 0.8;
 
 const handleExplore = async (user) => {
 	const cd = onCooldown("explore", user);
@@ -11,31 +11,16 @@ const handleExplore = async (user) => {
 		return cd.embed;
 	}
 	const { currentLocation } = user.world;
-
-	/* const chanceForRandomEvent = 0.05;
-	const randomNumber = Math.random(); */
-
 	const now = new Date();
-
-	// triggers randomevent 5%
-	/* if (chanceForRandomEvent > randomNumber) {
-		const { randomEvents } = worldLocations[currentLocation];
-		user.setNewCooldown("explore", now);
-		return handleRandomEvent(randomEvents);
-	} */
-
 	const { places } = worldLocations[currentLocation];
-	const exploreResult = exploreArea(user, places, currentLocation, now);
+	const explorablePlaces = objectFilter(places, place=> !place.notExplorable);
+
+	const exploreResult = exploreArea(user, explorablePlaces, currentLocation, now);
 	return exploreResult;
 };
 
-/* const handleRandomEvent = (randomEvents) => {
-	const randomEventNames = Object.keys(randomEvents);
-	const randomEvent = randomEventNames[Math.floor(Math.random() * randomEventNames.length)];
-	return `randomEvent triggered --> ${randomEvent} - not yet done`;
-}; */
-
 const exploreArea = async (user, places, currentLocation, now)=>{
+	user.setNewCooldown("explore", now);
 	const placeNames = Object.keys(places);
 	let newlyExploredPlaceName = placeNames[Math.floor(Math.random() * placeNames.length)];
 	const previouslyExploredPlaces = user.world.locations[currentLocation].explored;
@@ -44,25 +29,24 @@ const exploreArea = async (user, places, currentLocation, now)=>{
 	}
 	let msg;
 
-	if(previouslyExploredPlaces.includes(newlyExploredPlaceName) || places[newlyExploredPlaceName].notExplorable) {
+	if(CHANCE_FOR_SUCCESS < Math.random() || previouslyExploredPlaces.includes(newlyExploredPlaceName)) {
 		msg = generateFailExploreMessage(currentLocation);
-		user.setNewCooldown("explore", now);
 	}
 	else {
+		user.handleExplore(currentLocation, newlyExploredPlaceName);
 		msg = generateSuccessExploreMessage(currentLocation, newlyExploredPlaceName, user.hero.rank);
-		user.handleExplore(now, currentLocation, newlyExploredPlaceName);
 	}
 	await user.save();
 	return msg;
 };
 
 module.exports = { handleExplore };
-// user.setNewCooldown("explore", now);
 
 const generateFailExploreMessage = (currentLocation) => {
 	const worldIcon = getIcon(currentLocation);
 	const responses = [
 		"After a long adventure, you came back exploring nothing new",
+		`You wander aimlessly around in ${worldIcon} ${currentLocation} seing the same stuff you've seen before`,
 		`You walked around in ${worldIcon} ${currentLocation} finding nothing you haven't seen before`,
 		"You chose the comfortable path exploring the same old stuff",
 		`You find nothing new in ${worldIcon} ${currentLocation}`,

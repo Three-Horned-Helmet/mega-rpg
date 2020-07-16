@@ -17,25 +17,26 @@ const handleMiniboss = async (message, user)=>{
 
 	const miniboss = createMinibossEvent(user);
 	const now = new Date();
-	await user.setNewCooldown("miniboss", now);
+	user.setNewCooldown("miniboss", now);
+	await user.save();
 
 	const minibossInvitation = createMinibossInvitation(miniboss, user);
 	const invitation = await message.channel.send(minibossInvitation);
-
-	await invitation.react("🧟");
+	const minibossIcon = getIcon("miniboss", "icon");
+	await invitation.react(minibossIcon);
 
 	const reactionFilter = (reaction) => {
-		return reaction.emoji.name === "🧟";
+		return reaction.emoji.name === minibossIcon;
 	};
 
-	const collector = await invitation.createReactionCollector(reactionFilter, { time: 1000 * 20, errors: ["time"] });
+	const collector = await invitation.createReactionCollector(reactionFilter, { max:10, time: 1000 * 20, errors: ["time"] });
 	collector.on("collect", async (result, rUser) => {
 		if (rUser.bot || miniboss.helperIds.length > 9) {
 			return;
 		}
 		const allowedHelper = await validateHelper(rUser.id);
 		if (!allowedHelper) {
-			return;
+			return message.channel.send(`<@${message.author.id}>: Your HP is too low`);
 		}
 		miniboss.helperIds.push(rUser.id);
 	});
@@ -48,7 +49,7 @@ const handleMiniboss = async (message, user)=>{
 };
 
 const minibossStartAllowed = (user)=>{
-	// checks for cooldown
+
 	const cooldownInfo = onCooldown("miniboss", user);
 	if (cooldownInfo.response) {
 		return cooldownInfo.embed;
@@ -100,10 +101,14 @@ const calculateMinibossResult = async (miniboss)=>{
 		return acc + cur.hero.rank;
 	}, 0) + initiativeTaker[0].hero.rank + 2;
 
-	// Temporary workaround for testcases
+	if (chanceForSuccess > miniboss.stats.difficulty) {
+		chanceForSuccess = miniboss.stats.difficulty - 5;
+	}
+
+	/* // Temporary workaround for testcases
 	if (initiativeTaker[0].account.testUser) {
 		chanceForSuccess -= 2;
-	}
+	} */
 
 	const difficulty = Math.random() * miniboss.stats.difficulty;
 
