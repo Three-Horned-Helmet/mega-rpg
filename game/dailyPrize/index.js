@@ -32,7 +32,8 @@ const generatePrizeEmbed = (result, consecutiveDay)=>{
 	const sideColor = "#45b6fe";
 
 	const preTitle = " DAILY PRIZE  ";
-	const consecutiveStars = "⭐️".repeat(consecutiveDay + 1);
+	const star = getIcon("dailyPrizeStar", "icon");
+	const consecutiveStars = star.repeat(consecutiveDay + 1);
 
 	const title = `${consecutiveStars} ${preTitle} ${consecutiveStars}`;
 	// "⭐️⭐️⭐️ DAILY PRIZE ⭐️⭐️⭐️"

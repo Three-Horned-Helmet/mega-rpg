@@ -25,7 +25,7 @@ const createMinibossInvitation = (miniboss, user)=>{
 				inline: false,
 			},
 		)
-		.setFooter(`React with a ${getIcon("miniboss")} within 20 seconds to participate! (max 10!)`);
+		.setFooter(`React with a ${getIcon("miniboss", "icon")} within 20 seconds to participate! (max 10!)`);
 
 	return embedInvitation;
 };

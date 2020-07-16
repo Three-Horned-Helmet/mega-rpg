@@ -62,6 +62,8 @@ const icons = {
 	// Misc
 	"false":{ name: ":x:", icon: "❌" },
 	"true":{ name: ":white_check_mark:", icon: "✅" },
+	"weeklyPrizeStar":{ name:"star2", icon:"🌟" },
+	"dailyPrizeStar": { name:"star", icon: "⭐️" }
 };
 /**
  * Returns an emoji if configured in icons-object or a danger symbol if missing
