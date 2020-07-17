@@ -50,11 +50,11 @@ const worldLocations = {
 				name: "Collapsed Mine",
 				type: "raid",
 				stats:{
-					attack: 160,
-					health: 160,
+					attack: 200,
+					health: 200,
 				},
 				rewards:{
-					gold: 150,
+					gold: 170,
 					"copper ore": 20,
 					"iron ore": 12,
 				},
@@ -74,11 +74,11 @@ const worldLocations = {
 				name: "Bandit Vault",
 				type: "raid",
 				stats:{
-					attack: 350,
-					health: 350,
+					attack: 450,
+					health: 450,
 				},
 				rewards:{
-					gold: 370,
+					gold: 400,
 				},
 			},
 			Forest: {
@@ -98,11 +98,11 @@ const worldLocations = {
 				name: "Cave",
 				type: "hunt",
 				stats:{
-					attack: 40,
-					health: 40,
+					attack: 45,
+					health: 45,
 				},
 				rewards:{
-					gold: 22,
+					gold: 23,
 					"copper ore": 2,
 				},
 			},
@@ -233,8 +233,8 @@ const worldLocations = {
 				type: "raid",
 				notExplorable: true,
 				stats:{
-					attack: 500,
-					health: 500,
+					attack: 400,
+					health: 400,
 				},
 				rewards:{
 					"copper ore": 4,
@@ -262,8 +262,8 @@ const worldLocations = {
 				type: "hunt",
 				notExplorable: true,
 				stats:{
-					attack: 300,
-					health: 200,
+					attack: 180,
+					health: 180,
 				},
 				rewards:{
 					gold: 185,
@@ -275,8 +275,8 @@ const worldLocations = {
 				type: "raid",
 				notExplorable: true,
 				stats:{
-					attack: 850,
-					health: 850,
+					attack: 600,
+					health: 600,
 				},
 				rewards:{
 					gold: 470,
@@ -287,8 +287,8 @@ const worldLocations = {
 				type: "raid",
 				notExplorable: true,
 				stats: {
-					attack: 600,
-					health: 600,
+					attack: 550,
+					health: 550,
 				},
 				rewards:{
 					"oak wood": 60,
@@ -326,8 +326,8 @@ const worldLocations = {
 				type: "raid",
 				notExplorable: true,
 				stats:{
-					attack: 1100,
-					health: 1100,
+					attack: 750,
+					health: 750,
 				},
 				rewards:{
 					"steel bar": 40,

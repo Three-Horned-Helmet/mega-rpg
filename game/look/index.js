@@ -3,6 +3,8 @@ const Discord = require("discord.js");
 const { worldLocations } = require("../_CONSTS/explore");
 const { getIcon } = require("../_CONSTS/icons");
 
+const { calculateTopAndLowStrengths } = require("./calculate-difficulty");
+
 const getWorld = (user) => {
 
 	const { currentLocation } = user.world;
@@ -12,9 +14,17 @@ const getWorld = (user) => {
 	const defaultNonExplored = `You have not explored anything in ${currentLocation}\ntry: ${exploreCommand}`;
 
 	const exploredPlaces = user.world.locations[currentLocation].explored;
+	const strengths = calculateTopAndLowStrengths(currentLocation);
 	const exploredPlacesWithIcons = exploredPlaces.length ? exploredPlaces.map(place=>{
-		const { type } = worldLocations[currentLocation].places[place];
-		return `${getIcon(type)} ${place}`;
+		const { type, stats } = worldLocations[currentLocation].places[place];
+		let difficulty = "";
+		if(strengths[type]) {
+			const { lowestStrength, highestStrength } = strengths[type];
+			difficulty = stats ? Math.floor(((Object.values(stats).reduce((a, b) => a + b) - lowestStrength) / (highestStrength - lowestStrength)) * 9 + 1) : "";
+		}
+
+		// typeof difficulty === "number" ? ":skull_crossbones:".repeat(difficulty) : difficulty
+		return `${getIcon(type)} ${place} ${typeof difficulty === "number" ? ":skull_crossbones:".repeat(difficulty) : difficulty}`;
 	}) : defaultNonExplored;
 
 	const sideColor = "#45b6fe";
