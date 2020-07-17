@@ -41,6 +41,10 @@ const icons = {
 	"chest":{ name: ":womans_clothes:", icon: "👚" },
 	"legging":{ name: ":jeans:", icon: "👖" },
 
+	// Shop
+	"Small Healing Potion": { name: ":thermometer:" },
+	"Large Healing Potion": { name: ":syringe:" },
+
 	// Stats
 	"xp":{ name: ":mortar_board:", icon: "🎓" },
 	"health":{ name: ":heart:", icon: "❤️" },
