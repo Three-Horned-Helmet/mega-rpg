@@ -61,7 +61,7 @@ const checkIfBuildIsPossible = (user, building, coordinates) => {
 	}
 
 	// Check for resources and max level
-	const buildingCost = building.levels[usersBuilding ? usersBuilding.level + 1 : 0];
+	const buildingCost = building.levels.find(b => usersBuilding ? b.level === usersBuilding.level + 1 : b.level === 0);
 
 	if(!buildingCost) return { response: false, message:"You have already reached max level" };
 
