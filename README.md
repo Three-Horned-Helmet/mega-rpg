@@ -1,6 +1,4 @@
-Come play with us for free at our [support server](https://discord.gg/32KMfY)
-
-OR [invite](https://discord.gg/DZXZzC3) the bot to your Discord server!
+Come play with us for free at our [support server](https://discord.gg/DZXZzC3)
 
 # MEGA RPG
 
