@@ -429,7 +429,7 @@ userSchema.methods.collectResource = async function(collectBuildings, now, resou
 				// checks how many minutes it has been since last collected, and calculates produced value
 				const lastCollected = (now - lastCol) / 60000;
 				let produced = Math.floor(lastCollected * buildingsObject[name]
-					.levels[level].productionRate);
+					.levels.find(b => b.level === level).productionRate);
 
 				// If collect was called before you have any at all (prevent the reset of collect)
 				if(!produced && !resource) {
