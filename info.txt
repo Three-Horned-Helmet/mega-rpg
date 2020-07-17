@@ -29,7 +29,7 @@ __Build:__
 
 __Buy:__
 `!buy` => Returns all available items in your shop
-`!buy [itemName]` => Buys the item from the shop (!buy small heal potion)
+`!buy [itemName]` => Buys the item from the shop (!buy small healing potion)
 
 __Cooldowns:__
 `!cooldown` => An overview of the actions that are currently on cooldown
@@ -108,7 +108,7 @@ __Stake:__
 `!stake [@player]` => Stakes another player that must accept the challenge. Loser loses an aritfact item and 20% hero exp, winner gets it. (!stake @SpinningSiri)
 
 __Use:__
-`!use [itemName]` => Uses the specified item (consumable). (!use small heal potion)
+`!use [itemName]` => Uses the specified item (consumable). (!use small healing potion)
 
 __Weeklyprize:__
 `!weeklyprize` => A weekly prize that could be collected every 7 days

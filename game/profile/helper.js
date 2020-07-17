@@ -43,7 +43,7 @@ const generateTip = ()=> {
 		"You can gain gold by fishing!",
 		"Your elo rating is only affected by staking other players!",
 		"Fighting a miniboss is easier if your hero has a high rank!",
-		"Shortcut for Large Heal Potion is lhp!",
+		"Shortcut for Large Healing Potion is lhp!",
 		"Doing quests allow you to advance into other worlds!",
 		"Type !info for available commands!",
 		"Daily prizes grows for each consective day you trigger it!",

@@ -192,11 +192,11 @@ const userSchema = new Schema({
 			default: 3,
 		},
 		inventory: {
-			["Small Heal Potion"]: {
+			["Small Healing Potion"]: {
 				type: Number,
 				default: 5,
 			},
-			["Large Heal Potion"]: {
+			["Large Healing Potion"]: {
 				type: Number,
 				default: 0,
 			},

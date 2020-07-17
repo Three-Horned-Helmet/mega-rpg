@@ -27,7 +27,7 @@ const prettifyUser = async (message, user, avatar) => {
 
 	const armyValue = `👮‍♀️ Soldiers: ${totalSoldiers}\n\n⚔ AT: ${armyStats.unitStats.attack}\n\n❤️ HP: ${armyStats.unitStats.health}`;
 
-	const inventoryValue = `💰 Gold: ${user.resources.gold}\n\n🧪 Small Potion: ${hero.inventory["Small Heal Potion"]}\n\n💉 Large Potion: ${hero.inventory["Large Heal Potion"]}`;
+	const inventoryValue = `💰 Gold: ${user.resources.gold}\n\n🧪 Small Potion: ${hero.inventory["Small Healing Potion"]}\n\n💉 Large Potion: ${hero.inventory["Large Healing Potion"]}`;
 
 	const fields = [
 		{

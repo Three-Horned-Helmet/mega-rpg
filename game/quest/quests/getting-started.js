@@ -122,8 +122,8 @@ module.exports = {
 	},
 	buildShop: {
 		name: "Build a shop",
-		description: "Your hero will lose hp when fighting, and thus needs to get healed back up. To do this you can buy healing potions from a shop. Your goal is to build a shop and buy a small healing potion\n\nYou can build a shop with the command `!build shop`, buy a small heal potion with the command `!buy small heal potion` and use it with the command `!use small heal potion`",
-		objective: "Build a shop level 0\nBuy a small heal potion",
+		description: "Your hero will lose hp when fighting, and thus needs to get healed back up. To do this you can buy healing potions from a shop. Your goal is to build a shop and buy a small healing potion\n\nYou can build a shop with the command `!build shop`, buy a small healing potion with the command `!buy small healing potion` and use it with the command `!use small healing potion`",
+		objective: "Build a shop level 0\nBuy a small healing potion",
 		reward: "Gold: 20",
 		winDescription: "Make sure to not let your hero die as it will lose experience and possibly ranks\n**A new quest is available**",
 		questKeySequence: ["gettingStarted", "buildShop"],
