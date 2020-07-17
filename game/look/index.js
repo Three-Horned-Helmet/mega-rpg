@@ -17,14 +17,14 @@ const getWorld = (user) => {
 	const strengths = calculateTopAndLowStrengths(currentLocation);
 	const exploredPlacesWithIcons = exploredPlaces.length ? exploredPlaces.map(place=>{
 		const { type, stats } = worldLocations[currentLocation].places[place];
-		let difficulty = "?";
+		let difficulty = "";
 		if(strengths[type]) {
 			const { lowestStrength, highestStrength } = strengths[type];
-			difficulty = stats ? Math.floor(((Object.values(stats).reduce((a, b) => a + b) - lowestStrength) / (highestStrength - lowestStrength)) * 9 + 1) : "?";
+			difficulty = stats ? Math.floor(((Object.values(stats).reduce((a, b) => a + b) - lowestStrength) / (highestStrength - lowestStrength)) * 9 + 1) : "";
 		}
 
 		// typeof difficulty === "number" ? ":skull_crossbones:".repeat(difficulty) : difficulty
-		return `${getIcon(type)} ${place}  (${difficulty})`;
+		return `${getIcon(type)} ${place} ${typeof difficulty === "number" ? ":skull_crossbones:".repeat(difficulty) : difficulty}`;
 	}) : defaultNonExplored;
 
 	const sideColor = "#45b6fe";
