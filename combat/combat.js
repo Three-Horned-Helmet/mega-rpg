@@ -70,6 +70,7 @@ const calculatePveFullArmyResult = (user, npc) => {
 	let lossPercentage = (userHp + userAt - (oppHp + oppAt)) / (userHp + userAt);
 	lossPercentage = lossPercentage < 0 ? 0 : 1 - lossPercentage;
 	const { username, userId } = user.account;
+	const damageLost = Math.round(lossPercentage * user.hero.currentHealth);
 
 	const pveResult = {
 		combatModifier,
@@ -81,6 +82,7 @@ const calculatePveFullArmyResult = (user, npc) => {
 		win,
 		username,
 		userId,
+		damageLost
 	};
 
 	// generates a random reward number
@@ -98,7 +100,7 @@ const calculatePveFullArmyResult = (user, npc) => {
 	}
 	else {
 		pveResult.expReward = Math.ceil(Math.random() * 10);
-		if (user.hero.rank > 0 && lossPercentage === 0) {
+		if (user.hero.rank > 0 && damageLost + user.hero.currentHealth >= user.hero.health) {
 			pveResult.levelUp = false;
 			pveResult.expReward = 0;
 			pveResult.heroDemote = true;
