@@ -18,7 +18,6 @@ const handleCaptcha = async (message, user, tries = 3)=> {
 	});
 
 	collector.on("end", async () => {
-		console.log(userAnswer, "useranswer");
 
 
 		if(tries <= 1) {
