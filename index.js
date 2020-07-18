@@ -81,7 +81,7 @@ client.on("message", async (message) => {
 
 	// creates new user if not exist
 	if (!userProfile) {
-		userProfile = await createNewUser(author);
+		userProfile = await createNewUser(author, message.channel.id);
 	}
 
 	// stops banned players
@@ -117,7 +117,7 @@ client.on("message", async (message) => {
 
 client.login(token);
 
-const createNewUser = (user) => {
+const createNewUser = (user, channelId) => {
 	if (user.bot) {
 		console.error("No bots allowed");
 		return;
@@ -125,6 +125,7 @@ const createNewUser = (user) => {
 	const account = {
 		username: user.username,
 		userId: user.id,
+		servers:[channelId]
 	};
 	const newUser = new User({
 		account,

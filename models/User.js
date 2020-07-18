@@ -27,6 +27,7 @@ const userSchema = new Schema({
 			type: Boolean,
 			default: false,
 		},
+		servers:Array,
 		patreon: {
 			type: String,
 			enum: ["", "Bronze", "Silver", "Gold", "Platinum"],
