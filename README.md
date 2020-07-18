@@ -10,6 +10,13 @@ OR [invite](https://discordapp.com/oauth2/authorize?client_id=721024429345341560
 
 ---
 
+## Intro
+In Mega-RPG you can build a city and explore the surroundings with your hero and army. You are able to do quests, kill minibosses and drop epic loot during your adventures! If you are brave enough you will also be able to raid a dungeon, but be warned you’ll need the help from other adventurers to take it down!
+
+The Game is set in a fantasy-medieval universe and the journey begins in a kingdom tyrannized by a Bandit King and its Impling helpers. The citizens of the kingdom has lost hope, but some try their best to live their lives. You are a master of your own empire, but with an army and a hero you will be able to help the citizens and bring down the Bandit King!
+
+The game is in very early development, but we have great plans on how to expand it if there are enough people who enjoy playing it just as much as we have enjoyed creating it! Any feedback or bug-reports are very much appreciated!!:)
+
 ## How to install
 
 1. Install [NodeJS](https://nodejs.org/en/download/).
