@@ -11,7 +11,7 @@ module.exports = {
 			level: 0,
 		},
 		stats: {
-			attack: 15,
+			attack: 5,
 		},
 	},
 	["oak shortbow"]: {
@@ -25,7 +25,7 @@ module.exports = {
 			level: 0,
 		},
 		stats: {
-			attack: 20,
+			attack: 6,
 		},
 	},
 	["bronze helmet"]: {
@@ -39,7 +39,7 @@ module.exports = {
 			level: 0,
 		},
 		stats: {
-			health: 8,
+			health: 3,
 		},
 	},
 	["bronze platemail"]: {
@@ -53,7 +53,7 @@ module.exports = {
 			level: 0,
 		},
 		stats: {
-			health: 15,
+			health: 6,
 		},
 	},
 	["bronze leggings"]: {
@@ -67,7 +67,7 @@ module.exports = {
 			level: 0,
 		},
 		stats: {
-			health: 10,
+			health: 5,
 		},
 	},
 
@@ -83,7 +83,7 @@ module.exports = {
 			level: 1,
 		},
 		stats: {
-			attack: 35,
+			attack: 10,
 		},
 	},
 	["yew shortbow"]: {
@@ -97,7 +97,7 @@ module.exports = {
 			level: 1,
 		},
 		stats: {
-			attack: 43,
+			attack: 12,
 		},
 	},
 	["iron helmet"]: {
@@ -111,7 +111,7 @@ module.exports = {
 			level: 1,
 		},
 		stats: {
-			health: 15,
+			health: 8,
 		},
 	},
 	["iron platemail"]: {
@@ -125,7 +125,7 @@ module.exports = {
 			level: 1,
 		},
 		stats: {
-			health: 22,
+			health: 15,
 		},
 	},
 	["iron leggings"]: {
@@ -139,7 +139,7 @@ module.exports = {
 			level: 1,
 		},
 		stats: {
-			health: 17,
+			health: 13,
 		},
 	},
 
@@ -155,7 +155,7 @@ module.exports = {
 			level: 2,
 		},
 		stats: {
-			attack: 50,
+			attack: 25,
 		},
 	},
 	["northern shortbow"]: {
@@ -170,7 +170,7 @@ module.exports = {
 			level: 2,
 		},
 		stats: {
-			attack: 60,
+			attack: 30,
 		},
 	},
 	["steel helmet"]: {
@@ -184,7 +184,7 @@ module.exports = {
 			level: 2,
 		},
 		stats: {
-			health: 25,
+			health: 15,
 		},
 	},
 	["steel platemail"]: {
@@ -198,7 +198,7 @@ module.exports = {
 			level: 2,
 		},
 		stats: {
-			health: 35,
+			health: 22,
 		},
 	},
 	["steel leggings"]: {
@@ -212,7 +212,7 @@ module.exports = {
 			level: 2,
 		},
 		stats: {
-			health: 23,
+			health: 14,
 		},
 	},
 };

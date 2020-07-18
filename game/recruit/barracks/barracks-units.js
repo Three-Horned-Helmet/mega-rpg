@@ -9,14 +9,14 @@ module.exports = {
 			level: 0,
 		},
 		stats: {
-			health: 20,
+			health: 10,
 			attack: 5,
 		},
 	},
 	militia: {
 		name: "militia",
 		cost: {
-			gold: 20,
+			gold: 15,
 			["bronze bar"]: 2,
 		},
 		requirement: {
@@ -24,14 +24,14 @@ module.exports = {
 			level: 1,
 		},
 		stats: {
-			health: 60,
-			attack: 10,
+			health: 35,
+			attack: 16,
 		},
 	},
 	guardsman: {
 		name: "guardsman",
 		cost: {
-			gold: 50,
+			gold: 35,
 			["iron bar"]: 4,
 		},
 		requirement: {
@@ -39,8 +39,8 @@ module.exports = {
 			level: 2,
 		},
 		stats: {
-			health: 150,
-			attack: 20,
+			health: 80,
+			attack: 25,
 		},
 	},
 };

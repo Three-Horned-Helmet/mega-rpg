@@ -74,7 +74,7 @@ module.exports = {
 					["oak wood"]: 35,
 				},
 				level: 0,
-				popIncrease: 200,
+				popIncrease: 30,
 			},
 			{
 				cost: {
@@ -83,7 +83,7 @@ module.exports = {
 					["yew wood"]: 145,
 				},
 				level: 1,
-				popIncrease: 300,
+				popIncrease: 90,
 			},
 			{
 				cost: {
@@ -93,7 +93,7 @@ module.exports = {
 					["barlind wood"]: 210,
 				},
 				level: 2,
-				popIncrease: 300,
+				popIncrease: 150,
 			},
 		],
 		execute: async function(user) {
