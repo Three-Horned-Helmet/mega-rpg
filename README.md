@@ -10,6 +10,12 @@ OR [invite](https://discordapp.com/oauth2/authorize?client_id=721024429345341560
 
 ---
 
+## Get started
+1. Join a discord server that has the bot (see invite above).
+2. Type: `!help` in one of the command channels to get an overview of all the different commands
+3. It is adviced to start your adventure with `!quest` to ease your way into Mega-RPG!
+
+
 ## Intro
 In Mega-RPG you can build a city and explore the surroundings with your hero and army. You are able to do quests, kill minibosses and drop epic loot during your adventures! If you are brave enough you will also be able to raid a dungeon, but be warned you’ll need the help from other adventurers to take it down!
 
