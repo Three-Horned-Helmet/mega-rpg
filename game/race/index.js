@@ -28,18 +28,18 @@ const handleRace = async (message, user)=>{
 	const generatedInvitation = createRaceInvitation(user, raceDataCopy);
 
 	const raceInvitation = await message.channel.send(generatedInvitation);
+	const participants = new Map();
 
 	const reactionFilter = (reaction) => {
 		return Object.keys(raceDataCopy).some(r=> r === reaction.emoji.name);
 	};
 
-	const collector = await raceInvitation.createReactionCollector(reactionFilter, { max:15, time: 1000 * 15, errors: ["time"] });
+	const collector = await raceInvitation.createReactionCollector(reactionFilter, { time: 1000 * 15, errors: ["time"] });
 
 	await asyncForEach(Object.keys(raceDataCopy), async (r)=>{
-		await raceInvitation.react(r);
+		raceInvitation.react(r);
 	});
 
-	const participants = new Map();
 
 	collector.on("collect", async (result, rUser) => {
 		if (rUser.bot) {
