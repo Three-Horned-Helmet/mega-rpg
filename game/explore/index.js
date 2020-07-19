@@ -29,7 +29,7 @@ const exploreArea = async (user, places, currentLocation, now)=>{
 	}
 	let msg;
 
-	if(CHANCE_FOR_SUCCESS > Math.random() || previouslyExploredPlaces.includes(newlyExploredPlaceName)) {
+	if(CHANCE_FOR_SUCCESS < Math.random() || previouslyExploredPlaces.includes(newlyExploredPlaceName)) {
 		msg = generateFailExploreMessage(currentLocation);
 	}
 	else {
