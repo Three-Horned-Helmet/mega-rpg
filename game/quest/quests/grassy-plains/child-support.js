@@ -35,7 +35,7 @@ module.exports = {
 			await user.gainManyResources({
 				gold: 280,
 			});
-			user.buyItem({ name: "Large Heal Potion" }, 5);
+			user.buyItem({ name: "Large Healing Potion" }, 5);
 
 			user.removeQuest(this.name);
 

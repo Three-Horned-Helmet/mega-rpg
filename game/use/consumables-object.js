@@ -1,7 +1,7 @@
 const consumablesObject = {
-	["Small Heal Potion"]: {
-		name: "Small Heal Potion",
-		healingValue: 170,
+	["Small Healing Potion"]: {
+		name: "Small Healing Potion",
+		healingValue: 200,
 		price: 5,
 		requirement: {
 			building: "shop",
@@ -11,10 +11,10 @@ const consumablesObject = {
 			return await useHealingPotion(user, item);
 		},
 	},
-	["Large Heal Potion"]: {
-		name: "Large Heal Potion",
-		healingValue: 800,
-		price: 25,
+	["Large Healing Potion"]: {
+		name: "Large Healing Potion",
+		healingValue: 1200,
+		price: 30,
 		requirement: {
 			building: "shop",
 			level: 1,

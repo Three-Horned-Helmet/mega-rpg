@@ -10,14 +10,14 @@ module.exports = {
 			level: 0,
 		},
 		stats: {
-			health: 22,
-			attack: 10,
+			health: 14,
+			attack: 6,
 		},
 	},
 	archer: {
 		name: "archer",
 		cost: {
-			gold: 30,
+			gold: 22,
 			["yew wood"]: 7,
 		},
 		requirement: {
@@ -25,14 +25,14 @@ module.exports = {
 			level: 1,
 		},
 		stats: {
-			health: 45,
-			attack: 35,
+			health: 27,
+			attack: 30,
 		},
 	},
 	ranger: {
 		name: "ranger",
 		cost: {
-			gold: 50,
+			gold: 45,
 			["yew wood"]: 10,
 			["oak wood"]: 10,
 		},
@@ -41,8 +41,8 @@ module.exports = {
 			level: 2,
 		},
 		stats: {
-			health: 75,
-			attack: 80,
+			health: 70,
+			attack: 75,
 		},
 	},
 };

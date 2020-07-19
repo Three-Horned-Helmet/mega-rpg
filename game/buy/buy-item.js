@@ -1,4 +1,5 @@
 const consumeObj = require("../use/consumables-object");
+const { getIcon } = require("../_CONSTS/icons");
 
 // Runs functions depending on the given args
 const handleBuyCommand = async (args, user) =>{
@@ -23,7 +24,7 @@ const displayShop = (user) =>{
 	Object.values(consumeObj).forEach(item =>{
 		const { building, level } = item.requirement;
 		if(user.empire.find(b => b.name === building && b.level >= level)) {
-			message += `- ${item.name}: ${item.price}g\n`;
+			message += `${getIcon(item.name)} ${item.name}: ${item.price}g\n`;
 			noItems = false;
 		}
 	});

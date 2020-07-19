@@ -206,7 +206,7 @@ const worldLocations = {
 					rewards:{
 						gold:600,
 						xp:1100,
-						drop: ["greatsword of the spring", "bauxite daggers", "Large Heal Potion", "Small Heal Potion"],
+						drop: ["greatsword of the spring", "bauxite daggers", "Large Healing Potion", "Small Healing Potion"],
 					},
 					stats:{
 						attack: 500,
@@ -512,7 +512,7 @@ const worldLocations = {
 					rewards:{
 						gold:5000,
 						xp:1100,
-						drop: ["greatsword of the spring", "bauxite daggers", "Large Heal Potion", "Small Heal Potion"],
+						drop: ["greatsword of the spring", "bauxite daggers", "Large Healing Potion", "Small Healing Potion"],
 					},
 					stats:{
 						attack: 500,

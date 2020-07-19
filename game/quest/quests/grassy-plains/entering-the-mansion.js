@@ -13,7 +13,7 @@ module.exports = {
 		pve: [{
 			name: "Fishing village",
 			completed: false,
-			chance: 0.5,
+			chance: 0.6,
 		}],
 		found: "While looking through the Village for someone who knows how to get into the Mansion, you stumble upon a sign with the text 'Locksmith Ahred'",
 		intro: "You try to open the door into the Mansion, but it is locked.",
