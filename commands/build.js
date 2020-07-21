@@ -20,7 +20,7 @@ module.exports = {
 		if (args.length === 0) return message.channel.send(availableBuilds(user));
 		const building = buildingsObject[args.slice(0, args.length - 1).join(" ")] || buildingsObject[args.slice(0, args.length).join(" ")];
 
-		if(args[args.length - 1] === "-u") {
+		if(args[args.length - 1] === "-u" || (building && user.empire.find(b => b.name === building.name))) {
 			const usersBuildings = user.empire.filter(b => b.name === building.name).sort((a, b) => a.level - b.level);
 			if(usersBuildings.length > 0) {
 				args[args.length - 1] = usersBuildings[0].position.join(".");
