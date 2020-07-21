@@ -20,7 +20,7 @@ const prettifyUser = async (message, user, avatar) => {
 	const heroRank = hero.rank;
 	const heroValue = `❤️ HP: ${hero.currentHealth}/${hero.health}\n\n⚔ AT: ${hero.attack}\n\n🛡 DEF: ${hero.defense}\n\n🔅 XP: ${hero.currentExp}/${hero.expToNextRank}`;
 
-	const heroEquipment = `🧢 Helmet: ${hero.armor.helmet}\n\n⚜️ Chest: ${hero.armor.chest}\n\n🦵 Leggings: ${hero.armor.legging}\n\n🗡 Weapon: ${hero.armor.weapon}`;
+	const heroEquipment = `🧢 Helmet: ${hero.armor.helmet.capitalize()}\n\n⚜️ Chest: ${hero.armor.chest.capitalize()}\n\n🦵 Leggings: ${hero.armor.legging.capitalize()}\n\n🗡 Weapon: ${hero.armor.weapon.capitalize()}`;
 
 	const totalSoldiers = getAllSoldiers(user.army.units);
 	const armyStats = calculateStats(user);

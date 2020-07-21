@@ -37,6 +37,7 @@ const equipmentEmbed = (user) => {
 
 const addEquipmentField = (user, iType) => {
 	const items = Object.keys(user.army.armory[iType]).sort((a, b)=> sortHelper(a) - sortHelper(b));
+
 	const value = items.map(item => {
 		const itemAmount = user.army.armory[iType][item];
 		if(!itemAmount) return false;
@@ -44,9 +45,10 @@ const addEquipmentField = (user, iType) => {
 		return `${item.capitalize()} (${itemAmount})\n${objectMessage(itemObj.stats)}`;
 	}).filter(el => el);
 
+
 	const field = {
 		name: `${iType.capitalize()}s`,
-		value: value,
+		value: value.length > 0 ? value : "[NONE]",
 		inline: true,
 	};
 

@@ -14,7 +14,8 @@ module.exports = {
 	execute(message, args, user) {
 		if(args.length === 0) return message.channel.send(showProduceEmbed(user));
 
-		const resource = args.join(" ");
+		// Filter to remove duplicates arising from the shortcuts
+		const resource = args.filter((el, i) => args.indexOf(el) === i).join(" ");
 
 		changeProducedResource(user, resource).then((response) => {
 			message.channel.send(`<@${message.author.id}>: ${response}`);

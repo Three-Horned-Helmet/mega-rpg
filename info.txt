@@ -47,6 +47,9 @@ __Craft:__
 __Dailyprize:__
 `!dailyprize` => A daily prize that could be collected every 24 hours
 
+__Destroy:__
+`!destroy <buildingName> => Removes the specified building from your empire.
+
 __Duel:__
 `!duel [@user]` => Duels the user in a friendly full army battle without losses (!duel @SpinningSiri)
 
@@ -103,6 +106,9 @@ __Recruit:__
 
 __Resources:__
 `!resources` => Returns all your resources (!resources)
+
+__Shortcuts:__
+`!<command> shortcuts` => Returns all the available shortcuts for the given command. (!build shortcuts)
 
 __Stake:__
 `!stake [@player]` => Stakes another player that must accept the challenge. Loser loses an aritfact item and 20% hero exp, winner gets it. (!stake @SpinningSiri)
