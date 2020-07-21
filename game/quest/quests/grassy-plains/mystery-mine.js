@@ -20,7 +20,7 @@ module.exports = {
 		found: "*\\*Bugbear is covered in blood and falls to his knees\\**",
 		description: "You silently move closer to the squealing. As you round the corner you see a tall, crooked shadow inspecting a massive rock by the wall. A Goblin! You are surprised by the sight and move slowly away. The slippery stones makes you lose the balance and fall with a lound *\\*crack\\**.\n\n'Yeeek! What do we have here!', *\\*squeeal\\**, 'Is it a puny human disturbing busy Bugbear?' *\\*shriiiek\\** 'What business does a human have in this Collapsed Mine?'\n\n'I... I was just hunting for Spiders when I heard your squealing!'\n\n'You better leave working Bugbear alone' *\\*reeek\\** 'Little Human is lucky hungry Bugbear is busy, else you would greet the red man! Run now! Leave! Now!' *\\*yiiik\\**\n\n*You take on Bugbears advice and run out of the Mine to greet the warm sunlight outside!*\n\n'What is a dangerous Goblin doing in this area? It can not be safe to let him stay... I need to end him before he starts making mischief!'",
 		objective: "Gather your full strength and attack Bugbear! (`!raid bugbear`)",
-		reward: "Gold: 740",
+		reward: "Gold: 440",
 		winDescription: "'You... Defeated... Dying Bugbear... I just... Wanted... Stone... The... Smell...'\n**A new quest is available**",
 		questKeySequence: ["Grassy Plains", "meetingBugbear"],
 
@@ -35,7 +35,7 @@ module.exports = {
 
 			// Get reward
 			await user.gainManyResources({
-				gold: 740,
+				gold: 440,
 			});
 
 			// Add next quest

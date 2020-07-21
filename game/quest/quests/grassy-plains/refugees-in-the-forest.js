@@ -9,11 +9,11 @@ module.exports = {
 		name: "Refugees in the Forest",
 		obtaining: {
 			area: "Forest",
-			chance: 0.4,
+			chance: 1,
 		},
 		intro: "As you chase a boar deeper into the Forest you come across an encampment.",
 		description: "You are greeted by worried looks as you enter the encampment. There are several tents across the area, but the people seems to be in rough shape. A tall muscular man comes up to you. He has an aggressive look on his face.\n\n'Hello! My name is Isaac, who are you and where do you come from stranger? Speak!'\n\n'My name is %username%, and I come from an Empire in the rising about a day's travel from here. I was just hunting for Boars and stumbled across the encampment, I want no harm!'\n\n*\\*His face breaks out in a small but firm smile\\**\n\n'As long as you are no friend of that Bandit King, then you are more than welcome here! We have fled his tyranny to start a new life here in the woods. It is a place where people can feel safe, and the children can run freely!'\n\n*\\*He shows you around the encampment\\**\n\n'As you can tell we are in rough shape, The Bandit King took everything from us so we had no choice but to start fresh.\nWe could really need your help! If your Empire could provide us some lumber and ore, then it would help us build proper homes before the winter arrives!'",
-		objective: "Provide the encampment some raw materials\nOak wood: 70\nYew wood: 30\nCopper ore: 50",
+		objective: "Provide the encampment some raw materials\nOak wood: 70\nYew wood: 30\nCopper ore: 50\nEnter the command `!quest %questIndex%` when you are finished.",
 		reward: "Leggings of the Dawn: 1",
 		winDescription: "'Thank you so much, %username%! These materials will come to good use, we promise you that! I know that you have already done so much for us, but may we ask you for one last favour?\n**A new quest is available**'",
 		questKeySequence: ["Grassy Plains", "refugeesInForest"],

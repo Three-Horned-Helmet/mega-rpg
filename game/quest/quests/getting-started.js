@@ -5,8 +5,8 @@ const allItems = require("../../items/all-items");
 module.exports = {
 	buildMine: {
 		name: "Build a Mine",
-		description: "Welcome to MEGA RPG, where your goal is to create the largest empire and conquer the world! Now let's get you started!\n\n Your first objective is to __build a Mine__ and __collect 5 copper ore__. \n\nYou can build a Mine with the command `!build mine` and it will passively collect ores depending on the level of the Mine. A level 0 Mine will collect 1 copper ore per minute, and can be collected with the command `!collect`. Mines are crucial for rapid expansion and in production of an unbeatable army!",
-		objective: "Build: Mine level 0\n Collect: 5 Copper Ore",
+		description: "Welcome to Mega-RPG %username%, where your goal is to create the largest empire and conquer the world! Now let's get you started!\n\n Your first objective is to __build a Mine__ and __collect 5 copper ore__. \n\nYou can build a Mine with the command `!build mine` and it will passively collect ores depending on the level of the Mine. A level 0 Mine will collect 1 copper ore per minute, and can be collected with the command `!collect`. Mines are crucial for rapid expansion and in production of an unbeatable army!",
+		objective: "Build: Mine level 0\nCollect: 5 Copper Ore.\nEnter the command `!quest %questIndex%` when you are finished.",
 		reward: "Gold: 30\nCopper Ore: 5",
 		winDescription: "A Mine will help you build new structures in your empire! To see the different available buildings type the command `!build`.\n**A new quest is available**",
 		questKeySequence: ["gettingStarted", "buildMine"],
@@ -46,7 +46,7 @@ module.exports = {
 	buildLumbermill: {
 		name: "Build a Lumbermill",
 		description: "You have now set up a production of copper ore, however some buildings, units and items require wood as well to be made. Your next goal is to __build a Lumbermill__ and collect 7 oak wood__. \n\nYou can build a lumbermill with the command `!build lumbermill` and it will passively collect wood depending on the level of the lumbermill. A level 0 lumbermill will collect 1 oak wood per minute, and can be collected with the command `!collect`. Lumbermill are crucial in obtaining certain buildings, items or units!",
-		objective: "Build: Lumbermill level 0\n Collect: 7 Oak Wood",
+		objective: "Build: Lumbermill level 0\nCollect: 7 Oak Wood\nEnter the command `!quest %questIndex%` when you are finished.",
 		reward: "Gold: 35\nOak Wood: 10",
 		winDescription: "With the Lumbermill set up you are now able to start expanding your kingdom! You can __upgrade__ buildings using the command prefix `-u`: `!build <buildingName> -u`. e.g. `!build lumbermill -u`. A higher leveled production building will be able to produce different resources. You can see display all available production and change it with the command `!produce`.\n**A new quest is available**",
 		questKeySequence: ["gettingStarted", "buildLumbermill"],
@@ -87,7 +87,7 @@ module.exports = {
 		name: "Explore your Surroundings",
 		description: "You have now successfully started production of ores and lumber in your empire and it is time to explore your empire's surroundings. Try and find some nearby sources of income. \n\nYou can explore with the command `!explore` and you will have a chance of finding different areas that you can interact with around your empire.",
 		objective: "Explore 'River'",
-		reward: "Gold: 25\nCopper Ore: 5",
+		reward: "Gold: 25\nCopper Ore: 5\nEnter the command `!quest %questIndex%` when you are finished.",
 		winDescription: "With the 'River' explored you can go fishing in it with the command `!fish`. This is an excellent source of gold! There are several available areas that you can explore and interact with, so keep exploring and see what you find!\n**A new quest is available**",
 		questKeySequence: ["gettingStarted", "exploreSurroundings"],
 
@@ -124,7 +124,7 @@ module.exports = {
 		name: "Build a shop",
 		description: "Your hero will lose hp when fighting, and thus needs to get healed back up. To do this you can buy healing potions from a shop. Your goal is to build a shop and buy a small healing potion\n\nYou can build a shop with the command `!build shop`, buy a small healing potion with the command `!buy small healing potion` and use it with the command `!use small healing potion`.",
 		objective: "Build a shop level 0\nBuy a small healing potion",
-		reward: "Gold: 20",
+		reward: "Gold: 20\nEnter the command `!quest %questIndex%` when you are finished.",
 		winDescription: "You can also use shortcuts to save time like `!buy shp`. See available shortcuts with the command `!buy shortcuts`. Make sure to not let your hero die as it will lose experience and possibly ranks.\n**A new quest is available**",
 		questKeySequence: ["gettingStarted", "buildShop"],
 

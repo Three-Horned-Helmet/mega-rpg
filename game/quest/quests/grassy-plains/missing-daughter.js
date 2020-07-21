@@ -20,7 +20,7 @@ module.exports = {
 		intro: "You found a Young Woman begging for help in one of the houses of the Village",
 		description: "'Please sir! I need your help', cried the Young Woman. 'My daughter is missing! She was playing with her doll about a day ago when some of the other kids started making fun of her. She got upset ran away in the direction of the **Cave**. I have always told her not to go near that dangerous area! There has been several kids missing after those damned bandits started inhabiting the Cave.'\n\n*\\*The young woman walks up close to you.\\**\n\n'When I came looking for her, she was nowhere to be found. It is probably those damned bandits! They have been staying at the Cave for a while now, but I don't dare go in there alone, the Cave is too enormous and I can only imagine what they will do to a young woman like me.'\n\n*\\*She grabs your arm forcefully!\\**\n\n'Will you please go and look for her and if you find those bandits teach them a lesson! My poor, poor, little girl! All by herself, she must be so afraid!'\n\n*\\*The tears are rolling down her face in despair...\\** \n**You think to yourself... 'Here comes the rape train!'**",
 		objective: "Hunt the **Cave** until you find any signs of her daughter",
-		reward: "Gold: 270\n",
+		reward: "Gold: 220\n",
 		winDescription: "The torn up doll must belong to the Young Woman's daughter. You better confront those bandits about the missing children of the village and bring back the poor little girl to her mother.\n**A new quest is available**",
 		questKeySequence: ["Grassy Plains", "missingDaughter"],
 
@@ -35,7 +35,7 @@ module.exports = {
 
 			// Get reward
 			await user.gainManyResources({
-				gold: 270,
+				gold: 220,
 			});
 
 			// Add next quest
