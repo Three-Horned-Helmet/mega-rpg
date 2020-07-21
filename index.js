@@ -103,11 +103,6 @@ client.on("message", async (message) => {
 		userProfile.statistics[command.name] += 1;
 	}
 
-	// delete after 20.07.2020
-	if (userProfile.account.userId == "285773285944328193") {
-		return message.reply(" 🎉 Happy Birthday 🎉 ");
-	}
-
 	// executes the command
 	{
 		try {
