@@ -3,6 +3,7 @@ const fs = require("fs");
 const Discord = require("discord.js");
 const User = require("./models/User");
 const { handleCaptcha } = require("./game/_GLOBAL_HELPERS/captcha");
+const { welcomeMessage } = require("./index-helpers/welcome-message");
 
 const token = process.env.DISCORD_TOKEN;
 const prefix = process.env.DISCORD_PREFIX;
@@ -82,6 +83,11 @@ client.on("message", async (message) => {
 	// creates new user if not exist
 	if (!userProfile) {
 		userProfile = await createNewUser(author, message.channel.id);
+		message.channel.send(welcomeMessage(userProfile));
+
+		if(!(command.name === "help" || command.name === "info")) {
+			return;
+		}
 	}
 
 	// stops banned players
