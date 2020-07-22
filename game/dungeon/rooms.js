@@ -12,8 +12,8 @@ const {
 } = require("./embedGenerator");
 const { asyncForEach } = require("../_GLOBAL_HELPERS/");
 
-const ICON_FORBIDDEN = getIcon("false");
-const ICON_CHECK = getIcon("true");
+const ICON_FORBIDDEN = getIcon("false", "icon");
+const ICON_CHECK = getIcon("true", "icon");
 
 const startDungeonRooms = async (message, progress) => {
 	const { initiativeTaker } = progress;

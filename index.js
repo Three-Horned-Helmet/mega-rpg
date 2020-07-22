@@ -99,10 +99,10 @@ client.on("message", async (message) => {
 	// - only for 3% of all commands
 	// - not for testusers (unit tests)
 	// - !hunt, !collect, !raid or !fish is being triggered
-
-	if (Math.random() <= 0.03 && userProfile.account.testUser === false && ["hunt", "collect", "raid", "fish"].includes(command.name)) {
-		return handleCaptcha(message, userProfile);
-	}
+	// bug found - removed for now
+	/* if (Math.random() <= 0.03 && userProfile.account.testUser === false && ["hunt", "collect", "raid", "fish"].includes(command.name)) {
+		return handleCaptcha(message, userProfile, 3);
+	} */
 
 	// adds command to statistics
 	if (Object.keys(userProfile.statistics).includes(command.name)) {

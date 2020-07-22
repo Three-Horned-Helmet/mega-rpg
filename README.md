@@ -11,7 +11,7 @@ OR [invite](https://discordapp.com/oauth2/authorize?client_id=721024429345341560
 ---
 
 ## Get started
-1. Join a discord server that has the bot (see invite above).
+1. Join a discord server that has the bot ([invite](https://discord.gg/DZXZzC3)).
 2. Type: `!help` in one of the command channels to get an overview of all the different commands
 3. It is adviced to start your adventure with `!quest` to ease your way into Mega-RPG!
 

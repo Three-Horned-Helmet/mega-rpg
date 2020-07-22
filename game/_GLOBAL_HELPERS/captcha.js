@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const Canvas = require("canvas");
 
-const handleCaptcha = async (message, user, tries = 3)=> {
+const handleCaptcha = async (message, user, tries)=> {
 	const captcha = createCaptcha();
 
 	const filter = msg =>{
