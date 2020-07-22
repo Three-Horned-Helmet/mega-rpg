@@ -27,7 +27,6 @@ const createDungeonBossRound = async (message, progress) => {
 	});
 	collector.on("collect", async (result) => {
 		if (result.author.bot) {
-			console.error("No bots allowed");
 			return;
 		}
 		if (progress.weaponAnswer.has(result.author.id)) {
