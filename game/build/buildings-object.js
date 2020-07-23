@@ -222,8 +222,8 @@ module.exports = {
 			{
 				cost: {
 					gold: 30,
-					["oak wood"]: 5,
-					["bronze bar"]: 20,
+					["oak wood"]: 10,
+					["bronze bar"]: 10,
 				},
 				level: 0,
 				craftables: ["bronze sword", "oak shortbow",

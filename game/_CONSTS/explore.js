@@ -89,9 +89,10 @@ const worldLocations = {
 					health: 25,
 				},
 				rewards:{
-					gold: 16,
+					gold: 5,
 					"oak wood": 2,
 					"yew wood": 1,
+					"copper ore": 1,
 				},
 			},
 			Cave: {
