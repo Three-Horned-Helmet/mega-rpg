@@ -181,6 +181,43 @@ module.exports = {
 			await user.addItem(allItems["bronze helmet"], 5);
 			await user.addItem(allItems["bronze leggings"], 5);
 			// // Add next quest
+			const newQuest = {
+			    name: "Upgrade Mine",
+			    started: false,
+			    questKeySequence: ["gettingStarted", "upgradeMine"],
+			};
+
+			user.addNewQuest(newQuest);
+			user.removeQuest(this.name);
+
+			await user.save();
+
+			return true;
+		},
+	},
+	upgradeMine: {
+		name: "Upgrade Mine",
+		description: "Now that your empire is starting to take form, you can go ahead and aim towards upgrading your buildings. To upgrade a building you can type the command `!build <buildingName> -u`. Upgrade your Lumbermill to increase your lumber production and to access new resources.",
+		objective: "Upgrade your lumbermill to level 1. It can be achieved with the command `!build lumbermill -u`",
+		reward: "Gold: 90\nYew wood: 20",
+		winDescription: "With the newly built Lumbermill you can now start producing Yew Wood. You can do this with the command `!produce yew`.",
+		questKeySequence: ["gettingStarted", "upgradeMine"],
+
+		// Returns false if the quest description is shown, or true if the quest is being completed
+		execute: async function(user) {
+			const questResponse = questHelper(user, this.name);
+			if(!questResponse) return false;
+
+			// Does the user have the enough bronze swords
+			if(!user.empire.find(b => b.name === "lumbermill" && b.level === 1)) return false;
+
+			// Get reward
+			await user.gainManyResources({
+				gold: 90,
+				"yew wood": 20
+			});
+
+			// // Add next quest
 			// const newQuest = {
 			//     name: "Build a Lumbermill",
 			//     started: false,
