@@ -1,4 +1,5 @@
 const User = require("../../models/User");
+const { getIcon } = require("../_CONSTS/icons");
 
 const getAllSoldiers = (units) => {
 	let result = 0;
@@ -13,14 +14,15 @@ const getAllSoldiers = (units) => {
 };
 
 const determineSupporterTitle = (subscription) => {
+
 	const titles = {
-		Bronze: "🎗 Supporter 🎗",
-		Silver: "🎖 Supporter 🎖",
-		Gold: "👑 Ultra Supporter 👑",
-		Platinum: "💎 Epic Supporter 💎",
+		Bronze: `${getIcon("bronzeSupporter")} Supporter ${getIcon("bronzeSupporter")}`,
+		Silver: `${getIcon("silverSupporter")} Supporter ${getIcon("silverSupporter")}`,
+		Gold: `${getIcon("goldSupporter")} Ultra Supporter ${getIcon("goldSupporter")}`,
+		Platinum: `${getIcon("platinumSupporter")} Epic Supporter ${getIcon("platinumSupporter")}`,
 	};
-	const result = subscription ? titles[subscription] : "Casual player";
-	return result;
+	const title = titles[subscription] ? titles[subscription] : "Casual player";
+	return title;
 };
 
 const getPlayerPosition = async (discordId, criteria = "hero.currentExp")=>{

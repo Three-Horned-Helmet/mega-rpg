@@ -4,7 +4,7 @@ const { expect } = require("chai");
 const User = require("../../models/User");
 const exploreCommand = require("../../commands/explore");
 const { createTestUser, generateDiscordMessage } = require("../helper");
-const { worldLocations } = require("../../game/_CONSTS/explore");
+const { worldLocations } = require("../../game/_UNIVERSE");
 
 
 describe("explore command", () => {

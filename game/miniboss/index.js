@@ -1,5 +1,5 @@
 const { onCooldown } = require("../_CONSTS/cooldowns");
-const { worldLocations } = require("../_CONSTS/explore");
+const { worldLocations } = require("../_UNIVERSE");
 const { getIcon } = require("../_CONSTS/icons");
 const { createMinibossInvitation, createMinibossResult } = require("./embedGenerator");
 const { asyncForEach, deepCopyFunction } = require("../_GLOBAL_HELPERS");
@@ -7,7 +7,7 @@ const { asyncForEach, deepCopyFunction } = require("../_GLOBAL_HELPERS");
 const User = require("../../models/User");
 
 // Note: The success of defeating the miniboss is based soley on user rank
-const handleMiniboss = async (message, user)=>{
+const handleMiniboss = async (message, user) => {
 
 	// cooldown, health, explored miniboss
 	const disallowed = minibossStartAllowed(user);
@@ -29,7 +29,7 @@ const handleMiniboss = async (message, user)=>{
 		return reaction.emoji.name === minibossIcon;
 	};
 
-	const collector = await invitation.createReactionCollector(reactionFilter, { max:10, time: 1000 * 20, errors: ["time"] });
+	const collector = await invitation.createReactionCollector(reactionFilter, { max: 10, time: 1000 * 20, errors: ["time"] });
 	collector.on("collect", async (result, rUser) => {
 		if (rUser.bot || miniboss.helperIds.length > 9) {
 			return;
@@ -48,7 +48,7 @@ const handleMiniboss = async (message, user)=>{
 	});
 };
 
-const minibossStartAllowed = (user)=>{
+const minibossStartAllowed = (user) => {
 
 	const cooldownInfo = onCooldown("miniboss", user);
 	if (cooldownInfo.response) {
@@ -65,7 +65,7 @@ const minibossStartAllowed = (user)=>{
 	}
 
 	const { currentLocation } = user.world;
-	const minibossInformation = Object.values(worldLocations[currentLocation].places).find(p=>p.type === "miniboss");
+	const minibossInformation = Object.values(worldLocations[currentLocation].places).find(p => p.type === "miniboss");
 
 
 	const locationIcon = getIcon(currentLocation);
@@ -75,9 +75,9 @@ const minibossStartAllowed = (user)=>{
 	return null;
 };
 
-const createMinibossEvent = (user) =>{
+const createMinibossEvent = (user) => {
 	const { currentLocation } = user.world;
-	const minibossname = Object.keys(worldLocations[currentLocation].places).find(p=>{
+	const minibossname = Object.keys(worldLocations[currentLocation].places).find(p => {
 		return worldLocations[currentLocation].places[p].type === "miniboss";
 	});
 	const miniboss = deepCopyFunction(worldLocations[currentLocation].places[minibossname]);
@@ -85,19 +85,19 @@ const createMinibossEvent = (user) =>{
 	return miniboss;
 };
 
-const validateHelper = async discordId =>{
+const validateHelper = async discordId => {
 	const user = await User.findOne({ "account.userId": discordId }).lean();
 	return user.hero.currentHealth > user.hero.health * 0.05;
 };
 
 
-const calculateMinibossResult = async (miniboss)=>{
+const calculateMinibossResult = async (miniboss) => {
 	const users = await User.find({ "account.userId": miniboss.helperIds });
 
-	const initiativeTaker = users.filter(user=>user.account.userId === miniboss.helperIds[0]);
-	const helpers = users.filter(user=>user.account.userId !== miniboss.helperIds[0]);
+	const initiativeTaker = users.filter(user => user.account.userId === miniboss.helperIds[0]);
+	const helpers = users.filter(user => user.account.userId !== miniboss.helperIds[0]);
 
-	let chanceForSuccess = helpers.reduce((acc, cur)=>{
+	let chanceForSuccess = helpers.reduce((acc, cur) => {
 		return acc + cur.hero.rank;
 	}, 0) + initiativeTaker[0].hero.rank + 2;
 
@@ -116,18 +116,18 @@ const calculateMinibossResult = async (miniboss)=>{
 		win: false,
 		initiativeTaker: initiativeTaker[0],
 		helpers: helpers,
-		rewards:{
-			initiativeTaker:{
+		rewards: {
+			initiativeTaker: {
 				dungeonKey: null,
 				gold: Math.round(miniboss.rewards.gold / 2),
 				xp: Math.round(miniboss.rewards.xp / 2),
 			},
-			helpers:[],
+			helpers: [],
 		},
-		damageDealt:{
+		damageDealt: {
 			initiativeTaker: Math.floor(Math.random() * miniboss.stats.attack),
-			initiativeTakerDead:false,
-			helpers:[],
+			initiativeTakerDead: false,
+			helpers: [],
 		},
 	};
 	// checks if initativetaker is dead
@@ -139,7 +139,7 @@ const calculateMinibossResult = async (miniboss)=>{
 	if (chanceForSuccess > difficulty) {
 		result.win = true;
 
-		if(result.initiativeTaker.hero.rank >= 2) {
+		if (result.initiativeTaker.hero.rank >= 2) {
 			result.rewards.initiativeTaker.dungeonKey = miniboss.rewards.dungeonKey;
 		}
 
@@ -153,7 +153,7 @@ const calculateMinibossResult = async (miniboss)=>{
 			const helperName = helper.account.username;
 			const helperLeveledUp = randomHelperXp + helper.hero.currentExp > helper.hero.expToNextRank;
 			helper.alternativeGainXp(randomHelperXp);
-			helper.gainManyResources({ gold:randomHelperGold });
+			helper.gainManyResources({ gold: randomHelperGold });
 			result.rewards.helpers.push({
 				randomHelperXp,
 				randomHelperGold,
@@ -164,8 +164,8 @@ const calculateMinibossResult = async (miniboss)=>{
 	}
 	else {
 		result.initiativeTaker.heroHpLossFixedAmount(result.damageDealt.initiativeTaker);
-		result.helpers.forEach(helper=>{
-			const randomHelperDamage = Math.round(Math.random() * miniboss.stats.attack) ;
+		result.helpers.forEach(helper => {
+			const randomHelperDamage = Math.round(Math.random() * miniboss.stats.attack);
 			const helperDead = helper.hero.currentHealth - randomHelperDamage <= 0;
 			helper.heroHpLossFixedAmount(randomHelperDamage);
 			result.rewards.helpers.push({
@@ -176,7 +176,7 @@ const calculateMinibossResult = async (miniboss)=>{
 	}
 	// saves to db
 
-	await asyncForEach(result.helpers, async (helper) =>{
+	await asyncForEach(result.helpers, async (helper) => {
 		await helper.save();
 	});
 	await result.initiativeTaker.save();

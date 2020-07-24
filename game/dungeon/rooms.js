@@ -1,4 +1,4 @@
-// const { worldLocations } = require("../_CONSTS/explore");
+// const { worldLocations } = require("../_UNIVERSE");
 const sleep = require("util").promisify(setTimeout);
 const { dungeonStartAllowed } = require("./helper");
 const { checkQuest } = require("../quest/quest-utils");
@@ -43,9 +43,9 @@ const startDungeonRooms = async (message, progress) => {
 	const raidResults = progress.players.map((player) => {
 		const balancedPlaceInfo = placeInfo;
 		balancedPlaceInfo.stats.attack =
-      balancedPlaceInfo.stats.attack / progress.players.length;
+			balancedPlaceInfo.stats.attack / progress.players.length;
 		balancedPlaceInfo.stats.health =
-      balancedPlaceInfo.stats.health / progress.players.length;
+			balancedPlaceInfo.stats.health / progress.players.length;
 		return calculatePveFullArmyResult(player, balancedPlaceInfo);
 	});
 
@@ -97,7 +97,7 @@ const startDungeonRooms = async (message, progress) => {
 		const emoji = reaction.emoji.name;
 		return (
 			progress.dungeon.helperIds.includes(rUser.id + "") &&
-      (emoji === ICON_CHECK || emoji === ICON_FORBIDDEN)
+			(emoji === ICON_CHECK || emoji === ICON_FORBIDDEN)
 		);
 	};
 	const acceptedPlayers = new Set();
@@ -145,8 +145,8 @@ const startDungeonRooms = async (message, progress) => {
 		if (progress.currentRoom >= 2) {
 			return await createDungeonBossRound(message, progress);
 		}
-		const requiredQuest = "The Key to the Mansion";
-		if (!progress.initiativeTaker.completedQuests.includes(requiredQuest)) {
+		const { requiredQuest } = progress.dungeon.boss;
+		if (!!requiredQuest && !progress.initiativeTaker.completedQuests.includes(requiredQuest)) {
 			const username = progress.initiativeTaker.account;
 			return message.channel.send(
 				`${username} has not completed the required quest to proceed`

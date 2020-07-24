@@ -1,5 +1,5 @@
 const { onCooldown } = require("../_CONSTS/cooldowns");
-const { worldLocations } = require("../_CONSTS/explore");
+const { worldLocations } = require("../_UNIVERSE");
 const { getIcon } = require("../_CONSTS/icons");
 const { calculateFishResult } = require("./fishvalue");
 
@@ -11,7 +11,7 @@ const handleFish = async (user) => {
 		return onCooldownInfo.embed;
 	}
 
-	const fishingPlaceInformation = Object.values(worldLocations[currentLocation].places).find(p=>{
+	const fishingPlaceInformation = Object.values(worldLocations[currentLocation].places).find(p => {
 		return p.type === "fish";
 	});
 	const locationIcon = getIcon(currentLocation);

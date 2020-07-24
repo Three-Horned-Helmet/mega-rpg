@@ -1,12 +1,12 @@
 const User = require("../../models/User");
-const { worldLocations } = require("../_CONSTS/explore");
+const { worldLocations } = require("../_UNIVERSE");
 const { startDungeonRooms } = require("./rooms");
 const { createDungeonInvitation } = require("./embedGenerator");
 const { dungeonStartAllowed, validateHelper } = require("./helper");
 const { deepCopyFunction } = require("../_GLOBAL_HELPERS/");
 const { getIcon } = require("../_CONSTS/icons");
 
-const handleDungeon = async (message, user)=>{
+const handleDungeon = async (message, user) => {
 	// cooldown, health, explored dungeon and dungeon key
 	const disallowed = dungeonStartAllowed(user);
 	if (disallowed) {
@@ -54,9 +54,9 @@ const handleDungeon = async (message, user)=>{
 };
 
 // Finds dungeon in current world
-const createDungeonBossEvent = (user) =>{
+const createDungeonBossEvent = (user) => {
 	const { currentLocation } = user.world;
-	const dungeonName = Object.keys(worldLocations[currentLocation].places).find(p=>{
+	const dungeonName = Object.keys(worldLocations[currentLocation].places).find(p => {
 		return worldLocations[currentLocation].places[p].type === "dungeon";
 	});
 	const dungeon = deepCopyFunction(worldLocations[currentLocation].places[dungeonName]);
@@ -68,18 +68,18 @@ const createDungeonBossEvent = (user) =>{
 // c
 const startDungeonEvent = async (message, dungeon) => {
 	const users = await User.find({ "account.userId": dungeon.helperIds });
-	const initiativeTaker = users.filter(u=> u.account.userId === dungeon.helperIds[0]);
+	const initiativeTaker = users.filter(u => u.account.userId === dungeon.helperIds[0]);
 
 	const progress = {
 		win: false,
-		finish:false,
-		currentRoom:0,
+		finish: false,
+		currentRoom: 0,
 		bossAttempts: 0,
 		initiativeTaker: initiativeTaker[0],
 		players: users,
 		dungeon: dungeon,
-		roundResults:[],
-		weaponAnswer:new Map(),
+		roundResults: [],
+		weaponAnswer: new Map(),
 	};
 
 	// recursive starts here

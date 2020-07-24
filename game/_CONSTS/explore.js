@@ -1,4 +1,7 @@
-const worldLocations = {
+// Object has been replaced
+// See _UNIVERSE
+
+/* const worldLocations = {
 	"Grassy Plains": {
 		description: "Here you can find all the noobs, such as yourself",
 		randomEvents: {
@@ -339,28 +342,6 @@ const worldLocations = {
 	"Misty Mountains":{
 		description: "You've entered a hostile environment where rewards are equally big as the threats",
 		randomEvents: {
-			"Mountain Bandits": {
-				name: "Mountain Bandits",
-				type: "raid",
-				stats:{
-					attack: 300,
-					health:100,
-				},
-				rewards:{
-					gold: 100,
-				},
-			},
-			Gnomes: {
-				name: "Gnomes",
-				type: "hunt",
-				stats:{
-					attack: 150,
-					health:50,
-				},
-				rewards:{
-					gold: 50,
-				},
-			},
 			["Bronze Chest"]: {
 				name: "Bronze Chest",
 				type: "luck",
@@ -682,4 +663,4 @@ const worldLocations = {
 	},
 };
 
-module.exports = { worldLocations };
+module.exports = { worldLocations }; */

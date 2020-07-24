@@ -63,6 +63,12 @@ const icons = {
 	"heal":{ name: ":test_tube:", icon: "🧪" },
 	"poke":{ name: ":point_right:", icon: "👉" },
 
+	// Supporter
+	"bronzeSupporter":{ name:":reminder_ribbon:", icon:"🎗" },
+	"silverSupporter":{ name:":military_medal:", icon:"🎖" },
+	"goldSupporter":{ name:":crown:", icon:"👑" },
+	"platinumSupporter":{ name:":gem:", icon:"💎" },
+
 	// Misc
 	"false":{ name: ":x:", icon: "❌" },
 	"true":{ name: ":white_check_mark:", icon: "✅" },

@@ -1,5 +1,5 @@
 const { onCooldown } = require("../_CONSTS/cooldowns");
-const { worldLocations } = require("../_CONSTS/explore");
+const { worldLocations } = require("../_UNIVERSE");
 const { getIcon } = require("../_CONSTS/icons");
 const { calculatePveFullArmyResult } = require("../../combat/combat");
 const { generateEmbedPveFullArmy } = require("../../combat/pveEmedGenerator");
@@ -24,8 +24,8 @@ const handleRaid = async (user, place = null) => {
 
 	const userExploredPlaces = user.world.locations[currentLocation].explored;
 	const userExploredRaidPlaces = userExploredPlaces
-		.filter(p=> placesInCurrentWorld[p].type === "raid")
-		.map(p=>p.replace(/\s/g, "").toLowerCase());
+		.filter(p => placesInCurrentWorld[p].type === "raid")
+		.map(p => p.replace(/\s/g, "").toLowerCase());
 
 	// checks if user has explored any raidable place in current location
 	if (!userExploredRaidPlaces.length) {
@@ -33,13 +33,13 @@ const handleRaid = async (user, place = null) => {
 	}
 
 	const notHuntPlaces = Object.keys(placesInCurrentWorld)
-		.filter(p=> {
+		.filter(p => {
 			const notHuntPlace = placesInCurrentWorld[p].type !== "raid";
 			if (notHuntPlace) {
 				return placesInCurrentWorld[p];
 			}
 		})
-		.map(p=> p.replace(/\s/g, "").toLowerCase());
+		.map(p => p.replace(/\s/g, "").toLowerCase());
 
 	// if user tries to raid a place that is not raidable
 	if (notHuntPlaces.includes(place.replace(/\s/g, "").toLowerCase())) {
@@ -50,7 +50,7 @@ const handleRaid = async (user, place = null) => {
 
 	// if user wants to raid a specific place
 	if (place) {
-		placeInfo = Object.values(placesInCurrentWorld).find(p=>{
+		placeInfo = Object.values(placesInCurrentWorld).find(p => {
 			const friendlyFormat = p.name.replace(/\s/g, "").toLowerCase();
 			return friendlyFormat === place.replace(/\s/g, "");
 
@@ -63,7 +63,7 @@ const handleRaid = async (user, place = null) => {
 	else {
 		// if user doesn't provide a specific place to raid, the user will be given a random place
 
-		const listOfPlaces = Object.values(placesInCurrentWorld).filter(p=>{
+		const listOfPlaces = Object.values(placesInCurrentWorld).filter(p => {
 			const friendlyFormat = p.name.replace(/\s/g, "").toLowerCase();
 			return userExploredRaidPlaces.includes(friendlyFormat);
 		});
