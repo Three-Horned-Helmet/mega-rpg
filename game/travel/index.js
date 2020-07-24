@@ -16,8 +16,6 @@ const handleTravel = async (user, travelDestination) => {
 		const newDestination = Object.keys(worldLocations).filter(location => {
 			return location.split(" ").join("").toLowerCase("").substring(0, 4) === shortAnswer;
 		});
-		console.log(worldLocations);
-		console.log(newDestination);
 		const worldDescription = worldLocations[newDestination[0]].description;
 		await user.locationTravel(newDestination[0]);
 		return `You traveled to ${getIcon(newDestination)} ${newDestination[0]}\n${worldDescription}`;
