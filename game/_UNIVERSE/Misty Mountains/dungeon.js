@@ -2,6 +2,7 @@ module.exports = { "Windlow Volcano": {
 	name: "Windlow Volcano",
 	type: "dungeon",
 	requires: "Eridian Vase",
+	helperIds:[],
 	rooms:[
 		{
 			name: "Volcano Foot",
@@ -72,7 +73,6 @@ module.exports = { "Windlow Volcano": {
 			healing:true,
 		},
 		bossWeapons:["slash", "strike", "heal"],
-		helperIds:[],
 		numOfAllowedWeapons: 3,
 		allowedWeapons:[],
 		unlocks: "Deep Caves",

@@ -203,10 +203,18 @@ const userSchema = new Schema({
 			},
 		},
 		dungeonKeys:{
-			["CM Key"]:{
+			"CM Key":{
 				type: Number,
 				default: 0,
 			},
+			"Eridian Vase":{
+				type: Number,
+				default: 0
+			},
+			"The One Shell":{
+				type: Number,
+				default: 0
+			}
 		},
 		currentExp: {
 			type: Number,

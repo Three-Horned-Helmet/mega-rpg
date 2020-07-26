@@ -54,7 +54,6 @@ const prettifyUser = async (message, user, avatar) => {
 		value: [],
 		inline: true,
 	};
-
 	Object.keys(hero.dungeonKeys).forEach(dk=>{
 		if (hero.dungeonKeys[dk] && !dk.startsWith("$")) {
 			dungeonKeys.value.push(`${getIcon(dk)} ${dk} \n`);

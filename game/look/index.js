@@ -5,7 +5,7 @@ const { getIcon } = require("../_CONSTS/icons");
 
 const { calculateTopAndLowStrengths } = require("./calculate-difficulty");
 
-const getWorld = (user) => {
+const getWorld = async (user) => {
 
 	const { currentLocation } = user.world;
 	const currentLocationWithIcon = `${getIcon(currentLocation)} ${currentLocation}`;
@@ -66,13 +66,14 @@ const getWorld = (user) => {
 		});
 	}
 
-	const embedUser = new Discord.MessageEmbed()
+	const embedLook = new Discord.MessageEmbed()
 		.setTitle(`${username}'s world`)
 		.setColor(sideColor)
 		.addFields(
 			...fields,
 		);
-	return embedUser;
+	await user.save();
+	return embedLook;
 };
 
 module.exports = { getWorld };
