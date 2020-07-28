@@ -81,7 +81,7 @@ const checkIfStakeIsPossible = (user, opponent, stakedItems) =>{
 		const doesNotOwnArtifact = [username, oppUsername].filter(u => !doesOwnArtifact.includes(u));
 		return {
 			response: false,
-			message:`${doesNotOwnArtifact.length === 1 ? "This player" : "These players"} does not have any artifact items equiped on their hero, which is required to stake other players: ${
+			message:`${doesNotOwnArtifact.length === 1 ? "This player" : "These players"} does not have any artifact items equipped on their hero, which is required to stake other players: ${
 				doesNotOwnArtifact.join(", ")
 			}`,
 		};

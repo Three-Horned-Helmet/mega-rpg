@@ -269,6 +269,42 @@ const userSchema = new Schema({
 		}],
 	},
 	completedQuests: [String],
+	// Saving the rooms etc, of the towers
+	tower: {
+		"solo full-army": {
+			room: {
+				type: Number,
+				default: 0,
+			}
+		},
+		"trio full-army": {
+			room: {
+				type: Number,
+				default: 0,
+			},
+			users: {
+				type: Array,
+				default: [],
+			}
+		},
+		"solo hero": {
+			room: {
+				type: Number,
+				default: 0,
+			},
+		},
+		"trio hero": {
+			room: {
+				type: Number,
+				default: 0,
+			},
+			users: {
+				type: Array,
+				default: [],
+			}
+		}
+	},
+
 	// object too big, moved to ./uservalues/default
 	statistics,
 }, {
