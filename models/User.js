@@ -272,13 +272,13 @@ const userSchema = new Schema({
 	// Saving the rooms etc, of the towers
 	tower: {
 		"solo full-army": {
-			room: {
+			level: {
 				type: Number,
 				default: 0,
 			}
 		},
 		"trio full-army": {
-			room: {
+			level: {
 				type: Number,
 				default: 0,
 			},
@@ -288,13 +288,13 @@ const userSchema = new Schema({
 			}
 		},
 		"solo hero": {
-			room: {
+			level: {
 				type: Number,
 				default: 0,
 			},
 		},
 		"trio hero": {
-			room: {
+			level: {
 				type: Number,
 				default: 0,
 			},
@@ -581,14 +581,14 @@ userSchema.methods.unitLoss = function(lossPercentage) {
 	Object.values(this.army.units).forEach(unitBuilding => {
 		Object.keys(unitBuilding).forEach(unit => {
 			if(typeof unitBuilding[unit] === "number") {
-				unitBuilding[unit] = unitBuilding[unit] - Math.floor(unitBuilding[unit] * lossPercentage);
+				unitBuilding[unit] = Math.floor(unitBuilding[unit] * lossPercentage);
 				this.markModified(`army.units.${unitBuilding}.${unit}`);
 			}
 		});
 	});
 
 	// Remove hp from your hero depending on the loss percentage
-	this.hero.currentHealth = this.hero.currentHealth - Math.floor(this.hero.currentHealth * lossPercentage);
+	this.hero.currentHealth = Math.floor(this.hero.currentHealth * lossPercentage);
 
 	// if the hero dies
 	if (this.hero.currentHealth <= 0 && this.hero.rank > 0) {
@@ -766,6 +766,14 @@ userSchema.methods.changeElo = async function(newElo) {
 		return;
 	}
 	this.hero.elo = newElo;
+};
+
+userSchema.methods.changeTowerLevel = function(towerCategory, newLevel) {
+	if(typeof newLevel !== "number") {
+		console.error("newLevel is not a number but " + typeof newLevel);
+		return;
+	}
+	this.tower[towerCategory].level = newLevel;
 };
 
 

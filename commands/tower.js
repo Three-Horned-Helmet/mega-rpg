@@ -11,10 +11,9 @@ module.exports = {
 		if(args.length === 0) return message.channel.send(towerInfoEmbed(user));
 
 		towerHandler(user, args).then(response => {
-
+			message.channel.send(`<@${message.author.id}>: ${response}`);
 		});
 		// equipItem(user, item).then((response) => {
-		// 	message.channel.send(`<@${message.author.id}>: ${response}`);
 		// });
 	},
 };
