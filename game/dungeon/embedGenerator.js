@@ -291,7 +291,7 @@ function generateRoomEmbed(user, placeInfo, results, questIntro = false) {
 
 	if (questIntro) {
 		fields.push({
-			name: "Quest",
+			name: `${getIcon("quest")}Quest${getIcon("quest")}`,
 			value: questIntro,
 		});
 	}

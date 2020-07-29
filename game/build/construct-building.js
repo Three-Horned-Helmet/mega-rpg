@@ -77,7 +77,7 @@ const checkIfBuildIsPossible = (user, building, coordinates) => {
 
 			return {
 				response: false,
-				message: `You are missing ${userRes ? buildRes - userRes : buildRes} of ${resource}. ` + msg,
+				message: `You are missing ${userRes ? buildRes - userRes : buildRes} of ${resource} to build a ${building.name.capitalize()} level ${buildingCost.level}. ` + msg,
 			};
 		}
 	}

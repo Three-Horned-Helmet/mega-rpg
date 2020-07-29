@@ -141,7 +141,7 @@ module.exports = {
 		],
 		execute: async function(user) {
 			// Add the lastCollected and producing to new mine
-			return await user.updateNewProduction("mine", new Date(), "copper ore");
+			return await user.updateNewProduction("mine", new Date(new Date() - 1000 * 60 * 5), "copper ore");
 		},
 	},
 	lumbermill: {
@@ -179,7 +179,7 @@ module.exports = {
 		],
 		execute: async function(user) {
 			// Add the lastCollected and producing to new mine
-			return await user.updateNewProduction("lumbermill", new Date(), "oak wood");
+			return await user.updateNewProduction("lumbermill", new Date(new Date() - 1000 * 60 * 5), "oak wood");
 		},
 	},
 	forge: {
@@ -222,8 +222,8 @@ module.exports = {
 			{
 				cost: {
 					gold: 30,
-					["oak wood"]: 5,
-					["bronze bar"]: 20,
+					["oak wood"]: 10,
+					["bronze bar"]: 10,
 				},
 				level: 0,
 				craftables: ["bronze sword", "oak shortbow",

@@ -60,7 +60,7 @@ function generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro) {
 
 	if(questIntro) {
 		fields.push({
-			name: "Quest",
+			name: `${getIcon("quest")}Quest${getIcon("quest")}`,
 			value: questIntro,
 		});
 	}
@@ -163,7 +163,7 @@ function generateEmbedPveHeroWin(user, placeInfo, pveResult, questIntro) {
 
 	if(questIntro) {
 		fields.push({
-			name: "Quest",
+			name: `${getIcon("quest")}Quest${getIcon("quest")}`,
 			value: questIntro,
 		});
 	}

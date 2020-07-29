@@ -72,6 +72,7 @@ const icons = {
 	// Misc
 	"false":{ name: ":x:", icon: "❌" },
 	"true":{ name: ":white_check_mark:", icon: "✅" },
+	"quest": { name: ":boom:", icon:"💥" },
 	"weeklyPrizeStar":{ name:"star2", icon:"🌟" },
 	"dailyPrizeStar": { name:"star", icon: "⭐️" }
 };

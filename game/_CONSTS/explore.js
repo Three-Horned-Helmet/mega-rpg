@@ -44,7 +44,7 @@
 					health: 120,
 				},
 				rewards:{
-					gold: 100,
+					gold: 80,
 					"oak wood": 15,
 					"yew wood": 10,
 				},
@@ -57,7 +57,7 @@
 					health: 200,
 				},
 				rewards:{
-					gold: 170,
+					gold: 110,
 					"copper ore": 20,
 					"iron ore": 12,
 				},
@@ -70,7 +70,7 @@
 					health: 250,
 				},
 				rewards:{
-					gold: 280,
+					gold: 170,
 				},
 			},
 			"Bandit Vault": {
@@ -81,7 +81,7 @@
 					health: 450,
 				},
 				rewards:{
-					gold: 400,
+					gold: 210,
 				},
 			},
 			Forest: {
@@ -92,9 +92,10 @@
 					health: 25,
 				},
 				rewards:{
-					gold: 16,
+					gold: 5,
 					"oak wood": 2,
 					"yew wood": 1,
+					"copper ore": 1,
 				},
 			},
 			Cave: {
@@ -255,7 +256,7 @@
 					health: 300,
 				},
 				rewards:{
-					gold: 170,
+					gold: 130,
 					"iron bar": 20,
 					"yew wood": 40,
 				},
@@ -269,7 +270,7 @@
 					health: 180,
 				},
 				rewards:{
-					gold: 185,
+					gold: 125,
 					"yew wood": 60,
 				},
 			},
@@ -282,7 +283,7 @@
 					health: 600,
 				},
 				rewards:{
-					gold: 470,
+					gold: 200,
 				},
 			},
 			"Wood Elves": {
@@ -307,7 +308,7 @@
 					health: 100,
 				},
 				rewards:{
-					gold: 110,
+					gold: 90,
 					"yew wood": 20,
 				},
 			},
@@ -321,7 +322,7 @@
 				},
 				rewards:{
 					"yew wood": 35,
-					gold: 150,
+					gold: 120,
 				},
 			},
 			"Courtyard Guards": {

@@ -2,7 +2,7 @@ module.exports = {
 	peasant: {
 		name: "peasant",
 		cost: {
-			gold: 5,
+			gold: 6,
 		},
 		requirement: {
 			building: "barracks",
