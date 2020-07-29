@@ -8,8 +8,9 @@ module.exports = {
 	async execute(message, args, user) {
 		let dbUser;
 		let avatar;
-		// this will fail if sent as a DM
-		const userFromMention = message.mentions.members.first();
+
+		/* const userFromMention = message.mentions.members.first(); */
+		const userFromMention = null;
 		if (userFromMention) {
 			avatar = userFromMention.user.displayAvatarURL({ format: "png", dynamic: true, size: 1024 });
 			try {
