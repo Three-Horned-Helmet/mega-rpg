@@ -19,7 +19,7 @@ describe("consecutive prizes commands", () => {
 		const result = await dailyPrizeCommand.execute(mockMessage, null, testUser);
 		const result2 = await dailyPrizeCommand.execute(mockMessage, null, testUser);
 		expect(result.footer.text).to.be.equal("This is your first consecutive day!");
-		expect(result2.fields[0].name.startsWith("You can't use this command. Cooldown is")).to.be.equal(true);
+		expect(result2.fields[0].name).to.have.string("You can't use this command. Cooldown is");
 	});
 	it("should have different prices for each consecutive day", async ()=>{
 		const goldResults = [];
@@ -27,11 +27,11 @@ describe("consecutive prizes commands", () => {
 		const mockMessage = generateDiscordMessage(testUser);
 
 		for (let i = 0; i < 5; i++) {
-			await dailyPrizeCommand.execute(mockMessage, null, testUser);
-			await testUser.setNewCooldown("dailyPrize", mockDays(i + 1));
-			goldResults.push(testUser.resources.gold);
 			testUser.resources.gold = 0;
+			await dailyPrizeCommand.execute(mockMessage, null, testUser);
+			testUser.setNewCooldown("dailyprize", mockDays(i + 1));
 			await testUser.save();
+			goldResults.push(testUser.resources.gold);
 		}
 		[50, 100, 200, 280, 350].forEach((p, i)=>{
 			expect(goldResults[i]).to.be.equal(p);
@@ -44,7 +44,7 @@ describe("consecutive prizes commands", () => {
 		const mockMessage = generateDiscordMessage(testUser);
 		for (let i = 0; i < 2; i++) {
 			await dailyPrizeCommand.execute(mockMessage, null, testUser);
-			await testUser.setNewCooldown("dailyPrize", mockDays(i + 1));
+			testUser.setNewCooldown("dailyprize", mockDays(i + 1));
 			goldResults.push(testUser.resources.gold);
 			testUser.resources.gold = 0;
 			await testUser.save();
@@ -60,7 +60,7 @@ describe("consecutive prizes commands", () => {
 
 		for (let i = 0; i < 6; i++) {
 			const result = await dailyPrizeCommand.execute(mockMessage, null, testUser);
-			await testUser.setNewCooldown("dailyPrize", mockDays(i + 1));
+			testUser.setNewCooldown("dailyprize", mockDays(i + 1));
 			footerResults.push(result.footer.text.split(" ")[3]);
 		}
 		["first", "second", "third", "fourth", "fifth", "fifth"].forEach((n, i)=>{
@@ -78,7 +78,7 @@ describe("consecutive prizes commands", () => {
 		const result = await weeklyPrizeCommand.execute(mockMessage, null, testUser);
 		const result2 = await weeklyPrizeCommand.execute(mockMessage, null, testUser);
 		expect(result.footer.text).to.be.equal("This is your first consecutive week!");
-		expect(result2.fields[0].name.startsWith("You can't use this command. Cooldown is")).to.be.equal(true);
+		expect(result2.fields[0].name).to.have.string("You can't use this command. Cooldown is");
 	});
 	it("should have different prices for each consecutive week", async ()=>{
 		const goldResults = [];
@@ -87,7 +87,7 @@ describe("consecutive prizes commands", () => {
 
 		for (let i = 0; i < 5; i++) {
 			await weeklyPrizeCommand.execute(mockMessage, null, testUser);
-			await testUser.setNewCooldown("weeklyPrize", mockDays((i + 1) * 7));
+			testUser.setNewCooldown("weeklyprize", mockDays((i + 1) * 7));
 			goldResults.push(testUser.resources.gold);
 			testUser.resources.gold = 0;
 			await testUser.save();
@@ -106,13 +106,28 @@ describe("consecutive prizes commands", () => {
 		const mockMessage = generateDiscordMessage(testUser);
 		for (let i = 0; i < 2; i++) {
 			await weeklyPrizeCommand.execute(mockMessage, null, testUser);
-			await testUser.setNewCooldown("weeklyPrize", mockDays((i + 1) * 7));
+			testUser.setNewCooldown("weeklyprize", mockDays((i + 1) * 7));
 			goldResults.push(testUser.resources.gold);
 			testUser.resources.gold = 0;
 			await testUser.save();
 		}
 		expect(goldResults[0]).to.be.equal(5000);
 		expect(goldResults[1]).to.be.equal(5000);
+	});
+
+	it("should reset if not claimed weekly", async ()=>{
+		const goldResults = [];
+		const testUser = await createTestUser({ account:{ testUser:false }, resources:{ gold:0 } });
+		const mockMessage = generateDiscordMessage(testUser);
+
+		for (let i = 0; i < 2; i++) {
+			await weeklyPrizeCommand.execute(mockMessage, null, testUser);
+			testUser.setNewCooldown("weeklyprize", mockDays((i + 1) * 21));
+			goldResults.push(testUser.resources.gold);
+			testUser.resources.gold = 0;
+			await testUser.save();
+		}
+		goldResults.every(p=>expect(p).to.be.equal(200));
 	});
 
 	it("should give different user feedback based upon week", async ()=>{
@@ -122,7 +137,7 @@ describe("consecutive prizes commands", () => {
 
 		for (let i = 0; i < 6; i++) {
 			const result = await weeklyPrizeCommand.execute(mockMessage, null, testUser);
-			await testUser.setNewCooldown("weeklyPrize", mockDays((i + 1) * 7));
+			testUser.setNewCooldown("weeklyprize", mockDays((i + 1) * 7));
 			footerResults.push(result.footer.text.split(" ")[3]);
 		}
 		["first", "second", "third", "fourth", "fifth", "fifth"].forEach((n, i)=>{

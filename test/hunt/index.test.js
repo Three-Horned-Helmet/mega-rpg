@@ -30,7 +30,7 @@ describe("hunt command", () => {
 		const testUser = await createTestUser({ hero:{ currentHealth:0 } });
 		const mockMessage = generateDiscordMessage(testUser);
 		const result = await huntCommand.execute(mockMessage, [], testUser);
-		expect(result.includes("Your hero's health is too low (**0**)")).to.be.equal(true);
+		expect(result).to.have.string("Your hero's health is too low (**0**)");
 	});
 	it("should not be able to hunt a raiding, dungeon or miniboss place", async ()=>{
 		const places = ["Collapsed Mine", "Forest"];
@@ -50,7 +50,7 @@ describe("hunt command", () => {
 		const testUser = await createTestUser({ hero:{ currentHealth:500, health:500, attack:500 }, world:{ locations:{ "Grassy Plains":{ explored:["Cave", "Forest"] } } } });
 		const mockMessage = generateDiscordMessage(testUser);
 		const result = await huntCommand.execute(mockMessage, [], testUser);
-		expect(result.title.startsWith("Anniken Avisbud's hero hunted :frog:")).to.be.equal(true);
+		expect(result.title).to.have.string("Anniken Avisbud's hero hunted :frog:");
 		await testUser.setNewCooldown("hunt", mockDays(1));
 		const result2 = await huntCommand.execute(mockMessage, ["Cave"], testUser);
 		expect(result2.title).to.be.equal("Anniken Avisbud's hero hunted :frog: Cave");
