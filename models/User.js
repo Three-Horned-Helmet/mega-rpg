@@ -274,13 +274,13 @@ const userSchema = new Schema({
 		"solo full-army": {
 			level: {
 				type: Number,
-				default: 0,
+				default: 1,
 			}
 		},
 		"trio full-army": {
 			level: {
 				type: Number,
-				default: 0,
+				default: 1,
 			},
 			users: {
 				type: Array,
@@ -290,13 +290,13 @@ const userSchema = new Schema({
 		"solo hero": {
 			level: {
 				type: Number,
-				default: 0,
+				default: 1,
 			},
 		},
 		"trio hero": {
 			level: {
 				type: Number,
-				default: 0,
+				default: 1,
 			},
 			users: {
 				type: Array,

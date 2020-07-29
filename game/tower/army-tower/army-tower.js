@@ -1,5 +1,6 @@
 const { calculatePveFullArmyResult } = require("../../../combat/combat");
 const { getArmyTowerEnemies } = require("./army-tower-enemies/army-tower-enemies");
+const towerItems = require("../../items/tower-items/hero-tower-items");
 
 // Takes an array of users and makes them fight together in the Tower
 // Category is "solo" or "trio" etc
@@ -100,15 +101,11 @@ const armyTowerFight = async (users, category) => {
 	// Go down in a level if loss
 	else {
 		let newLevel = highestLevel + "";
-		newLevel = parseInt(newLevel.slice(0, newLevel.length - 1) + 0);
+		newLevel = parseInt(newLevel.slice(0, newLevel.length - 1) + 1);
 
 		users.forEach(user => {
 			user.changeTowerLevel(`${category} full-army`, newLevel);
 		});
-
-
-		// Add item here
-
 
 		response = {
 			message: `You lost the battle at level ${highestLevel} and go down to level: **${newLevel}**`
@@ -116,7 +113,7 @@ const armyTowerFight = async (users, category) => {
 	}
 
 	// Save the users
-	users = await Promise.all(users.map(user => user.save()));
+	await Promise.all(users.map(user => user.save()));
 
 	return response;
 };

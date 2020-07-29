@@ -1,7 +1,7 @@
 module.exports = {
 	// WEAPONS
-	"silver imbued rapier": {
-		name: "silver imbued rapier",
+	"Silver Imbued Rapier": {
+		name: "Silver Imbued Rapier",
 		typeSequence: ["army", "armory", "weapon"],
 		requirement: {
 			building: "armorer",
@@ -12,8 +12,8 @@ module.exports = {
 		},
 		heroTower: true,
 	},
-	"elven longbow": {
-		name: "elven longbow",
+	"Elven Longbow": {
+		name: "Elven Longbow",
 		typeSequence: ["army", "armory", "weapon"],
 		requirement: {
 			building: "armorer",
@@ -24,8 +24,8 @@ module.exports = {
 		},
 		heroTower: true,
 	},
-	"demon slayer battleaxe": {
-		name: "demon slayer battleaxe",
+	"Demon Slayer Battleaxe": {
+		name: "Demon Slayer Battleaxe",
 		typeSequence: ["army", "armory", "weapon"],
 		requirement: {
 			building: "armorer",
@@ -36,8 +36,8 @@ module.exports = {
 		},
 		heroTower: true,
 	},
-	"templars verdict": {
-		name: "templars verdict",
+	"Templars Verdict": {
+		name: "Templars Verdict",
 		typeSequence: ["army", "armory", "weapon"],
 		requirement: {
 			building: "armorer",
@@ -51,8 +51,8 @@ module.exports = {
 	},
 
 	// HELMETS
-	"spiked helmet": {
-		name: "spiked helmet",
+	"Spiked Helmet": {
+		name: "Spiked Helmet",
 		typeSequence: ["army", "armory", "helmet"],
 		requirement: {
 			building: "armorer",
@@ -64,8 +64,8 @@ module.exports = {
 		},
 		heroTower: true,
 	},
-	"black knight helmet": {
-		name: "black knight helmet",
+	"Black Knight Helmet": {
+		name: "Black Knight Helmet",
 		typeSequence: ["army", "armory", "helmet"],
 		requirement: {
 			building: "armorer",
@@ -76,8 +76,8 @@ module.exports = {
 		},
 		heroTower: true,
 	},
-	"assassins hood": {
-		name: "black knight helmet",
+	"Assassins Hood": {
+		name: "Assassins Hood",
 		typeSequence: ["army", "armory", "helmet"],
 		requirement: {
 			building: "armorer",
@@ -89,8 +89,8 @@ module.exports = {
 		},
 		heroTower: true,
 	},
-	"skull helmet": {
-		name: "",
+	"Skull Helmet": {
+		name: "Skull Helmet",
 		typeSequence: ["army", "armory", "helmet"],
 		requirement: {
 			building: "armorer",
@@ -103,8 +103,8 @@ module.exports = {
 	},
 
 	// CHEST
-	"beastal breastplate": {
-		name: "beastal breastplate",
+	"Beastal Breastplate": {
+		name: "Beastal Breastplate",
 		typeSequence: ["army", "armory", "chest"],
 		requirement: {
 			building: "armorer",
@@ -115,8 +115,8 @@ module.exports = {
 		},
 		heroTower: true,
 	},
-	"hellforged chainmail": {
-		name: "hellforged chainmail",
+	"Hellforged Chainmail": {
+		name: "Hellforged Chainmail",
 		typeSequence: ["army", "armory", "chest"],
 		requirement: {
 			building: "armorer",
@@ -128,8 +128,8 @@ module.exports = {
 		},
 		heroTower: true,
 	},
-	"ancient warlords platebody": {
-		name: "ancient warlords platebody",
+	"Ancient Warlords Platebody": {
+		name: "Ancient Warlords Platebody",
 		typeSequence: ["army", "armory", "chest"],
 		requirement: {
 			building: "armorer",
@@ -140,8 +140,8 @@ module.exports = {
 		},
 		heroTower: true,
 	},
-	"moriths heavy platebody": {
-		name: "moriths heavy platebody",
+	"Moriths Heavy Platebody": {
+		name: "Moriths Heavy Platebody",
 		typeSequence: ["army", "armory", "chest"],
 		requirement: {
 			building: "armorer",
@@ -152,8 +152,8 @@ module.exports = {
 		},
 		heroTower: true,
 	},
-	"retribution chainbody": {
-		name: "retribution chainbody",
+	"Retribution Chainbody": {
+		name: "Retribution Chainbody",
 		typeSequence: ["army", "armory", "chest"],
 		requirement: {
 			building: "armorer",
@@ -167,8 +167,8 @@ module.exports = {
 	},
 
 	// Leggings
-	"rubinite leggings": {
-		name: "rubinite leggings",
+	"Rubinite Leggings": {
+		name: "Rubinite Leggings",
 		typeSequence: ["army", "armory", "legging"],
 		requirement: {
 			building: "armorer",
@@ -179,8 +179,8 @@ module.exports = {
 		},
 		heroTower: true,
 	},
-	"revenants platelegs": {
-		name: "revenants platelegs",
+	"Revenants Platelegs": {
+		name: "Revenants Platelegs",
 		typeSequence: ["army", "armory", "legging"],
 		requirement: {
 			building: "armorer",
@@ -192,8 +192,8 @@ module.exports = {
 		},
 		heroTower: true,
 	},
-	"mystic robes": {
-		name: "mystic robes",
+	"Mystic Robes": {
+		name: "Mystic Robes",
 		typeSequence: ["army", "armory", "legging"],
 		requirement: {
 			building: "armorer",
@@ -205,8 +205,8 @@ module.exports = {
 		},
 		heroTower: true,
 	},
-	"heavens platelegs": {
-		name: "heavens platelegs",
+	"Heavens Platelegs": {
+		name: "Heavens Platelegs",
 		typeSequence: ["army", "armory", "legging"],
 		requirement: {
 			building: "armorer",
