@@ -53,7 +53,13 @@ const getRandomPrefix = () => {
 };
 
 const getPrefixMultiplier = (prefix) => {
-	return prefixes[prefix].multiplier || 1;
+	const prefixKey = Object.keys(prefixes).find(p => p.toLowerCase() === prefix.toLowerCase());
+
+	return prefixes[prefixKey].multiplier || 1;
 };
 
-module.exports = { getRandomPrefix, getPrefixMultiplier };
+const getPrefix = (prefix) => {
+	return Object.keys(prefixes).find(originalPrefix => originalPrefix.toLowerCase() === prefix.toLowerCase());
+};
+
+module.exports = { getRandomPrefix, getPrefixMultiplier, getPrefix };

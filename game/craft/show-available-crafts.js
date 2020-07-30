@@ -7,7 +7,7 @@ const craftsEmbed = (user) => {
 	const sideColor = "#45b6fe";
 
 	const fields = Object.values(allItems).filter(item => {
-		if(!item.requirement) return false;
+		if(!item.requirement || item.towerItem) return false;
 		const { building, level } = item.requirement;
 		return user.empire.find(b => b.name === building && b.level >= level);
 	}).map(item => {

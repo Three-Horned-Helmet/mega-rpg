@@ -1,7 +1,7 @@
 const { towerHandler } = require("../game/tower/tower");
 const towerInfoEmbed = require("../game/tower/tower-info-embed");
 
-// const { getNewTowerItem, getTowerItemStats } = require("../game/items/tower-items/tower-item-functions");
+// const { getNewTowerItem, getTowerItem } = require("../game/items/tower-items/tower-item-functions");
 
 module.exports = {
 	name: "tower",
@@ -11,7 +11,7 @@ module.exports = {
 	},
 	execute(message, args, user) {
 		// const newItem = getNewTowerItem(5);
-		// getTowerItemStats(newItem);
+		// getTowerItem(newItem);
 		// return;
 
 		if(args.length === 0) return message.channel.send(towerInfoEmbed(user));

@@ -499,7 +499,7 @@ userSchema.methods.collectResource = async function(collectBuildings, now, resou
 	return totalCollected;
 };
 
-userSchema.methods.addItem = function(item, amount, craft) {
+userSchema.methods.addItem = function(item, amount = 1, craft) {
 	if(craft) {
 		// Resource cost
 		for(const resource in item.cost) {
@@ -519,8 +519,6 @@ userSchema.methods.addItem = function(item, amount, craft) {
 		itemType[item.name] + amount : amount;
 
 	this.markModified(`${markModifiedString}${item.name}`);
-
-	return this.save();
 };
 
 // Removes the item (if hero => remove it from hero, else from armory)
@@ -558,6 +556,7 @@ userSchema.methods.equipItem = function(item, currentItem) {
 	// Remove old stats and add new item stats to hero
 	if(currentItem) {
 		// Add old item to armory
+		if(!this.army.armory[itemType][currentItem.name]) this.army.armory[itemType][currentItem.name] = 0;
 		this.army.armory[itemType][currentItem.name] += 1;
 
 		for(const stat in currentItem.stats) {

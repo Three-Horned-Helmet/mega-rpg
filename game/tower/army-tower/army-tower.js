@@ -1,23 +1,21 @@
 const { calculatePveFullArmyResult } = require("../../../combat/combat");
 const { getArmyTowerEnemies } = require("./army-tower-enemies/army-tower-enemies");
-const towerItems = require("../../items/tower-items/hero-tower-items");
-
+const { getNewTowerItem, getTowerItem } = require("../../../game/items/tower-items/tower-item-functions");
 // Takes an array of users and makes them fight together in the Tower
 // Category is "solo" or "trio" etc
 const armyTowerFight = async (users, category) => {
 	const highestLevel = users.reduce((acc, cur) => {
-		console.log("Acc", acc);
-		console.log("Cur", cur.tower[`${category} full-army`]);
 		return cur.tower[`${category} full-army`].level > acc ? cur.tower[`${category} full-army`].level : acc;
 	}, 0);
 
 	console.log("highest Level", highestLevel);
 
-	const enemy = getArmyTowerEnemies(highestLevel);
+	const originalEnemy = getArmyTowerEnemies(highestLevel);
+	const enemy = { ...originalEnemy, stats: { ...originalEnemy.stats } };
 
 	console.log("ENEMY", enemy);
 
-	const enemyCombatModifier = Math.random() * 0.5 + highestLevel + 1;
+	const enemyCombatModifier = highestLevel * 0.8 * (1 + Math.random() * 0.5);
 
 	for(const stat in enemy.stats) {
 		enemy.stats[stat] = Math.floor(enemy.stats[stat] * enemyCombatModifier);
@@ -33,12 +31,9 @@ const armyTowerFight = async (users, category) => {
 	users.forEach(user => {
 		const userCombatResults = combatResults.find(cr => cr.userId === user.account.userId);
 		// user.setNewCooldown("tower", new Date());
-		console.log("LOSS PERCE", userCombatResults.lossPercentage);
 		user.unitLoss(userCombatResults.lossPercentage);
 		user.alternativeGainXp(userCombatResults.expReward);
 	});
-
-	console.log("HERO HP", users[0].hero.currentHealth);
 
 	// While loop to iterate over combat results and let the other users fight the remaining forces
 	let losingCombatResults = combatResults.filter(cr => !cr.win);
@@ -51,7 +46,6 @@ const armyTowerFight = async (users, category) => {
 	// This has not been tested yet
 	while(!(losingCombatResults.length === 0 || !healthLeft)) {
 		console.log("WHILE LOOP");
-
 
 		losingCombatResults = losingCombatResults.map(cr => {
 			const remainingUsers = users.filter(user => healthLeftOnArmy(user));
@@ -91,11 +85,23 @@ const armyTowerFight = async (users, category) => {
 			user.changeTowerLevel(`${category} full-army`, newLevel);
 		});
 
-		// Add item
-
 		response = {
-			message: `You won the battle at level ${highestLevel} and advance to the next level: **${newLevel}**`
+			message: `You won the battle at level ${highestLevel} and advance to the next level: **${newLevel}**.`
 		};
+
+		// Add item
+		users.filter(user => winningCombatResults.find(wcr => wcr.userId === user.account.userId)).forEach(user => {
+			const dropChance = Math.random() * ((winningCombatResults.filter(wcr => wcr.userId === user.account.userId).length / 2) + 0.5);
+			let itemDrop;
+			if(dropChance > 0.85) {
+				itemDrop = getNewTowerItem(highestLevel);
+				const itemObject = { ...getTowerItem(itemDrop) };
+
+				user.addItem(itemObject);
+
+				response.message += `In the battle ${user.account.username} found a new item: ${itemDrop}`;
+			}
+		});
 	}
 
 	// Go down in a level if loss

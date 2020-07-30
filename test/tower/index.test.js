@@ -4,7 +4,7 @@ const { expect } = require("chai");
 const User = require("../../models/User");
 const towerCommand = require("../../commands/tower");
 const { getRandomPrefix, getPrefixMultiplier } = require("../../game/items/tower-items/tower-item-prefix");
-const { getNewTowerItem, getTowerItemStats, isTowerItem } = require("../../game/items/tower-items/tower-item-functions");
+const { getNewTowerItem, getTowerItem, isTowerItem } = require("../../game/items/tower-items/tower-item-functions");
 const { createTestUser, generateDiscordMessage } = require("../helper");
 
 
@@ -41,14 +41,14 @@ describe("tower functions and command", () => {
 		expect(isTowerItem("Rambadam of the broken saw")).to.equal(false);
 	});
 
-	it("getTowerItemStats returns an object", () => {
+	it("getTowerItem returns an object", () => {
 		const newItem = getNewTowerItem(5);
-		expect(typeof getTowerItemStats(newItem) === "object").to.equal(true);
+		expect(typeof getTowerItem(newItem) === "object").to.equal(true);
 	});
 
 	it("getNewTowerItem has its stats generated dependent of the tower level", () => {
-		const newItemOne = getTowerItemStats(getNewTowerItem(1));
-		const newItemTwo = getTowerItemStats(getNewTowerItem(100));
+		const newItemOne = getTowerItem(getNewTowerItem(1));
+		const newItemTwo = getTowerItem(getNewTowerItem(100));
 
 		const itemOneStats = Object.values(newItemOne.stats).reduce((acc, cur) => acc + cur);
 		const itemTwoStats = Object.values(newItemTwo.stats).reduce((acc, cur) => acc + cur);

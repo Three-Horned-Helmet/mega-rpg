@@ -10,7 +10,7 @@ module.exports = {
 		stats: {
 			attack: 50,
 		},
-		heroTower: true,
+		towerItem: true,
 	},
 	"Elven Longbow": {
 		name: "Elven Longbow",
@@ -22,7 +22,7 @@ module.exports = {
 		stats: {
 			attack: 55,
 		},
-		heroTower: true,
+		towerItem: true,
 	},
 	"Demon Slayer Battleaxe": {
 		name: "Demon Slayer Battleaxe",
@@ -34,7 +34,7 @@ module.exports = {
 		stats: {
 			attack: 60,
 		},
-		heroTower: true,
+		towerItem: true,
 	},
 	"Templars Verdict": {
 		name: "Templars Verdict",
@@ -47,7 +47,7 @@ module.exports = {
 			attack: 45,
 			health: 15,
 		},
-		heroTower: true,
+		towerItem: true,
 	},
 
 	// HELMETS
@@ -62,7 +62,7 @@ module.exports = {
 			attack: 10,
 			health: 20,
 		},
-		heroTower: true,
+		towerItem: true,
 	},
 	"Black Knight Helmet": {
 		name: "Black Knight Helmet",
@@ -74,7 +74,7 @@ module.exports = {
 		stats: {
 			health: 35,
 		},
-		heroTower: true,
+		towerItem: true,
 	},
 	"Assassins Hood": {
 		name: "Assassins Hood",
@@ -87,7 +87,7 @@ module.exports = {
 			attack: 20,
 			health: 20,
 		},
-		heroTower: true,
+		towerItem: true,
 	},
 	"Skull Helmet": {
 		name: "Skull Helmet",
@@ -99,7 +99,7 @@ module.exports = {
 		stats: {
 			health: 40,
 		},
-		heroTower: true,
+		towerItem: true,
 	},
 
 	// CHEST
@@ -113,7 +113,7 @@ module.exports = {
 		stats: {
 			health: 35,
 		},
-		heroTower: true,
+		towerItem: true,
 	},
 	"Hellforged Chainmail": {
 		name: "Hellforged Chainmail",
@@ -126,7 +126,7 @@ module.exports = {
 			attack: 5,
 			health: 35,
 		},
-		heroTower: true,
+		towerItem: true,
 	},
 	"Ancient Warlords Platebody": {
 		name: "Ancient Warlords Platebody",
@@ -138,7 +138,7 @@ module.exports = {
 		stats: {
 			health: 40,
 		},
-		heroTower: true,
+		towerItem: true,
 	},
 	"Moriths Heavy Platebody": {
 		name: "Moriths Heavy Platebody",
@@ -150,7 +150,7 @@ module.exports = {
 		stats: {
 			health: 50,
 		},
-		heroTower: true,
+		towerItem: true,
 	},
 	"Retribution Chainbody": {
 		name: "Retribution Chainbody",
@@ -163,7 +163,7 @@ module.exports = {
 			attack: 25,
 			health: 25,
 		},
-		heroTower: true,
+		towerItem: true,
 	},
 
 	// Leggings
@@ -177,7 +177,7 @@ module.exports = {
 		stats: {
 			health: 25,
 		},
-		heroTower: true,
+		towerItem: true,
 	},
 	"Revenants Platelegs": {
 		name: "Revenants Platelegs",
@@ -190,7 +190,7 @@ module.exports = {
 			attack: 25,
 			health: 5,
 		},
-		heroTower: true,
+		towerItem: true,
 	},
 	"Mystic Robes": {
 		name: "Mystic Robes",
@@ -203,7 +203,7 @@ module.exports = {
 			attack: 10,
 			health: 25,
 		},
-		heroTower: true,
+		towerItem: true,
 	},
 	"Heavens Platelegs": {
 		name: "Heavens Platelegs",
@@ -215,7 +215,7 @@ module.exports = {
 		stats: {
 			health: 40,
 		},
-		heroTower: true,
+		towerItem: true,
 	},
 };
 

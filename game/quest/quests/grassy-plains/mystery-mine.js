@@ -105,8 +105,8 @@ module.exports = {
 			await user.gainManyResources({
 				"gold": 1300,
 			});
-			await user.addItem(allItems["bauxite daggers"], 1);
-			await user.addItem(allItems["three horned helmet"], 1);
+			user.addItem(allItems["bauxite daggers"], 1);
+			user.addItem(allItems["three horned helmet"], 1);
 
 			user.removeQuest(this.name);
 

@@ -36,7 +36,7 @@ module.exports = {
 			});
 
 			// Get reward
-			await user.addItem(allItems["leggings of the dawn"], 1);
+			user.addItem(allItems["leggings of the dawn"], 1);
 
 			// Add next quest
 			const newQuest = {
@@ -128,7 +128,7 @@ module.exports = {
 			if(!user.completedQuests.includes("The Wolf Pack") || !user.completedQuests.includes("The Alpha Wolf")) return false;
 
 			// Get reward
-			await user.addItem(allItems["kings platemail"], 1);
+			user.addItem(allItems["kings platemail"], 1);
 			user.removeQuest(this.name);
 
 			user.save();
