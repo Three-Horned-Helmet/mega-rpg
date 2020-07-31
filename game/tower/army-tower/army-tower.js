@@ -4,16 +4,25 @@ const { getNewTowerItem, getTowerItem } = require("../../../game/items/tower-ite
 // Takes an array of users and makes them fight together in the Tower
 // Category is "solo" or "trio" etc
 const armyTowerFight = async (users, category) => {
+	// The results sent to the results embed after the combat
+	const allResults = {
+		users,
+		combatResults: [],
+		drops: [],
+		enemy: {},
+		highestLevel: 0,
+		newLevel: 0,
+		won: false,
+	};
+
 	const highestLevel = users.reduce((acc, cur) => {
 		return cur.tower[`${category} full-army`].level > acc ? cur.tower[`${category} full-army`].level : acc;
 	}, 0);
 
-	console.log("highest Level", highestLevel);
-
 	const originalEnemy = getArmyTowerEnemies(highestLevel);
 	const enemy = { ...originalEnemy, stats: { ...originalEnemy.stats } };
 
-	console.log("ENEMY", enemy);
+	allResults.enemy = enemy;
 
 	const enemyCombatModifier = highestLevel * 0.8 * (1 + Math.random() * 0.5);
 
@@ -21,17 +30,13 @@ const armyTowerFight = async (users, category) => {
 		enemy.stats[stat] = Math.floor(enemy.stats[stat] * enemyCombatModifier);
 	}
 
-	console.log("UPDATED ENEMY", enemy);
-
 	const combatResults = users.map(user => calculatePveFullArmyResult(user, enemy));
-
-	console.log("COMBAT RESULTS", combatResults);
 
 	// Make the users lose hero hp and units depending on lossPercentage and give exp
 	users.forEach(user => {
 		const userCombatResults = combatResults.find(cr => cr.userId === user.account.userId);
 		// user.setNewCooldown("tower", new Date());
-		user.unitLoss(userCombatResults.lossPercentage);
+		user.unitLoss(userCombatResults.lossPercentage, true);
 		user.alternativeGainXp(userCombatResults.expReward);
 	});
 
@@ -41,12 +46,9 @@ const armyTowerFight = async (users, category) => {
 
 
 	let healthLeft = users.filter(user => healthLeftOnArmy(user)).length > 0;
-	console.log("Before WHILE", losingCombatResults.length, !healthLeft);
 
-	// This has not been tested yet
+	// This has not been tested yet. It is used when there are several players attending the fight. Lets the remaining players fight the remaining enemies.
 	while(!(losingCombatResults.length === 0 || !healthLeft)) {
-		console.log("WHILE LOOP");
-
 		losingCombatResults = losingCombatResults.map(cr => {
 			const remainingUsers = users.filter(user => healthLeftOnArmy(user));
 			const randomUser = Math.floor(Math.random() * remainingUsers.length);
@@ -60,6 +62,7 @@ const armyTowerFight = async (users, category) => {
 			console.log("NEW ENEMIES", newEnemy, enemy);
 
 			const remainingFightResult = calculatePveFullArmyResult(remainingUsers[randomUser]);
+			combatResults.push(remainingFightResult);
 
 			if(remainingFightResult.win) {
 				winningCombatResults.push(remainingFightResult);
@@ -76,18 +79,19 @@ const armyTowerFight = async (users, category) => {
 		console.log("HEALTH LEFT", healthLeft);
 	}
 
-	let response;
 	// Add item rewards and progression to the next level if win
 	if(losingCombatResults.length === 0) {
+		// Progression
 		const newLevel = highestLevel + 1;
 
 		users.forEach(user => {
 			user.changeTowerLevel(`${category} full-army`, newLevel);
 		});
 
-		response = {
-			message: `You won the battle at level ${highestLevel} and advance to the next level: **${newLevel}**.`
-		};
+		allResults.highestLevel = highestLevel;
+		allResults.newLevel = newLevel;
+		allResults.won = true;
+
 
 		// Add item
 		users.filter(user => winningCombatResults.find(wcr => wcr.userId === user.account.userId)).forEach(user => {
@@ -99,7 +103,13 @@ const armyTowerFight = async (users, category) => {
 
 				user.addItem(itemObject);
 
-				response.message += `In the battle ${user.account.username} found a new item: ${itemDrop}`;
+				// Saves the drops to the results for the Embed
+				const userDrop = {
+					user,
+					item: itemDrop
+				};
+
+				allResults.drops.push(userDrop);
 			}
 		});
 	}
@@ -113,15 +123,20 @@ const armyTowerFight = async (users, category) => {
 			user.changeTowerLevel(`${category} full-army`, newLevel);
 		});
 
-		response = {
-			message: `You lost the battle at level ${highestLevel} and go down to level: **${newLevel}**`
-		};
+		allResults.highestLevel = highestLevel;
+		allResults.newLevel = newLevel;
 	}
+
+	users.forEach(user => {
+		user.setNewCooldown("tower", new Date());
+	});
 
 	// Save the users
 	await Promise.all(users.map(user => user.save()));
 
-	return response;
+	allResults.combatResults = combatResults;
+
+	return allResults;
 };
 
 // Takes the user and returns true if it still has health left on some units

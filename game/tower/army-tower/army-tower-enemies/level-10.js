@@ -8,35 +8,35 @@ const levelTen = {
 	},
 	units: [
 		{
-			name: "Thug",
+			name: "Thugs",
 			stats: {
 				attack: 50,
 				health: 50
 			}
 		},
 		{
-			name: "Highlander",
+			name: "Highlanders",
 			stats: {
 				attack: 53,
 				health: 53
 			}
 		},
 		{
-			name: "Bandit",
+			name: "Bandits",
 			stats: {
 				attack: 55,
 				health: 55
 			}
 		},
 		{
-			name: "Bandit Mercenary",
+			name: "Bandit Mercenaries",
 			stats: {
 				attack: 57,
 				health: 57
 			}
 		},
 		{
-			name: "Ruffian",
+			name: "Ruffians",
 			stats: {
 				attack: 60,
 				health: 60
@@ -50,21 +50,21 @@ const levelTen = {
 			}
 		},
 		{
-			name: "Bandit Mercenary",
+			name: "Bandit Assassins",
 			stats: {
 				attack: 65,
 				health: 65
 			}
 		},
 		{
-			name: "Bomber",
+			name: "Bombers",
 			stats: {
 				attack: 67,
 				health: 67
 			}
 		},
 		{
-			name: "Elite Outlaw",
+			name: "Elite Outlaws",
 			stats: {
 				attack: 70,
 				health: 70

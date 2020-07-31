@@ -575,7 +575,7 @@ userSchema.methods.equipItem = function(item, currentItem) {
 };
 
 // lossPercentage: 0.9 => 10% units loss
-userSchema.methods.unitLoss = function(lossPercentage) {
+userSchema.methods.unitLoss = function(lossPercentage, towerFight) {
 	// Kill off unit depending on the lossPercentage
 	Object.values(this.army.units).forEach(unitBuilding => {
 		Object.keys(unitBuilding).forEach(unit => {
@@ -590,7 +590,7 @@ userSchema.methods.unitLoss = function(lossPercentage) {
 	this.hero.currentHealth = Math.floor(this.hero.currentHealth * lossPercentage);
 
 	// if the hero dies
-	if (this.hero.currentHealth <= 0 && this.hero.rank > 0) {
+	if (this.hero.currentHealth <= 0 && this.hero.rank > 0 && !towerFight) {
 		Object.keys(heroStatIncreaseOnLevel[this.hero.rank]).forEach(s=>{
 			this.hero[s] -= heroStatIncreaseOnLevel[this.hero.rank][s];
 		});

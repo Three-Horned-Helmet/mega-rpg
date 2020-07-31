@@ -1,17 +1,17 @@
 const prefixes = {
-	"of the Boar": {
+	"of Boar": {
 		chance: 0,
 		multiplier: 1,
 	},
-	"of the Cougar": {
+	"of Cougar": {
 		chance: 5,
 		multiplier: 1.1,
 	},
-	"of the Bandit": {
+	"of Bandit": {
 		chance: 10,
 		multiplier: 1.2,
 	},
-	"of the Outlaw": {
+	"of Outlaw": {
 		chance: 15,
 		multiplier: 1.3,
 	},
@@ -23,11 +23,11 @@ const prefixes = {
 		chance: 25,
 		multiplier: 1.5,
 	},
-	"of the Windlow": {
+	"of Windlow": {
 		chance: 30,
 		multiplier: 1.6,
 	},
-	"of the Underworld": {
+	"of Underworld": {
 		chance: 35,
 		multiplier: 1.65,
 	},

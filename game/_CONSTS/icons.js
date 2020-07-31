@@ -63,6 +63,13 @@ const icons = {
 	"heal":{ name: ":test_tube:", icon: "🧪" },
 	"poke":{ name: ":point_right:", icon: "👉" },
 
+	// Tower
+	"tower header": { name: ":japanese_ogre:" },
+	"tower drop": { name: "" },
+	"tower won": { name: ":medal:" },
+	"tower lost": { name: ":anger:" },
+	"tower fight": { name: ":crossed_swords:" },
+
 	// Misc
 	"false":{ name: ":x:", icon: "❌" },
 	"true":{ name: ":white_check_mark:", icon: "✅" },

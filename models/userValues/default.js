@@ -31,6 +31,10 @@ const cooldowns = {
 		type:Date,
 		default:0,
 	},
+	tower:{
+		type:Date,
+		default:0,
+	},
 	weeklyPrize:{
 		type:Date,
 		default:0,
