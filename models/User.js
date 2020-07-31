@@ -203,10 +203,18 @@ const userSchema = new Schema({
 			},
 		},
 		dungeonKeys:{
-			["CM Key"]:{
+			"CM Key":{
 				type: Number,
 				default: 0,
 			},
+			"Eridian Vase":{
+				type: Number,
+				default: 0
+			},
+			"The One Shell":{
+				type: Number,
+				default: 0
+			}
 		},
 		currentExp: {
 			type: Number,
@@ -691,15 +699,12 @@ userSchema.methods.buyItem = async function(item, amount = 1) {
 	this.markModified("hero.inventory");
 };
 
-userSchema.methods.handleConsecutive = function(resources, consecutive, now, cyclus) {
-
-	this.cooldowns[cyclus] = now;
+userSchema.methods.handleConsecutive = function(resources, consecutive, cyclus) {
 	this.consecutivePrizes[cyclus] = consecutive;
 
 	Object.keys(resources).forEach(r=>{
 		this.resources[r] += resources[r];
 	});
-	return this.save();
 };
 
 

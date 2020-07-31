@@ -23,7 +23,7 @@ const handleCaptcha = async (message, user, tries)=> {
 		if(tries <= 1) {
 			user.account.banned = true;
 			await user.save();
-			return message.channel.send(`<@${message.author.id}>  is banned for not typing in the captcha. Check out our support server to plead for a unban!`);
+			return message.channel.send(`<@${message.author.id}>  is banned for not typing in the captcha. Check out our support server to plead for an unban!`);
 		}
 
 		if (captcha.captchaNumbers.join("") === userAnswer) {

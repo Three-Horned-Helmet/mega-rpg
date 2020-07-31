@@ -6,6 +6,7 @@ const minibossCommand = require("../../commands/miniboss");
 const { createTestUser } = require("../helper");
 const sleep = require("util").promisify(setTimeout);
 
+
 const { minibossStartAllowed, createMinibossEvent, calculateMinibossResult } = require("../../game/miniboss");
 
 const world = {
@@ -31,14 +32,14 @@ describe("miniboss command", () => {
 		const testUser = await createTestUser({ world });
 		await testUser.setNewCooldown("miniboss", now);
 		const result = await minibossStartAllowed(testUser);
-		expect(result.fields[0].name.startsWith("You can't use this command. Cooldown is")).to.be.equal(true);
+		expect(result.fields[0].name).to.have.string("You can't use this command. Cooldown is");
 	});
 
 
 	it("should not be able to trigger if not explored", async ()=>{
 		const testUser = await createTestUser();
 		const result = await minibossStartAllowed(testUser);
-		expect(result.startsWith("You haven't found any miniboss in")).to.be.equal(true);
+		expect(result).to.have.string("You haven't found any miniboss in");
 	});
 	it("should not be triggered if hp too low", async ()=>{
 
@@ -48,7 +49,7 @@ describe("miniboss command", () => {
 		};
 		const testUser = await createTestUser({ world, hero });
 		const result = await minibossStartAllowed(testUser);
-		expect(result.startsWith("Your hero's health is too low")).to.be.equal(true);
+		expect(result).to.have.string("Your hero's health is too low");
 
 	});
 	it("should succeed when initativetaker has higher rank than helper", async ()=>{
@@ -66,11 +67,12 @@ describe("miniboss command", () => {
 		miniboss.helperIds.push(helper0.account.userId);
 		let looping = true;
 		let result;
-		for (let i = 0; i < 10 && looping; i++) {
+		for (let i = 0; i < 20 && looping; i++) {
 			result = await calculateMinibossResult(miniboss);
 			if (result.win) looping = false;
 		}
 		await sleep(200);
+
 		expect(result.win).to.be.equal(true);
 
 	});
@@ -78,7 +80,7 @@ describe("miniboss command", () => {
 	it("should be rewarded with gold, dungeonkey, xp (and level up) win", async ()=>{
 
 		const hero = {
-			rank:3,
+			rank:5,
 			currentExp: 99.99,
 			expToNextRank: 100,
 			stats:{
@@ -88,6 +90,9 @@ describe("miniboss command", () => {
 			dungeonKeys:{
 				["CM Key"]: 0,
 			},
+			resources:{
+				gold:100
+			}
 		};
 
 		const testUser = await createTestUser({ world, hero });
@@ -103,26 +108,30 @@ describe("miniboss command", () => {
 
 		let looping = true;
 		let result;
-		for (let i = 0; i < 10 && looping; i++) {
+		for (let i = 0; i < 20 && looping; i++) {
 			result = await calculateMinibossResult(miniboss);
 			if (result.win) looping = false;
 		}
 		await sleep(200);
-		expect(result.initiativeTaker.resources.gold > 100).to.be.equal(true);
-		expect(result.initiativeTaker.hero.health > 100).to.be.equal(true);
-		expect(result.initiativeTaker.hero.attack > 1).to.be.equal(true);
-		expect(result.initiativeTaker.hero.currentExp > 100).to.be.equal(true);
-		expect(result.initiativeTaker.hero.rank).to.be.equal(4);
-		expect(result.initiativeTaker.hero.dungeonKeys["CM Key"]).to.be.equal(1);
+
+
+		expect(result.initiativeTaker.resources.gold > 100).to.not.equal(hero.resources.gold, result.initiativeTaker);
+		expect(result.initiativeTaker.hero.health > 100).to.not.equal(hero.stats.health, result.initiativeTaker);
+		expect(result.initiativeTaker.hero.attack > 1).to.not.equal(hero.stats.attack, result.initiativeTaker);
+		expect(result.initiativeTaker.hero.currentExp > 100).to.not.equal(hero.stats.currentExp, result.initiativeTaker);
+		expect(result.initiativeTaker.hero.rank).to.not.equal(hero.rank, result.initiativeTaker);
+		expect(result.initiativeTaker.hero.dungeonKeys["CM Key"]).to.be.equal(1, result.initiativeTaker);
 
 
 		result.helpers.forEach(helper=>{
-			expect(helper.resources.gold > 100).to.be.equal(true);
-			expect(helper.hero.health > 100).to.be.equal(true);
-			expect(helper.hero.attack > 1).to.be.equal(true);
-			expect(helper.hero.currentExp > 100).to.be.equal(true);
-			expect(helper.hero.rank).to.be.equal(4);
-			expect(helper.hero.dungeonKeys["CM Key"]).to.be.equal(0);
+			const { health, attack, currentExp, rank, dungeonKeys } = helper.hero;
+			const { gold } = helper.resources;
+			expect(gold).to.not.equal(hero.resources.gold, helper);
+			expect(health).to.not.equal(hero.stats.health, helper);
+			expect(attack).to.not.equal(hero.stats.attack, helper);
+			expect(currentExp).to.not.equal(hero.stats.currentExp, helper);
+			expect(rank).to.not.equal(hero.rank, helper);
+			expect(dungeonKeys["CM Key"]).to.be.equal(0, helper);
 		});
 	});
 
@@ -148,7 +157,7 @@ describe("miniboss command", () => {
 
 		let looping = true;
 		let result;
-		for (let i = 0; i < 10 && looping; i++) {
+		for (let i = 0; i < 20 && looping; i++) {
 			result = await calculateMinibossResult(miniboss);
 			if (result.win) looping = false;
 		}
@@ -165,7 +174,7 @@ describe("miniboss command", () => {
 
 		let looping = true;
 		let result;
-		for (let i = 0; i < 10 && looping; i++) {
+		for (let i = 0; i < 20 && looping; i++) {
 			result = await calculateMinibossResult(miniboss);
 			if (!result.win) looping = false;
 		}
@@ -186,7 +195,7 @@ describe("miniboss command", () => {
 
 		let looping = true;
 		let result;
-		for (let i = 0; i < 10 && looping; i++) {
+		for (let i = 0; i < 20 && looping; i++) {
 			result = await calculateMinibossResult(miniboss);
 			if (!result.win) looping = false;
 		}
@@ -207,11 +216,11 @@ describe("miniboss command", () => {
 
 		let looping = true;
 		let result;
-		for (let i = 0; i < 10 && looping; i++) {
+		for (let i = 0; i < 20 && looping; i++) {
 			result = await calculateMinibossResult(miniboss);
 			if (!result.win) looping = false;
 		}
-		await sleep(200);
+
 		expect(result.win).to.be.equal(false);
 	});
 
@@ -242,9 +251,9 @@ describe("miniboss command", () => {
 
 		const result = await calculateMinibossResult(miniboss);
 		await sleep(200);
-		expect(result.initiativeTaker.hero.currentHealth < hero.currentHealth).to.be.equal(true);
+		expect(result.initiativeTaker.hero.currentHealth).to.not.equal(hero.currentHealth, result.initiativeTaker);
 		result.helpers.forEach(helper=>{
-			expect(helper.hero.currentHealth < hero.currentHealth).to.be.equal(true);
+			expect(helper.hero.currentHealth).to.not.equal(hero.currentHealth, helper);
 		});
 	});
 });

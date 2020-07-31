@@ -1,10 +1,10 @@
 const User = require("../../models/User");
 const { getIcon } = require("../_CONSTS/icons");
-const { worldLocations } = require("../_CONSTS/explore");
+const { worldLocations } = require("../_UNIVERSE");
 const { onCooldown } = require("../_CONSTS/cooldowns");
-const getWeaponInfo = (weapon, num = null)=>{
+const getWeaponInfo = (weapon, num = null) => {
 	const weaponInformation = {
-		"slash":{
+		"slash": {
 			name: "slash",
 			type: "attack",
 			answer: null,
@@ -12,7 +12,7 @@ const getWeaponInfo = (weapon, num = null)=>{
 			damage: 1,
 			description: "\n95% chance of slashing the enemy",
 		},
-		"strike":{
+		"strike": {
 			name: "strike",
 			type: "attack",
 			answer: null,
@@ -20,7 +20,7 @@ const getWeaponInfo = (weapon, num = null)=>{
 			damage: 2,
 			description: "\n80% chance of causing a strong attack",
 		},
-		"critical":{
+		"critical": {
 			name: "critical",
 			type: "attack",
 			answer: null,
@@ -28,7 +28,7 @@ const getWeaponInfo = (weapon, num = null)=>{
 			damage: 4,
 			description: "\n40% chance of causing a brutal attack",
 		},
-		"disarm":{
+		"disarm": {
 			name: "disarm",
 			type: "disarm",
 			answer: null,
@@ -36,7 +36,7 @@ const getWeaponInfo = (weapon, num = null)=>{
 			damage: 0.2,
 			description: "\n25% chance of lowering boss attack",
 		},
-		"heal":{
+		"heal": {
 			name: "heal",
 			type: "heal",
 			answer: null,
@@ -44,7 +44,7 @@ const getWeaponInfo = (weapon, num = null)=>{
 			damage: 0.25,
 			description: "\n90% chance of healing a teammate",
 		},
-		"poke":{
+		"poke": {
 			name: "poke",
 			type: "attack",
 			answer: null,
@@ -74,7 +74,7 @@ const getWeaponInfo = (weapon, num = null)=>{
 	}
 	return weaponInformation;
 };
-const dungeonStartAllowed = (user)=>{
+const dungeonStartAllowed = (user) => {
 	// checks for cooldown
 	const cooldownInfo = onCooldown("dungeon", user);
 	if (cooldownInfo.response) {
@@ -83,7 +83,7 @@ const dungeonStartAllowed = (user)=>{
 
 	const { currentLocation } = user.world;
 	const locationIcon = getIcon(currentLocation);
-	const dungeonInformation = Object.values(worldLocations[currentLocation].places).find(p=>{
+	const dungeonInformation = Object.values(worldLocations[currentLocation].places).find(p => {
 		return p.type === "dungeon";
 	});
 
@@ -110,7 +110,7 @@ const dungeonStartAllowed = (user)=>{
 	}
 	return null;
 };
-const validateHelper = async discordId =>{
+const validateHelper = async discordId => {
 	const user = await User.findOne({ "account.userId": discordId }).lean();
 	return user.hero.currentHealth > user.hero.health * 0.05;
 };

@@ -85,8 +85,8 @@ const generateDiscordMessage = (user = isRequired())=>{
 
 const mockDays = (d = 1) => {
 	// one day + 1 minute to ensure to bypass cooldown
-	const ms = (1000 * 60 * 60 * 24 * d) + 60000;
-	const now = new Date(Date.now() + ms);
+	const ms = (1000 * 60 * 60 * 24 * d);
+	const now = new Date(Date.now() + ms + 60000);
 	return now;
 };
 

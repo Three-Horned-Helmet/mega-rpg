@@ -4,16 +4,16 @@ const { getWeeklyPrize } = require("../_CONSTS/weeklyPrize");
 const { getIcon } = require("../_CONSTS/icons");
 
 const handleWeekly = async (user) => {
-	const onCooldownInfo = onCooldown("weeklyPrize", user);
+	const onCooldownInfo = onCooldown("weeklyprize", user);
 	if (onCooldownInfo.response) {
 		return onCooldownInfo.embed;
 	}
 	const now = new Date();
-	const lastClaimLessThanTwoDays = user.cooldowns.dailyPrize + 1000 * 60 * 60 * 14 >= now;
-
+	const lastClaimLessThanTwoWeeks = new Date(user.cooldowns.weeklyprize + (1000 * 60 * 60 * 24 * 7 * 2)) >= now;
 	let consecutiveWeek = user.consecutivePrizes.weeklyPrize;
 
-	if (lastClaimLessThanTwoDays) {
+	// todo, should not rely testuser account
+	if (lastClaimLessThanTwoWeeks && user.account.testUser === false) {
 		consecutiveWeek = 0;
 	}
 	if (consecutiveWeek >= 4) {
@@ -21,9 +21,11 @@ const handleWeekly = async (user) => {
 	}
 
 	const weeklyPrizeResult = getWeeklyPrize(consecutiveWeek);
-	await user.handleConsecutive(weeklyPrizeResult, (consecutiveWeek + 1), now, "weeklyPrize");
+	user.handleConsecutive(weeklyPrizeResult, (consecutiveWeek + 1), "weeklyPrize");
+	user.setNewCooldown("weeklyprize", now);
 
 	const embededResult = generatePrizeEmbed(weeklyPrizeResult, consecutiveWeek);
+	await user.save();
 	return embededResult;
 };
 

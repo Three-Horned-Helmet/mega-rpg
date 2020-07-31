@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 // in miliseconds
 // alphabetical
 const cooldowns = {
-	dailyPrize:(1000 * 60 * 60 * 24),
+	dailyprize:(1000 * 60 * 60 * 24),
 	duel: (1000 * 60 * 2),
 	dungeon:(1000 * 60 * 60 * 12),
 	explore: (1000 * 30),
@@ -13,7 +13,7 @@ const cooldowns = {
 	race:(1000 * 60 * 60 * 24),
 	raid:(1000 * 60 * 4),
 	tower: (1000 * 60),
-	weeklyPrize:(1000 * 60 * 60 * 24 * 7),
+	weeklyprize:(1000 * 60 * 60 * 24 * 7),
 };
 
 
@@ -43,7 +43,6 @@ const onCooldown = (actionType, user)=>{
 	}
 	const previousTime = user.cooldowns[actionType];
 	const now = new Date();
-
 	let cooldown = cooldowns[actionType];
 
 	const patreonType = user.account.patreon;

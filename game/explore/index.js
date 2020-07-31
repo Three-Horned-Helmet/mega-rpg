@@ -1,6 +1,6 @@
 const { onCooldown } = require("../_CONSTS/cooldowns");
 const { objectFilter } = require("../_GLOBAL_HELPERS");
-const { worldLocations } = require("../_CONSTS/explore");
+const { worldLocations } = require("../_UNIVERSE");
 const { getIcon } = require("../_CONSTS/icons");
 
 const CHANCE_FOR_SUCCESS = 0.8;
@@ -13,13 +13,13 @@ const handleExplore = async (user) => {
 	const { currentLocation } = user.world;
 	const now = new Date();
 	const { places } = worldLocations[currentLocation];
-	const explorablePlaces = objectFilter(places, place=> !place.notExplorable);
+	const explorablePlaces = objectFilter(places, place => !place.notExplorable);
 
 	const exploreResult = exploreArea(user, explorablePlaces, currentLocation, now);
 	return exploreResult;
 };
 
-const exploreArea = async (user, places, currentLocation, now)=>{
+const exploreArea = async (user, places, currentLocation, now) => {
 	user.setNewCooldown("explore", now);
 	const placeNames = Object.keys(places);
 	let newlyExploredPlaceName = placeNames[Math.floor(Math.random() * placeNames.length)];
@@ -29,7 +29,7 @@ const exploreArea = async (user, places, currentLocation, now)=>{
 	}
 	let msg;
 
-	if(CHANCE_FOR_SUCCESS < Math.random() || previouslyExploredPlaces.includes(newlyExploredPlaceName)) {
+	if (CHANCE_FOR_SUCCESS < Math.random() || previouslyExploredPlaces.includes(newlyExploredPlaceName)) {
 		msg = generateFailExploreMessage(currentLocation);
 	}
 	else {
@@ -52,14 +52,15 @@ const generateFailExploreMessage = (currentLocation) => {
 		`You find nothing new in ${worldIcon} ${currentLocation}`,
 		"After a lot of exploration, you find nothing interesting ",
 		"After adventuring for hours, your men fell tired and you decided to head back without any result",
+		"A thick fog hinders you to do any exploration"
 	];
 	const response = responses[Math.floor(Math.random() * responses.length)];
 	return response;
 };
 const generateSuccessExploreMessage = (currentLocation, place, heroRank) => {
 	const worldIcon = getIcon(currentLocation);
-	const placeType = worldLocations[currentLocation].places[place].type;
-	const placeIcon = getIcon(placeType);
+	const { type, name } = worldLocations[currentLocation].places[place];
+	const placeIcon = getIcon(type);
 	const strings = [
 		`You went onto a new path and found a ${placeIcon} **${place}**`,
 		`You explored for hours and upon your return you found a ${placeIcon} **${place}** behind your empire`,
@@ -69,8 +70,8 @@ const generateSuccessExploreMessage = (currentLocation, place, heroRank) => {
 		`You can't belive your eyes, you have just encountered a ${placeIcon} **${place}**`,
 	];
 	let response = `${strings[Math.floor(Math.random() * strings.length)]}`;
-	if (heroRank < 2) {
-		response += ` ~~~ type \`!${placeType}\` to interact`;
+	if (heroRank < 3) {
+		response += ` ~~~ type \`!${type} ${name}\` to interact`;
 	}
 	return response;
 };

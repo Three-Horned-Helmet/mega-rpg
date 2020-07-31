@@ -1,11 +1,11 @@
-const { worldLocations } = require("../_CONSTS/explore");
+const { worldLocations } = require("../_UNIVERSE");
 const { getIcon } = require("../_CONSTS/icons");
 const handleTravel = async (user, travelDestination) => {
 	const { currentLocation } = user.world;
 
 	const playerUnlockedLocations = Object.keys(user.world.locations)
-		.filter(location=> user.world.locations[location].available)
-		.map(location=> location.split(" ").join("").toLowerCase("").substring(0, 4));
+		.filter(location => user.world.locations[location].available)
+		.map(location => location.split(" ").join("").toLowerCase("").substring(0, 4));
 
 	if (playerUnlockedLocations.length < 2) {
 		return `You haven't unlocked anything but ${getIcon(currentLocation)} ${currentLocation}`;
@@ -13,7 +13,7 @@ const handleTravel = async (user, travelDestination) => {
 	const shortAnswer = travelDestination.substring(0, 4);
 	// allows the player to not type out the ful name
 	if (playerUnlockedLocations.includes(shortAnswer)) {
-		const newDestination = Object.keys(worldLocations).filter(location=>{
+		const newDestination = Object.keys(worldLocations).filter(location => {
 			return location.split(" ").join("").toLowerCase("").substring(0, 4) === shortAnswer;
 		});
 		const worldDescription = worldLocations[newDestination[0]].description;

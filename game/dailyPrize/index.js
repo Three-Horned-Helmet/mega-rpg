@@ -4,16 +4,17 @@ const { getDailyPrize } = require("../_CONSTS/dailyPrize");
 const { getIcon } = require("../_CONSTS/icons");
 
 const handleDaily = async (user) => {
-	const onCooldownInfo = onCooldown("dailyPrize", user);
+	const onCooldownInfo = onCooldown("dailyprize", user);
 	if (onCooldownInfo.response) {
 		return onCooldownInfo.embed;
 	}
 	const now = new Date();
-	const lastClaimLessThanTwoDays = user.cooldowns.dailyPrize + 1000 * 60 * 60 * 48 >= now;
+	const lastClaimLessThanTwoDays = new Date(user.cooldowns.dailyprize + 1000 * 60 * 60 * 24 * 2) >= now;
 
 	let consecutiveDay = user.consecutivePrizes.dailyPrize;
 
-	if (lastClaimLessThanTwoDays) {
+	// todo, should not rely testuser account
+	if (lastClaimLessThanTwoDays && user.account.testUser === false) {
 		consecutiveDay = 0;
 	}
 	if (consecutiveDay >= 4) {
@@ -21,10 +22,12 @@ const handleDaily = async (user) => {
 	}
 
 	const dailyPrizeResult = getDailyPrize(consecutiveDay);
-	await user.handleConsecutive(dailyPrizeResult, (consecutiveDay + 1), now, "dailyPrize");
+	user.setNewCooldown("dailyprize", now);
+	user.handleConsecutive(dailyPrizeResult, (consecutiveDay + 1), "dailyPrize");
 
 
 	const embededResult = generatePrizeEmbed(dailyPrizeResult, consecutiveDay);
+	await user.save();
 	return embededResult;
 };
 

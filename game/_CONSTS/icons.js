@@ -70,9 +70,16 @@ const icons = {
 	"tower lost": { name: ":anger:" },
 	"tower fight": { name: ":crossed_swords:" },
 
+	// Supporter
+	"bronzeSupporter":{ name:":reminder_ribbon:", icon:"🎗" },
+	"silverSupporter":{ name:":military_medal:", icon:"🎖" },
+	"goldSupporter":{ name:":crown:", icon:"👑" },
+	"platinumSupporter":{ name:":gem:", icon:"💎" },
+
 	// Misc
 	"false":{ name: ":x:", icon: "❌" },
 	"true":{ name: ":white_check_mark:", icon: "✅" },
+	"quest": { name: ":boom:", icon:"💥" },
 	"weeklyPrizeStar":{ name:"star2", icon:"🌟" },
 	"dailyPrizeStar": { name:"star", icon: "⭐️" }
 };

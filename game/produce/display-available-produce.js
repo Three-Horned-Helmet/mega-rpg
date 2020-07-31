@@ -3,7 +3,7 @@ const { getIcon } = require("../_CONSTS/icons");
 const buildingsObj = require("../build/buildings-object");
 
 const produceEmbed = (user) => {
-	const title = `${user.account.username}'s available productions`;
+	const title = `${user.account.username}'s available productions (usage: \`!produce <resourceName>\`):`;
 	const sideColor = "#45b6fe";
 	const prodBuildings = user.empire.filter(b => b.producing).sort((a, b) => b.level - a.level).reduce((acc, cur) => {
 		if (acc.find(a => a.name === cur.name)) return acc;
@@ -12,7 +12,7 @@ const produceEmbed = (user) => {
 
 	const currentProdField = prodBuildings.map(building => {
 		return {
-			name: `${building.name.capitalize()}'s current production`,
+			name: `${building.name.capitalize()}'s current production.`,
 			value: resourceMessage(building),
 			inline: true,
 		};

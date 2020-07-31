@@ -1,6 +1,10 @@
 const allQuests = require("./all-quests");
 
 const checkRaidAndHuntQuest = async (user, place, currentLocation) => {
+	// temp. remove when new quest have arrived.
+	if (currentLocation !== "Grassy Plains") {
+		return;
+	}
 	// Does the user have a quest here
 	const currentQuest = user.quests.find(q => q.pve ? q.pve.find(raid => raid.name === place && !raid.completed) && q.started : false);
 

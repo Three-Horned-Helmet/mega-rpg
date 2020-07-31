@@ -1,4 +1,7 @@
-const worldLocations = {
+// Object has been replaced
+// See _UNIVERSE
+
+/* const worldLocations = {
 	"Grassy Plains": {
 		description: "Here you can find all the noobs, such as yourself",
 		randomEvents: {
@@ -41,7 +44,7 @@ const worldLocations = {
 					health: 120,
 				},
 				rewards:{
-					gold: 100,
+					gold: 80,
 					"oak wood": 15,
 					"yew wood": 10,
 				},
@@ -54,7 +57,7 @@ const worldLocations = {
 					health: 200,
 				},
 				rewards:{
-					gold: 170,
+					gold: 110,
 					"copper ore": 20,
 					"iron ore": 12,
 				},
@@ -67,7 +70,7 @@ const worldLocations = {
 					health: 250,
 				},
 				rewards:{
-					gold: 280,
+					gold: 170,
 				},
 			},
 			"Bandit Vault": {
@@ -78,7 +81,7 @@ const worldLocations = {
 					health: 450,
 				},
 				rewards:{
-					gold: 400,
+					gold: 210,
 				},
 			},
 			Forest: {
@@ -89,9 +92,10 @@ const worldLocations = {
 					health: 25,
 				},
 				rewards:{
-					gold: 16,
+					gold: 5,
 					"oak wood": 2,
 					"yew wood": 1,
+					"copper ore": 1,
 				},
 			},
 			Cave: {
@@ -252,7 +256,7 @@ const worldLocations = {
 					health: 300,
 				},
 				rewards:{
-					gold: 170,
+					gold: 130,
 					"iron bar": 20,
 					"yew wood": 40,
 				},
@@ -266,7 +270,7 @@ const worldLocations = {
 					health: 180,
 				},
 				rewards:{
-					gold: 185,
+					gold: 125,
 					"yew wood": 60,
 				},
 			},
@@ -279,7 +283,7 @@ const worldLocations = {
 					health: 600,
 				},
 				rewards:{
-					gold: 470,
+					gold: 200,
 				},
 			},
 			"Wood Elves": {
@@ -304,7 +308,7 @@ const worldLocations = {
 					health: 100,
 				},
 				rewards:{
-					gold: 110,
+					gold: 90,
 					"yew wood": 20,
 				},
 			},
@@ -318,7 +322,7 @@ const worldLocations = {
 				},
 				rewards:{
 					"yew wood": 35,
-					gold: 150,
+					gold: 120,
 				},
 			},
 			"Courtyard Guards": {
@@ -339,28 +343,6 @@ const worldLocations = {
 	"Misty Mountains":{
 		description: "You've entered a hostile environment where rewards are equally big as the threats",
 		randomEvents: {
-			"Mountain Bandits": {
-				name: "Mountain Bandits",
-				type: "raid",
-				stats:{
-					attack: 300,
-					health:100,
-				},
-				rewards:{
-					gold: 100,
-				},
-			},
-			Gnomes: {
-				name: "Gnomes",
-				type: "hunt",
-				stats:{
-					attack: 150,
-					health:50,
-				},
-				rewards:{
-					gold: 50,
-				},
-			},
 			["Bronze Chest"]: {
 				name: "Bronze Chest",
 				type: "luck",
@@ -682,4 +664,4 @@ const worldLocations = {
 	},
 };
 
-module.exports = { worldLocations };
+module.exports = { worldLocations }; */

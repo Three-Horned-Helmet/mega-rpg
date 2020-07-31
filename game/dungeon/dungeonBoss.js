@@ -32,9 +32,6 @@ const createDungeonBossRound = async (message, progress) => {
 		if (progress.weaponAnswer.has(result.author.id)) {
 			message.channel.send("You've already chosen a weapon");
 		}
-		weaponAnswerFilter.some(
-			(alternative) => console.log(alternative, "alternative")
-		);
 		if (!weaponAnswerFilter.includes(result.content.toLowerCase())) {
 			return message.channel.send("Invalid weapon");
 		}

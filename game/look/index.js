@@ -1,11 +1,11 @@
 const Discord = require("discord.js");
 
-const { worldLocations } = require("../_CONSTS/explore");
+const { worldLocations } = require("../_UNIVERSE");
 const { getIcon } = require("../_CONSTS/icons");
 
 const { calculateTopAndLowStrengths } = require("./calculate-difficulty");
 
-const getWorld = (user) => {
+const getWorld = async (user) => {
 
 	const { currentLocation } = user.world;
 	const currentLocationWithIcon = `${getIcon(currentLocation)} ${currentLocation}`;
@@ -15,10 +15,10 @@ const getWorld = (user) => {
 
 	const exploredPlaces = user.world.locations[currentLocation].explored;
 	const strengths = calculateTopAndLowStrengths(currentLocation);
-	const exploredPlacesWithIcons = exploredPlaces.length ? exploredPlaces.map(place=>{
+	const exploredPlacesWithIcons = exploredPlaces.length ? exploredPlaces.map(place => {
 		const { type, stats } = worldLocations[currentLocation].places[place];
 		let difficulty = "";
-		if(strengths[type]) {
+		if (strengths[type]) {
 			const { lowestStrength, highestStrength } = strengths[type];
 			difficulty = stats ? Math.floor(((Object.values(stats).reduce((a, b) => a + b) - lowestStrength) / (highestStrength - lowestStrength)) * 9 + 1) : "";
 		}
@@ -31,11 +31,11 @@ const getWorld = (user) => {
 	const username = `${user.account.username}`;
 	const legend = new Set();
 
-	Object.keys(worldLocations[currentLocation].places).map(p=>{
+	Object.keys(worldLocations[currentLocation].places).map(p => {
 		const { type } = worldLocations[currentLocation].places[p];
-		legend.add(`${getIcon(type, "icon")} : !${type} - `);
+		legend.add(`${getIcon(type, "icon")} \`!${type}\` ~ `);
 	});
-	const footerFriendlyLegend = Array.from(legend).join("");
+	const legendCollection = Array.from(legend).join("");
 	const fields = [
 		{
 			name: "Current location:",
@@ -48,11 +48,15 @@ const getWorld = (user) => {
 			value: exploredPlacesWithIcons,
 			inline: false,
 		},
+		{
+			name: "Legend",
+			value: legendCollection
+		}
 	];
 
 	const availableLocations = Object.keys(user.world.locations)
-		.filter(l=> user.world.locations[l].available === true && l !== currentLocation)
-		.map(l=> `${getIcon(l)} ${l}`);
+		.filter(l => user.world.locations[l].available === true && l !== currentLocation)
+		.map(l => `${getIcon(l)} ${l}`);
 
 	if (availableLocations.length) {
 		fields.splice(1, 0, {
@@ -62,14 +66,14 @@ const getWorld = (user) => {
 		});
 	}
 
-	const embedUser = new Discord.MessageEmbed()
+	const embedLook = new Discord.MessageEmbed()
 		.setTitle(`${username}'s world`)
 		.setColor(sideColor)
 		.addFields(
 			...fields,
-		)
-		.setFooter(`Legend:\n ${footerFriendlyLegend}`);
-	return embedUser;
+		);
+	await user.save();
+	return embedLook;
 };
 
 module.exports = { getWorld };

@@ -112,7 +112,7 @@ module.exports = {
 		found: "You enter the main room in the hut",
 		description: "The hut is filled with several implings, small vile creatures made by the devil himself! The treasure must be inside of the hut, but there is no way to sneak in unnoticed... \n\nThere is only one solution to get to the treasure!",
 		objective: "Defeat the Pack of Implings! (`!hunt pack of implings`)",
-		reward: "Gold: 390",
+		reward: "Gold: 250",
 		winDescription: "The dead Implings are soaked in blood and spread across the floor. Exhausted from the battle you start looking around the old hut for signs of the treasure. \n\nThere are scratches along the walls, shattered vials on the shelves and blood stained on the floor. Somehow everything seems burnt... It must've been the implings. Surprisingly, the house has not been burned down.\n\nAs you strafe across the floor you stumble on a piece of wood sticking up from the floor. You lift it up and notice someone has been digging in the dirt underneath.\n**A new quest is available**",
 		questKeySequence: ["Grassy Plains", "packOfImplings"],
 
@@ -127,7 +127,7 @@ module.exports = {
 
 			// Get reward
 			await user.gainManyResources({
-				gold: 390,
+				gold: 250,
 			});
 
 			// Add next quest
@@ -148,7 +148,7 @@ module.exports = {
 		name: "Digging for Treasure",
 		description: "The floor is full of mud, ash and stones making digging quite the challenge. You need to craft proper equipment to get anywhere in this rough earth.",
 		objective: "Gather 50 iron bars and 40 yew wood to craft digging equipment",
-		reward: "Gold: 450",
+		reward: "Gold: 320",
 		winDescription: "With the proper equipment you start digging into the earth. \n\nAs you get deeper, you come across an increasingly amount of what seems to be small bones covered in thick layers of ash. \n\nA lot of sweat later a glimmer of shiny metal emerge from the ashes. You pick up a round, solid Gold Medallion. With a quick stroke, you remove the dirt surrounding it to find some letters engraved into the shiny object. It is a beautiful piece and may be worth some nice gold on the market, but you decide to keep it. \n\nAfter several hours of digging you find nothing but bones and ash. \n\nWith a *sigh* you leave the old hut with nothing but a shiny Golden Medallion engraved with the letters **C.M.**",
 		questKeySequence: ["Grassy Plains", "diggingForTreasure"],
 
@@ -169,7 +169,7 @@ module.exports = {
 
 			// Get reward
 			await user.gainManyResources({
-				gold: 450,
+				gold: 320,
 			});
 
 			user.removeQuest(this.name);
