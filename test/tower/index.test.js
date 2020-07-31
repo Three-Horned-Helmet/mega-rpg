@@ -5,7 +5,7 @@ const User = require("../../models/User");
 const towerCommand = require("../../commands/tower");
 const { getRandomPrefix, getPrefixMultiplier } = require("../../game/items/tower-items/tower-item-prefix");
 const { getNewTowerItem, getTowerItem, isTowerItem } = require("../../game/items/tower-items/tower-item-functions");
-const { createTestUser, generateDiscordMessage } = require("../helper");
+// const { createTestUser, generateDiscordMessage } = require("../helper");
 
 
 describe("tower functions and command", () => {
