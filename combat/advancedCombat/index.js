@@ -1,17 +1,14 @@
-const {
-	generateEmbedCombatRound,
-	generateEmbedCombatResult,
-} = require("./embedGenerator");
+const { generateEmbedCombatRound, generateEmbedCombatResult } = require("./embedGenerator");
 const { getWeaponInfo } = require("./helper");
-const { asyncForEach, randomIntBetweenMinMax } = require("../_GLOBAL_HELPERS/");
+const { asyncForEach, randomIntBetweenMinMax } = require("../../game/_GLOBAL_HELPERS");
 
 
-const templateProgress = {
-	finish:false,
+/* const templateProgress = {
+	winner:null,
 	roundResults:[],
+	currentRound:0,
 	combatRules:{
 		mode: "PVP", // ["PVP","PVE"]
-		currentRound:0,
 		maxRounds: 3
 	},
 	weaponInformation:{
@@ -22,10 +19,11 @@ const templateProgress = {
 	teamGreen:[],
 	teamRed:[],
 	allDiscordIds:new Set,
-};
+}; */
 
 const createCombatRound = async (message, progress) => {
 	// validate progress object
+	validateProgress(progress);
 
 	// eslint-disable-next-line prefer-const
 	let { numOfAllowedWeapons, allowedWeapons, weaponAnswers } = progress.weaponInformation;
@@ -62,6 +60,7 @@ const createCombatRound = async (message, progress) => {
 			return message.channel.send("Invalid weapon");
 		}
 		const answer = result.content.toLowerCase();
+
 		// adds answer to progress object
 		if (Object.keys(allowedWeapons).includes(answer)) {
 			weaponAnswers.set(result.author.id, answer);
@@ -79,7 +78,7 @@ const createCombatRound = async (message, progress) => {
 	});
 	collector.on("end", async () => {
 		const result = await calculateCombatResult(progress);
-		if (result.finish) {
+		if (result.winner) {
 			const finalResult = await generateEmbedCombatResult(progress);
 			return message.channel.send(finalResult);
 		}
@@ -180,70 +179,87 @@ const calculateCombatResult = async (progress) => {
 		}
 	});
 
-
+	// todo probably too many awaits
 	// takes care of healing
-	await asyncForEach(Object.keys(awaitHealPromises), async (u) => {
-		return await awaitHealPromises[u].user.healHero(
-			awaitHealPromises[u].healGiven
-		);
-	});
+	Object.keys(awaitHealPromises).forEach(async (u) => awaitHealPromises[u].user.healHero(awaitHealPromises[u].healGiven));
 
 	// inflicts damage on user document
-	await asyncForEach(Object.keys(awaitDamagePromises), async (u) => {
-		return await awaitDamagePromises[u].user.heroHpLossFixedAmount(
-			awaitDamagePromises[u].damage
-		);
+	Object.keys(awaitDamagePromises).forEach(async (u) => awaitDamagePromises[u].user.heroHpLossFixedAmount(awaitDamagePromises[u].damage));
+
+	await asyncForEach(teamRed, async (member)=>{
+		await member.save();
 	});
+	await asyncForEach(teamGreen, async (member)=>{
+		await member.save();
+	});
+	// await player.save(); ???????
 
 	// removes player from combat
 	progress.teamGreen.filter(member=>member.hero.currentHealth > 0);
 	progress.teamRed.filter(member=>member.hero.currentHealth > 0);
 
-	progress.bossAttempts += 1;
+	progress.currentRound += 1;
 	progress.weaponAnswers.clear();
 
 	// checks if fight is over
-	if (teamGreen.length === 0 || teamRed.length === 0) {
-		progress.finish = true;
-		if (progress.bossAttempts > 3) {
-			progress.winner = "No winners";
-		}
-		if (teamGreen.lenth === 0 && teamRed.length === 0) {
-			progress.winner = "draw";
-		}
-		else {
-			progress.winner = teamGreen.length === 0 ? "teamRed" : "teamGreen";
-		}
-	}
-
+	progress.winner = checkWinner(progress);
 
 	return progress;
 };
 
-const generateAttackString = (
-	playerName,
-	weaponInfo,
-	damageGiven,
-	playerAttacked
-) => {
-	const string = `\n- **${playerName}** used ${weaponInfo.name} attack causing **${damageGiven}** damage to **${playerAttacked}**`;
-	return string;
-};
-const generateHealString = (
-	playerName,
-	weaponInfo,
-	healGiven,
-	playerHealed
-) => {
+const generateAttackString = (playerName, weaponInfo, damageGiven, playerAttacked) => {
+	return `\n- **${playerName}** used ${weaponInfo.name} attack causing **${damageGiven}** damage to **${playerAttacked}**`;
 
+};
+const generateHealString = (playerName, weaponInfo, healGiven, playerHealed) => {
 	return `\n${playerName} helead ${playerHealed === playerName ? "himself" : playerHealed}. +${healGiven} HP`;
 };
 
 
 const populateDiscordIds = (progress)=>{
-	progress.teamGreen.forEach(member=> progress.allDiscordIds.add(member.account.userid));
-	progress.teamRed.forEach(member=> progress.allDiscordIds.add(member.account.userid));
+	progress.teamGreen.forEach(member=> progress.allDiscordIds.add(member.account.userId));
+	progress.teamRed.forEach(member=> progress.allDiscordIds.add(member.account.userId));
+};
 
+const checkWinner = progress=>{
+	const{ teamGreen, teamRed } = progress;
+	if (teamGreen.length === 0 && teamRed.length === 0) {
+		return "draw";
+	}
+	if (teamGreen.length === 0 || teamRed.length === 0) {
+		return teamGreen.length === 0 ? "teamRed" : "teamGreen";
+	}
+	if (progress.currentRound > progress.combatRules.maxRounds) {
+		return "No winners";
+	}
+	return null;
+};
+
+const validateProgress = (progress)=>{
+	const progressKeys = "[\"winner\",\"roundResults\",\"currentRound\",\"combatRules\",\"weaponInformation\",\"teamGreen\",\"teamRed\",\"allDiscordIds\"]";
+	if (JSON.stringify(Object.keys(progress)) !== progressKeys) {
+		throw new Error(`progress keys are missing\nExpected: ${progressKeys}\nGot: ${Object.keys(progress)}\n`);
+	}
+	const allowedModes = ["PVP", "PVE"];
+	if (!progress.combatRules.mode || progress.combatRules.mode.includes(allowedModes)) {
+		throw new Error(`progress.combatRules.mode must be set to ${allowedModes.split(" or ")}\n`);
+	}
+	if (!progress.combatRules.maxRounds || typeof progress.combatRules.maxRounds !== "number") {
+		throw new Error("progress.combatRules.maxRounds must be set to a number\n");
+	}
+	const weaponInformationKeys = "[\"numOfAllowedWeapons\",\"allowedWeapons\",\"weaponAnswers\"]";
+	if (JSON.stringify(Object.keys(progress.weaponInformation)) !== weaponInformationKeys) {
+		throw new Error(`progress.weaponInformation keys are missing\nExpected: ${weaponInformationKeys}\nGot: ${Object.keys(progress.weaponInformation)}\n`);
+	}
+	if (progress.weaponInformation.weaponAnswers instanceof Map === false) {
+		throw new Error("progress.weaponAnswers must be a Map -> weaponAnswers: new Map\n");
+	}
+	if (progress.teamGreen.length === 0 || progress.teamRed.length === 0) {
+		throw new Error(`No players in the teams. \n teamGreen: ${progress.teamGreen.length} members \n teamRed: ${progress.teamRed.length} members\n`);
+	}
+	if (progress.allDiscordIds instanceof Set === false) {
+		throw new Error("progress.allDiscordIds must be a Set -> allDiscordIds: new Set\n");
+	}
 };
 
 module.exports = { createCombatRound };
