@@ -2,59 +2,53 @@ const User = require("../../models/User");
 const { getIcon } = require("../_CONSTS/icons");
 const { worldLocations } = require("../_UNIVERSE");
 const { onCooldown } = require("../_CONSTS/cooldowns");
+
+const weaponInformation = {
+	"slash": {
+		name: "slash",
+		type: "attack",
+		answer: null,
+		chanceforSuccess: 0.95,
+		damage: 1,
+		description: "\n95% chance of slashing the enemy",
+	},
+	"strike": {
+		name: "strike",
+		type: "attack",
+		answer: null,
+		chanceforSuccess: 0.80,
+		damage: 2,
+		description: "\n80% chance of causing a strong attack",
+	},
+	"critical": {
+		name: "critical",
+		type: "attack",
+		answer: null,
+		chanceforSuccess: 0.40,
+		damage: 4,
+		description: "\n40% chance of causing a brutal attack",
+	},
+	"heal": {
+		name: "heal",
+		type: "heal",
+		answer: null,
+		chanceforSuccess: 0.90,
+		damage: 0.25,
+		description: "\n90% chance of healing a teammate",
+	},
+	"poke": {
+		name: "poke",
+		type: "attack",
+		answer: null,
+		chanceforSuccess: 0.1,
+		damage: 0.05,
+		description: "\n10% chance of poking the enemy",
+	},
+};
+
 const getWeaponInfo = (weapon, num = null) => {
-	const weaponInformation = {
-		"slash": {
-			name: "slash",
-			type: "attack",
-			answer: null,
-			chanceforSuccess: 0.95,
-			damage: 1,
-			description: "\n95% chance of slashing the enemy",
-		},
-		"strike": {
-			name: "strike",
-			type: "attack",
-			answer: null,
-			chanceforSuccess: 0.80,
-			damage: 2,
-			description: "\n80% chance of causing a strong attack",
-		},
-		"critical": {
-			name: "critical",
-			type: "attack",
-			answer: null,
-			chanceforSuccess: 0.40,
-			damage: 4,
-			description: "\n40% chance of causing a brutal attack",
-		},
-		"disarm": {
-			name: "disarm",
-			type: "disarm",
-			answer: null,
-			chanceforSuccess: 0.25,
-			damage: 0.2,
-			description: "\n25% chance of lowering boss attack",
-		},
-		"heal": {
-			name: "heal",
-			type: "heal",
-			answer: null,
-			chanceforSuccess: 0.90,
-			damage: 0.25,
-			description: "\n90% chance of healing a teammate",
-		},
-		"poke": {
-			name: "poke",
-			type: "attack",
-			answer: null,
-			chanceforSuccess: 0.1,
-			damage: 0.05,
-			description: "\n10% chance of poking the enemy",
-		},
-	};
 	if (num) {
-		const alphabet = ["a", "b", "c", "d", "e"];
+		const alphabet = ["a", "b", "c", "d", "e", "f", "g"];
 		const shuffled = Object
 			.entries(weaponInformation)
 			.sort(() => 0.5 - Math.random())
@@ -69,7 +63,7 @@ const getWeaponInfo = (weapon, num = null) => {
 		}
 		return shuffled;
 	}
-	if (weapon) {
+	if (weapon && weaponInformation[weapon]) {
 		return weaponInformation[weapon];
 	}
 	return weaponInformation;
