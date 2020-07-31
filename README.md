@@ -23,7 +23,7 @@ The Game is set in a fantasy-medieval universe and the journey begins in a kingd
 
 The game is in very early development, but we have great plans on how to expand it if there are enough people who enjoy playing it just as much as we have enjoyed creating it! Any feedback or bug-reports are very much appreciated!!:)
 
-## How to install
+## How to run Mega-RPG locally
 
 1. Install [NodeJS](https://nodejs.org/en/download/).
 2. Install [MongoDB Community](https://docs.mongodb.com/manual/installation/#mongodb-community-edition-installation-tutorials).
