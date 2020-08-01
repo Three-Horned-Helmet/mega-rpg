@@ -55,7 +55,7 @@ const getRandomPrefix = () => {
 const getPrefixMultiplier = (prefix) => {
 	const prefixKey = Object.keys(prefixes).find(p => p.toLowerCase() === prefix.toLowerCase());
 
-	return prefixes[prefixKey].multiplier || 1;
+	return prefixes[prefixKey] ? prefixes[prefixKey].multiplier : 1;
 };
 
 const getPrefix = (prefix) => {

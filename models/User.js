@@ -780,5 +780,4 @@ userSchema.methods.changeTowerLevel = function(towerCategory, newLevel) {
 	this.tower[towerCategory].level = newLevel;
 };
 
-
 module.exports = mongoose.model("User", userSchema);

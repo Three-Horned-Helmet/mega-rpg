@@ -1,6 +1,6 @@
 const { calculatePveFullArmyResult } = require("../../../combat/combat");
 const { getArmyTowerEnemies } = require("./army-tower-enemies/army-tower-enemies");
-const { getNewTowerItem, getTowerItem } = require("../../../game/items/tower-items/tower-item-functions");
+const { getNewTowerItem, getTowerItem, removeTowerItemFromUser } = require("../../../game/items/tower-items/tower-item-functions");
 // Takes an array of users and makes them fight together in the Tower
 // Category is "solo" or "trio" etc
 const armyTowerFight = async (users, category) => {
@@ -97,9 +97,14 @@ const armyTowerFight = async (users, category) => {
 		users.filter(user => winningCombatResults.find(wcr => wcr.userId === user.account.userId)).forEach(user => {
 			const dropChance = Math.random() * ((winningCombatResults.filter(wcr => wcr.userId === user.account.userId).length / 2) + 0.5);
 			let itemDrop;
-			if(dropChance > 0.85) {
+			if(dropChance > 0.085) {
 				itemDrop = getNewTowerItem(highestLevel);
 				const itemObject = { ...getTowerItem(itemDrop) };
+
+				const resultTower = removeTowerItemFromUser(user, itemObject);
+
+				// Returns if the droped item is worse
+				if(!resultTower) return;
 
 				user.addItem(itemObject);
 
