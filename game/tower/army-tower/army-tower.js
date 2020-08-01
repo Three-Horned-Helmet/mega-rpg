@@ -145,8 +145,7 @@ const healthLeftOnArmy = (user) => {
 
 	const totalUnits = totalUnitsArray.filter(unitNumbers => typeof unitNumbers === "number").reduce((acc, cur) => acc + cur);
 
-	if(totalUnits > 0 || user.hero.currentHealth > 0) return true;
-	return false;
+	return totalUnits > 0 || user.hero.currentHealth > 0;
 };
 
 

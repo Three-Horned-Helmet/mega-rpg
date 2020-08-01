@@ -53,6 +53,6 @@ describe("tower functions and command", () => {
 		const itemOneStats = Object.values(newItemOne.stats).reduce((acc, cur) => acc + cur);
 		const itemTwoStats = Object.values(newItemTwo.stats).reduce((acc, cur) => acc + cur);
 
-		expect(itemOneStats + 50 < itemTwoStats).to.equal(true);
+		expect(itemOneStats + 50).to.be.below(itemTwoStats);
 	});
 });
