@@ -64,10 +64,10 @@ const icons = {
 	"poke":{ name: ":point_right:", icon: "👉" },
 
 	// Tower
-	"tower header": { name: ":japanese_ogre:",icon: "👹" },
+	"tower header": { name: ":japanese_ogre:", icon: "👹" },
 	"tower drop": { name: "", icon:"" },
 	"tower won": { name: ":medal:", icon:"🏅" },
-	"tower lost": { name: ":anger:",icon"😠" },
+	"tower lost": { name: ":anger:", icon: "😠" },
 	"tower fight": { name: ":crossed_swords:", icon: "⚔️" },
 
 	// Supporter
