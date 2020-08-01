@@ -6,8 +6,7 @@ const getNewTowerItem = (level) => {
 
 	const towerItemsValues = Object.values(towerItems);
 
-	// const randomItemNumber = Math.floor(Math.random() * towerItemsValues.length);
-	const randomItemNumber = 0;
+	const randomItemNumber = Math.floor(Math.random() * towerItemsValues.length);
 
 	return `${towerItemsValues[randomItemNumber].name} ${prefix} (${typeof level === "number" ? level : 1})`;
 };

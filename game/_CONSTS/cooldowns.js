@@ -12,7 +12,7 @@ const cooldowns = {
 	miniboss:(1000 * 60 * 60 * 3),
 	race:(1000 * 60 * 60 * 24),
 	raid:(1000 * 60 * 4),
-	tower: (1000 * 60 * 0),
+	tower: (1000 * 60),
 	weeklyprize:(1000 * 60 * 60 * 24 * 7),
 };
 
