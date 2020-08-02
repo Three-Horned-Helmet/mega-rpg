@@ -109,6 +109,11 @@ client.on("message", async (message) => {
 		userProfile.statistics[command.name] += 1;
 	}
 
+	// saves the server id
+	if (!userProfile.account.servers.includes(message.channel.id)) {
+		userProfile.servers.push(message.channel.id);
+	}
+
 	// executes the command
 	{
 		try {
