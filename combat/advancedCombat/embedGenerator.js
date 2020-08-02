@@ -1,88 +1,41 @@
 const Discord = require("discord.js");
 const { getIcon } = require("../../game/_CONSTS/icons");
-// Dungeon boss invitation
-const createDungeonInvitation = (dungeon, user) => {
-	const sideColor = "#45b6fe";
-	const { username } = user.account;
-	const dungeonIcon = getIcon("dungeon");
-	const rules = `\` ${dungeon.rooms.length} Rooms\`\n ${getIcon(dungeon.boss.rules.canKill)} \`Dungeon deadly\`\n${getIcon(dungeon.boss.rules.allowHelpers)} \`helpers allowed\`\n\n**Unclocks**: ${getIcon(dungeon.boss.unlocks)} **${dungeon.boss.unlocks}**\n`;
-	const dungeonStats = `${getIcon("health")} \`Health: ${dungeon.boss.stats.health}\`\n ${getIcon("attack")} \`Attack: ${dungeon.boss.stats.attack}\`\n ${getIcon(dungeon.boss.stats.healing)} \`Healing\`\n`;
-	const bossRewards = `${getIcon("gold")} \`Gold: ${dungeon.boss.rewards.gold}\`\n ${getIcon("xp")} \`XP: ${dungeon.boss.rewards.xp}\`\n${getIcon(!!dungeon.boss.rewards.drop.length)} \`Loot drop\`\n\n   `;
-	const bossWeapons = dungeon.boss.bossWeapons.map(w => {
-		return `${getIcon(w)} \`${w}\``;
-	});
 
-	const fields = [{
-		name: `${dungeon.boss.name}'s Boss stats:`,
-		value: dungeonStats,
-		inline: true,
-	},
-	{
-		name: `${dungeon.boss.name}'s weapons:`,
-		value: bossWeapons,
-		inline: true,
-	},
-
-	{
-		name: "\u200B",
-		value: "\u200B",
-		inline: false,
-	},
-	{
-		name: "Rules",
-		value: rules,
-		inline: true,
-	},
-
-	{
-		name: `${dungeon.boss.name}'s rewards:`,
-		value: bossRewards,
-		inline: true,
-	}];
-
-	const embedInvitation = new Discord.MessageEmbed()
-		.setTitle(`${username} is going for the dungeon !!`)
-		.setDescription(`Help taking out ${dungeonIcon} **${dungeon.boss.name}** in ${dungeon.name}!`)
-		.setColor(sideColor)
-		.addFields(
-			...fields,
-		)
-		.setFooter(`React with a ${getIcon("dungeon", "icon")} within 20 seconds to participate! (max 5!)`);
-	return embedInvitation;
-};
 
 const generateEmbedCombatRound = (progress) => {
 //	console.log(progress);
 	const { allowedWeapons } = progress.weaponInformation;
+	const { teamRed, teamGreen, roundResults } = progress;
 	// const initiativeTakerName = progress.initiativeTaker.account.username;
+
 	const topLeft = {
+		name:  "Team Red HP:",
+		value: null,
+		inline: true,
+	};
+	const topRight = {
+		name: "Team Green HP:",
+		value: null,
+		inline: true,
+	};
+
+	const bottomLeft = {
 		name: "Team Red",
 		value: null,
 		inline: true,
 	};
-    const topRight={
-        name: "Team Red",
+	const bottomRight = {
+		name: "Team Red",
 		value: null,
 		inline: true,
-    }
-    const bottomLeft={
-        name: "Team Red",
-		value: null,
-		inline: true,
-    }
-    const bottomRight={
-        name: "Team Red",
-		value: null,
-		inline: true,
-    }
+	};
 
-	const bottomLeft = progress.players.length > 1 ?
+	/* 	const bottomLeft = progress.players.length > 1 ?
 		progress.players
 			.filter(p => p.account.username !== initiativeTakerName)
 			.map(p => `${p.account.username} ${p.hero.currentHealth <= 0 ? "☠️" : ""} `)
-		: ["You're fighting solo!"];
+		: ["You're fighting solo!"]; */
 
-	const { roundResults } = progress;
 	if (roundResults.length) {
 		bottomLeft.push("\n");
 		bottomLeft.push(`\`Results from round ${progress.bossAttempts}:\``);
@@ -145,22 +98,13 @@ const generateEmbedCombatRound = (progress) => {
 
 
 const generateEmbedCombatResult = (progress) => {
-	if (progress.win) {
-		return createDungeonBossResultWin(progress);
-	}
-	return createDungeonBossResultLoss(progress);
+	return progress.win ? createDungeonBossResultWin(progress) : createDungeonBossResultLoss(progress);
 };
 
 const createDungeonBossResultWin = (progress) => {
-
-	const initiativeTakerName = progress.initiativeTaker.account.username;
-	const initiativeTakerAlive = progress.initiativeTaker.hero.currentHealth > 0;
 	const sideColor = "#45b6fe";
 
-	const bossName = progress.dungeon.boss.name;
-
-	const topLeft = progress.players
-		.filter(p => p.account.username !== initiativeTakerName)
+	const topLeft = progress.teamRed
 		.map(p => `${p.account.username} ${p.hero.currentHealth <= 0 ? "☠️" : ""} `);
 
 	const { roundResults } = progress;
