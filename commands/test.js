@@ -17,6 +17,13 @@ const templateProgress = {
 	teamGreen:[],
 	teamRed:[],
 	allDiscordIds:new Set,
+	allPlayerNames: new Set,
+	embedInformation:{
+		title:"",
+		description:"",
+		fields:"",
+		footer:"",
+	},
 };
 
 

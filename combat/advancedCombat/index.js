@@ -3,24 +3,6 @@ const { getWeaponInfo } = require("./helper");
 const { asyncForEach, randomIntBetweenMinMax } = require("../../game/_GLOBAL_HELPERS");
 
 
-/* const templateProgress = {
-	winner:null,
-	roundResults:[],
-	currentRound:0,
-	combatRules:{
-		mode: "PVP", // ["PVP","PVE"]
-		maxRounds: 3
-	},
-	weaponInformation:{
-		numOfAllowedWeapons: 3,
-		allowedWeapons: null,
-		weaponAnswers: new Map,
-	},
-	teamGreen:[],
-	teamRed:[],
-	allDiscordIds:new Set,
-}; */
-
 const createCombatRound = async (message, progress) => {
 	// validate progress object
 	validateProgress(progress);
@@ -30,8 +12,10 @@ const createCombatRound = async (message, progress) => {
 
 	if (progress.allDiscordIds.size === 0) {
 		populateDiscordIds(progress);
+		populatePlayerNames(progress);
 	}
 	allowedWeapons = getWeaponInfo(null, numOfAllowedWeapons);
+	progress.weaponInformation.allowedWeapons = allowedWeapons;
 
 	const weaponAnswerFilter = Object.keys(allowedWeapons)
 		.map((w) => [allowedWeapons[w].answer, allowedWeapons[w].name])
@@ -199,7 +183,7 @@ const calculateCombatResult = async (progress) => {
 	progress.teamRed.filter(member=>member.hero.currentHealth > 0);
 
 	progress.currentRound += 1;
-	progress.weaponAnswers.clear();
+	progress.weaponInformation.weaponAnswers.clear();
 
 	// checks if fight is over
 	progress.winner = checkWinner(progress);
@@ -221,6 +205,11 @@ const populateDiscordIds = (progress)=>{
 	progress.teamRed.forEach(member=> progress.allDiscordIds.add(member.account.userId));
 };
 
+const populatePlayerNames = (progress)=>{
+	progress.teamGreen.forEach(member=> progress.allPlayerNames.add(member.account.userId));
+	progress.teamRed.forEach(member=> progress.allPlayerNames.add(member.account.userId));
+};
+
 const checkWinner = progress=>{
 	const{ teamGreen, teamRed } = progress;
 	if (teamGreen.length === 0 && teamRed.length === 0) {
@@ -236,8 +225,9 @@ const checkWinner = progress=>{
 };
 
 const validateProgress = (progress)=>{
-	const progressKeys = "[\"winner\",\"roundResults\",\"currentRound\",\"combatRules\",\"weaponInformation\",\"teamGreen\",\"teamRed\",\"allDiscordIds\"]";
-	if (JSON.stringify(Object.keys(progress)) !== progressKeys) {
+
+	const progressKeys = ["winner", "roundResults", "currentRound", "combatRules", "weaponInformation", "teamGreen", "teamRed", "allPlayerNames", "allDiscordIds", "embedInformation"];
+	if (!progressKeys.every(key=> Object.keys(progress).includes(key))) {
 		throw new Error(`progress keys are missing\nExpected: ${progressKeys}\nGot: ${Object.keys(progress)}\n`);
 	}
 	const allowedModes = ["PVP", "PVE"];
@@ -247,8 +237,8 @@ const validateProgress = (progress)=>{
 	if (!progress.combatRules.maxRounds || typeof progress.combatRules.maxRounds !== "number") {
 		throw new Error("progress.combatRules.maxRounds must be set to a number\n");
 	}
-	const weaponInformationKeys = "[\"numOfAllowedWeapons\",\"allowedWeapons\",\"weaponAnswers\"]";
-	if (JSON.stringify(Object.keys(progress.weaponInformation)) !== weaponInformationKeys) {
+	const weaponInformationKeys = ["numOfAllowedWeapons", "allowedWeapons", "weaponAnswers"];
+	if (!weaponInformationKeys.every(key=> Object.keys(progress.weaponInformation).includes(key))) {
 		throw new Error(`progress.weaponInformation keys are missing\nExpected: ${weaponInformationKeys}\nGot: ${Object.keys(progress.weaponInformation)}\n`);
 	}
 	if (progress.weaponInformation.weaponAnswers instanceof Map === false) {
@@ -257,8 +247,8 @@ const validateProgress = (progress)=>{
 	if (progress.teamGreen.length === 0 || progress.teamRed.length === 0) {
 		throw new Error(`No players in the teams. \n teamGreen: ${progress.teamGreen.length} members \n teamRed: ${progress.teamRed.length} members\n`);
 	}
-	if (progress.allDiscordIds instanceof Set === false) {
-		throw new Error("progress.allDiscordIds must be a Set -> allDiscordIds: new Set\n");
+	if (progress.allDiscordIds instanceof Set === false || progress.allPlayerNames instanceof Set === false) {
+		throw new Error("progress.allDiscordIds and progress.AllPlayerNames must be a Set -> allDiscordIds: new Set\n");
 	}
 };
 
