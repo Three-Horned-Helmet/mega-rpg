@@ -111,7 +111,7 @@ client.on("message", async (message) => {
 
 	// saves the server id
 	if (!userProfile.account.servers.includes(message.channel.id)) {
-		userProfile.servers.push(message.channel.id);
+		userProfile.account.servers.push(message.channel.id);
 	}
 
 	// executes the command
