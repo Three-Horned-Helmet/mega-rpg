@@ -14,6 +14,7 @@ module.exports = {
 		fo: "forge",
 		bl: "blacksmith",
 		arm: "armorer",
+		se: "senate",
 		sh: "shop",
 	},
 	execute(message, args, user) {

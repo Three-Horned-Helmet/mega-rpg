@@ -30,6 +30,35 @@ module.exports = {
 				},
 				level: 2,
 			},
+			{
+				cost: {
+					gold: 3600,
+					["oak wood"]: 480,
+					["yew wood"]: 300,
+					["barlind wood"]: 300,
+				},
+				level: 3,
+			},
+			{
+				cost: {
+					gold: 6700,
+					["aspen wood"]: 800,
+					["barlind wood"]: 300,
+					["mithril bar"]: 400,
+					["obsidian ore"]: 200,
+				},
+				level: 4,
+			},
+			{
+				cost: {
+					gold: 12700,
+					["aspen wood"]: 1450,
+					["yew wood"]: 3200,
+					["mithril bar"]: 490,
+					["pyrite bar"]: 700,
+				},
+				level: 5,
+			},
 		],
 	},
 	archery: {
@@ -63,6 +92,27 @@ module.exports = {
 				},
 				level: 2,
 			},
+			{
+				cost: {
+					gold: 7800,
+					["barlind wood"]: 2500,
+					["aspen wood"]: 1300,
+					["iron bar"]: 190,
+					["mithril bar"]: 650,
+					["burite ore"]: 400,
+					["obsidian ore"]: 300,
+				},
+				level: 3,
+			},
+			{
+				cost: {
+					gold: 15800,
+					["yew wood"]: 9500,
+					["aspen wood"]: 5300,
+					["purite bar"]: 400,
+				},
+				level: 4,
+			},
 		],
 	},
 	farm: {
@@ -94,6 +144,26 @@ module.exports = {
 				},
 				level: 2,
 				popIncrease: 150,
+			},
+			{
+				cost: {
+					gold: 4800,
+					["oak wood"]: 1500,
+					["aspen wood"]: 690,
+					["mithril bar"]: 240,
+				},
+				level: 3,
+				popIncrease: 200,
+			},
+			{
+				cost: {
+					gold: 9800,
+					["aspen wood"]: 6900,
+					["mithril bar"]: 580,
+					["pyrite bar"]: 380,
+				},
+				level: 3,
+				popIncrease: 260,
 			},
 		],
 		execute: async function(user) {
@@ -131,7 +201,27 @@ module.exports = {
 			},
 			{
 				cost: {
-					gold: 540,
+					gold: 1940,
+					["bronze bar"]: 220,
+					["iron bar"]: 260,
+					["steel bar"]: 200
+				},
+				level: 2,
+				produce: "mithril ore",
+				productionRate: 3,
+			},
+			{
+				cost: {
+					gold: 8800,
+					["mithril bar"]: 510,
+				},
+				level: 1,
+				produce: "burite ore",
+				productionRate: 4,
+			},
+			{
+				cost: {
+					gold: 99999999999,
 					["bronze bar"]: 100,
 				},
 				level: 999,
@@ -158,7 +248,7 @@ module.exports = {
 			},
 			{
 				cost: {
-					gold: 290,
+					gold: 390,
 					["oak wood"]: 160,
 					["copper ore"]: 95,
 				},
@@ -168,13 +258,23 @@ module.exports = {
 			},
 			{
 				cost: {
-					gold: 1800,
+					gold: 2800,
 					["oak wood"]: 250,
 					["yew wood"]: 250,
 				},
 				level: 2,
 				produce: "barlind wood",
 				productionRate: 3,
+			},
+			{
+				cost: {
+					gold: 7800,
+					["oak wood"]: 750,
+					["barlind wood"]: 750,
+				},
+				level: 3,
+				produce: "aspen wood",
+				productionRate: 4,
 			},
 		],
 		execute: async function(user) {
@@ -213,6 +313,26 @@ module.exports = {
 				},
 				level: 2,
 				craftables: ["steel bar"],
+			},
+			{
+				cost: {
+					gold: 5650,
+					["barlind wood"]: 575,
+					["mithril ore"]: 520,
+					["steel bar"]: 490,
+				},
+				level: 3,
+				craftables: ["mithril bar"],
+			},
+			{
+				cost: {
+					gold: 11650,
+					["aspen wood"]: 700,
+					["obsidian ore"]: 370,
+					["mithril bar"]: 490,
+				},
+				level: 4,
+				craftables: ["pyrite bar"],
 			},
 		],
 	},
@@ -254,6 +374,47 @@ module.exports = {
 				craftables: ["steel sword", "northern shortbow",
 					"steel helmet", "steel platemail", "steel leggings"],
 			},
+			{
+				cost: {
+					gold: 12000,
+					["yew wood"]: 2400,
+					["aspen wood"]: 2100,
+					["iron bar"]: 900,
+					["steel bar"]: 1800,
+					["mithril bar"]: 600,
+					["obsidian ore"]: 150,
+				},
+				level: 3,
+				craftables: ["mithril sword", "aspen longbow",
+					"mithril helmet", "mithril platemail", "mithril leggings"],
+			},
+			{
+				cost: {
+					gold: 12000,
+					["yew wood"]: 2400,
+					["aspen wood"]: 2100,
+					["iron bar"]: 900,
+					["steel bar"]: 1800,
+					["mithril bar"]: 700,
+					["obsidian ore"]: 150,
+				},
+				level: 3,
+				craftables: ["mithril sword", "aspen longbow",
+					"mithril helmet", "mithril platemail", "mithril leggings"],
+			},
+			{
+				cost: {
+					gold: 23000,
+					["oak wood"]: 5400,
+					["aspen wood"]: 4100,
+					["steel bar"]: 4500,
+					["mithril bar"]: 1200,
+					["pyrite bar"]: 800,
+				},
+				level: 4,
+				craftables: ["pyrite sword", "ancient longbow",
+					"pyrite helmet", "pyrite platemail", "pyrite leggings"],
+			},
 		],
 	},
 	["armorer"]: {
@@ -282,6 +443,57 @@ module.exports = {
 			},
 		],
 	},
+	senate: {
+		name: "senate",
+		unique: true,
+		levels: [
+			{
+				cost: {
+					gold: 300,
+					["iron bar"]: 60,
+					["oak wood"]: 60,
+					["yew wood"]: 60,
+				},
+				level: 0,
+			},
+			{
+				cost: {
+					gold: 2900,
+					["steel bar"]: 650,
+					["oak wood"]: 650,
+					["yew wood"]: 650,
+				},
+				level: 1,
+			},
+			{
+				cost: {
+					gold: 9300,
+					["oak wood"]: 1000,
+					["yew wood"]: 1000,
+					["barlind wood"]: 1000,
+					["steel bar"]: 700,
+					["mithril bar"]: 500,
+				},
+				level: 2,
+			},
+			{
+				cost: {
+					gold: 21000,
+					["yew wood"]: 3500,
+					["barlind wood"]: 3500,
+					["aspen wood"]: 3500,
+					["mithril bar"]: 2000,
+					["pyrite bar"]: 1600,
+					["obsidian ore"]: 900,
+				},
+				level: 3,
+			},
+		],
+		execute: function(user) {
+			// Add the lastCollected and producing to new mine
+			return user.updateSenateLevel();
+		},
+	},
 	shop: {
 		name: "shop",
 		levels: [
@@ -299,6 +511,54 @@ module.exports = {
 					["iron bar"]: 180,
 				},
 				level: 1,
+			},
+			{
+				cost: {
+					gold: 800,
+					["yew wood"]: 280,
+					["iron bar"]: 280,
+				},
+				level: 2,
+			},
+			{
+				cost: {
+					gold: 1500,
+					["yew wood"]: 350,
+					["iron bar"]: 350,
+				},
+				level: 3,
+			},
+			{
+				cost: {
+					gold: 2100,
+					["yew wood"]: 440,
+					["iron bar"]: 440,
+				},
+				level: 4,
+			},
+			{
+				cost: {
+					gold: 2600,
+					["yew wood"]: 550,
+					["iron bar"]: 550,
+				},
+				level: 5,
+			},
+			{
+				cost: {
+					gold: 3400,
+					["yew wood"]: 690,
+					["iron bar"]: 690,
+				},
+				level: 6,
+			},
+			{
+				cost: {
+					gold: 4500,
+					["yew wood"]: 750,
+					["iron bar"]: 750,
+				},
+				level: 7,
 			},
 		],
 	},

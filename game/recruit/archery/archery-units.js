@@ -45,4 +45,34 @@ module.exports = {
 			attack: 75,
 		},
 	},
+	survivalist: {
+		name: "survivalist",
+		cost: {
+			gold: 100,
+			["barlind wood"]: 10,
+		},
+		requirement: {
+			building: "archery",
+			level: 3,
+		},
+		stats: {
+			health: 110,
+			attack: 110,
+		},
+	},
+	sharpshooter: {
+		name: "sharpshooter",
+		cost: {
+			gold: 190,
+			["aspen wood"]: 15,
+		},
+		requirement: {
+			building: "archery",
+			level: 4,
+		},
+		stats: {
+			health: 150,
+			attack: 160,
+		},
+	},
 };

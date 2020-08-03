@@ -38,6 +38,10 @@ const userSchema = new Schema({
 		type: Number,
 		default: 10,
 	},
+	maxBuildings: {
+		type: Number,
+		default: 9
+	},
 	// object too big, moved to ./uservalues/default
 	cooldowns,
 	resources: {
@@ -395,6 +399,12 @@ userSchema.methods.changeBuildingLevel = function(buildingName, buildingLevel, l
 userSchema.methods.updateHousePop = function(newPop) {
 	this.maxPop = newPop;
 	return this.save();
+};
+
+userSchema.methods.updateMaxBuildings = function() {
+	const senate = this.empire.find(building => building.name === "senate")
+
+	this.maxBuildings = 9 + senate.level +1
 };
 
 // Recruit, Add or Remove Units
