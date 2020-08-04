@@ -1,24 +1,18 @@
 const { createCombatRound } = require("../combat/advancedCombat");
 const User = require("../models/User");
 
+
 const templateProgress = {
-	winner:null,
-	roundResults:[],
-	currentRound:0,
 	combatRules:{
 		mode: "PVP", // ["PVP","PVE"]
+		armyAllowed: false,
 		maxRounds: 3
-	},
-	weaponInformation:{
-		numOfAllowedWeapons: 3,
-		allowedWeapons: null,
-		weaponAnswers: new Map,
 	},
 	teamGreen:[],
 	teamRed:[],
-	allDiscordIds:new Set,
-	allPlayerNames: new Set,
 	embedInformation:{
+		teamRed:"",
+		teamGreen:"",
 		title:"",
 		description:"",
 		fields:"",

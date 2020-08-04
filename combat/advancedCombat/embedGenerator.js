@@ -4,14 +4,13 @@ const { getIcon } = require("../../game/_CONSTS/icons");
 
 const generateEmbedCombatRound = (progress) => {
 	const { allowedWeapons } = progress.weaponInformation;
-	const { teamRed, teamGreen, roundResults, allDiscordIds, allPlayerNames } = progress;
+	const { teamRed, teamGreen, roundResults, teamGreenIds, teamRedIds, teamGreenNames, teamRedNames } = progress;
 	const { title, description, fields, footer } = progress.embedInformation;
 
-	const greenTeamsHp = getPlayersHp(teamGreen, allDiscordIds);
-	const redTeamsHp = getPlayersHp(teamRed, allDiscordIds, true);
-
-	const teamRedOVerview = formatTeamOverview(teamRed, allPlayerNames);
-	const teamGreenOverview = formatTeamOverview(teamGreen, allPlayerNames);
+	const greenTeamsHp = getPlayersHp(teamGreen, teamGreenIds);
+	const redTeamsHp = getPlayersHp(teamRed, teamRedIds, true);
+	const teamGreenOverview = formatTeamOverview(teamGreen, teamGreenNames);
+	const teamRedOverview = formatTeamOverview(teamRed, teamRedNames);
 
 	const weaponsOverview = Object.keys(allowedWeapons).map(w => {
 		// eslint-disable-next-line no-shadow
@@ -19,30 +18,33 @@ const generateEmbedCombatRound = (progress) => {
 		return `${getIcon(name)} ${answer}) **${name}** ${description}\n`;
 	});
 
+	const teamRedName = progress.embedInformation.teamRed ? progress.embedInformation.teamRed : teamRed.length !== 1 ? "Team Red" : teamRed[0].account.username;
+	const teamGreenName = progress.embedInformation.teamGreen ? progress.embedInformation.teamGreen : teamGreen.length !== 1 ? "Team Green" : teamGreen[0].account.username;
+
 	const topLeft = {
-		name:  "Team Red HP:",
+		name:  `${teamRedName} HP:`,
 		value: redTeamsHp,
 		inline: true,
 	};
 	const topRight = {
-		name: "Team Green HP:",
+		name: `${teamGreenName} HP:`,
 		value: greenTeamsHp,
 		inline: true,
 	};
 
 	const midLeft = {
-		name: "Team Red",
-		value: teamRedOVerview,
+		name: teamRedName,
+		value: teamRedOverview,
 		inline: true,
 	};
 	const midRight = {
-		name: "Team Red",
+		name: teamGreenName,
 		value: teamGreenOverview,
 		inline: true,
 	};
 	const bottomLeft = {
 		name: "Roundresults",
-		value: "Get ready to fight",
+		value: [],
 		inline: true,
 	};
 	const bottomRight = {
@@ -55,6 +57,9 @@ const generateEmbedCombatRound = (progress) => {
 		bottomLeft.value.push("\n");
 		bottomLeft.value.push(`\`Results from round ${progress.currentRound}:\``);
 		bottomLeft.value.push(roundResults);
+	}
+	else {
+		bottomLeft.value = "Get ready to fight";
 	}
 
 	const sideColor = "#45b6fe";
@@ -98,10 +103,11 @@ const getPlayersHp = (players, currentDiscordIds, teamRed = false) => {
 	const totalPlayerHealth = players
 		.reduce((acc, curr) => acc + curr.hero.health, 0);
 	const totalPlayerCurrentHealth = players
-		.filter(p => currentDiscordIds.has(p.account.username))
+		.filter(p => currentDiscordIds.includes(p.account.userId))
 		.reduce((acc, curr) => acc + curr.hero.currentHealth, 0);
 	const percentageHealth = (totalPlayerCurrentHealth / totalPlayerHealth * 100) * MAX_REPEATING / 100;
 	const percentageMissingHealth = MAX_REPEATING - percentageHealth;
+
 	if (teamRed) {
 		return `\`\`\`diff\n- ${"|".repeat(percentageHealth)}${" ".repeat(percentageMissingHealth)} \n \`\`\``;
 	}
@@ -109,6 +115,9 @@ const getPlayersHp = (players, currentDiscordIds, teamRed = false) => {
 };
 
 const formatTeamOverview = (team, allPlayers)=>{
+	if (allPlayers.length === 1) {
+		return "1 man army";
+	}
 	const deadIcon = "☠️";
 	const teamOverview = Array
 		.from(allPlayers)

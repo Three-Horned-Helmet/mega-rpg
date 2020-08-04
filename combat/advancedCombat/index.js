@@ -1,19 +1,30 @@
-const { generateEmbedCombatRound, generateEmbedCombatResult } = require("./embedGenerator");
+const { generateEmbedCombatRound } = require("./embedGenerator");
 const { getWeaponInfo } = require("./helper");
 const { asyncForEach, randomIntBetweenMinMax } = require("../../game/_GLOBAL_HELPERS");
+/*
+Todo:
+- Potential issue with object references and teamGreenIds
+- Issue with naming in embed. Team green / team red etc
+*/
 
+/* {
+			name: "Bandit Prince",
+			stats: {
+				attack: 73,
+				health: 73,
+				maxHealth: 73
+			}
+}, */
 
 const createCombatRound = async (message, progress) => {
-	// validate progress object
-	validateProgress(progress);
+	if (!progress.teamGreenIds || !progress.teamGreenIds.length) {
+		validateProgress(progress);
+		populateProgress(progress);
+	}
 
 	// eslint-disable-next-line prefer-const
 	let { numOfAllowedWeapons, allowedWeapons, weaponAnswers } = progress.weaponInformation;
 
-	if (progress.allDiscordIds.size === 0) {
-		populateDiscordIds(progress);
-		populatePlayerNames(progress);
-	}
 	allowedWeapons = getWeaponInfo(null, numOfAllowedWeapons);
 	progress.weaponInformation.allowedWeapons = allowedWeapons;
 
@@ -26,11 +37,11 @@ const createCombatRound = async (message, progress) => {
 
 	const filter = (response) => {
 		// checks if included in the fight
-		return progress.allDiscordIds.has(response.author.id);
+		return progress.teamGreenIds.includes(response.author.id) || progress.teamRedIds.includes(response.author.id);
 	};
 
 	const collector = await message.channel.createMessageCollector(filter, {
-		time: 1000 * 20,
+		time: 1000 * 5,
 		errors: ["time"],
 	});
 	collector.on("collect", async (result) => {
@@ -56,15 +67,14 @@ const createCombatRound = async (message, progress) => {
 			weaponAnswers.set(result.author.id, weaponInformation.name);
 		}
 		// stops collecting if all users have answered
-		if (weaponAnswers.size >= progress.allDiscordIds.length) {
+		if (weaponAnswers.size >= progress.teamRedIds.length + progress.teamGreenIds.length) {
 			collector.stop();
 		}
 	});
 	collector.on("end", async () => {
 		const result = await calculateCombatResult(progress);
 		if (result.winner) {
-			const finalResult = await generateEmbedCombatResult(progress);
-			return message.channel.send(finalResult);
+			return progress;
 		}
 		else {
 			return await createCombatRound(message, result);
@@ -74,14 +84,15 @@ const createCombatRound = async (message, progress) => {
 
 const calculateCombatResult = async (progress) => {
 	// eslint-disable-next-line prefer-const
-	let { roundResults, teamGreen, teamRed } = progress;
+	let { teamGreen, teamRed, combatRules } = progress;
 	const { weaponAnswers } = progress.weaponInformation;
 
 	// cleans up roundResults from previous round
-	roundResults = [];
+	progress.roundResults = [];
 
 	const awaitHealPromises = {};
 	const awaitDamagePromises = {};
+
 
 	weaponAnswers.forEach((weapon, player) => {
 		const isTeamGreen = teamGreen.some(member=> member.account.userId === player);
@@ -107,7 +118,7 @@ const calculateCombatResult = async (progress) => {
 
 		const weaponInfo = getWeaponInfo(weapon);
 		const playerName = playerInfo.account.username;
-		const victimName = randomVictim.account.username;
+		const victimName = randomVictim.name || randomVictim.account.username;
 
 
 		if (weaponInfo.chanceforSuccess > chance) {
@@ -121,13 +132,14 @@ const calculateCombatResult = async (progress) => {
 				if (awaitDamagePromises[victimName]) {
 					awaitDamagePromises[victimName].damage += damageGiven;
 				}
+
 				else {
 					awaitDamagePromises[victimName] = {
 						user: randomVictim,
 						damage: damageGiven,
 					};
 				}
-				roundResults.push(
+				progress.roundResults.push(
 					generateAttackString(
 						playerName,
 						weaponInfo,
@@ -151,7 +163,7 @@ const calculateCombatResult = async (progress) => {
 						healGiven: healGiven,
 					};
 				}
-				roundResults.push(
+				progress.roundResults.push(
 					generateHealString(
 						playerName,
 						weaponInfo,
@@ -161,33 +173,33 @@ const calculateCombatResult = async (progress) => {
 				);
 			}
 		}
+		else {
+			progress.roundResults.push(`\n${playerName} failed to use ${weaponInfo.name} on ${victimName === playerName ? "himself" : victimName}`);
+		}
 	});
 
-	// todo probably too many awaits
 	// takes care of healing
 	Object.keys(awaitHealPromises).forEach(async (u) => awaitHealPromises[u].user.healHero(awaitHealPromises[u].healGiven));
 
 	// inflicts damage on user document
 	Object.keys(awaitDamagePromises).forEach(async (u) => awaitDamagePromises[u].user.heroHpLossFixedAmount(awaitDamagePromises[u].damage));
 
-	await asyncForEach(teamRed, async (member)=>{
-		await member.save();
-	});
 	await asyncForEach(teamGreen, async (member)=>{
 		await member.save();
 	});
-	// await player.save(); ???????
+	await asyncForEach(teamRed, async (member)=>{
+		await member.save();
+	});
 
 	// removes player from combat
-	progress.teamGreen.filter(member=>member.hero.currentHealth > 0);
-	progress.teamRed.filter(member=>member.hero.currentHealth > 0);
+	progress.teamGreen = progress.teamGreen.filter(member=>member.hero.currentHealth > 0);
+	progress.teamRed = progress.teamRed.filter(member=>member.hero.currentHealth > 0);
 
 	progress.currentRound += 1;
 	progress.weaponInformation.weaponAnswers.clear();
 
 	// checks if fight is over
 	progress.winner = checkWinner(progress);
-
 	return progress;
 };
 
@@ -199,15 +211,46 @@ const generateHealString = (playerName, weaponInfo, healGiven, playerHealed) => 
 	return `\n${playerName} helead ${playerHealed === playerName ? "himself" : playerHealed}. +${healGiven} HP`;
 };
 
+const populateProgress = progress => {
+	setupProgressKeys(progress);
+	populateDiscordIds(progress);
+	populatePlayerNames(progress);
+};
+
+const setupProgressKeys = (progress)=>{
+	const setup = {
+		winner: null,
+		roundResults: [],
+		currentRound: 0,
+		weaponInformation: {
+			numOfAllowedWeapons: 3,
+			allowedWeapons: null,
+			weaponAnswers: new Map,
+		},
+		teamGreenIds:[],
+		teamRedIds: [],
+		teamGreenNames: [],
+		teamRedNames: [],
+	};
+	Object.assign(progress, setup);
+};
+
 
 const populateDiscordIds = (progress)=>{
-	progress.teamGreen.forEach(member=> progress.allDiscordIds.add(member.account.userId));
-	progress.teamRed.forEach(member=> progress.allDiscordIds.add(member.account.userId));
+	progress.teamGreen.forEach(member=> progress.teamGreenIds.push(member.account.userId));
+	if (progress.combatRules.mode === "PVP") {
+		progress.teamRed.forEach(member=> progress.teamRedIds.push(member.account.userId));
+	}
 };
 
 const populatePlayerNames = (progress)=>{
-	progress.teamGreen.forEach(member=> progress.allPlayerNames.add(member.account.userId));
-	progress.teamRed.forEach(member=> progress.allPlayerNames.add(member.account.userId));
+	progress.teamGreen.forEach(member=> progress.teamGreenNames.push(member.account.username));
+	if (progress.combatRules.mode === "PVP") {
+		progress.teamRed.forEach(member=> progress.teamRedNames.push(member.account.username));
+	}
+	if (progress.combatRules.mode === "PVE") {
+		progress.teamRed.forEach(member=> progress.teamRedNames.push(member.name));
+	}
 };
 
 const checkWinner = progress=>{
@@ -226,8 +269,8 @@ const checkWinner = progress=>{
 
 const validateProgress = (progress)=>{
 
-	const progressKeys = ["winner", "roundResults", "currentRound", "combatRules", "weaponInformation", "teamGreen", "teamRed", "allPlayerNames", "allDiscordIds", "embedInformation"];
-	if (!progressKeys.every(key=> Object.keys(progress).includes(key))) {
+	const progressKeys = ["combatRules", "teamGreen", "teamRed", "embedInformation"];
+	if (!progressKeys.some(key=> Object.keys(progress).includes(key))) {
 		throw new Error(`progress keys are missing\nExpected: ${progressKeys}\nGot: ${Object.keys(progress)}\n`);
 	}
 	const allowedModes = ["PVP", "PVE"];
@@ -237,18 +280,19 @@ const validateProgress = (progress)=>{
 	if (!progress.combatRules.maxRounds || typeof progress.combatRules.maxRounds !== "number") {
 		throw new Error("progress.combatRules.maxRounds must be set to a number\n");
 	}
-	const weaponInformationKeys = ["numOfAllowedWeapons", "allowedWeapons", "weaponAnswers"];
-	if (!weaponInformationKeys.every(key=> Object.keys(progress.weaponInformation).includes(key))) {
-		throw new Error(`progress.weaponInformation keys are missing\nExpected: ${weaponInformationKeys}\nGot: ${Object.keys(progress.weaponInformation)}\n`);
-	}
-	if (progress.weaponInformation.weaponAnswers instanceof Map === false) {
-		throw new Error("progress.weaponAnswers must be a Map -> weaponAnswers: new Map\n");
+	if (progress.combatRules.army === undefined) {
+		throw new Error("progress.combatRules.army must be set to a boolean\n");
 	}
 	if (progress.teamGreen.length === 0 || progress.teamRed.length === 0) {
 		throw new Error(`No players in the teams. \n teamGreen: ${progress.teamGreen.length} members \n teamRed: ${progress.teamRed.length} members\n`);
 	}
-	if (progress.allDiscordIds instanceof Set === false || progress.allPlayerNames instanceof Set === false) {
-		throw new Error("progress.allDiscordIds and progress.AllPlayerNames must be a Set -> allDiscordIds: new Set\n");
+	if (progress.combatRules.mode === "PVE") {
+		if (!progress.teamRed.every(member=> {
+			const keys = Object.keys(member);
+			return keys.includes("name") && keys.includes("stats");
+		})) {
+			throw new Error("Team red can only have npc in PVE mode. \n NAME or STATS missing from npc");
+		}
 	}
 };
 
