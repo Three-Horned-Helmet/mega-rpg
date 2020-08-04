@@ -16,7 +16,7 @@ const topggToken = process.env.TOPGG_TOKEN;
 const topggAuth = process.env.TOPGG_AUTH;
 const topggPort = process.env.TOPGG_PORT;
 
-const dbl = new DBL(topggToken, { webhookPort: 5000, webhookAuth: topggAuth });
+const dbl = new DBL(topggToken, { webhookPort: topggPort, webhookAuth: topggAuth });
 dbl.webhook.on("ready", hook => {
 	console.log(hook);
 	console.log(`Webhook running at http://${hook.hostname}:${hook.port}${hook.path}`);
