@@ -11,6 +11,31 @@ const prefix = process.env.DISCORD_PREFIX;
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 
+const DBL = require("dblapi.js");
+const topggToken = process.env.TOPGG_TOKEN;
+const topggAuth = process.env.TOPGG_AUTH;
+const topggPort = process.env.TOPGG_PORT;
+
+const dbl = new DBL(topggToken, { webhookPort: 5000, webhookAuth: topggAuth });
+dbl.webhook.on("ready", hook => {
+	console.log(hook);
+	console.log(`Webhook running at http://${hook.hostname}:${hook.port}${hook.path}`);
+});
+dbl.webhook.on("vote", vote => {
+	console.log(`User with ID ${vote.user} just voted!`);
+});
+dbl.on("posted", () => {
+	console.log("Server count posted!");
+});
+
+dbl.on("vote", vote => {
+	console.log("????!", vote);
+});
+
+dbl.on("error", e => {
+	console.error(`Error with topgg webhook: ${e}`);
+});
+
 
 // reads all .js files from commands folder
 const commandFiles = fs
