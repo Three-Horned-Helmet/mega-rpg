@@ -3,7 +3,6 @@
 const { expect } = require("chai");
 const User = require("../../models/User");
 const useCommand = require("../../commands/use");
-const consumablesObject = require("../../game/use/consumables-object")
 const { createTestUser, generateDiscordMessage } = require("../helper");
 
 
