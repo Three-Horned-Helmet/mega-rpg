@@ -666,7 +666,7 @@ userSchema.methods.removeExp = async function(exp, newExpToNextRank, statRemoval
 
 userSchema.methods.buyItem = async function(item, amount = 1) {
 	if(item.price) {
-		this.resources.gold -= item.price;
+		this.resources.gold -= item.price * amount;
 	}
 
 	this.hero.inventory[item.name] += amount;

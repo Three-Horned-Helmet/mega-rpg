@@ -8,10 +8,17 @@ const handleBuyCommand = async (args, user) =>{
 		return message;
 	}
 
+	let amount = 1
+	const amountInput = parseInt(args[args.length-1])
+	if(amountInput >= 0) {
+		amount = amountInput
+		args.splice(args.length-1, 1)
+	}
+
 	const joinedArg = args.map(a => a.charAt(0).toUpperCase() + a.slice(1).toLowerCase()).join(" ");
 	const item = consumeObj[joinedArg];
 
-	const message = await buyItem(user, item);
+	const message = await buyItem(user, item, amount);
 
 	return message;
 };
@@ -35,29 +42,28 @@ const displayShop = (user) =>{
 };
 
 // Checks if the user can afford the item and then proceeds to buy it
-const buyItem = async (user, item) =>{
-
-	const canBeBought = checkIfPossibleToBuy(user, item);
+const buyItem = async (user, item, amount) =>{
+	const canBeBought = checkIfPossibleToBuy(user, item, amount);
 	if(!canBeBought.response) return canBeBought.message;
 
-	user.buyItem(item);
+	user.buyItem(item, amount);
 
 	await user.save();
 
 	return `You bought a ${item.name}`;
 };
 
-const checkIfPossibleToBuy = (user, item) => {
+const checkIfPossibleToBuy = (user, item, amount) => {
 	if(!item) return { response: false, message: "The consumable does not exists" };
 	const { requirement, name, price } = item;
 	const { building, level } = requirement;
 	const { resources, empire } = user;
 
 	// User has sufficient gold?
-	if(resources.gold < price) {
+	if(resources.gold < price * amount) {
 		return {
 			response: false,
-			message: `Can not afford: ${name} costs ${price} gold and you only have ${resources.gold} gold`,
+			message: `Can not afford: ${amount}x ${name} costs ${price * amount} gold and you only have ${resources.gold} gold`,
 		};
 	}
 
