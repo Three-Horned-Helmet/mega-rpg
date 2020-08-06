@@ -81,14 +81,14 @@ __Produce:__
 `!produce [resource]` => Collects the resource type and starts producing the specified resource (!produce yew wood)
 
 __Profile:__
-`!profile` => Returns a overview of your profile
+`!profile` => Returns a overview of your profile or `!profile @username` to see a player's profile
 Æ
 
 __Race:__
 `!race` => Triggers a race where players can win money
 
 __Rank:__
-`!rank` => Let's you see who has the most xp on whole Mega RPG
+`!rank` => Let's you see who has the most xp on whole Mega RPG.
 
 __Quest:__
 `!quest` => Returns the quest's description/winDescription if you only have 1 quest available, otherwise returns all available quests
