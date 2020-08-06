@@ -9,7 +9,7 @@ const towerInfoEmbed = (user) => {
 		{
 			name: "Solo Full-Army",
 			value:
-              `Command: \`!tower solo full-army\`\nLevel: ${user.tower["solo full-army"].level}`,
+              `Command: \`!tower sfa\`\nLevel: ${user.tower["solo full-army"].level}`,
 			inline: true,
 		},
 		{
