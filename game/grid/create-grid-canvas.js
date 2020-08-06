@@ -7,7 +7,7 @@ const createGridCanvas = async (user) => {
 	const ctx = canvas.getContext("2d");
 
 	// Load grid
-	const gridSize = Math.ceil(Math.sqrt(user.maxBuildings)); // FInish this
+	const gridSize = Math.ceil(Math.sqrt(user.maxBuildings));
 	let background;
 	try{
 		// check if file exists
