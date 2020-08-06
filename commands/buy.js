@@ -7,6 +7,12 @@ module.exports = {
 	shortcuts: {
 		shp: "small healing potion",
 		lhp: "large healing potion",
+		ehp: "enourmous healing potion",
+		qhp: "quality healing potion",
+		mhp: "mega healing potion",
+		uhp: "ultra healing potion",
+		shs: "small healing salve",
+		lhs: "large healing salve",
 	},
 	async execute(message, args, user) {
 		const response = await handleBuyCommand(args, user);

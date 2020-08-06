@@ -23,6 +23,78 @@ const consumablesObject = {
 			return await useHealingPotion(user, item);
 		},
 	},
+	["Enourmous Healing Potion"]: {
+		name: "Enourmous Healing Potion",
+		healingValue: 2000,
+		price: 45,
+		requirement: {
+			building: "shop",
+			level: 2,
+		},
+		execute: async (user, item) =>{
+			return await useHealingPotion(user, item);
+		},
+	},
+	["Quality Healing Potion"]: {
+		name: "Quality Healing Potion",
+		healingValue: 3000,
+		price: 60,
+		requirement: {
+			building: "shop",
+			level: 3,
+		},
+		execute: async (user, item) =>{
+			return await useHealingPotion(user, item);
+		},
+	},
+	["Mega Healing Potion"]: {
+		name: "Mega Healing Potion",
+		healingValue: 4500,
+		price: 80,
+		requirement: {
+			building: "shop",
+			level: 4,
+		},
+		execute: async (user, item) =>{
+			return await useHealingPotion(user, item);
+		},
+	},
+	["Ultra Healing Potion"]: {
+		name: "Ultra Healing Potion",
+		healingValue: 6000,
+		price: 100,
+		requirement: {
+			building: "shop",
+			level: 5,
+		},
+		execute: async (user, item) =>{
+			return await useHealingPotion(user, item);
+		},
+	},
+	["Small Healing Salve"]: {
+		name: "Small Healing Salve",
+		healingValue: 8000,
+		price: 140,
+		requirement: {
+			building: "shop",
+			level: 6,
+		},
+		execute: async (user, item) =>{
+			return await useHealingPotion(user, item);
+		},
+	},
+	["Large Healing Salve"]: {
+		name: "Large Healing Salve",
+		healingValue: 9500,
+		price: 160,
+		requirement: {
+			building: "shop",
+			level: 7,
+		},
+		execute: async (user, item) =>{
+			return await useHealingPotion(user, item);
+		},
+	},
 };
 
 const useHealingPotion = async (user, item) =>{

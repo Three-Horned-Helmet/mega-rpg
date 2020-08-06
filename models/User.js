@@ -38,6 +38,10 @@ const userSchema = new Schema({
 		type: Number,
 		default: 10,
 	},
+	maxBuildings: {
+		type: Number,
+		default: 9
+	},
 	// object too big, moved to ./uservalues/default
 	cooldowns,
 	resources: {
@@ -397,6 +401,12 @@ userSchema.methods.updateHousePop = function(newPop) {
 	return this.save();
 };
 
+userSchema.methods.updateMaxBuildings = function() {
+	const senate = this.empire.find(building => building.name === "senate");
+
+	this.maxBuildings = 9 + senate.level + 1;
+};
+
 // Recruit, Add or Remove Units
 userSchema.methods.addOrRemoveUnits = function(unit, amount, free) {
 	if(!free) {
@@ -656,10 +666,11 @@ userSchema.methods.removeExp = async function(exp, newExpToNextRank, statRemoval
 
 userSchema.methods.buyItem = async function(item, amount = 1) {
 	if(item.price) {
-		this.resources.gold -= item.price;
+		this.resources.gold -= item.price * amount;
 	}
 
-	this.hero.inventory[item.name] += amount;
+	if(!this.hero.inventory[item.name]) this.hero.inventory[item.name] = amount;
+	else this.hero.inventory[item.name] += amount;
 
 	this.markModified("hero.inventory");
 };

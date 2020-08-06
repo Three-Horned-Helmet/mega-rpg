@@ -5,14 +5,19 @@ const icons = {
 	"oak wood":{ name: ":evergreen_tree:", icon: "🌲" },
 	"yew wood":{ name: ":deciduous_tree:", icon: "🌳" },
 	"barlind wood":{ name: ":tanabata_tree:", icon: "🎋" },
+	"aspen wood":{ name: ":mountain_snow:", icon: "" },
 
 	"copper ore":{ name: ":orange_circle:", icon: "🟠" },
 	"iron ore":{ name: ":white_circle:", icon: "⚪️" },
+	"mithril ore":{ name: ":blue_circle:", icon: "" },
+	"burite ore":{ name: ":purple_circle:", icon: "" },
 	"obsidian ore":{ name: ":black_circle:", icon: "⚫️" },
 
 	"bronze bar":{ name: ":orange_square:", icon: "🟧" },
 	"iron bar":{ name: ":white_large_square:", icon: "⬜️" },
 	"steel bar":{ name: ":brown_square:", icon: "🟫" },
+	"mithril bar":{ name: ":blue_square:", icon: "" },
+	"pyrite bar":{ name: ":purple_square:", icon: "" },
 
 	// Universe
 	"Grassy Plains" :{ name: ":deciduous_tree:", icon: "🌳" },
@@ -44,6 +49,14 @@ const icons = {
 	// Shop
 	"Small Healing Potion": { name: ":thermometer:" },
 	"Large Healing Potion": { name: ":syringe:" },
+	"Enourmous Healing Potion": { name: ":scarf:" },
+	"Quality Healing Potion": { name: ":pill:" },
+	"Mega Healing Potion": { name: ":school_satchel:" },
+	"Ultra Healing Potion": { name: ":drop_of_blood:" },
+	"Small Healing Salve": { name: ":rose:" },
+	"Large Healing Salve": { name: ":maple_leaf:" },
+	"Quality Healing Salve": { name: ":bowl_with_spoon:" },
+
 
 	// Stats
 	"xp":{ name: ":mortar_board:", icon: "🎓" },
