@@ -672,7 +672,6 @@ userSchema.methods.buyItem = async function(item, amount = 1) {
 	if(!this.hero.inventory[item.name]) this.hero.inventory[item.name] = amount;
 	else this.hero.inventory[item.name] += amount;
 
-
 	this.markModified("hero.inventory");
 };
 

@@ -8,11 +8,11 @@ const handleBuyCommand = async (args, user) =>{
 		return message;
 	}
 
-	let amount = 1
-	const amountInput = parseInt(args[args.length-1])
+	let amount = 1;
+	const amountInput = parseInt(args[args.length - 1]);
 	if(amountInput >= 0) {
-		amount = amountInput
-		args.splice(args.length-1, 1)
+		amount = amountInput;
+		args.splice(args.length - 1, 1);
 	}
 
 	const joinedArg = args.map(a => a.charAt(0).toUpperCase() + a.slice(1).toLowerCase()).join(" ");
