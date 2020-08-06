@@ -9,8 +9,7 @@ module.exports = {
 		let dbUser;
 		let avatar;
 
-		/* const userFromMention = message.mentions.members.first(); */
-		const userFromMention = null;
+		const userFromMention = message.mentions.members.first();
 		if (userFromMention) {
 			avatar = userFromMention.user.displayAvatarURL({ format: "png", dynamic: true, size: 1024 });
 			try {

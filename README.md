@@ -4,6 +4,8 @@ OR [invite](https://discordapp.com/oauth2/authorize?client_id=721024429345341560
 
 # MEGA RPG
 
+[![Discord Bots](https://top.gg/api/widget/status/721024429345341560.svg)](https://top.gg/bot/721024429345341560)
+
 [![Build Status](https://travis-ci.org/Three-Horned-Helmet/mega-rpg.svg?branch=master)](https://travis-ci.org/Three-Horned-Helmet/mega-rpg)
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/4d263688effd49c2b04dae98b985e1db)](https://www.codacy.com/gh/Three-Horned-Helmet/mega-rpg?utm_source=github.com&utm_medium=referral&utm_content=Three-Horned-Helmet/mega-rpg&utm_campaign=Badge_Grade)
@@ -11,9 +13,9 @@ OR [invite](https://discordapp.com/oauth2/authorize?client_id=721024429345341560
 ---
 
 ## Get started
-1. Join a discord server that has the bot ([invite](https://discord.gg/DZXZzC3)).
-2. Type: `!help` in one of the command channels to get an overview of all the different commands
-3. It is advised to start your adventure with `!quest` to ease your way into Mega-RPG!
+1. [Join](https://discord.gg/DZXZzC3) a discord server that has the bot or [invite](https://discord.gg/DZXZzC3) the bot to your own server.
+2. There's over 30 commands available, try typeing `!help` or `!quest` to get you started.
+3. If you get stuck, you can always type `!info` to get a DM about the commands!
 
 
 ## Intro
@@ -21,7 +23,10 @@ In Mega-RPG you can build a city and explore the surroundings with your hero and
 
 The Game is set in a fantasy-medieval universe and the journey begins in a kingdom tyrannized by a Bandit King and its Impling helpers. The citizens of the kingdom has lost hope, but some try their best to live their lives. You are a master of your own empire, but with an army and a hero you will be able to help the citizens and bring down the Bandit King!
 
-The game is in very early development, but we have great plans on how to expand it if there are enough people who enjoy playing it just as much as we have enjoyed creating it! Any feedback or bug-reports are very much appreciated!!:)
+The game is in early stage, but we are continuously expanding the game with more quests and features. If you see something you like (or don't like), please let us know by pinging us at Discord.
+Any feedback or bug-reports are highly appreciated!
+
+Thank you to everyone that has helped us with the early testing! 
 
 ## How to run Mega-RPG locally
 
