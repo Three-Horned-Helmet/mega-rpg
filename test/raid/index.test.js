@@ -69,6 +69,8 @@ describe("raid command", () => {
 		const result = await raidCommand.execute(mockMessage, [], testUser);
 		expect(result.title).to.have.string("Anniken Avisbud's army raided :man_supervillain:");
 		await testUser.setNewCooldown("raid", mockDays(1));
+		testUser.hero.currentHealth = testUser.hero.health;
+		await testUser.save();
 		const result2 = await raidCommand.execute(mockMessage, ["Bandit Camp"], testUser);
 		expect(result2.title).to.be.equal("Anniken Avisbud's army raided :man_supervillain: Bandit Camp");
 
