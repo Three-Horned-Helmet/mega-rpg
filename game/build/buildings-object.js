@@ -215,7 +215,7 @@ module.exports = {
 					gold: 8800,
 					["mithril bar"]: 510,
 				},
-				level: 1,
+				level: 3,
 				produce: "burite ore",
 				productionRate: 4,
 			},
@@ -491,7 +491,7 @@ module.exports = {
 		],
 		execute: function(user) {
 			// Add the lastCollected and producing to new mine
-			return user.updateSenateLevel();
+			return user.updateMaxBuildings();
 		},
 	},
 	shop: {

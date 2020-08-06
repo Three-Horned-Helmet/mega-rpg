@@ -24,7 +24,7 @@ const consumablesObject = {
 		},
 	},
 	["Enourmous Healing Potion"]: {
-		name: "Superior Healing Potion",
+		name: "Enourmous Healing Potion",
 		healingValue: 2000,
 		price: 45,
 		requirement: {
@@ -48,7 +48,7 @@ const consumablesObject = {
 		},
 	},
 	["Mega Healing Potion"]: {
-		name: "Superior Healing Potion",
+		name: "Mega Healing Potion",
 		healingValue: 4500,
 		price: 80,
 		requirement: {
@@ -72,7 +72,7 @@ const consumablesObject = {
 		},
 	},
 	["Small Healing Salve"]: {
-		name: "Lesser Healing Salve",
+		name: "Small Healing Salve",
 		healingValue: 8000,
 		price: 140,
 		requirement: {
@@ -84,7 +84,7 @@ const consumablesObject = {
 		},
 	},
 	["Large Healing Salve"]: {
-		name: "Lesser Healing Salve",
+		name: "Large Healing Salve",
 		healingValue: 9500,
 		price: 160,
 		requirement: {

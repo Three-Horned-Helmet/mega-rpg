@@ -5,19 +5,18 @@ const fs = require("fs");
 const createGridCanvas = async (user) => {
 	const canvas = Canvas.createCanvas(700, 700);
 	const ctx = canvas.getContext("2d");
-	
+
 	// Load grid
-	const gridSize = user.empire.length // FInish this
+	const gridSize = Math.ceil(Math.sqrt(user.maxBuildings)); // FInish this
 	let background;
 	try{
 		// check if file exists
-		const backgroundUrl = `./assets/building-images/grid-${gridSize}x${gridSize}.jpg`
-		const background = await Canvas.loadImage();
+		const backgroundUrl = `./assets/building-images/grid-${gridSize}x${gridSize}.jpg`;
 		if (fs.existsSync(backgroundUrl)) {
-			background = await Canvas.loadImage(imgUrl)
+			background = await Canvas.loadImage(backgroundUrl);
 		}
 		else {
-			background = await Canvas.loadImage("./assets/building-images/grid-3x3.jpg")
+			background = await Canvas.loadImage("./assets/building-images/grid-3x3.jpg");
 		}
 	}
 	catch (err) {
@@ -55,14 +54,14 @@ const createGridCanvas = async (user) => {
 
 	// Draw images onto the main canvas
 	for(let i = 0; i < images.length; i++) {
-		const { width, height } = canvas;
+		const { width } = canvas;
 		const { name, level, position } = user.empire[i];
 		ctx.drawImage(
 			images[i],
 			(width * 0.02 + ((width / gridSize) * position[0])),
 			(width * 0.05 + ((width / gridSize) * position[1])),
 			(width / gridSize) - 20,
-			(height / (gridSize + gridSize/6)) - 20,
+			(width / (gridSize + gridSize / 6)) - 20,
 		);
 
 		// Add building name
@@ -71,7 +70,7 @@ const createGridCanvas = async (user) => {
 
 		ctx.fillText(
 			`${name[0].toUpperCase() + name.slice(1)}(${level})`,
-			(((width / 6) - (name.length + 3) * 6.2) + ((width / gridSize) * position[0])),
+			(((width / 6) - (name.length + 3) * 2 * gridSize) + ((width / gridSize) * position[0])),
 			(width * 0.04 + ((width / gridSize) * position[1])),
 		);
 	}

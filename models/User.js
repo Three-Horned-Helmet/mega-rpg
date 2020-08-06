@@ -402,9 +402,9 @@ userSchema.methods.updateHousePop = function(newPop) {
 };
 
 userSchema.methods.updateMaxBuildings = function() {
-	const senate = this.empire.find(building => building.name === "senate")
+	const senate = this.empire.find(building => building.name === "senate");
 
-	this.maxBuildings = 9 + senate.level +1
+	this.maxBuildings = 9 + senate.level + 1;
 };
 
 // Recruit, Add or Remove Units
@@ -669,7 +669,7 @@ userSchema.methods.buyItem = async function(item, amount = 1) {
 		this.resources.gold -= item.price * amount;
 	}
 
-	if(!this.hero.inventory[item.name]) this.hero.inventory[item.name] = amount
+	if(!this.hero.inventory[item.name]) this.hero.inventory[item.name] = amount;
 	else this.hero.inventory[item.name] += amount;
 
 

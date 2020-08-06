@@ -7,9 +7,12 @@ module.exports = {
 	shortcuts: {
 		copper: "copper ore",
 		iron: "iron ore",
+		mithril: "mithril ore",
+		burite: "burite ore",
 		oak: "oak wood",
 		yew: "yew wood",
 		barlind: "barlind wood",
+		aspen: "aspen wood"
 	},
 	execute(message, args, user) {
 		if(args.length === 0) return message.channel.send(showProduceEmbed(user));
