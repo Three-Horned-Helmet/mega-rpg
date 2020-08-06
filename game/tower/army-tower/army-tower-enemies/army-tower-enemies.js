@@ -6,7 +6,7 @@ const levelFifty = require("./level-50");
 const levelSixty = require("./level-60");
 
 const getArmyTowerEnemies = (level) => {
-	level = level % 100;
+	level = level % 61;
 
 	if(level <= 10) {
 		return pickUnitHandler(levelTen, level);
