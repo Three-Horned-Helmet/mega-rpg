@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const { getIcon } = require("../_CONSTS/icons");
 const allItems = require("../items/all-items");
+const { getTowerItem } = require("../items/tower-items/tower-item-functions");
 
 const equipmentEmbed = (user) => {
 	const title = `${user.account.username}'s available equipment (usage: \`!equip <itemName>\`):`;
@@ -41,8 +42,8 @@ const addEquipmentField = (user, iType) => {
 	const value = items.map(item => {
 		const itemAmount = user.army.armory[iType][item];
 		if(!itemAmount) return false;
-		const itemObj = allItems[item];
-		return `${item.capitalize()} (${itemAmount})\n${objectMessage(itemObj.stats)}`;
+		const itemObj = allItems[item] || getTowerItem(item);
+		return `${item.capitalize()} [${itemAmount}]\n${objectMessage(itemObj.stats)}`;
 	}).filter(el => el);
 
 
@@ -65,8 +66,10 @@ const objectMessage = (stats) => {
 	return message;
 };
 
+// Can be optimized without having to call getTowerItem or allItems if the user doesn't own the item anyways
 const sortHelper = (a) => {
-	return Object.values(allItems[a].stats).reduce((acc, cur) => acc + cur);
+	const item = allItems[a] || getTowerItem(a);
+	return Object.values(item.stats).reduce((acc, cur) => acc + cur);
 };
 
 module.exports = equipmentEmbed;

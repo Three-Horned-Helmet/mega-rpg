@@ -83,7 +83,7 @@ module.exports = {
 			if(userQuest.pve.find(raid => !raid.completed)) return false;
 
 			// Get reward
-			await user.addItem(allItems["iron sword"], 10);
+			user.addItem(allItems["iron sword"], 10);
 
 
 			// Add next quest
@@ -115,7 +115,7 @@ module.exports = {
 			if(!questResponse) return false;
 
 			// Get reward
-			await user.addItem(allItems["black granite mace"], 1);
+			user.addItem(allItems["black granite mace"], 1);
 
 			user.removeQuest(this.name);
 

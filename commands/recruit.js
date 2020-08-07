@@ -9,9 +9,14 @@ module.exports = {
 		pe: "peasant",
 		mi: "militia",
 		gu: "guardsman",
+		kn: "knight",
+		be: "berserker",
+		ju: "justicar",
 		hu: "huntsman",
 		ar: "archer",
 		ra: "ranger",
+		su: "survivalist",
+		sh: "sharpshooter",
 	},
 	execute(message, args, user) {
 		if(args.length === 0) return message.channel.send(showRecruitsEmbed(user));

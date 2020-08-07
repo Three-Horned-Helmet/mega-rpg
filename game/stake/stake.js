@@ -42,8 +42,7 @@ const stakePlayer = async (user, opponent, stakedItems, msg) =>{
 
 	loser.removeItem(artifactItems[wonItem], true);
 	loser.changeElo(elo.eloForLoser.newRating);
-	await loser.save();
-	await winner.addItem(artifactItems[wonItem], 1);
+	winner.addItem(artifactItems[wonItem], 1);
 
 	// Determine exp won
 	const expWon = Math.floor(opponent.hero.currentExp * 0.2);
@@ -51,6 +50,8 @@ const stakePlayer = async (user, opponent, stakedItems, msg) =>{
 	await gainHeroExp(winner, expWon, msg);
 	await removeHeroExp(loser, expWon, msg);
 
+	await winner.save();
+	await loser.save();
 	return stakeEmbed(winner, loser, battleStats, expWon, wonItem, elo);
 	// return `${winner.account.username} won the battle with modifiers of ${uModifier} and ${oModifier}. The item won is ${capitalize(wonItem)} and exp won is ${expWon}`;
 };
@@ -81,7 +82,7 @@ const checkIfStakeIsPossible = (user, opponent, stakedItems) =>{
 		const doesNotOwnArtifact = [username, oppUsername].filter(u => !doesOwnArtifact.includes(u));
 		return {
 			response: false,
-			message:`${doesNotOwnArtifact.length === 1 ? "This player" : "These players"} does not have any artifact items equiped on their hero, which is required to stake other players: ${
+			message:`${doesNotOwnArtifact.length === 1 ? "This player" : "These players"} does not have any artifact items equipped on their hero, which is required to stake other players: ${
 				doesNotOwnArtifact.join(", ")
 			}`,
 		};

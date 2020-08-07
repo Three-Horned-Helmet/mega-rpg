@@ -31,6 +31,10 @@ const cooldowns = {
 		type:Date,
 		default:0,
 	},
+	tower:{
+		type:Date,
+		default:0,
+	},
 	weeklyprize:{
 		type:Date,
 		default:0,
@@ -143,6 +147,10 @@ const statistics = {
 		default:0,
 	},
 	stake: {
+		type: Number,
+		default:0,
+	},
+	tower: {
 		type: Number,
 		default:0,
 	},

@@ -14,6 +14,7 @@ module.exports = {
 		fo: "forge",
 		bl: "blacksmith",
 		arm: "armorer",
+		se: "senate",
 		sh: "shop",
 	},
 	execute(message, args, user) {
@@ -21,7 +22,8 @@ module.exports = {
 		const building = buildingsObject[args.slice(0, args.length - 1).join(" ")] || buildingsObject[args.slice(0, args.length).join(" ")];
 
 		// Remove the user.empire.find stuff to make it possible to build several of the same building
-		if(args[args.length - 1] === "-u" || (building && user.empire.find(b => b.name === building.name))) {
+		// || (building && user.empire.find(b => b.name === building.name))
+		if(args[args.length - 1] === "-u") {
 			const usersBuildings = user.empire.filter(b => b.name === building.name).sort((a, b) => a.level - b.level);
 			if(usersBuildings.length > 0) {
 				args[args.length - 1] = usersBuildings[0].position.join(".");

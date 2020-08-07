@@ -79,6 +79,7 @@ const calculatePveFullArmyResult = (user, npc) => {
 		heroDemote: false,
 		lossPercentage: lossPercentage,
 		resourceReward: {},
+		remainingForces: losses > 0 ? 0 : Math.floor(Math.abs(losses)),
 		win,
 		username,
 		userId,
@@ -87,13 +88,15 @@ const calculatePveFullArmyResult = (user, npc) => {
 
 	// generates a random reward number
 	if (win) {
-		pveResult.resourceReward = Object.keys(npc.rewards).reduce((acc, cur) => {
-			const randomReward = Math.ceil(
-				Math.random() * npc.rewards[cur] + npc.rewards[cur] / 2
-			);
-			acc[cur] = randomReward;
-			return acc;
-		}, {});
+		if(npc.rewards) {
+			pveResult.resourceReward = Object.keys(npc.rewards).reduce((acc, cur) => {
+				const randomReward = Math.ceil(
+					Math.random() * npc.rewards[cur] + npc.rewards[cur] / 2
+				);
+				acc[cur] = randomReward;
+				return acc;
+			}, {});
+		}
 		pveResult.expReward = Math.ceil(
 			(Math.random() * (npc.stats.attack + npc.stats.health)) / 2
 		);

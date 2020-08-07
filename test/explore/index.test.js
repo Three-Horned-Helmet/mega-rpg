@@ -21,7 +21,8 @@ describe("explore command", () => {
 		const result2 = await exploreCommand.execute(mockMessage, null, testUser);
 		expect(typeof result).to.be.equal("string");
 		expect(result2.title).to.be.equal("Cooldown");
-		expect(result2.fields[0].name.startsWith("You can't use this command for")).to.be.equal(true);
+		expect(result2.fields[0].name).to.have.string("You can't use this command ");
+
 	});
 
 	it("should have instance of newly explored places in user", async () => {
@@ -45,7 +46,7 @@ describe("explore command", () => {
 			howManyPlacesFound += d.world.locations["Grassy Plains"].explored.length;
 		});
 		expect(howManyPlacesFound).to.not.be.equal(0);
-		expect(howManyPlacesFound > 3).to.be.equal(true);
+		expect(howManyPlacesFound).to.be.above(3);
 	});
 	it("should not add more places if everything is explored", async () => {
 		const allPlaces = Object.keys(worldLocations["Grassy Plains"].places);

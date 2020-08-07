@@ -15,7 +15,7 @@ module.exports = { "Graveward": {
 		canKill:true,
 		allowArmy:false,
 		allowHelpers:true,
-		minRankToGetKey: 4,
+		minRankToGetKey: 12,
 	},
-	helpers:[],
+	helperIds:[],
 }, };

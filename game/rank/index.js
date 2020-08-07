@@ -10,6 +10,8 @@ const handleRank = async (rankType, user)=> {
 			return await getTop5Quest(user);
 		case "army":
 			return await getTop5Army(user);
+		case "sfa":
+			return await getTop5Sfa(user);
 		default:
 			return await getTop5Xp(user);
 	}
@@ -135,6 +137,33 @@ const getTop5Xp = async (user) => {
 			}
 		});
 		formatted.push(`\`#${playerPosition}: ${user.account.username} --- hero lvl: ${user.hero.rank} - ${user.hero.currentExp} XP\``);
+	}
+
+	return formatted;
+};
+
+const getTop5Sfa = async (user) => {
+	const allUsers = await User
+		.find({})
+		.select(["account", "tower"])
+		.sort({ "tower.solo full-army.level":-1 })
+		.lean();
+
+	const top5 = allUsers.slice(0, 5);
+
+	const formatted = top5.map((p, i)=>{
+		const first = i === 0 ? "💎" : "";
+		return `\`#${i + 1}: ${first}${p.account.username}${first} --- tower lvl: ${p.tower["solo full-army"].level}\``;
+	});
+
+	if (!top5.some(player=> player.account.userId === user.account.userId)) {
+		let playerPosition;
+		allUsers.forEach((p, i)=>{
+			if (p.account.userId === user.account.userId) {
+				playerPosition = i + 1;
+			}
+		});
+		formatted.push(`\`#${playerPosition}: ${user.account.username} --- tower lvl: ${user.tower["solo full-army"].level}\``);
 	}
 
 	return formatted;

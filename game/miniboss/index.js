@@ -2,7 +2,7 @@ const { onCooldown } = require("../_CONSTS/cooldowns");
 const { worldLocations } = require("../_UNIVERSE");
 const { getIcon } = require("../_CONSTS/icons");
 const { createMinibossInvitation, createMinibossResult } = require("./embedGenerator");
-const { asyncForEach, deepCopyFunction } = require("../_GLOBAL_HELPERS");
+const { asyncForEach, deepCopyFunction, randomIntBetweenMinMax } = require("../_GLOBAL_HELPERS");
 
 const User = require("../../models/User");
 
@@ -101,6 +101,7 @@ const calculateMinibossResult = async (miniboss) => {
 		return acc + cur.hero.rank;
 	}, 0) + initiativeTaker[0].hero.rank + 2;
 
+	// ensures that it's not possible to have a 100% or more chance of success
 	if (chanceForSuccess > miniboss.stats.difficulty) {
 		chanceForSuccess = miniboss.stats.difficulty - 5;
 	}
@@ -125,7 +126,7 @@ const calculateMinibossResult = async (miniboss) => {
 			helpers: [],
 		},
 		damageDealt: {
-			initiativeTaker: Math.floor(Math.random() * miniboss.stats.attack),
+			initiativeTaker: randomIntBetweenMinMax(miniboss.stats.attack / 2, miniboss.stats.attack),
 			initiativeTakerDead: false,
 			helpers: [],
 		},
@@ -139,17 +140,17 @@ const calculateMinibossResult = async (miniboss) => {
 	if (chanceForSuccess > difficulty) {
 		result.win = true;
 
-		if (result.initiativeTaker.hero.rank >= 2) {
+		if (result.initiativeTaker.hero.rank >= miniboss.rules.minRankToGetKey) {
 			result.rewards.initiativeTaker.dungeonKey = miniboss.rewards.dungeonKey;
 		}
 
+		result.initiativeTaker.giveDungeonKey(result.rewards.initiativeTaker.dungeonKey);
 		result.initiativeTaker.alternativeGainXp(result.rewards.initiativeTaker.xp);
 		result.initiativeTaker.gainManyResources({ gold: result.rewards.initiativeTaker.gold });
-		result.initiativeTaker.giveDungeonKey(result.rewards.initiativeTaker.dungeonKey);
 
 		result.helpers.forEach(helper => {
-			const randomHelperXp = Math.round((Math.random() * miniboss.rewards.xp) / helpers.length);
-			const randomHelperGold = Math.round((Math.random() * miniboss.rewards.gold) / helpers.length);
+			const randomHelperXp = randomIntBetweenMinMax(miniboss.rewards.xp / (helpers.length + 1), miniboss.rewards.xp);
+			const randomHelperGold = randomIntBetweenMinMax(miniboss.rewards.gold / (helpers.length + 1), miniboss.rewards.gold);
 			const helperName = helper.account.username;
 			const helperLeveledUp = randomHelperXp + helper.hero.currentExp > helper.hero.expToNextRank;
 			helper.alternativeGainXp(randomHelperXp);
@@ -165,7 +166,7 @@ const calculateMinibossResult = async (miniboss) => {
 	else {
 		result.initiativeTaker.heroHpLossFixedAmount(result.damageDealt.initiativeTaker);
 		result.helpers.forEach(helper => {
-			const randomHelperDamage = Math.round(Math.random() * miniboss.stats.attack);
+			const randomHelperDamage = randomIntBetweenMinMax(miniboss.stats.attack / 2, miniboss.stats.attack);
 			const helperDead = helper.hero.currentHealth - randomHelperDamage <= 0;
 			helper.heroHpLossFixedAmount(randomHelperDamage);
 			result.rewards.helpers.push({
@@ -175,11 +176,14 @@ const calculateMinibossResult = async (miniboss) => {
 		});
 	}
 	// saves to db
-
 	await asyncForEach(result.helpers, async (helper) => {
 		await helper.save();
 	});
-	await result.initiativeTaker.save();
+	result.initiativeTaker.save()
+		.then(()=> result)
+		.catch((e)=>{
+			console.error("Error: ", e);
+		});
 
 	return result;
 };

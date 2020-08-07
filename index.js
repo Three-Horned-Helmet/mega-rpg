@@ -2,7 +2,7 @@ require("dotenv").config();
 const fs = require("fs");
 const Discord = require("discord.js");
 const User = require("./models/User");
-const { handleCaptcha } = require("./game/_GLOBAL_HELPERS/captcha");
+// const { handleCaptcha } = require("./game/_GLOBAL_HELPERS/captcha");
 const { welcomeMessage } = require("./index-helpers/welcome-message");
 
 const token = process.env.DISCORD_TOKEN;
@@ -107,6 +107,11 @@ client.on("message", async (message) => {
 	// adds command to statistics
 	if (Object.keys(userProfile.statistics).includes(command.name)) {
 		userProfile.statistics[command.name] += 1;
+	}
+
+	// saves the server id
+	if (!userProfile.account.servers.includes(message.channel.id)) {
+		userProfile.account.servers.push(message.channel.id);
 	}
 
 	// executes the command

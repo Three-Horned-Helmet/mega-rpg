@@ -5,16 +5,30 @@ module.exports = {
 	bh: "bronze helmet",
 	bp: "bronze platemail",
 	bl: "bronze leggings",
+
 	is: "iron sword",
 	ys: "yew shortbow",
 	ih: "iron helmet",
 	ip: "iron platemail",
 	il: "iron leggings",
+
 	sw: "steel sword",
 	ns: "northern shortbow",
 	sh: "steel helmet",
 	sp: "steel platemail",
 	sl: "steel leggings",
+
+	ms: "mithril sword",
+	al: "aspen longbow",
+	mh: "mithril helmet",
+	mp: "mithril platemail",
+	ml: "mithril leggings",
+
+	ps: "pyrite sword",
+	as: "ancient shortbow",
+	ph: "pyrite helmet",
+	pp: "pyrite platemail",
+	pl: "pyrite leggings",
 
 	// ARMORER
 	al: "aged longsword",
@@ -26,6 +40,7 @@ module.exports = {
 	kp: "kings platemail",
 	scl: "scottish leggings",
 	ld: "leggings of the dawn",
+
 	bd: "bauxite daggers",
 	gs: "greatsword of the spring",
 	frl: "fallen ranger longbow",
@@ -40,4 +55,6 @@ module.exports = {
 	bb: "bronze bar",
 	ib: "iron bar",
 	sb: "steel bar",
+	mb: "mithril bar",
+	pb: "pyrite bar"
 };

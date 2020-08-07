@@ -6,6 +6,7 @@ module.exports = {
 	description: "Displays the building grid and all the buildings you have currently built in your empire.",
 	async execute(message, args, user) {
 		const gridImage = await createGridCanvas(user);
-		message.channel.send(`<@${message.author.id}>'s Empire:`, gridImage);
+		await user.save();
+		return message.channel.send(`<@${message.author.id}>'s Empire (${user.empire.length}/${user.maxBuildings}):`, gridImage);
 	},
 };

@@ -90,8 +90,11 @@ const calculateCombatResult = async (progress) => {
 	// cleans up roundResults from previous round
 	progress.roundResults = [];
 
-	const awaitHealPromises = {};
-	const awaitDamagePromises = {};
+	const awaitHealPlayerPromises = {};
+	const awaitDamagePlayerPromises = {};
+
+	const awaitHealNPCPromises = {};
+	const awaitDamageNPCPromises = {};
 
 
 	weaponAnswers.forEach((weapon, player) => {
@@ -129,16 +132,34 @@ const calculateCombatResult = async (progress) => {
 				);
 				// playerResult.damageGiven = tempDamageGiven;
 
-				if (awaitDamagePromises[victimName]) {
-					awaitDamagePromises[victimName].damage += damageGiven;
+				if (combatRules.mode === 'PVP'){
+
+					if (awaitDamagePlayerPromises[victimName]) {
+						awaitDamagePlayerPromises[victimName].damage += damageGiven;
+					}
+
+					else {
+						awaitDamagePlayerPromises[victimName] = {
+							user: randomVictim,
+							damage: damageGiven,
+						};
+					}
 				}
 
-				else {
-					awaitDamagePromises[victimName] = {
-						user: randomVictim,
-						damage: damageGiven,
-					};
+				if (combatRules.mode === 'PVE'){
+
+					if (awaitDamageNPCPromises[victimName]) {
+						awaitDamageNPCPromises[victimName].damage += damageGiven;
+					}
+
+					else {
+						awaitDamageNPCPromises[victimName] = {
+							user: randomVictim,
+							damage: damageGiven,
+						};
+					}
 				}
+
 				progress.roundResults.push(
 					generateAttackString(
 						playerName,
@@ -154,15 +175,15 @@ const calculateCombatResult = async (progress) => {
 					(playerInfo.hero.health * weaponInfo.damage) / 2,
 					playerInfo.hero.health * weaponInfo.damage
 				);
-				if (awaitHealPromises[victimName]) {
-					awaitHealPromises[victimName].healGiven += healGiven;
-				}
-				else {
-					awaitHealPromises[victimName] = {
-						user: teamMateWithLowestHp,
-						healGiven: healGiven,
-					};
-				}
+					if (awaitHealPlayerPromises[victimName]) {
+						awaitHealPlayerPromises[victimName].healGiven += healGiven;
+					}
+					else {
+						awaitHealPlayerPromises[victimName] = {
+							user: teamMateWithLowestHp,
+							healGiven: healGiven,
+						};
+					}
 				progress.roundResults.push(
 					generateHealString(
 						playerName,
@@ -178,22 +199,93 @@ const calculateCombatResult = async (progress) => {
 		}
 	});
 
+if (combatRules.mode === "PVE"){
+	teamRed.forEach(npc=>{
+		const allowedNumOfAttacks = npc.allowedNumOfAttacks || 1
+
+		for (let i = 0; i < allowedNumOfAttacks; i += 1) {
+			const alivePlayers = teamGreen.filter(p => p.hero.currentHealth > 0);
+			const randomVictim =alivePlayers[Math.floor(Math.random() * alivePlayers.length)];
+
+			const npcName = npc.name
+
+			const randomWeaponName = progress.allowedWeapons[Math.floor(Math.random() * progress.allowedWeapons.length)];
+			const weaponInfo = getWeaponInfo(randomWeaponName);
+			const { stats } = boss;
+
+			if (randomVictim) {
+				if (weaponInfo.type === "attack") {
+					const tempDamageGiven = randomIntBetweenMinMax(
+						stats.attack * weaponInfo.damage,
+						(stats.attack / 2) * weaponInfo.damage
+					);
+
+					if (awaitDamagePromises[randomVictim.account.username]) {
+						awaitDamagePromises[
+							randomVictim.account.username
+						].damage += tempDamageGiven;
+					}
+					else {
+						awaitDamagePromises[randomVictim.account.username] = {
+							user: randomVictim,
+							damage: tempDamageGiven,
+						};
+					}
+					// removes user from helper array if dead
+					if (randomVictim.hero.currentHealth - tempDamageGiven <= 0) {
+						progress.dungeon.helperIds = progress.dungeon.helperIds.filter(
+							(h) => h !== randomVictim.account.userId
+						);
+					}
+					progress.roundResults.push(
+						generateAttackString(
+							npcName,
+							weaponInfo,
+							tempDamageGiven,
+							randomVictim.account.username
+						)
+					);
+				}
+			}
+			if (weaponInfo.type === "heal") {
+				const healGiven = randomIntBetweenMinMax(
+					stats.health * weaponInfo.damage,
+					(stats.health * weaponInfo.damage) / 2
+				);
+				bossSelfHeal += healGiven;
+				progress.roundResults.push(
+					generateHealString(npcName, weaponInfo, healGiven)
+				);
+			}
+		}
+	})
+	}
+
+
 	// takes care of healing
-	Object.keys(awaitHealPromises).forEach(async (u) => awaitHealPromises[u].user.healHero(awaitHealPromises[u].healGiven));
+	Object.keys(awaitHealPlayerPromises).forEach(async (u) => awaitHealPlayerPromises[u].user.healHero(awaitHealPlayerPromises[u].healGiven));
 
 	// inflicts damage on user document
-	Object.keys(awaitDamagePromises).forEach(async (u) => awaitDamagePromises[u].user.heroHpLossFixedAmount(awaitDamagePromises[u].damage));
+	Object.keys(awaitDamagePlayerPromises).forEach(async (u) => awaitDamagePlayerPromises[u].user.heroHpLossFixedAmount(awaitDamagePlayerPromises[u].damage));
 
 	await asyncForEach(teamGreen, async (member)=>{
 		await member.save();
 	});
-	await asyncForEach(teamRed, async (member)=>{
-		await member.save();
-	});
+	if (combatRules.mode === 'PVP'){
+		await asyncForEach(teamRed, async (member)=>{
+			await member.save();
+		});
+	}
+	
 
 	// removes player from combat
-	progress.teamGreen = progress.teamGreen.filter(member=>member.hero.currentHealth > 0);
-	progress.teamRed = progress.teamRed.filter(member=>member.hero.currentHealth > 0);
+	teamGreen = teamGreen.filter(member=>member.hero.currentHealth > 0);
+	if (combatRules.mode === 'PVP'){
+		teamRed = teamRed.filter(member=>member.hero.currentHealth > 0);
+	}
+	if (combatRules.mode === 'PVE'){
+		teamRed = teamRed.filter(npc=>npc.health > 0);
+	}
 
 	progress.currentRound += 1;
 	progress.weaponInformation.weaponAnswers.clear();

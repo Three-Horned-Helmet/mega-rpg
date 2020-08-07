@@ -215,4 +215,150 @@ module.exports = {
 			health: 14,
 		},
 	},
+
+	// Mithril
+	["mithril sword"]: {
+		name: "mithril sword",
+		typeSequence: ["army", "armory", "weapon"],
+		cost: {
+			["mithril bar"]: 8,
+		},
+		requirement: {
+			building: "blacksmith",
+			level: 3,
+		},
+		stats: {
+			attack: 35,
+		},
+	},
+	["aspen longbow"]: {
+		name: "aspen longbow",
+		typeSequence: ["army", "armory", "weapon"],
+		cost: {
+			["aspen wood"]: 30,
+			["mithril bar"]: 4,
+		},
+		requirement: {
+			building: "blacksmith",
+			level: 3,
+		},
+		stats: {
+			attack: 40,
+		},
+	},
+	["mithril helmet"]: {
+		name: "mithril helmet",
+		typeSequence: ["army", "armory", "helmet"],
+		cost: {
+			["mithril bar"]: 3,
+		},
+		requirement: {
+			building: "blacksmith",
+			level: 3,
+		},
+		stats: {
+			health: 22,
+		},
+	},
+	["mithril platemail"]: {
+		name: "mithril platemail",
+		typeSequence: ["army", "armory", "chest"],
+		cost: {
+			["mithril bar"]: 5,
+		},
+		requirement: {
+			building: "blacksmith",
+			level: 3,
+		},
+		stats: {
+			health: 30,
+		},
+	},
+	["mithril leggings"]: {
+		name: "mithril leggings",
+		typeSequence: ["army", "armory", "legging"],
+		cost: {
+			["mithril bar"]: 3,
+		},
+		requirement: {
+			building: "blacksmith",
+			level: 3,
+		},
+		stats: {
+			health: 20,
+		},
+	},
+
+	// Pyrite
+	["pyrite sword"]: {
+		name: "pyrite sword",
+		typeSequence: ["army", "armory", "weapon"],
+		cost: {
+			["pyrite bar"]: 12,
+		},
+		requirement: {
+			building: "blacksmith",
+			level: 4,
+		},
+		stats: {
+			attack: 42,
+		},
+	},
+	["ancient shortbow"]: {
+		name: "ancient longbow",
+		typeSequence: ["army", "armory", "weapon"],
+		cost: {
+			["barlind wood"]: 50,
+			["pyrite bar"]: 8,
+		},
+		requirement: {
+			building: "blacksmith",
+			level: 4,
+		},
+		stats: {
+			attack: 46,
+		},
+	},
+	["pyrite helmet"]: {
+		name: "pyrite helmet",
+		typeSequence: ["army", "armory", "helmet"],
+		cost: {
+			["pyrite bar"]: 5,
+		},
+		requirement: {
+			building: "blacksmith",
+			level: 4,
+		},
+		stats: {
+			health: 26,
+		},
+	},
+	["pyrite platemail"]: {
+		name: "pyrite platemail",
+		typeSequence: ["army", "armory", "chest"],
+		cost: {
+			["pyrite bar"]: 10,
+		},
+		requirement: {
+			building: "blacksmith",
+			level: 4,
+		},
+		stats: {
+			health: 35,
+		},
+	},
+	["pyrite leggings"]: {
+		name: "pyrite leggings",
+		typeSequence: ["army", "armory", "legging"],
+		cost: {
+			["pyrite bar"]: 6,
+		},
+		requirement: {
+			building: "blacksmith",
+			level: 4,
+		},
+		stats: {
+			health: 28,
+		},
+	},
 };

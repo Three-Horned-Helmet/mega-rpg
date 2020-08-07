@@ -15,8 +15,8 @@ module.exports = { "Kraken": {
 		canKill:true,
 		allowArmy:false,
 		allowHelpers:true,
-		minRankToGetKey: 4,
+		minRankToGetKey: 22,
 	},
-	helpers:[],
+	helperIds:[],
 },
 };

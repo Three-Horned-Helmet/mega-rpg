@@ -1,6 +1,6 @@
 module.exports = {
 	["bandits bandana"]: {
-		name: "Bandits Bandana",
+		name: "bandits bandana",
 		typeSequence: ["army", "armory", "helmet"],
 		requirement: {
 			building: "armorer",

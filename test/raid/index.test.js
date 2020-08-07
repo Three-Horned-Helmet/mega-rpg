@@ -47,7 +47,7 @@ describe("raid command", () => {
 		const testUser = await createTestUser({ hero:{ currentHealth:0 } });
 		const mockMessage = generateDiscordMessage(testUser);
 		const result = await raidCommand.execute(mockMessage, [], testUser);
-		expect(result.includes("Your hero's health is too low (**0**)")).to.be.equal(true);
+		expect(result).to.have.string("Your hero's health is too low (**0**)");
 	});
 	it("should not be able to raid a hunting, dungeon or miniboss place", async ()=>{
 		const places = ["Collapsed Mine", "Forest"];
@@ -67,8 +67,10 @@ describe("raid command", () => {
 		const testUser = await createTestUser(opTestStats);
 		const mockMessage = generateDiscordMessage(testUser);
 		const result = await raidCommand.execute(mockMessage, [], testUser);
-		expect(result.title.startsWith("Anniken Avisbud's army raided :man_supervillain:")).to.be.equal(true);
+		expect(result.title).to.have.string("Anniken Avisbud's army raided :man_supervillain:");
 		await testUser.setNewCooldown("raid", mockDays(1));
+		testUser.hero.currentHealth = testUser.hero.health;
+		await testUser.save();
 		const result2 = await raidCommand.execute(mockMessage, ["Bandit Camp"], testUser);
 		expect(result2.title).to.be.equal("Anniken Avisbud's army raided :man_supervillain: Bandit Camp");
 

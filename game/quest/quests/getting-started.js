@@ -213,9 +213,8 @@ module.exports = {
 
 			// Get reward
 			user.addOrRemoveUnits(allUnits["peasant"], 5, true);
-			await user.save();
-			await user.addItem(allItems["bronze helmet"], 5);
-			await user.addItem(allItems["bronze leggings"], 5);
+			user.addItem(allItems["bronze helmet"], 5);
+			user.addItem(allItems["bronze leggings"], 5);
 			// // Add next quest
 			const newQuest = {
 				name: "Upgrade Mine",
