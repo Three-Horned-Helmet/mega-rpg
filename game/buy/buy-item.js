@@ -50,7 +50,7 @@ const buyItem = async (user, item, amount) =>{
 
 	await user.save();
 
-	return `You bought a ${item.name}`;
+	return `You bought ${amount}x ${item.name}`;
 };
 
 const checkIfPossibleToBuy = (user, item, amount) => {

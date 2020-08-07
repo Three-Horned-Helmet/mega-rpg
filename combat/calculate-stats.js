@@ -36,6 +36,8 @@ const calculateStats = (user) => {
 			return Object.values(a.stats).reduce((acc, cur) => acc + cur);
 		};
 
+		console.log(allSlotItems);
+
 		allSlotItems.sort((a, b) => sortHelper(b) - sortHelper(a));
 
 		// Add the stats of up to the amount of units that you have (e.g. 60 units can onlyuse 60 helmets)
