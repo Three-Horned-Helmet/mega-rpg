@@ -68,7 +68,7 @@ const calculatePveFullArmyResult = (user, npc) => {
 	const win = losses > 0;
 	const lossPercentage = (userHp + userAt - (oppHp + oppAt)) / (userHp + userAt);
 	const { username, userId } = user.account;
-	const damageLost = Math.round(lossPercentage * user.hero.currentHealth);
+	const damageLost = Math.abs(Math.round(lossPercentage * user.hero.currentHealth - user.hero.currentHealth));
 
 	const pveResult = {
 		combatModifier,

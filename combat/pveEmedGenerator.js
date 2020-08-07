@@ -31,9 +31,9 @@ function generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro) {
 
 	let expReward = `+ **${pveResult.expReward}** exp\n`;
 
-	const casualtiesPercentage = (pveResult.lossPercentage * 100).toFixed(2);
+	const casualtiesPercentage = ((1 - pveResult.lossPercentage) * 100).toFixed(2);
 	const casulty = generateArmyCasultyString(casualtiesPercentage);
-	const heroHpLoss = Math.round(user.hero.currentHealth * pveResult.lossPercentage);
+	const heroHpLoss = pveResult.damageLost;
 	const heroCasulty = generateHeroCasulty(heroHpLoss, placeName);
 
 	if (pveResult.levelUp) {
