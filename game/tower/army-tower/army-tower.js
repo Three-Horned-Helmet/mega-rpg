@@ -59,8 +59,6 @@ const armyTowerFight = async (users, category) => {
 				newEnemy[stat] = newEnemy[stat] - Math.floor(cr.remainingForces / statsLength);
 			}
 
-			console.log("NEW ENEMIES", newEnemy, enemy);
-
 			const remainingFightResult = calculatePveFullArmyResult(remainingUsers[randomUser]);
 			combatResults.push(remainingFightResult);
 
@@ -76,7 +74,6 @@ const armyTowerFight = async (users, category) => {
 		const remainingUsers = users.filter(user => healthLeftOnArmy(user));
 
 		healthLeft = remainingUsers.filter(user => healthLeftOnArmy(user)).length > 0;
-		console.log("HEALTH LEFT", healthLeft);
 	}
 
 	// Add item rewards and progression to the next level if win
