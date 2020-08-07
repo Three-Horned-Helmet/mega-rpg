@@ -24,7 +24,7 @@ const armyTowerFight = async (users, category) => {
 
 	allResults.enemy = enemy;
 
-	const enemyCombatModifier = highestLevel * 0.8 * (1 + Math.random() * 0.5);
+	const enemyCombatModifier = Math.pow(highestLevel, 1.4) * 0.5 * (1 + Math.random() * 0.5);
 
 	for(const stat in enemy.stats) {
 		enemy.stats[stat] = Math.floor(enemy.stats[stat] * enemyCombatModifier);
