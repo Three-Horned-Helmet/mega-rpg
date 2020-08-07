@@ -13,7 +13,7 @@ const calculatePveHero = (user, npc) => {
 	const losses = userHp + userAt - (oppHp + oppAt);
 	const win = losses > 0;
 	const lossPercentage = (userHp + userAt - (oppHp + oppAt)) / (userHp + userAt);
-	const damageLost = Math.round(lossPercentage * user.hero.currentHealth);
+	const damageLost = Math.abs(Math.round(lossPercentage * user.hero.currentHealth - user.hero.currentHealth));
 
 	const pveResult = {
 		combatModifier,
