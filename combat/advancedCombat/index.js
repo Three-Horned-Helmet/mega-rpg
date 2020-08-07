@@ -243,7 +243,8 @@ const calculateCombatResult = async (progress) => {
 						stats.health * weaponInfo.damage,
 						(stats.health * weaponInfo.damage) / 2
 					);
-					npcSelfHeal += healGiven;
+
+					npc.stats.health += healGiven;
 					progress.roundResults.push(
 						generateHealString(npcName, weaponInfo, healGiven)
 					);
