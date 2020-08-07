@@ -17,6 +17,6 @@ module.exports = { "Kraken": {
 		allowHelpers:true,
 		minRankToGetKey: 22,
 	},
-	helpers:[],
+	helperIds:[],
 },
 };
