@@ -4,18 +4,18 @@ const User = require("../models/User");
 
 const templateProgress = {
 	combatRules:{
-		mode: "PVP", // ["PVP","PVE"]
+		mode: "PVE", // ["PVP","PVE"]
 		armyAllowed: false,
 		maxRounds: 3
 	},
-	teamGreen:[],
-	teamRed:[],
+	teamGreen:[], // Users from db
+	teamRed:[], // Users from db OR npc
 	embedInformation:{
 		teamRed:"",
 		teamGreen:"",
 		title:"",
 		description:"",
-		fields:"",
+		fields:{},
 		footer:"",
 	},
 };
@@ -26,9 +26,16 @@ module.exports = {
 	description: "dev tool",
 	async execute(message, args, user) {
 		const t = await User.findOne({ "account.username":"SpinningSiri" });
-		const m = await User.findOne({ "account.username":"Ignore" });
+
 		templateProgress.teamGreen.push(t);
-		templateProgress.teamRed.push(m);
+		templateProgress.teamRed.push({
+			name: "Bandit Prince",
+			stats: {
+				attack: 73,
+				health: 2000,
+				maxHealth: 2000
+			}
+		})
 		return await createCombatRound(message, templateProgress);
 	},
 };

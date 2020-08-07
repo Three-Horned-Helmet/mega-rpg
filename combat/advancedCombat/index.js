@@ -1,3 +1,4 @@
+const sleep = require("util").promisify(setTimeout);
 const { generateEmbedCombatRound } = require("./embedGenerator");
 const { getWeaponInfo } = require("./helper");
 const { asyncForEach, randomIntBetweenMinMax } = require("../../game/_GLOBAL_HELPERS");
@@ -5,16 +6,8 @@ const { asyncForEach, randomIntBetweenMinMax } = require("../../game/_GLOBAL_HEL
 Todo:
 - Potential issue with object references and teamGreenIds
 - Issue with naming in embed. Team green / team red etc
+- Potential issue if not deepcopying npc before function call
 */
-
-/* {
-			name: "Bandit Prince",
-			stats: {
-				attack: 73,
-				health: 73,
-				maxHealth: 73
-			}
-}, */
 
 const createCombatRound = async (message, progress) => {
 	if (!progress.teamGreenIds || !progress.teamGreenIds.length) {
@@ -41,7 +34,7 @@ const createCombatRound = async (message, progress) => {
 	};
 
 	const collector = await message.channel.createMessageCollector(filter, {
-		time: 1000 * 5,
+		time: 1000 * 10,
 		errors: ["time"],
 	});
 	collector.on("collect", async (result) => {
@@ -68,6 +61,7 @@ const createCombatRound = async (message, progress) => {
 		}
 		// stops collecting if all users have answered
 		if (weaponAnswers.size >= progress.teamRedIds.length + progress.teamGreenIds.length) {
+			await sleep(1500);
 			collector.stop();
 		}
 	});
@@ -202,16 +196,16 @@ const calculateCombatResult = async (progress) => {
 if (combatRules.mode === "PVE"){
 	teamRed.forEach(npc=>{
 		const allowedNumOfAttacks = npc.allowedNumOfAttacks || 1
+		const npcName = npc.name
 
 		for (let i = 0; i < allowedNumOfAttacks; i += 1) {
-			const alivePlayers = teamGreen.filter(p => p.hero.currentHealth > 0);
-			const randomVictim =alivePlayers[Math.floor(Math.random() * alivePlayers.length)];
-
-			const npcName = npc.name
-
-			const randomWeaponName = progress.allowedWeapons[Math.floor(Math.random() * progress.allowedWeapons.length)];
+			const randomVictim =teamGreen[Math.floor(Math.random() * teamGreen.length)];
+			
+			const weaponNames = Object.keys(progress.weaponInformation.allowedWeapons)
+			const randomWeaponName = weaponNames[Math.floor(Math.random()*weaponNames.length)]
 			const weaponInfo = getWeaponInfo(randomWeaponName);
-			const { stats } = boss;
+			console.log(weaponInfo,'weaponInfo')
+			const { stats } = npc;
 
 			if (randomVictim) {
 				if (weaponInfo.type === "attack") {
@@ -220,13 +214,11 @@ if (combatRules.mode === "PVE"){
 						(stats.attack / 2) * weaponInfo.damage
 					);
 
-					if (awaitDamagePromises[randomVictim.account.username]) {
-						awaitDamagePromises[
-							randomVictim.account.username
-						].damage += tempDamageGiven;
+					if (awaitDamagePlayerPromises[randomVictim.account.username]) {
+						awaitDamagePlayerPromises[randomVictim.account.username].damage += tempDamageGiven;
 					}
 					else {
-						awaitDamagePromises[randomVictim.account.username] = {
+						awaitDamagePlayerPromises[randomVictim.account.username] = {
 							user: randomVictim,
 							damage: tempDamageGiven,
 						};
@@ -252,7 +244,7 @@ if (combatRules.mode === "PVE"){
 					stats.health * weaponInfo.damage,
 					(stats.health * weaponInfo.damage) / 2
 				);
-				bossSelfHeal += healGiven;
+				npcSelfHeal += healGiven;
 				progress.roundResults.push(
 					generateHealString(npcName, weaponInfo, healGiven)
 				);
@@ -372,8 +364,8 @@ const validateProgress = (progress)=>{
 	if (!progress.combatRules.maxRounds || typeof progress.combatRules.maxRounds !== "number") {
 		throw new Error("progress.combatRules.maxRounds must be set to a number\n");
 	}
-	if (progress.combatRules.army === undefined) {
-		throw new Error("progress.combatRules.army must be set to a boolean\n");
+	if (progress.combatRules.armyAllowed === undefined) {
+		throw new Error("progress.combatRules.armyAllowed must be set to a boolean\n");
 	}
 	if (progress.teamGreen.length === 0 || progress.teamRed.length === 0) {
 		throw new Error(`No players in the teams. \n teamGreen: ${progress.teamGreen.length} members \n teamRed: ${progress.teamRed.length} members\n`);

@@ -4,11 +4,18 @@ const { getIcon } = require("../../game/_CONSTS/icons");
 
 const generateEmbedCombatRound = (progress) => {
 	const { allowedWeapons } = progress.weaponInformation;
-	const { teamRed, teamGreen, roundResults, teamGreenIds, teamRedIds, teamGreenNames, teamRedNames } = progress;
+	const { teamRed, teamGreen, roundResults, teamGreenIds, teamRedIds, teamGreenNames, teamRedNames,combatRules } = progress;
 	const { title, description, fields, footer } = progress.embedInformation;
 
 	const greenTeamsHp = getPlayersHp(teamGreen, teamGreenIds);
-	const redTeamsHp = getPlayersHp(teamRed, teamRedIds, true);
+	let redTeamsHp;
+
+	if (combatRules.mode === 'PVP'){
+		redTeamsHp = getPlayersHp(teamRed, teamRedIds, true);
+	}
+	if (combatRules.mode === 'PVE'){
+		redTeamsHp = getNpcHp(teamRed);
+	}
 	const teamGreenOverview = formatTeamOverview(teamGreen, teamGreenNames);
 	const teamRedOverview = formatTeamOverview(teamRed, teamRedNames);
 
@@ -18,8 +25,8 @@ const generateEmbedCombatRound = (progress) => {
 		return `${getIcon(name)} ${answer}) **${name}** ${description}\n`;
 	});
 
-	const teamRedName = progress.embedInformation.teamRed ? progress.embedInformation.teamRed : teamRed.length !== 1 ? "Team Red" : teamRed[0].account.username;
 	const teamGreenName = progress.embedInformation.teamGreen ? progress.embedInformation.teamGreen : teamGreen.length !== 1 ? "Team Green" : teamGreen[0].account.username;
+	const teamRedName = progress.embedInformation.teamRed ? progress.embedInformation.teamRed : teamRed.length !== 1 ? "Team Red" : teamRed[0].name || teamRed[0].account.username ;
 
 	const topLeft = {
 		name:  `${teamRedName} HP:`,
@@ -100,7 +107,7 @@ const generateEmbedCombatRound = (progress) => {
 const getPlayersHp = (players, currentDiscordIds, teamRed = false) => {
 	// embed get's messed up if hp bar is longer than 20
 	const MAX_REPEATING = 20;
-	const totalPlayerHealth = players
+	let totalPlayerHealth = players
 		.reduce((acc, curr) => acc + curr.hero.health, 0);
 	const totalPlayerCurrentHealth = players
 		.filter(p => currentDiscordIds.includes(p.account.userId))
@@ -112,6 +119,20 @@ const getPlayersHp = (players, currentDiscordIds, teamRed = false) => {
 		return `\`\`\`diff\n- ${"|".repeat(percentageHealth)}${" ".repeat(percentageMissingHealth)} \n \`\`\``;
 	}
 	return `\`\`\`diff\n+ ${"|".repeat(percentageHealth)}${" ".repeat(percentageMissingHealth)} \n \`\`\``;
+};
+
+const getNpcHp = (teamRed) => {
+	const MAX_REPEATING = 20;
+	let totalNpcHealth = teamRed
+		.reduce((acc, curr) => acc + curr.stats.maxHealth, 0);
+	const totalNpcCurrentHealth = teamRed
+		.reduce((acc, curr) => acc + curr.stats.health, 0);
+	const percentageHealth = (totalNpcCurrentHealth / totalNpcHealth * 100) * MAX_REPEATING / 100;
+	const percentageMissingHealth = MAX_REPEATING - percentageHealth;
+
+	console.log(totalNpcCurrentHealth,totalNpcHealth)
+
+	return `\`\`\`diff\n- ${"|".repeat(percentageHealth)}${" ".repeat(percentageMissingHealth)} \n \`\`\``;
 };
 
 const formatTeamOverview = (team, allPlayers)=>{
