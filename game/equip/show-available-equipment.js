@@ -43,7 +43,7 @@ const addEquipmentField = (user, iType) => {
 		const itemAmount = user.army.armory[iType][item];
 		if(!itemAmount) return false;
 		const itemObj = allItems[item] || getTowerItem(item);
-		return `${item.capitalize()} [${itemAmount}]\n${objectMessage(itemObj.stats)}`;
+		return `[${itemAmount}] ${item.capitalize()}\n${objectMessage(itemObj.stats)}`;
 	}).filter(el => el);
 
 
