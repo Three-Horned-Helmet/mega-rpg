@@ -2,6 +2,7 @@ const { checkBuildQuests } = require("../quest/quest-utils");
 
 // Takes a user, a building and coordinates and pushes the building to the users Empire array
 const constructBuilding = async (user, building, coordinates) => {
+	// Get random coordinates if none are given
 	if(!coordinates[0] && coordinates[0] !== 0) {
 		coordinates = findAvailableSpot(user);
 		if(!coordinates) return "There's no available spots in your empire" ;
@@ -26,6 +27,7 @@ const constructBuilding = async (user, building, coordinates) => {
 	let msg = `You have successfully created ${newBuilding.name} level ${newBuilding.level}`;
 	if(questIntro) msg += `\n\n**New Quest:**\n${questIntro}`;
 
+	await user.save();
 	return msg;
 };
 
@@ -41,7 +43,7 @@ const checkIfBuildIsPossible = (user, building, coordinates) => {
 	}
 
 	// Checks if the building- and coordinates command is valid
-	if(coordinates.find(cord => cord > 2 || cord < 0) || coordinates.length !== 2) {
+	if(coordinates.find(cord => cord > Math.ceil(Math.pow(user.maxBuildings, 1 / 2)) || cord < 0) || coordinates.length !== 2) {
 		return {
 			response: false,
 			message:"Please enter two coordinates between 0-2 divided by a punctuation, e.g: !build barracks 1.1 ",
@@ -56,8 +58,26 @@ const checkIfBuildIsPossible = (user, building, coordinates) => {
 		structure.position[0] === coordinates[0] && structure.position[1] === coordinates[1],
 	);
 
-	if(usersBuilding && usersBuilding.name !== building.name) {
+	const upgradeBuilding = !(usersBuilding && usersBuilding.name !== building.name);
+
+	if(!upgradeBuilding) {
 		return { response: false, message:`The position is occupied by ${usersBuilding.name}` };
+	}
+
+	// Check if maxBuilding has been reached
+	if(!usersBuilding && user.empire.length >= user.maxBuildings) {
+		return {
+			response: false,
+			message: "You need to level up your Senate to get additional building spots"
+		};
+	}
+
+	// Check if the building is unique and already exist
+	if(!upgradeBuilding && building.unique && user.empire.find(structure => structure.name === building.name)) {
+		return {
+			response: false,
+			message: "You can only have one of this building"
+		};
 	}
 
 	// Check for resources and max level
@@ -86,8 +106,9 @@ const checkIfBuildIsPossible = (user, building, coordinates) => {
 };
 
 const findAvailableSpot = (user) => {
-	for(let y = 0; y < 3; y++) {
-		for(let x = 0; x < 3; x++) {
+	const gridSize = Math.ceil(Math.sqrt(user.maxBuildings));
+	for(let y = 0; y < gridSize; y++) {
+		for(let x = 0; x < gridSize; x++) {
 			if(!user.empire.find(b => b.position[0] === x && b.position[1] === y)) {
 				return [x, y];
 			}
