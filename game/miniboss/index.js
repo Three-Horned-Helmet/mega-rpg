@@ -111,7 +111,7 @@ const calculateMinibossResult = async (miniboss) => {
 		chanceForSuccess -= 2;
 	} */
 
-	const difficulty = Math.random() * miniboss.stats.difficulty;
+	const difficulty = randomIntBetweenMinMax(miniboss.stats.difficulty / 2, miniboss.stats.difficulty);
 
 	const result = {
 		win: false,

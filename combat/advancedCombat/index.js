@@ -9,6 +9,7 @@ Todo:
 - Potential issue if not deepcopying npc before function call
 */
 
+
 const createCombatRound = async (message, progress) => {
 	if (!progress.teamGreenIds || !progress.teamGreenIds.length) {
 		validateProgress(progress);
@@ -87,7 +88,6 @@ const calculateCombatResult = async (progress) => {
 	const awaitHealPlayerPromises = {};
 	const awaitDamagePlayerPromises = {};
 
-	const awaitHealNPCPromises = {};
 	const awaitDamageNPCPromises = {};
 
 
@@ -126,7 +126,7 @@ const calculateCombatResult = async (progress) => {
 				);
 				// playerResult.damageGiven = tempDamageGiven;
 
-				if (combatRules.mode === 'PVP'){
+				if (combatRules.mode === "PVP") {
 
 					if (awaitDamagePlayerPromises[victimName]) {
 						awaitDamagePlayerPromises[victimName].damage += damageGiven;
@@ -140,7 +140,7 @@ const calculateCombatResult = async (progress) => {
 					}
 				}
 
-				if (combatRules.mode === 'PVE'){
+				if (combatRules.mode === "PVE") {
 
 					if (awaitDamageNPCPromises[victimName]) {
 						awaitDamageNPCPromises[victimName].damage += damageGiven;
@@ -169,15 +169,15 @@ const calculateCombatResult = async (progress) => {
 					(playerInfo.hero.health * weaponInfo.damage) / 2,
 					playerInfo.hero.health * weaponInfo.damage
 				);
-					if (awaitHealPlayerPromises[victimName]) {
-						awaitHealPlayerPromises[victimName].healGiven += healGiven;
-					}
-					else {
-						awaitHealPlayerPromises[victimName] = {
-							user: teamMateWithLowestHp,
-							healGiven: healGiven,
-						};
-					}
+				if (awaitHealPlayerPromises[victimName]) {
+					awaitHealPlayerPromises[victimName].healGiven += healGiven;
+				}
+				else {
+					awaitHealPlayerPromises[victimName] = {
+						user: teamMateWithLowestHp,
+						healGiven: healGiven,
+					};
+				}
 				progress.roundResults.push(
 					generateHealString(
 						playerName,
@@ -193,64 +193,63 @@ const calculateCombatResult = async (progress) => {
 		}
 	});
 
-if (combatRules.mode === "PVE"){
-	teamRed.forEach(npc=>{
-		const allowedNumOfAttacks = npc.allowedNumOfAttacks || 1
-		const npcName = npc.name
+	if (combatRules.mode === "PVE") {
+		teamRed.forEach(npc=>{
+			const allowedNumOfAttacks = npc.allowedNumOfAttacks || 1;
+			const npcName = npc.name;
 
-		for (let i = 0; i < allowedNumOfAttacks; i += 1) {
-			const randomVictim =teamGreen[Math.floor(Math.random() * teamGreen.length)];
-			
-			const weaponNames = Object.keys(progress.weaponInformation.allowedWeapons)
-			const randomWeaponName = weaponNames[Math.floor(Math.random()*weaponNames.length)]
-			const weaponInfo = getWeaponInfo(randomWeaponName);
-			console.log(weaponInfo,'weaponInfo')
-			const { stats } = npc;
+			for (let i = 0; i < allowedNumOfAttacks; i += 1) {
+				const randomVictim = teamGreen[Math.floor(Math.random() * teamGreen.length)];
 
-			if (randomVictim) {
-				if (weaponInfo.type === "attack") {
-					const tempDamageGiven = randomIntBetweenMinMax(
-						stats.attack * weaponInfo.damage,
-						(stats.attack / 2) * weaponInfo.damage
-					);
+				const weaponNames = Object.keys(progress.weaponInformation.allowedWeapons);
+				const randomWeaponName = weaponNames[Math.floor(Math.random() * weaponNames.length)];
+				const weaponInfo = getWeaponInfo(randomWeaponName);
+				const { stats } = npc;
 
-					if (awaitDamagePlayerPromises[randomVictim.account.username]) {
-						awaitDamagePlayerPromises[randomVictim.account.username].damage += tempDamageGiven;
-					}
-					else {
-						awaitDamagePlayerPromises[randomVictim.account.username] = {
-							user: randomVictim,
-							damage: tempDamageGiven,
-						};
-					}
-					// removes user from helper array if dead
-					if (randomVictim.hero.currentHealth - tempDamageGiven <= 0) {
-						progress.dungeon.helperIds = progress.dungeon.helperIds.filter(
-							(h) => h !== randomVictim.account.userId
+				if (randomVictim) {
+					if (weaponInfo.type === "attack") {
+						const tempDamageGiven = randomIntBetweenMinMax(
+							stats.attack * weaponInfo.damage,
+							(stats.attack / 2) * weaponInfo.damage
+						);
+
+						if (awaitDamagePlayerPromises[randomVictim.account.username]) {
+							awaitDamagePlayerPromises[randomVictim.account.username].damage += tempDamageGiven;
+						}
+						else {
+							awaitDamagePlayerPromises[randomVictim.account.username] = {
+								user: randomVictim,
+								damage: tempDamageGiven,
+							};
+						}
+						// removes user from helper array if dead
+						if (randomVictim.hero.currentHealth - tempDamageGiven <= 0) {
+							progress.dungeon.helperIds = progress.dungeon.helperIds.filter(
+								(h) => h !== randomVictim.account.userId
+							);
+						}
+						progress.roundResults.push(
+							generateAttackString(
+								npcName,
+								weaponInfo,
+								tempDamageGiven,
+								randomVictim.account.username
+							)
 						);
 					}
+				}
+				if (weaponInfo.type === "heal") {
+					const healGiven = randomIntBetweenMinMax(
+						stats.health * weaponInfo.damage,
+						(stats.health * weaponInfo.damage) / 2
+					);
+					npcSelfHeal += healGiven;
 					progress.roundResults.push(
-						generateAttackString(
-							npcName,
-							weaponInfo,
-							tempDamageGiven,
-							randomVictim.account.username
-						)
+						generateHealString(npcName, weaponInfo, healGiven)
 					);
 				}
 			}
-			if (weaponInfo.type === "heal") {
-				const healGiven = randomIntBetweenMinMax(
-					stats.health * weaponInfo.damage,
-					(stats.health * weaponInfo.damage) / 2
-				);
-				npcSelfHeal += healGiven;
-				progress.roundResults.push(
-					generateHealString(npcName, weaponInfo, healGiven)
-				);
-			}
-		}
-	})
+		});
 	}
 
 
@@ -263,19 +262,19 @@ if (combatRules.mode === "PVE"){
 	await asyncForEach(teamGreen, async (member)=>{
 		await member.save();
 	});
-	if (combatRules.mode === 'PVP'){
+	if (combatRules.mode === "PVP") {
 		await asyncForEach(teamRed, async (member)=>{
 			await member.save();
 		});
 	}
-	
+
 
 	// removes player from combat
 	teamGreen = teamGreen.filter(member=>member.hero.currentHealth > 0);
-	if (combatRules.mode === 'PVP'){
+	if (combatRules.mode === "PVP") {
 		teamRed = teamRed.filter(member=>member.hero.currentHealth > 0);
 	}
-	if (combatRules.mode === 'PVE'){
+	if (combatRules.mode === "PVE") {
 		teamRed = teamRed.filter(npc=>npc.health > 0);
 	}
 
