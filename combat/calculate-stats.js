@@ -1,5 +1,6 @@
 const allUnits = require("../game/recruit/all-units");
 const allItems = require("../game/items/all-items");
+const { getTowerItem } = require("../game/items/tower-items/tower-item-functions");
 
 // Takes the user and calculates the total amount of combat stats for that user
 // Returns an object with the values listed in the user
@@ -28,7 +29,7 @@ const calculateStats = (user) => {
 	// Add the stats from the items
 	for (const slot in armory.toJSON()) {
 		let slotsTaken = 0;
-		const allSlotItems = Object.keys(armory[slot]).map(item => allItems[item]);
+		const allSlotItems = Object.keys(armory[slot]).map(item => allItems[item] || getTowerItem(item));
 
 		// Sorts depending on what item that gives the most stats
 		const sortHelper = (a) => {

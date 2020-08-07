@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const { getIcon } = require("../_CONSTS/icons");
 const allItems = require("../items/all-items");
+const { getTowerItem } = require("../items/tower-items/tower-item-functions");
 
 const stakeEmbed = (winner, loser, battleStats, exp, item, elo) => {
 	const { username } = winner.account;
@@ -13,6 +14,8 @@ const stakeEmbed = (winner, loser, battleStats, exp, item, elo) => {
 
 	const footer = `${username} +${elo.eloForWinner.delta} elo\n${oppUsername} ${elo.eloForLoser.delta} elo`;
 
+	const itemObject = allItems[item] || getTowerItem(item);
+
 	const fields = [
 		{
 			name: `**${win ? username : oppUsername}** won the duel with a margin of ${Math.abs(winMargin)} units`,
@@ -20,7 +23,7 @@ const stakeEmbed = (winner, loser, battleStats, exp, item, elo) => {
 		},
 		{
 			name: itemName + ":",
-			value: statsMessage(allItems[item].stats),
+			value: statsMessage(itemObject.stats),
 		},
 		{
 			name: "\u200B",

@@ -281,6 +281,42 @@ const userSchema = new Schema({
 		}],
 	},
 	completedQuests: [String],
+	// Saving the rooms etc, of the towers
+	tower: {
+		"solo full-army": {
+			level: {
+				type: Number,
+				default: 1,
+			}
+		},
+		"trio full-army": {
+			level: {
+				type: Number,
+				default: 1,
+			},
+			users: {
+				type: Array,
+				default: [],
+			}
+		},
+		"solo hero": {
+			level: {
+				type: Number,
+				default: 1,
+			},
+		},
+		"trio hero": {
+			level: {
+				type: Number,
+				default: 1,
+			},
+			users: {
+				type: Array,
+				default: [],
+			}
+		}
+	},
+
 	// object too big, moved to ./uservalues/default
 	statistics,
 }, {
@@ -481,7 +517,7 @@ userSchema.methods.collectResource = async function(collectBuildings, now, resou
 	return totalCollected;
 };
 
-userSchema.methods.addItem = function(item, amount, craft) {
+userSchema.methods.addItem = function(item, amount = 1, craft) {
 	if(craft) {
 		// Resource cost
 		for(const resource in item.cost) {
@@ -501,8 +537,6 @@ userSchema.methods.addItem = function(item, amount, craft) {
 		itemType[item.name] + amount : amount;
 
 	this.markModified(`${markModifiedString}${item.name}`);
-
-	return this.save();
 };
 
 // Removes the item (if hero => remove it from hero, else from armory)
@@ -540,6 +574,7 @@ userSchema.methods.equipItem = function(item, currentItem) {
 	// Remove old stats and add new item stats to hero
 	if(currentItem) {
 		// Add old item to armory
+		if(!this.army.armory[itemType][currentItem.name]) this.army.armory[itemType][currentItem.name] = 0;
 		this.army.armory[itemType][currentItem.name] += 1;
 
 		for(const stat in currentItem.stats) {
@@ -558,22 +593,22 @@ userSchema.methods.equipItem = function(item, currentItem) {
 };
 
 // lossPercentage: 0.9 => 10% units loss
-userSchema.methods.unitLoss = function(lossPercentage) {
+userSchema.methods.unitLoss = function(lossPercentage, towerFight) {
 	// Kill off unit depending on the lossPercentage
 	Object.values(this.army.units).forEach(unitBuilding => {
 		Object.keys(unitBuilding).forEach(unit => {
 			if(typeof unitBuilding[unit] === "number") {
-				unitBuilding[unit] = unitBuilding[unit] - Math.floor(unitBuilding[unit] * lossPercentage);
+				unitBuilding[unit] = Math.floor(unitBuilding[unit] * lossPercentage);
 				this.markModified(`army.units.${unitBuilding}.${unit}`);
 			}
 		});
 	});
 
 	// Remove hp from your hero depending on the loss percentage
-	this.hero.currentHealth = this.hero.currentHealth - Math.floor(this.hero.currentHealth * lossPercentage);
+	this.hero.currentHealth = Math.floor(this.hero.currentHealth * lossPercentage);
 
 	// if the hero dies
-	if (this.hero.currentHealth <= 0 && this.hero.rank > 0) {
+	if (this.hero.currentHealth <= 0 && this.hero.rank > 0 && !towerFight) {
 		Object.keys(heroStatIncreaseOnLevel[this.hero.rank]).forEach(s=>{
 			this.hero[s] -= heroStatIncreaseOnLevel[this.hero.rank][s];
 		});
@@ -748,5 +783,12 @@ userSchema.methods.changeElo = async function(newElo) {
 	this.hero.elo = newElo;
 };
 
+userSchema.methods.changeTowerLevel = function(towerCategory, newLevel) {
+	if(typeof newLevel !== "number") {
+		console.error("newLevel is not a number but " + typeof newLevel);
+		return;
+	}
+	this.tower[towerCategory].level = newLevel;
+};
 
 module.exports = mongoose.model("User", userSchema);

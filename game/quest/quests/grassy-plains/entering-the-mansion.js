@@ -131,7 +131,7 @@ module.exports = {
 			if (userQuest.pve.find(raid => !raid.completed)) return false;
 
 			// Get reward
-			await user.addItem(allItems["bandits bandana"], 1);
+			user.addItem(allItems["bandits bandana"], 1);
 
 			user.removeQuest(this.name);
 
