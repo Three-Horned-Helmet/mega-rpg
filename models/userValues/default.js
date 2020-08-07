@@ -3,7 +3,7 @@ const cooldowns = {
 		type: Date,
 		default: 0,
 	},
-	dailyPrize:{
+	dailyprize:{
 		type:Date,
 		default:0,
 	},
