@@ -12,8 +12,7 @@ const calculatePveHero = (user, npc) => {
 
 	const losses = userHp + userAt - (oppHp + oppAt);
 	const win = losses > 0;
-	let lossPercentage = (userHp + userAt - (oppHp + oppAt)) / (userHp + userAt);
-	lossPercentage = lossPercentage < 0 ? 0 : 1 - lossPercentage;
+	const lossPercentage = (userHp + userAt - (oppHp + oppAt)) / (userHp + userAt);
 	const damageLost = Math.round(lossPercentage * user.hero.currentHealth);
 
 	const pveResult = {
@@ -67,8 +66,7 @@ const calculatePveFullArmyResult = (user, npc) => {
 
 	const losses = userHp + userAt - (oppHp + oppAt);
 	const win = losses > 0;
-	let lossPercentage = (userHp + userAt - (oppHp + oppAt)) / (userHp + userAt);
-	lossPercentage = lossPercentage < 0 ? 0 : 1 - lossPercentage;
+	const lossPercentage = (userHp + userAt - (oppHp + oppAt)) / (userHp + userAt);
 	const { username, userId } = user.account;
 	const damageLost = Math.round(lossPercentage * user.hero.currentHealth);
 

@@ -52,6 +52,8 @@ describe("hunt command", () => {
 		const result = await huntCommand.execute(mockMessage, [], testUser);
 		expect(result.title).to.have.string("Anniken Avisbud's hero hunted :frog:");
 		await testUser.setNewCooldown("hunt", mockDays(1));
+		testUser.hero.currentHealth = testUser.hero.health;
+		await testUser.save();
 		const result2 = await huntCommand.execute(mockMessage, ["Cave"], testUser);
 		expect(result2.title).to.be.equal("Anniken Avisbud's hero hunted :frog: Cave");
 
