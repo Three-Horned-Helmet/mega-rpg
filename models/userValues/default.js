@@ -150,6 +150,10 @@ const statistics = {
 		type: Number,
 		default:0,
 	},
+	tower: {
+		type: Number,
+		default:0,
+	},
 	travel: {
 		type: Number,
 		default:0,
