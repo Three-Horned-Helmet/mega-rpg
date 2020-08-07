@@ -1,6 +1,6 @@
-const levelSeventy = {
+const levelEightly = {
 	boss: {
-		name: "Fossegrim",
+		name: "Sand Elemental",
 		stats: {
 			attack: 80,
 			health: 80,
@@ -8,70 +8,70 @@ const levelSeventy = {
 	},
 	units: [
 		{
-			name: "Vampire Squid",
+			name: "Nomad",
 			stats: {
 				attack: 50,
 				health: 50
 			}
 		},
 		{
-			name: "Ursula",
+			name: "Desert Warriors",
 			stats: {
 				attack: 53,
 				health: 53
 			}
 		},
 		{
-			name: "Qalupalik",
+			name: "Desert Riders",
 			stats: {
 				attack: 55,
 				health: 55
 			}
 		},
 		{
-			name: "Iku-Turso",
+			name: "Haradrim",
 			stats: {
 				attack: 57,
 				health: 57
 			}
 		},
 		{
-			name: "Draugar",
+			name: "Pharaoh",
 			stats: {
 				attack: 60,
 				health: 60
 			}
 		},
 		{
-			name: "Gojira",
+			name: "Giant Desert Snakes",
 			stats: {
 				attack: 62,
 				health: 62
 			}
 		},
 		{
-			name: "Triton",
+			name: "Mummy",
 			stats: {
 				attack: 65,
 				health: 65
 			}
 		},
 		{
-			name: "Hydra",
+			name: "Sfinx",
 			stats: {
 				attack: 67,
 				health: 67
 			}
 		},
 		{
-			name: "Kraken",
+			name: "Manticora",
 			stats: {
 				attack: 70,
 				health: 70
 			}
 		},
 		{
-			name: "Cthulhu",
+			name: "Sand Golem",
 			stats: {
 				attack: 73,
 				health: 73
@@ -80,4 +80,4 @@ const levelSeventy = {
 	]
 };
 
-module.exports = levelSeventy;
+module.exports = levelEightly;

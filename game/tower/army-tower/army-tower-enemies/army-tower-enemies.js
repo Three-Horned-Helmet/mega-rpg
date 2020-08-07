@@ -4,9 +4,11 @@ const levelThirty = require("./level-30");
 const levelForty = require("./level-40");
 const levelFifty = require("./level-50");
 const levelSixty = require("./level-60");
+const levelSeventy = require("./level-70");
+const levelEighty = require("./level-80");
 
 const getArmyTowerEnemies = (level) => {
-	level = level % 61;
+	level = level % 71;
 
 	if(level <= 10) {
 		return pickUnitHandler(levelTen, level);
@@ -29,6 +31,12 @@ const getArmyTowerEnemies = (level) => {
 	}
 	else if(level >= 51 && level <= 60) {
 		return pickUnitHandler(levelSixty, level);
+	}
+	else if(level >= 61 && level <= 70) {
+		return pickUnitHandler(levelSeventy, level);
+	}
+	else if(level >= 71 && level <= 80) {
+		return pickUnitHandler(levelEighty, level);
 	}
 
 	// Add the other 90 levels here
