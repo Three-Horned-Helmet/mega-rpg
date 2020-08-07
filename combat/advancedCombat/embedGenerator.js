@@ -130,8 +130,6 @@ const getNpcHp = (teamRed) => {
 	const percentageHealth = (totalNpcCurrentHealth / totalNpcHealth * 100) * MAX_REPEATING / 100;
 	const percentageMissingHealth = MAX_REPEATING - percentageHealth;
 
-	console.log(totalNpcCurrentHealth, totalNpcHealth);
-
 	return `\`\`\`diff\n- ${"|".repeat(percentageHealth)}${" ".repeat(percentageMissingHealth)} \n \`\`\``;
 };
 
