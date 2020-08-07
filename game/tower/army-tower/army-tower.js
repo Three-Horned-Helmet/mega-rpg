@@ -94,7 +94,7 @@ const armyTowerFight = async (users, category) => {
 		users.filter(user => winningCombatResults.find(wcr => wcr.userId === user.account.userId)).forEach(user => {
 			const dropChance = Math.random() * ((winningCombatResults.filter(wcr => wcr.userId === user.account.userId).length / 2) + 0.5);
 			let itemDrop;
-			if(dropChance > 0.085) {
+			if(dropChance > 0.85) {
 				itemDrop = getNewTowerItem(highestLevel);
 				const itemObject = { ...getTowerItem(itemDrop) };
 
