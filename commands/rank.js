@@ -12,7 +12,7 @@ module.exports = {
 			rankType = args.join("");
 		}
 		else {
-			rankType = "xp";
+			rankType = "help";
 		}
 		const result = await handleRank(rankType, user);
 

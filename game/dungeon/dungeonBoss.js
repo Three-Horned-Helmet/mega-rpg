@@ -17,7 +17,7 @@ const createDungeonBossRound = async (message, progress) => {
 	await message.channel.send(dungeonRound);
 
 	const filter = (response) => {
-		// checks for includeing in the original team
+		// checks for including in the original team
 		return progress.dungeon.helperIds.includes(response.author.id);
 	};
 
@@ -30,7 +30,7 @@ const createDungeonBossRound = async (message, progress) => {
 			return;
 		}
 		if (progress.weaponAnswer.has(result.author.id)) {
-			message.channel.send("You've already chosen a weapon");
+			return message.channel.send("You've already chosen a weapon");
 		}
 		if (!weaponAnswerFilter.includes(result.content.toLowerCase())) {
 			return message.channel.send("Invalid weapon");

@@ -4,6 +4,8 @@ const handleRank = async (rankType, user)=> {
 	switch (rankType) {
 		case "xp":
 			return await getTop5Xp(user);
+		case "help":
+			return await getTop5Xp(user, "help");
 		case "elo":
 			return await getTop5Elo(user);
 		case "quest":
@@ -13,7 +15,7 @@ const handleRank = async (rankType, user)=> {
 		case "sfa":
 			return await getTop5Sfa(user);
 		default:
-			return await getTop5Xp(user);
+			return await getTop5Xp(user, "help");
 	}
 };
 
@@ -115,7 +117,7 @@ const getTop5Elo = async (user)=> {
 	return formatted;
 };
 
-const getTop5Xp = async (user) => {
+const getTop5Xp = async (user, help = false) => {
 	const allUsers = await User
 		.find({})
 		.select(["account", "hero"])
@@ -137,6 +139,10 @@ const getTop5Xp = async (user) => {
 			}
 		});
 		formatted.push(`\`#${playerPosition}: ${user.account.username} --- hero lvl: ${user.hero.rank} - ${user.hero.currentExp} XP\``);
+	}
+
+	if (help) {
+		formatted.push("\n Available rankings are:\n `!rank xp - !rank army - !rank sfa - !rank quest - !rank elo` ");
 	}
 
 	return formatted;
