@@ -9,12 +9,14 @@ const handleDaily = async (user) => {
 		return onCooldownInfo.embed;
 	}
 	const now = new Date();
-	const lastClaimLessThanTwoDays = new Date(user.cooldowns.dailyPrize + 1000 * 60 * 60 * 24 * 2) >= now;
+	const cooldownInMs = new Date(user.cooldowns.dailyPrize).getTime();
+
+	const lastClaimMoreThanTwoDays = new Date(cooldownInMs + (1000 * 60 * 60 * 24 * 2)) <= now;
 
 	let consecutiveDay = user.consecutivePrizes.dailyPrize;
 
 	// todo, should not rely testuser account
-	if (lastClaimLessThanTwoDays && user.account.testUser === false) {
+	if (lastClaimMoreThanTwoDays && user.account.testUser === false) {
 		consecutiveDay = 0;
 	}
 	if (consecutiveDay >= 4) {

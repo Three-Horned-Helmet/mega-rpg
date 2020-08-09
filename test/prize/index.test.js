@@ -122,7 +122,7 @@ describe("consecutive prizes commands", () => {
 
 		for (let i = 0; i < 2; i++) {
 			await weeklyPrizeCommand.execute(mockMessage, null, testUser);
-			testUser.setNewCooldown("weeklyPrize", mockDays((i + 1) * 21));
+			testUser.setNewCooldown("weeklyPrize", mockDays((i + 1) * -21));
 			goldResults.push(testUser.resources.gold);
 			testUser.resources.gold = 0;
 			await testUser.save();
