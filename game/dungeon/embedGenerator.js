@@ -5,7 +5,7 @@ const createDungeonInvitation = (dungeon, user) => {
 	const sideColor = "#45b6fe";
 	const { username } = user.account;
 	const dungeonIcon = getIcon("dungeon");
-	const rules = `\` ${dungeon.rooms.length} Rooms\`\n ${getIcon(dungeon.boss.rules.canKill)} \`Dungeon deadly\`\n${getIcon(dungeon.boss.rules.allowHelpers)} \`helpers allowed\`\n\n**Unclocks**: ${getIcon(dungeon.boss.unlocks)} **${dungeon.boss.unlocks}**\n`;
+	const rules = `\` ${dungeon.rooms.length} Rooms\`\n ${getIcon(dungeon.boss.rules.canKill)} \`Dungeon deadly\`\n${getIcon(dungeon.boss.rules.allowHelpers, "icon")} \`helpers allowed\`\n\n**Unclocks**: ${getIcon(dungeon.boss.unlocks)} **${dungeon.boss.unlocks}**\n`;
 	const dungeonStats = `${getIcon("health")} \`Health: ${dungeon.boss.stats.health}\`\n ${getIcon("attack")} \`Attack: ${dungeon.boss.stats.attack}\`\n ${getIcon(dungeon.boss.stats.healing)} \`Healing\`\n`;
 	const bossRewards = `${getIcon("gold")} \`Gold: ${dungeon.boss.rewards.gold}\`\n ${getIcon("xp")} \`XP: ${dungeon.boss.rewards.xp}\`\n${getIcon(!!dungeon.boss.rewards.drop.length)} \`Loot drop\`\n\n   `;
 	const bossWeapons = dungeon.boss.bossWeapons.map(w => {
