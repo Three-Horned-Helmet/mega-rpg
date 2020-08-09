@@ -1,27 +1,27 @@
 const User = require("../../models/User");
 
-const handleRank = async (rankType, user)=> {
+const handleRank = async (rankType, currentServer, user)=> {
 	switch (rankType) {
 		case "xp":
-			return await getTop5Xp(user);
+			return await getTop5Xp(user, currentServer);
 		case "help":
-			return await getTop5Xp(user, "help");
+			return await getTop5Xp(user, currentServer, "help");
 		case "elo":
-			return await getTop5Elo(user);
+			return await getTop5Elo(user, currentServer);
 		case "quest":
-			return await getTop5Quest(user);
+			return await getTop5Quest(user, currentServer);
 		case "army":
-			return await getTop5Army(user);
+			return await getTop5Army(user, currentServer);
 		case "sfa":
-			return await getTop5Sfa(user);
+			return await getTop5Sfa(user, currentServer);
 		default:
-			return await getTop5Xp(user, "help");
+			return await getTop5Xp(user, currentServer, "help");
 	}
 };
 
-const getTop5Army = async (user)=>{
+const getTop5Army = async (user, currentServer = {})=>{
 	const allUsers = await User
-		.find({})
+		.find(currentServer)
 		.select(["account", "army", "hero"])
 		.sort({ "hero.currentExp":-1 })
 		.limit(500)
@@ -48,9 +48,10 @@ const getTop5Army = async (user)=>{
 	return formatted;
 };
 
-const getTop5Quest = async (user)=>{
+const getTop5Quest = async (user, currentServer = {})=>{
 
 	const allUsers = await User.aggregate([
+		{ $match: currentServer },
 		{
 			$addFields: {
 				completedQuestsLength: {
@@ -89,10 +90,10 @@ const getTop5Quest = async (user)=>{
 	return formatted;
 };
 
-const getTop5Elo = async (user)=> {
+const getTop5Elo = async (user, currentServer = {})=> {
 
 	const allUsers = await User
-		.find({})
+		.find(currentServer)
 		.select(["account", "hero"])
 		.sort({ "hero.elo":-1 })
 		.lean();
@@ -117,9 +118,9 @@ const getTop5Elo = async (user)=> {
 	return formatted;
 };
 
-const getTop5Xp = async (user, help = false) => {
+const getTop5Xp = async (user, currentServer = {}, help = false) => {
 	const allUsers = await User
-		.find({})
+		.find(currentServer)
 		.select(["account", "hero"])
 		.sort({ "hero.currentExp":-1 })
 		.lean();
@@ -141,16 +142,16 @@ const getTop5Xp = async (user, help = false) => {
 		formatted.push(`\`#${playerPosition}: ${user.account.username} --- hero lvl: ${user.hero.rank} - ${user.hero.currentExp} XP\``);
 	}
 
-	if (help) {
-		formatted.push("\n Available rankings are:\n `!rank xp - !rank army - !rank sfa - !rank quest - !rank elo` ");
+	if (help && Object.keys(currentServer).length === 0) {
+		formatted.push("\n Available rankings are:\n `!rank xp - !rank army - !rank sfa - !rank quest - !rank elo`\n `!rank server` for players on this server!");
 	}
 
 	return formatted;
 };
 
-const getTop5Sfa = async (user) => {
+const getTop5Sfa = async (user, currentServer = {}) => {
 	const allUsers = await User
-		.find({})
+		.find(currentServer)
 		.select(["account", "tower"])
 		.sort({ "tower.solo full-army.level":-1 })
 		.lean();
