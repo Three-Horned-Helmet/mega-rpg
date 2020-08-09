@@ -45,7 +45,7 @@ __Craft:__
 `!craft [item] [amount]` => Crafts the x amount of the specified item (!craft bronze sword 5)
 
 __Dailyprize:__
-`!dailyprize` => A daily prize that could be collected every 24 hours
+`!dailyPrize` => A daily prize that could be collected every 24 hours
 
 __Destroy:__
 `!destroy <buildingName> => Removes the specified building from your empire.
@@ -117,5 +117,5 @@ __Use:__
 `!use [itemName]` => Uses the specified item (consumable). (!use small healing potion)
 
 __Weeklyprize:__
-`!weeklyprize` => A weekly prize that could be collected every 7 days
+`!weeklyPrize` => A weekly prize that could be collected every 7 days
 Æ

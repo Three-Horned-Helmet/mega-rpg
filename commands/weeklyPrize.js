@@ -1,7 +1,7 @@
 const { handleWeekly } = require("../game/weeklyPrize");
 
 module.exports = {
-	name: "weeklyprize",
+	name: "weeklyPrize",
 	aliases: ["weekly"],
 	description: "Get weekly bonuses!",
 	async execute(message, args, user) {

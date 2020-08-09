@@ -4,12 +4,12 @@ const { getDailyPrize } = require("../_CONSTS/dailyPrize");
 const { getIcon } = require("../_CONSTS/icons");
 
 const handleDaily = async (user) => {
-	const onCooldownInfo = onCooldown("dailyprize", user);
+	const onCooldownInfo = onCooldown("dailyPrize", user);
 	if (onCooldownInfo.response) {
 		return onCooldownInfo.embed;
 	}
 	const now = new Date();
-	const lastClaimLessThanTwoDays = new Date(user.cooldowns.dailyprize + 1000 * 60 * 60 * 24 * 2) >= now;
+	const lastClaimLessThanTwoDays = new Date(user.cooldowns.dailyPrize + 1000 * 60 * 60 * 24 * 2) >= now;
 
 	let consecutiveDay = user.consecutivePrizes.dailyPrize;
 
@@ -22,7 +22,7 @@ const handleDaily = async (user) => {
 	}
 
 	const dailyPrizeResult = getDailyPrize(consecutiveDay);
-	user.setNewCooldown("dailyprize", now);
+	user.setNewCooldown("dailyPrize", now);
 	user.handleConsecutive(dailyPrizeResult, (consecutiveDay + 1), "dailyPrize");
 
 
@@ -31,7 +31,7 @@ const handleDaily = async (user) => {
 	return embededResult;
 };
 
-const generatePrizeEmbed = (result, consecutiveDay)=>{
+const generatePrizeEmbed = (result, consecutiveDay) => {
 	const sideColor = "#45b6fe";
 
 	const preTitle = " DAILY PRIZE  ";
@@ -43,7 +43,7 @@ const generatePrizeEmbed = (result, consecutiveDay)=>{
 
 	let valueField = "";
 
-	Object.keys(result).forEach(r=>{
+	Object.keys(result).forEach(r => {
 		valueField += `${getIcon(r)} ${r}: ${result[r]}\n`;
 	});
 
@@ -54,7 +54,7 @@ const generatePrizeEmbed = (result, consecutiveDay)=>{
 		.addFields(
 			{
 				name: "Reward:",
-				value:valueField,
+				value: valueField,
 				inline: true,
 			},
 		)

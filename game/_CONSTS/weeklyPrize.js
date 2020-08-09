@@ -1,6 +1,6 @@
-const weeklyprizes = {
+const weeklyPrizes = {
 	0: {
-		gold:200,
+		gold: 200,
 	},
 	1: {
 		gold: 1000,
@@ -29,8 +29,8 @@ const weeklyprizes = {
 	},
 };
 
-const getWeeklyPrize = (week)=>{
-	return weeklyprizes[week];
+const getWeeklyPrize = (week) => {
+	return weeklyPrizes[week];
 };
 
 module.exports = { getWeeklyPrize };
