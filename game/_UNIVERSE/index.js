@@ -4,8 +4,8 @@ const { mistyMountains } = require("./Misty Mountains");
 
 const worldLocations = {
 	"Grassy Plains": grassyPlains,
+	"Misty Mountains":mistyMountains,
 	"Deep Caves": deepCaves,
-	"Misty Mountains":mistyMountains
 };
 
 module.exports = { worldLocations };

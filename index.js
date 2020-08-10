@@ -2,11 +2,32 @@ require("dotenv").config();
 const fs = require("fs");
 const Discord = require("discord.js");
 const User = require("./models/User");
+const DBL = require("dblapi.js");
 // const { handleCaptcha } = require("./game/_GLOBAL_HELPERS/captcha");
 const { welcomeMessage } = require("./index-helpers/welcome-message");
 
 const token = process.env.DISCORD_TOKEN;
 const prefix = process.env.DISCORD_PREFIX;
+
+const dblToken = process.env.TOPGG_TOKEN;
+const dblPort = process.env.TOPGG_AUTH;
+const dblAuth = process.env.TOPGG_PORT;
+
+
+const dbl = new DBL(dblToken, { webhookPort: dblPort, webhookAuth: dblAuth });
+dbl.webhook.on("ready", hook => {
+	console.log(`Webhook running at http://${hook.hostname}:${hook.port}${hook.path}`);
+});
+dbl.webhook.on("vote", vote => {
+	console.log(`User with ID ${vote.user} just voted!`);
+});
+dbl.on("posted", () => {
+	console.log("Server count posted!");
+});
+
+dbl.on("error", e => {
+	console.log(`Oops! ${e}`);
+});
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
