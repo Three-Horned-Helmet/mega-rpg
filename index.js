@@ -2,32 +2,11 @@ require("dotenv").config();
 const fs = require("fs");
 const Discord = require("discord.js");
 const User = require("./models/User");
-const DBL = require("dblapi.js");
 // const { handleCaptcha } = require("./game/_GLOBAL_HELPERS/captcha");
-const { welcomeMessage } = require("./index-helpers/welcome-message");
+const { welcomeMessage, createNewUser } = require("./index-helpers");
 
 const token = process.env.DISCORD_TOKEN;
 const prefix = process.env.DISCORD_PREFIX;
-
-
-// TOP.gg webhook currently not working as expected
-/* const dblToken = process.env.TOPGG_TOKEN;
-const dblPort = process.env.TOPGG_PORT;
-const dblAuth = process.env.TOPGG_AUTH;
-const dbl = new DBL(dblToken, { webhookPort: dblPort, webhookAuth: dblAuth });
-dbl.webhook.on("ready", hook => {
-	console.log(`Webhook running at http://${hook.hostname}:${hook.port}${hook.path}`);
-});
-dbl.webhook.on("vote", vote => {
-	console.log(`User with ID ${vote.user} just voted!`);
-});
-dbl.on("posted", () => {
-	console.log("Server count posted!");
-});
-
-dbl.on("error", e => {
-	console.log(`Oops! ${e}`);
-}); */
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -98,7 +77,7 @@ client.on("message", async (message) => {
 	}
 	catch (err) {
 		console.error("error: ", err);
-		message.reply("Something went wrong finding the user in the database");
+		message.reply("Something went wrong when trying to find the user");
 	}
 
 	// creates new user if not exist
@@ -116,11 +95,7 @@ client.on("message", async (message) => {
 		return message.reply("You are banned from Mega-RPG. You can plead for an unban at our support servers");
 	}
 
-	// triggers captcha if:
-	// - only for 3% of all commands
-	// - not for testusers (unit tests)
-	// - !hunt, !collect, !raid or !fish is being triggered
-	// bug found - removed for now
+	// temporary out of order
 	/* if (Math.random() <= 0.03 && userProfile.account.testUser === false && ["hunt", "collect", "raid", "fish"].includes(command.name)) {
 		return handleCaptcha(message, userProfile, 3);
 	} */
@@ -148,22 +123,6 @@ client.on("message", async (message) => {
 });
 
 client.login(token);
-
-const createNewUser = (user, channelId) => {
-	if (user.bot) {
-		console.error("No bots allowed");
-		return;
-	}
-	const account = {
-		username: user.username,
-		userId: user.id,
-		servers:[channelId]
-	};
-	const newUser = new User({
-		account,
-	});
-	return newUser.save();
-};
 
 // Move somewhere else?
 String.prototype.capitalize = function() {

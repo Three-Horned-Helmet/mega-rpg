@@ -205,6 +205,10 @@ const userSchema = new Schema({
 				type: Number,
 				default: 0,
 			},
+			Carrots: {
+				type: Number,
+				default: 0,
+			}
 		},
 		dungeonKeys:{
 			"CM Key":{
