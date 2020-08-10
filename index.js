@@ -10,8 +10,8 @@ const token = process.env.DISCORD_TOKEN;
 const prefix = process.env.DISCORD_PREFIX;
 
 const dblToken = process.env.TOPGG_TOKEN;
-const dblPort = process.env.TOPGG_AUTH;
-const dblAuth = process.env.TOPGG_PORT;
+const dblPort = process.env.TOPGG_PORT;
+const dblAuth = process.env.TOPGG_AUTH;
 
 
 const dbl = new DBL(dblToken, { webhookPort: dblPort, webhookAuth: dblAuth });
