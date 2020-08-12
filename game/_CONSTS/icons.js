@@ -9,8 +9,8 @@ const icons = {
 
 	"copper ore":{ name: ":orange_circle:", icon: "🟠" },
 	"iron ore":{ name: ":white_circle:", icon: "⚪️" },
-	"mithril ore":{ name: ":blue_circle:", icon: "" },
-	"burite ore":{ name: ":purple_circle:", icon: "" },
+	"mithril ore":{ name: ":blue_circle:", icon: "🔵" },
+	"burite ore":{ name: ":purple_circle:", icon: "🟣" },
 	"obsidian ore":{ name: ":black_circle:", icon: "⚫️" },
 
 	"bronze bar":{ name: ":orange_square:", icon: "🟧" },
@@ -95,7 +95,9 @@ const icons = {
 	"quest": { name: ":boom:", icon:"💥" },
 	"weeklyPrizeStar":{ name:":star2:", icon:"🌟" },
 	"dailyPrizeStar": { name:":star:", icon: "⭐️" },
-	"carrot": { name:":carrot:", icon:"🥕" }
+	"Carrot": { name:":carrot:", icon:"🥕" },
+	"cooldown": { name: ":clock9:", icon:"🕘" },
+	"lottery": { name: ":money_with_wings:", icon:"💸" }
 };
 /**
  * Returns an emoji if configured in icons-object or a danger symbol if missing

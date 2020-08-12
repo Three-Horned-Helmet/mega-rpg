@@ -1,42 +1,29 @@
-const Discord = require("discord.js");
 const Lottery = require("../../models/Lottery");
+const { getIcon } = require("../_CONSTS/icons");
+const { PRIZE_FOR_LOTTERY_TICKET, MAX_ALLOWED_TICKETS } = require("./CONTS");
+const { findOrSetupLottery } = require("./helper");
+const { generateLotteryPurchaseEmbed, generateLotteryInformationEmbed } = require("./embedGenerator");
 
-const PRIZE_FOR_LOTTERY_TICKET = 80;
-const MAX_ALLOWED_TICKETS = 100;
-const DEFAULT_GOLD_AWARD = 500;
+/* todo. comments, use/eat/consumables, plural Carrot, give money prize when user wins, fix carrot stuff */
 
-
-const handleLottery = async (user, amountOfTickets)=>{
-	const amount = Array.isArray(amountOfTickets) ? parseInt(amountOfTickets[0]) : parseInt(amount);
+const handleLottery = async (user, amountOfTickets = 1)=>{
+	const amount = amountOfTickets.length ? parseInt(amountOfTickets[0]) : 1;
 	const prizeToPay = amount * PRIZE_FOR_LOTTERY_TICKET;
 	const { userId, username } = user.account;
-	const now = Date.now();
+
 
 	// checks if player have enough gold
 	if (user.resources.gold <= prizeToPay) {
-		return `Insufficent funds! \n You need ICON ${prizeToPay} gold when buying ${amount} tickets!`;
+		return `Insufficent funds! \n You need ${getIcon("gold")} ${prizeToPay} gold when buying ${amount} tickets!`;
 	}
 
 
 	// finds the last created lottery
-	let latestLotteryRaffle;
-	try {
-		latestLotteryRaffle = await Lottery.findOne().sort({ created_at: -1 });
-	}
-	catch (err) {
-		console.error("Error: ", err);
-	}
-
-	// creates a lottery if none found
+	const latestLotteryRaffle = await findOrSetupLottery();
 	if (!latestLotteryRaffle) {
-		latestLotteryRaffle = await createNewLottery();
+		return "The Lottery is currently down for maintance";
 	}
 
-	// creates a lottery if the previous one has been claimed or time have run out
-	if (latestLotteryRaffle.claimed || latestLotteryRaffle.nextDrawing.getTime() <= now) {
-		await latestLotteryRaffle.determineWinner();
-		latestLotteryRaffle = await createNewLottery();
-	}
 
 	// checks if the player have more tickets than allowed
 	if (latestLotteryRaffle.currentContestors.length) {
@@ -63,68 +50,29 @@ const handleLottery = async (user, amountOfTickets)=>{
 	return purchaseEmbed;
 
 };
+const getLotteryInformation = async ()=>{
 
-module.exports = { handleLottery };
+	// This to check if winner needs to be picked
+	await findOrSetupLottery();
+	let latestLotteryRaffles;
+	try {
+		latestLotteryRaffles = await Lottery
+			.find()
+			.limit(2)
+			.sort({ nextDrawing: -1 });
+	}
+	catch (err) {
+		console.error("Error: ", err);
+	}
+	if (!latestLotteryRaffles || latestLotteryRaffles.length === 0) {
+		return "The Lottery is currently down for maintance";
+	}
 
+	const lotteryInformationEmbed = generateLotteryInformationEmbed(latestLotteryRaffles);
 
-const generateLotteryPurchaseEmbed = (username, userId, amount, latestLotteryRaffle)=>{
-	const chanceToWin = getWinnerPercentage(userId, latestLotteryRaffle);
-	const prizes = getLotteryPrizePool(latestLotteryRaffle);
-	const timeRemaining = getDrawTime(latestLotteryRaffle);
-
-	const fields = [
-		{
-			name: "Current Prizes",
-			value: prizes,
-			inline: true,
-		},
-		{
-			name: "Current chance to win",
-			value: chanceToWin,
-			inline: false,
-		},
-
-	];
-
-
-	const purchaseEmbed = new Discord.MessageEmbed()
-
-		.setColor("#0099ff")
-		.setTitle(`${username} purchased ${amount} of lottery tickets!`)
-		.addFields(...fields)
-		.setFooter(`The winner will be picked at ${timeRemaining}`);
-	return purchaseEmbed;
-};
-
-const getDrawTime = lottery => {
-	return "Probably one day";
-};
-
-const getWinnerPercentage = (userId, lottery)=>{
-	const user = lottery.currentContestors.find(c=> c.userId === userId);
-	const base = user.amount;
-	const total = lottery.currentContestors.reduce((acc, curr)=>{
-		acc + curr.amount;
-	}, 0);
-	return (base / total * 100).toFixed(2);
+	return lotteryInformationEmbed;
 
 };
 
-const getLotteryPrizePool = (lottery)=>{
-	const carrot = lottery.prizePool.Carrot ? `\n ${lottery.prizePool.Carrot} Icon` : "";
-	return `${lottery.prizePool.gold} Icon ${carrot} `;
-};
+module.exports = { handleLottery, getLotteryInformation };
 
-const createNewLottery = async ()=>{
-	const Carrots = Math.round(Math.random());
-	const lottery = new Lottery({
-		prizePool: {
-			gold: DEFAULT_GOLD_AWARD,
-			Carrots
-		},
-		// 24 hours from now
-		nextDrawing: new Date(Date.now() + 86400000),
-
-	});
-	return lottery.save();
-};

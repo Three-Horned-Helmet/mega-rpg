@@ -26,7 +26,8 @@ const handleFish = async (user) => {
 
 	const result = calculateFishResult(fish);
 
-	user.handleFishResult(result.gold, now);
+	user.setNewCooldown("fish", now);
+	user.gainManyResources({ gold: result.gold });
 	await user.save();
 
 	return result.response;

@@ -205,7 +205,7 @@ const userSchema = new Schema({
 				type: Number,
 				default: 0,
 			},
-			Carrots: {
+			Carrot: {
 				type: Number,
 				default: 0,
 			}
@@ -363,11 +363,6 @@ userSchema.methods.refreshQuestPve = async function(questName, pveIndex = 0) {
 	this.quests[questIndex].pve[pveIndex].completed = false;
 
 	this.markModified(`quests.${questIndex}.pve.${pveIndex}.completed`);
-};
-
-userSchema.methods.gainResource = function(resource, quantity) {
-	this.resources[resource] += quantity;
-	return this.save();
 };
 
 userSchema.methods.gainManyResources = function(obj) {
@@ -556,13 +551,6 @@ userSchema.methods.removeItem = function(item, hero, amount = 1) {
 	else {
 		this.army.armory[itemType][item.name] -= amount;
 		this.markModified(`army.armory.${itemType}.${item.name}`);
-	}
-};
-
-userSchema.methods.handleFishResult = function(goldresult, now) {
-	this.cooldowns.fish = now;
-	if(goldresult > 0) {
-		this.resources.gold += goldresult;
 	}
 };
 

@@ -2,6 +2,7 @@ const consumablesObject = require("../game/use/consumables-object");
 
 module.exports = {
 	name: "use",
+	alias:["eat"],
 	description: "Use any consumables like healing potions from your inventory. Type `!army` to see your inventory. Try `!use small healing potion` to use a healing potion. You need a shop to buy more consumables.",
 	shortcuts: {
 		shp: "small healing potion",

@@ -12,7 +12,7 @@ module.exports = {
 
 
 const generateVoteEmbed = ()=>{
-	const carrotIcon = getIcon("carrot");
+	const carrotIcon = getIcon("Carrot");
 	const healIcon = getIcon("Large Healing Potion");
 	const minibossIcon = getIcon("miniboss");
 	const dungeonIcon = getIcon("dungeon");

@@ -12,10 +12,6 @@ else {
 const { Schema } = mongoose;
 
 const lotterySchema = new Schema({
-	claimed: {
-		type: Boolean,
-		default:false
-	},
 	previousWinner: {
 		username: String,
 		userId: String,
@@ -23,7 +19,7 @@ const lotterySchema = new Schema({
 	},
 	prizePool: {
 		gold: Number,
-		Carrots: Number,
+		Carrot: Number,
 	},
 	currentContestors: [Object],
 	nextDrawing: Date,
@@ -59,7 +55,6 @@ lotterySchema.methods.determineWinner = function() {
 	if (!this.currentContestors || Object.keys(this.currentContestors).length === 0) {
 		return;
 	}
-	this.claimed = true;
 	const chanceArray = [];
 	for (const contestor of Object.keys(this.currentContestors)) {
 		for (let i = 0; i < this.currentContestors[contestor].ticketAmount; i += 1) {
@@ -70,8 +65,7 @@ lotterySchema.methods.determineWinner = function() {
 
 	this.previousWinner = {
 		username: this.currentContestors[winnerId].username,
-		userId: winnerId,
-		prize: ""
+		userId: this.currentContestors[winnerId].userId,
 	};
 
 	return this.save();
