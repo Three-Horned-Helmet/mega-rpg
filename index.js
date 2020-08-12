@@ -2,7 +2,7 @@ require("dotenv").config();
 const fs = require("fs");
 const Discord = require("discord.js");
 const User = require("./models/User");
-const DBL = require("dblapi.js");
+// const DBL = require("dblapi.js");
 // const { handleCaptcha } = require("./game/_GLOBAL_HELPERS/captcha");
 const { welcomeMessage } = require("./index-helpers/welcome-message");
 
