@@ -12,10 +12,13 @@ module.exports = {
 
 
 const generateVoteEmbed = ()=>{
-	const carrotIcon = getIcon("Carrot");
+
 	const healIcon = getIcon("Large Healing Potion");
 	const minibossIcon = getIcon("miniboss");
 	const dungeonIcon = getIcon("dungeon");
+
+	// Will be added later
+	// const carrotInformation = `**1 ${getIcon("Carrot")} Carrot**\n `
 
 	const isWeekend = new Date().getDay() % 6 == 0;
 	let dungeonInfo = "**Dungeon cooldown reset!**";
@@ -27,7 +30,7 @@ const generateVoteEmbed = ()=>{
 
 		.setColor("#0099ff")
 		.setTitle("Vote for Mega RPG and get rewards!")
-		.setDescription(`**1 ${carrotIcon} Carrot**\n **1 ${healIcon} heal potion** \n ${minibossIcon} ** Miniboss cooldown reset** \n ${dungeonIcon} ${dungeonInfo}  `)
+		.setDescription(`**1 ${healIcon} Heal potion** \n ${minibossIcon} ** Miniboss cooldown reset** \n ${dungeonIcon} ${dungeonInfo}  `)
 		.setURL("https://top.gg/bot/721024429345341560/vote")
 		.setFooter("You can vote every 12 hour");
 	return voteEmbed;

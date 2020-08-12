@@ -95,16 +95,6 @@ const consumablesObject = {
 			return await useHealingPotion(user, item);
 		},
 	},
-	Carrot: {
-		name: "Carrot",
-		visibleInShop:false,
-		healingValue: null,
-		price: null,
-		requirement: null,
-		execute: async (user, item) =>{
-			return await consumeCarrot(user, item);
-		},
-	},
 };
 
 const useHealingPotion = async (user, item) =>{
@@ -119,37 +109,5 @@ const useHealingPotion = async (user, item) =>{
 	return `You drank a ${item.name} and your hero has ${updatedUser.hero.currentHealth}/${updatedUser.hero.health} hp left`;
 };
 
-const consumeCarrot = async (user, item)=>{
-	if (user.hero.inventory[item] < 1) {
-		return `You don't have any ${item} to consume`;
-	}
-	// if already under influence of carrot perk, return false
-	const perks = [
-		{ cooldownReduction:{
-			chance: 5,
-			name: "Cooldown reduction",
-			reduction: ()=> Math.random() * 0.49 + 0.5,
-			durationInMs: ()=> Math.floor(Math.random() * 5 + 2) * 1000 * 60
-		} },
-		{ randomCooldownReset:{
-			chance: 5,
-			name: "Random Cooldown Reset",
-			reduction: ()=> Math.random() * 0.49 + 0.5,
-			durationInMs: ()=> Math.floor(Math.random() * 5 + 2) * 1000 * 60
-		} },
-		{ randomBuildingUpgrade:{
-			chance: 5,
-			name: "Random building upgrade for free",
-		} },
-		{ goldPrize: {
-			chance: 40,
-			name: "Gold Prize",
-		} },
-		{ resourcePrize:{
-			chance: 30,
-			name: "Resource Prize",
-		} }
-	];
-};
 
 module.exports = consumablesObject;

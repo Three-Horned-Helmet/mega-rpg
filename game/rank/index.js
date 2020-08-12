@@ -34,7 +34,7 @@ const getTop5Army = async (user, currentServer = {})=>{
 
 	const formatted = top5.map((p, i)=>{
 		const first = i === 0 ? "👮‍♀️" : "";
-		return `\`#${i + 1}: ${first}${p.name}${first} --- ${p.total} soldiers\``;
+		return `\`#${i + 1}: ${first}${p.name}${first} --- ${p.total} army power\``;
 	});
 	if (!top5.some(player=> player.userId === user.account.userId)) {
 		let playerPosition;
@@ -43,7 +43,7 @@ const getTop5Army = async (user, currentServer = {})=>{
 				playerPosition = i + 1;
 			}
 		});
-		formatted.push(`\`#${playerPosition}: ${user.account.username} --- ${getAllSoldiers(user.army.units)} soldiers\``);
+		formatted.push(`\`#${playerPosition}: ${user.account.username} --- ${getAllSoldiers(user.army.units)} army power\``);
 	}
 	return formatted;
 };

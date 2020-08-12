@@ -4,7 +4,7 @@ const { PRIZE_FOR_LOTTERY_TICKET, MAX_ALLOWED_TICKETS } = require("./CONTS");
 const { findOrSetupLottery } = require("./helper");
 const { generateLotteryPurchaseEmbed, generateLotteryInformationEmbed } = require("./embedGenerator");
 
-/* todo. comments, use/eat/consumables, plural Carrot, give money prize when user wins, fix carrot stuff */
+/* Todo. Add carrots as consumable object */
 
 const handleLottery = async (user, amountOfTickets = 1)=>{
 	const amount = amountOfTickets.length ? parseInt(amountOfTickets[0]) : 1;

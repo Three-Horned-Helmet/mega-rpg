@@ -4,17 +4,17 @@ const { msToHumanTime } = require("../_GLOBAL_HELPERS/index");
 // in miliseconds
 // alphabetical
 const cooldowns = {
-	dailyprize:(1000 * 60 * 60 * 24),
+	dailyPrize: (1000 * 60 * 60 * 24),
 	duel: (1000 * 60 * 2),
-	dungeon:(1000 * 60 * 60 * 12),
+	dungeon: (1000 * 60 * 60 * 12),
 	explore: (1000 * 30),
-	fish:(1000 * 15),
-	hunt:(1000 * 20),
-	miniboss:(1000 * 60 * 60 * 3),
-	race:(1000 * 60 * 60 * 24),
-	raid:(1000 * 60 * 4),
+	fish: (1000 * 15),
+	hunt: (1000 * 20),
+	miniboss: (1000 * 60 * 60 * 3),
+	race: (1000 * 60 * 60 * 24),
+	raid: (1000 * 60 * 4),
 	tower: (1000 * 60 * 2),
-	weeklyprize:(1000 * 60 * 60 * 24 * 7),
+	weeklyPrize: (1000 * 60 * 60 * 24 * 7),
 };
 
 
@@ -33,7 +33,7 @@ const cooldowns = {
 	message: STRING eg: "hunt is on cooldown! 42 seconds remaining until you can perform hunt",
 	embed: OBJECT Discord formatted response (pretty af)
 } */
-const onCooldown = (actionType, user)=>{
+const onCooldown = (actionType, user) => {
 	if (!actionType || !user) {
 		console.error("Missing arguments ");
 		return null;
@@ -58,7 +58,7 @@ const onCooldown = (actionType, user)=>{
 		const timeLeftFormatted = msToHumanTime(timeLeftInMs);
 
 		return {
-			response:true,
+			response: true,
 			timeLeftInSec,
 			timeLeftInMs,
 			timeLeftFormatted,
@@ -67,13 +67,13 @@ const onCooldown = (actionType, user)=>{
 		};
 	}
 	return {
-		response:false,
+		response: false,
 	};
 
 };
 
 // generates a discord embed for when the user tries to perform an action that is in cooldown
-const generateSingleCdEmbed = (timeLeftInMs, user) =>{
+const generateSingleCdEmbed = (timeLeftInMs, user) => {
 	const timeLeftSentence = timeLeftInMs > 60000 ?
 		`You can't use this command. Cooldown is ${msToHumanTime(timeLeftInMs)}`
 		: `You can't use this command for ${Math.ceil(timeLeftInMs / 1000)} seconds`;
@@ -97,16 +97,16 @@ const generateSingleCdEmbed = (timeLeftInMs, user) =>{
 };
 
 // generates a discord embed with all the active cooldowns a user have
-const generateAllCdEmbed = (user)=>{
+const generateAllCdEmbed = (user) => {
 	const { username } = user.account;
 	const cooldownNames = Object.keys(cooldowns);
-	const allOnCoolDowns = cooldownNames.map(c=>{
+	const allOnCoolDowns = cooldownNames.map(c => {
 		const info = onCooldown(c, user);
 		return info.response ? info.timeLeftInMs : false;
 	});
 
 	const status = allOnCoolDowns
-		.map((c, i)=>{
+		.map((c, i) => {
 			const formattedName = `${"`"} ${cooldownNames[i][0].toUpperCase() + cooldownNames[i].slice(1)} ${"`"}`;
 			if (!c) {
 				return `✅ ~-~ ${formattedName}`;

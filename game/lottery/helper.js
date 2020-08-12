@@ -1,5 +1,6 @@
 const { getIcon } = require("../_CONSTS/icons");
 const Lottery = require("../../models/Lottery");
+const User = require("../../models/User");
 const { DEFAULT_GOLD_AWARD } = require("./CONTS");
 
 const findOrSetupLottery = async ()=>{
@@ -20,7 +21,12 @@ const findOrSetupLottery = async ()=>{
 	}
 	// creates a lottery if the previous one has been claimed or time have run out
 	if (latestLotteryRaffle.nextDrawing.getTime() <= now) {
-		await latestLotteryRaffle.determineWinner();
+		const previousLotteryResult = await latestLotteryRaffle.determineWinner();
+		if (previousLotteryResult.previousWinner.userId) {
+			const previousWinner = await User.findOne({ "account.userId": previousLotteryResult.previousWinner.userId });
+			await previousWinner.gainManyResources(previousLotteryResult.prizePool);
+		}
+
 		latestLotteryRaffle = await createNewLottery();
 	}
 
@@ -29,6 +35,9 @@ const findOrSetupLottery = async ()=>{
 
 
 const getWinnerPercentage = (userId, lottery)=>{
+	if (!lottery || lottery.currentContestors.length === 0) {
+		return;
+	}
 	const user = lottery.currentContestors.find(c=> c.userId === userId);
 	const base = user.ticketAmount;
 	const total = lottery.currentContestors.reduce((acc, curr)=>{
@@ -38,16 +47,18 @@ const getWinnerPercentage = (userId, lottery)=>{
 };
 
 const getLotteryPrizePool = (lottery)=>{
-	const carrot = lottery.prizePool.Carrot ? `\n ${getIcon("Carrot")}` : "";
-	return `${getIcon("gold")} ${lottery.prizePool.gold} ${carrot} `;
+	// will be added later (add to end of return statement)
+	// const carrot = lottery.prizePool.Carrot ? `\n ${getIcon("Carrot")}` : "";
+	return `${getIcon("gold")} ${lottery.prizePool.gold} `;
 };
 
 const createNewLottery = async ()=>{
-	const Carrot = Math.round(Math.random());
+	// will be added later
+	// const Carrot = Math.round(Math.random());
 	const lottery = new Lottery({
 		prizePool: {
 			gold: DEFAULT_GOLD_AWARD,
-			Carrot
+			// Carrot
 		},
 		// 24 hours from now
 		nextDrawing: new Date(Date.now() + 86400000),
@@ -57,24 +68,28 @@ const createNewLottery = async ()=>{
 };
 
 const getPreviousLotteryInformation = lottery => {
-	if (!lottery) {
+	if (!lottery || !lottery.previousWinner || lottery.currentContestors.length === 0) {
 		return `${getIcon("miniboss")} C'Thun`;
 	}
 	const { previousWinner, prizePool } = lottery;
 
 	const goldPrize = `${getIcon("gold")} ${prizePool.gold}`;
-	const carrot = prizePool.Carrot ? `\n${getIcon("Carrot")} ${prizePool.Carrot}` : "";
+	// will be added later
+	// const carrot = prizePool.Carrot ? `\n${getIcon("Carrot")} ${prizePool.Carrot}` : "";
 
 	const probability = getWinnerPercentage(previousWinner.userId, lottery);
 	const result = [`${previousWinner.username} (${probability} chance)`, `${goldPrize}`];
-	if (carrot) {
+	/* if (carrot) {
 		result[1] += carrot;
-	}
+	} */
 
 	return result;
 };
 
 const getCurrentLotteryInformation = lottery =>{
+	if (!lottery || lottery.currentContestors.length === 0) {
+		return "None";
+	}
 	const contestors = lottery.currentContestors.map(c=> {
 		return `**${c.username}** ${getWinnerPercentage(c.userId, lottery)}`;
 	});

@@ -14,7 +14,7 @@ const handleRaid = async (user, place = null) => {
 	}
 
 	// checks for too low hp
-	if (user.hero.currentHealth < user.hero.health * 0.05) {
+	if (user.hero.currentHealth < user.hero.health * 0.05 && user.hero.currentHealth < 50) {
 		return `Your hero's health is too low (**${user.hero.currentHealth}**)`;
 	}
 

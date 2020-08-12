@@ -10,11 +10,12 @@ const generateLotteryInformationEmbed = (lotteries)=>{
 	const previousLotteryInfo = getPreviousLotteryInformation(lotteries[1]);
 	const currentLotteryInfo = getCurrentLotteryInformation(lotteries[0]);
 
-
 	const title = `${getIcon("lottery")} **LOTTERY** ${getIcon("lottery")}`;
 
-	const description = `Time remaining until winner is picked:\n${getDrawTime(lotteries[0])}`;
-	const footer = "You can buy tickets in the shop: !buy lottery 5";
+	const description = [
+		`Prize for ticket: ${getIcon("gold")} ${PRIZE_FOR_LOTTERY_TICKET} \nCurrent Prizepool: ${getLotteryPrizePool(lotteries[0])}\n`,
+		`Time remaining until winner is picked:\n${getDrawTime(lotteries[0])}`];
+	const footer = "How to buy tickets: !buy lottery 5";
 	const fields = [
 		{
 			name: "Previous lottery Winner",
