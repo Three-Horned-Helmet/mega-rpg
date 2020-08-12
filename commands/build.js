@@ -23,7 +23,7 @@ module.exports = {
 
 		// Remove the user.empire.find stuff to make it possible to build several of the same building
 		// || (building && user.empire.find(b => b.name === building.name))
-		if(args[args.length - 1] === "-u") {
+		if(args[args.length - 1] === "-u" && building) {
 			const usersBuildings = user.empire.filter(b => b.name === building.name).sort((a, b) => a.level - b.level);
 			if(usersBuildings.length > 0) {
 				args[args.length - 1] = usersBuildings[0].position.join(".");
