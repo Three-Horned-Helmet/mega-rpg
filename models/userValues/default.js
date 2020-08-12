@@ -66,7 +66,7 @@ const statistics = {
 		type: Number,
 		default: 0,
 	},
-	daily: {
+	dailyPrize: {
 		type: Number,
 		default: 0,
 	},
@@ -162,7 +162,7 @@ const statistics = {
 		type: Number,
 		default: 0,
 	},
-	weekly: {
+	weeklyPrize: {
 		type: Number,
 		default: 0,
 	},
