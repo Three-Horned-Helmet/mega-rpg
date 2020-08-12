@@ -89,7 +89,6 @@ const handleHunt = async (user, place = null) => {
 
 	// calculates result
 	const huntResult = calculatePveHero(user, placeInfo);
-	console.log(huntResult.damageLost, "huntResult.damageLost");
 	// saves to database
 	let questIntro;
 	const now = new Date();

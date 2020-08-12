@@ -27,7 +27,6 @@ const calculatePveHero = (user, npc) => {
 		win,
 		damageLost,
 	};
-	console.log(pveResult);
 
 	if (win) {
 		pveResult.resourceReward = Object.keys(npc.rewards).reduce((acc, cur) => {
