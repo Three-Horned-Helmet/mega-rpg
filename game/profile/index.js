@@ -84,7 +84,7 @@ const prettifyUser = async (message, user, avatar) => {
 };
 
 const addInventoryValueToProfile = (item, hero) => {
-	return hero.inventory[item] ? `${getIcon(item)} item: ${hero.inventory[item]}\n\n` : "";
+	return hero.inventory[item] ? `${getIcon(item)} ${item}: ${hero.inventory[item]}\n\n` : "";
 };
 
 module.exports = { prettifyUser };
