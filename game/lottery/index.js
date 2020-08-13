@@ -12,7 +12,7 @@ const handlePurchaseLottery = async (user, amountOfTickets = 1)=>{
 
 
 	// checks if player have enough gold and shop level x
-	const cantBeBought = validatePurchase(user, prizeToPay);
+	const cantBeBought = validatePurchase(user, prizeToPay, amount);
 	if (cantBeBought) {
 		return cantBeBought;
 	}
