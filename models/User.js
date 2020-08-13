@@ -739,7 +739,8 @@ userSchema.methods.changeTowerLevel = function(towerCategory, newLevel) {
 
 // will return between 33% and 99% progress of level
 const getNewCurrentExpAfterDeath = (oneLevelDown, currentLevel)=>{
-	return randomIntBetweenMinMax(oneLevelDown + ((currentLevel - oneLevelDown) / 3), currentLevel - 1);
+	const difference = currentLevel - oneLevelDown
+	return randomIntBetweenMinMax(oneLevelDown + (difference / 3), currentLevel - (difference/3));
 };
 
 
