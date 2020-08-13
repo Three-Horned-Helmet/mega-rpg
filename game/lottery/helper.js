@@ -110,7 +110,6 @@ const validatePurchase = (user, prizeToPay) => {
 		return "You need shop level 2 to buy lottery tickets";
 	}
 	return null;
-
 };
 
 
