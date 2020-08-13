@@ -100,7 +100,7 @@ const getCurrentLotteryInformation = lottery =>{
 	return contestors;
 };
 
-const validatePurchase = (user, prizeToPay) => {
+const validatePurchase = (user, prizeToPay, amount) => {
 	if (user.resources.gold <= prizeToPay) {
 		return `Insufficent funds! \n You need ${getIcon("gold")} ${prizeToPay} gold when buying ${amount} tickets!`;
 	}
