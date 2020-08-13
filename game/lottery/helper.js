@@ -100,5 +100,18 @@ const getCurrentLotteryInformation = lottery =>{
 	return contestors;
 };
 
+const validatePurchase = (user, prizeToPay) => {
+	if (user.resources.gold <= prizeToPay) {
+		return `Insufficent funds! \n You need ${getIcon("gold")} ${prizeToPay} gold when buying ${amount} tickets!`;
+	}
 
-module.exports = { findOrSetupLottery, getWinnerPercentage, getLotteryPrizePool, getPreviousLotteryInformation, getCurrentLotteryInformation };
+	// User has high enough shop level?
+	if(!user.empire.find(b => b.name === "shop" && b.level >= 2)) {
+		return "You need shop level 2 to buy lottery tickets";
+	}
+	return null;
+
+};
+
+
+module.exports = { findOrSetupLottery, getWinnerPercentage, getLotteryPrizePool, getPreviousLotteryInformation, getCurrentLotteryInformation, validatePurchase };

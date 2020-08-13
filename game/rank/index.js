@@ -3,23 +3,23 @@ const User = require("../../models/User");
 const handleRank = async (rankType, currentServer, user)=> {
 	switch (rankType) {
 		case "xp":
-			return await getTop5Xp(user, currentServer);
+			return await getTop10Xp(user, currentServer);
 		case "help":
-			return await getTop5Xp(user, currentServer, "help");
+			return await getTop10Xp(user, currentServer, "help");
 		case "elo":
-			return await getTop5Elo(user, currentServer);
+			return await getTop10Elo(user, currentServer);
 		case "quest":
-			return await getTop5Quest(user, currentServer);
+			return await getTop10Quest(user, currentServer);
 		case "army":
-			return await getTop5Army(user, currentServer);
+			return await getTop10Army(user, currentServer);
 		case "sfa":
-			return await getTop5Sfa(user, currentServer);
+			return await getTop10Sfa(user, currentServer);
 		default:
-			return await getTop5Xp(user, currentServer, "help");
+			return await getTop10Xp(user, currentServer, "help");
 	}
 };
 
-const getTop5Army = async (user, currentServer = {})=>{
+const getTop10Army = async (user, currentServer = {})=>{
 	const allUsers = await User
 		.find(currentServer)
 		.select(["account", "army", "hero"])
@@ -29,14 +29,14 @@ const getTop5Army = async (user, currentServer = {})=>{
 	const sortedPlayers = allUsers.map(p=>{
 		return { name: p.account.username, userId: p.account.userId, total:  getAllSoldiers(p.army.units) } ;
 	});
-	const top5 = sortedPlayers.slice(0, 5);
+	const top10 = sortedPlayers.slice(0, 10);
 
 
-	const formatted = top5.map((p, i)=>{
+	const formatted = top10.map((p, i)=>{
 		const first = i === 0 ? "👮‍♀️" : "";
 		return `\`#${i + 1}: ${first}${p.name}${first} --- ${p.total} army power\``;
 	});
-	if (!top5.some(player=> player.userId === user.account.userId)) {
+	if (!top10.some(player=> player.userId === user.account.userId)) {
 		let playerPosition;
 		sortedPlayers.forEach((p, i)=>{
 			if (p.userId === user.account.userId) {
@@ -48,7 +48,7 @@ const getTop5Army = async (user, currentServer = {})=>{
 	return formatted;
 };
 
-const getTop5Quest = async (user, currentServer = {})=>{
+const getTop10Quest = async (user, currentServer = {})=>{
 
 	const allUsers = await User.aggregate([
 		{ $match: currentServer },
@@ -72,13 +72,13 @@ const getTop5Quest = async (user, currentServer = {})=>{
 		}
 	]);
 
-	const top5 = allUsers.slice(0, 5);
+	const top10 = allUsers.slice(0, 10);
 
-	const formatted = top5.map((p, i)=>{
+	const formatted = top10.map((p, i)=>{
 		const first = i === 0 ? "🔥" : "";
 		return `\`#${i + 1}: ${first}${p.account.username}${first} --- ${p.completedQuests.length} \``;
 	});
-	if (!top5.some(player=> player.account.userId === user.account.userId)) {
+	if (!top10.some(player=> player.account.userId === user.account.userId)) {
 		let playerPosition;
 		allUsers.forEach((p, i)=>{
 			if (p.account.userId === user.account.userId) {
@@ -90,7 +90,7 @@ const getTop5Quest = async (user, currentServer = {})=>{
 	return formatted;
 };
 
-const getTop5Elo = async (user, currentServer = {})=> {
+const getTop10Elo = async (user, currentServer = {})=> {
 
 	const allUsers = await User
 		.find(currentServer)
@@ -98,14 +98,14 @@ const getTop5Elo = async (user, currentServer = {})=> {
 		.sort({ "hero.elo":-1 })
 		.lean();
 
-	const top5 = allUsers.slice(0, 5);
+	const top10 = allUsers.slice(0, 10);
 
-	const formatted = top5.map((p, i)=>{
+	const formatted = top10.map((p, i)=>{
 		const first = i === 0 ? "🎖" : "";
 		return `\`#${i + 1}: ${first}${p.account.username}${first} --- ${p.hero.elo} \``;
 	});
 
-	if (!top5.some(player=> player.account.userId === user.account.userId)) {
+	if (!top10.some(player=> player.account.userId === user.account.userId)) {
 		let playerPosition;
 		allUsers.forEach((p, i)=>{
 			if (p.account.userId === user.account.userId) {
@@ -118,21 +118,21 @@ const getTop5Elo = async (user, currentServer = {})=> {
 	return formatted;
 };
 
-const getTop5Xp = async (user, currentServer = {}, help = false) => {
+const getTop10Xp = async (user, currentServer = {}, help = false) => {
 	const allUsers = await User
 		.find(currentServer)
 		.select(["account", "hero"])
 		.sort({ "hero.currentExp":-1 })
 		.lean();
 
-	const top5 = allUsers.slice(0, 5);
+	const top10 = allUsers.slice(0, 10);
 
-	const formatted = top5.map((p, i)=>{
+	const formatted = top10.map((p, i)=>{
 		const first = i === 0 ? "💎" : "";
 		return `\`#${i + 1}: ${first}${p.account.username}${first} --- hero lvl: ${p.hero.rank} - ${p.hero.currentExp} XP\``;
 	});
 
-	if (!top5.some(player=> player.account.userId === user.account.userId)) {
+	if (!top10.some(player=> player.account.userId === user.account.userId)) {
 		let playerPosition;
 		allUsers.forEach((p, i)=>{
 			if (p.account.userId === user.account.userId) {
@@ -149,21 +149,21 @@ const getTop5Xp = async (user, currentServer = {}, help = false) => {
 	return formatted;
 };
 
-const getTop5Sfa = async (user, currentServer = {}) => {
+const getTop10Sfa = async (user, currentServer = {}) => {
 	const allUsers = await User
 		.find(currentServer)
 		.select(["account", "tower"])
 		.sort({ "tower.solo full-army.level":-1 })
 		.lean();
 
-	const top5 = allUsers.slice(0, 5);
+	const top10 = allUsers.slice(0, 10);
 
-	const formatted = top5.map((p, i)=>{
+	const formatted = top10.map((p, i)=>{
 		const first = i === 0 ? "💎" : "";
 		return `\`#${i + 1}: ${first}${p.account.username}${first} --- tower lvl: ${p.tower["solo full-army"].level}\``;
 	});
 
-	if (!top5.some(player=> player.account.userId === user.account.userId)) {
+	if (!top10.some(player=> player.account.userId === user.account.userId)) {
 		let playerPosition;
 		allUsers.forEach((p, i)=>{
 			if (p.account.userId === user.account.userId) {

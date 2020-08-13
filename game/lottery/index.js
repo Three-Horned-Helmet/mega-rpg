@@ -1,20 +1,20 @@
 const Lottery = require("../../models/Lottery");
-const { getIcon } = require("../_CONSTS/icons");
 const { PRIZE_FOR_LOTTERY_TICKET, MAX_ALLOWED_TICKETS } = require("./CONTS");
-const { findOrSetupLottery } = require("./helper");
+const { findOrSetupLottery, validatePurchase } = require("./helper");
 const { generateLotteryPurchaseEmbed, generateLotteryInformationEmbed } = require("./embedGenerator");
 
 /* Todo. Add carrots as consumable object */
 
-const handleLottery = async (user, amountOfTickets = 1)=>{
-	const amount = amountOfTickets.length ? parseInt(amountOfTickets[0]) : 1;
+const handlePurchaseLottery = async (user, amountOfTickets = 1)=>{
+	const amount = amountOfTickets.length ? Math.abs(parseInt(amountOfTickets[0])) : 1;
 	const prizeToPay = amount * PRIZE_FOR_LOTTERY_TICKET;
 	const { userId, username } = user.account;
 
 
-	// checks if player have enough gold
-	if (user.resources.gold <= prizeToPay) {
-		return `Insufficent funds! \n You need ${getIcon("gold")} ${prizeToPay} gold when buying ${amount} tickets!`;
+	// checks if player have enough gold and shop level x
+	const cantBeBought = validatePurchase(user, prizeToPay);
+	if (cantBeBought) {
+		return cantBeBought;
 	}
 
 
@@ -74,5 +74,5 @@ const getLotteryInformation = async ()=>{
 
 };
 
-module.exports = { handleLottery, getLotteryInformation };
+module.exports = { handlePurchaseLottery, getLotteryInformation };
 
