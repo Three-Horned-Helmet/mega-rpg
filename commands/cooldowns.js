@@ -3,9 +3,9 @@ const { generateAllCdEmbed } = require("../game/_CONSTS/cooldowns");
 module.exports = {
 	name: "cooldown",
 	aliases: ["cd", "cooldowns"],
-	description: "Let's the user see the current cooldowns.",
+	description: "Shows an overview for the current cooldowns ",
 	execute(message, args, user) {
 		const cooldownOverview = generateAllCdEmbed(user);
-		message.channel.send(cooldownOverview);
+		return message.channel.send(cooldownOverview);
 	},
 };

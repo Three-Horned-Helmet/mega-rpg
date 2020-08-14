@@ -1,4 +1,4 @@
-const fs = require("fs");
+/* const fs = require("fs");
 
 module.exports = {
 	name: "info",
@@ -19,4 +19,4 @@ module.exports = {
 		message.reply("I've sent you a DM with more info about the game!");
 
 	},
-};
+}; */

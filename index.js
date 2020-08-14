@@ -2,8 +2,7 @@ require("dotenv").config();
 const fs = require("fs");
 const Discord = require("discord.js");
 const User = require("./models/User");
-const DBL = require("dblapi.js");
-// const { handleCaptcha } = require("./game/_GLOBAL_HELPERS/captcha");
+const { handleCaptcha } = require("./game/_GLOBAL_HELPERS/captcha");
 const { welcomeMessage } = require("./index-helpers/welcome-message");
 
 const token = process.env.DISCORD_TOKEN;
@@ -116,14 +115,9 @@ client.on("message", async (message) => {
 		return message.reply("You are banned from Mega-RPG. You can plead for an unban at our support servers");
 	}
 
-	// triggers captcha if:
-	// - only for 3% of all commands
-	// - not for testusers (unit tests)
-	// - !hunt, !collect, !raid or !fish is being triggered
-	// bug found - removed for now
-	/* if (Math.random() <= 0.03 && userProfile.account.testUser === false && ["hunt", "collect", "raid", "fish"].includes(command.name)) {
-		return handleCaptcha(message, userProfile, 3);
-	} */
+	if (Math.random() <= 0.03 && userProfile.account.testUser === false && ["hunt", "collect", "raid", "fish"].includes(command.name)) {
+		urn handleCaptcha(message, userProfile, 3);
+	}
 
 	// adds command to statistics
 	if (Object.keys(userProfile.statistics).includes(command.name)) {

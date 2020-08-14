@@ -4,6 +4,7 @@ module.exports = {
 	name: "buy",
 	aliases: ["shop"],
 	description: "Used to buy consumables items from the shop. You can use the bought items with `!use <itemName`. This is useful to get your health back up on your hero. Try `!buy small healing potion` to buy your first item or `!buy` to display all your consumables. If you are missing a shop try `!build shop`.",
+	usage: "!buy 2 small healing potion",
 	shortcuts: {
 		shp: "small healing potion",
 		lhp: "large healing potion",
