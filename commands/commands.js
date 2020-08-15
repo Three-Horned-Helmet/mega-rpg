@@ -39,29 +39,39 @@ const generateCommandEmbed = ()=> {
 	const allEconomyCommands = ["build", "buy", "dailyPrize", "lottery", "use", "weeklyPrize"];
 	const allWorkingCommands = ["collect", "craft", "destroy", "equip", "explore", "look", "produce", "recruit", "travel"];
 	const allMiscCommands = ["fish", "race", "quest", "vote"];
+
 	const inviteUrl = "https://discordapp.com/oauth2/authorize?client_id=721024429345341560&scope=bot&permissions=1074121792/";
 	const supportServerUrl = "https://discord.gg/DZXZzC3/";
 	const patreonUrl = "https://www.patreon.com/megarpg/";
-	const links = `[Invite](${inviteUrl} \"Invite Mega RPG to your server\") | [Support Server](${supportServerUrl} \"Join our support server\") | [Donate](${patreonUrl} \"Patreon\")`;
 
+	const links = `[Invite](${inviteUrl} "Invite Mega RPG to your server") | [Support Server](${supportServerUrl} "Join our support server") | [Donate](${patreonUrl} "Patreon")`;
 
-	const title = "For more info: !help [command]\nAdd `!` before any command";
+	const title = "For more info: !help [command]";
 
 	function formatCommands(commands) {
 		const formatted = commands.map((c, i)=>{
-			const comma = i !== commands.length - 1 ? ", " : " ";
-			return `\`${c}\`${comma}`;
+			const seperator = i !== commands.length - 1 ? ", " : "\n \u200B";
+			return `\`!${c}\`${seperator}`;
 		});
-		return formatted.join("");
+		const result = formatted.join("");
+		return result;
 	}
+
+	/* const titleWithIcons = [
+		"🎖 Statistics commands 🎖",
+		"⚔️ Fighting commands ⚔️",
+		"💰 Economy commands 💰",
+		"🛠 Working commands 🛠",
+		"💡 Misc commands 💡",
+	]; */
 
 
 	const fields = [
-		{ name: "🎖 Statistics commands 🎖", value: formatCommands(allStatisticsCommands), inline: false },
-		{ name: "⚔️ Fighting commands ⚔️", value: formatCommands(allFightingCommands), inline: false },
-		{ name: "💰 Economy commands 💰", value: formatCommands(allEconomyCommands), inline: false },
-		{ name: "🛠 Working commands 🛠", value: formatCommands(allWorkingCommands), inline: false },
-		{ name: "💡 Misc commands 💡", value: formatCommands(allMiscCommands), inline: false },
+		{ name: "Statistics commands", value: formatCommands(allStatisticsCommands), inline: false },
+		{ name: "Fighting commands", value: formatCommands(allFightingCommands), inline: false },
+		{ name: "Economy commands", value: formatCommands(allEconomyCommands), inline: false },
+		{ name: "Working commands", value: formatCommands(allWorkingCommands), inline: false },
+		{ name: "Misc commands", value: formatCommands(allMiscCommands), inline: false },
 		{ name: "Links", value:links }
 	];
 
