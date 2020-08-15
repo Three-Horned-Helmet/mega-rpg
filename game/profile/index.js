@@ -27,7 +27,7 @@ const prettifyUser = async (message, user, avatar) => {
 
 	const armyValue = `👮‍♀️ Soldiers: ${totalSoldiers}\n\n⚔ AT: ${armyStats.unitStats.attack}\n\n❤️ HP: ${armyStats.unitStats.health}`;
 
-	const inventoryValue = `💰 Gold: ${user.resources.gold}\n\n🧪 Small Potion: ${hero.inventory["Small Healing Potion"]}\n\n💉 Large Potion: ${hero.inventory["Large Healing Potion"]}`;
+	const inventoryValue = `💰 Gold: ${user.resources.gold}\n\n${Object.keys(hero.inventory).map(item => typeof hero.inventory[item] === "number" ? addInventoryValueToProfile(item, hero) : false).filter(i => i).join(" ")}`;
 
 	const fields = [
 		{
@@ -81,6 +81,10 @@ const prettifyUser = async (message, user, avatar) => {
 	}
 
 	return embedUser;
+};
+
+const addInventoryValueToProfile = (item, hero) => {
+	return hero.inventory[item] ? `${getIcon(item)} ${item}: ${hero.inventory[item]}\n\n` : "";
 };
 
 module.exports = { prettifyUser };

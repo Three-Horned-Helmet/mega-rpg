@@ -14,6 +14,9 @@ const { Schema } = mongoose;
 const buildingsObject = require("../game/build/buildings-object");
 const { heroExpToNextLevel, heroStatIncreaseOnLevel } = require("../game/_CONSTS/hero-exp");
 const { statistics, cooldowns } = require("./userValues/default");
+const { resources } = require("./userValues/resources");
+const { inventory } = require("./userValues/inventory");
+
 
 const userSchema = new Schema({
 	account: {
@@ -44,50 +47,9 @@ const userSchema = new Schema({
 	},
 	// object too big, moved to ./uservalues/default
 	cooldowns,
-	resources: {
-		gold: {
-			type: Number,
-			default: 100,
-		},
 
-		["oak wood"]: {
-			type: Number,
-			default: 5,
-		},
-		["yew wood"]: {
-			type: Number,
-			default: 0,
-		},
-		["barlind wood"]: {
-			type: Number,
-			default: 0,
-		},
-
-		["copper ore"]: {
-			type: Number,
-			default: 10,
-		},
-		["iron ore"]: {
-			type: Number,
-			default: 0,
-		},
-		["bronze bar"]: {
-			type: Number,
-			default: 0,
-		},
-		["iron bar"]: {
-			type: Number,
-			default: 0,
-		},
-		["steel bar"]: {
-			type: Number,
-			default: 0,
-		},
-		["obsidian ore"]: {
-			type: Number,
-			default: 0,
-		},
-	},
+	// object too big, moved to ./uservalues/resources
+	resources,
 
 	army: {
 		armory: {
@@ -196,16 +158,7 @@ const userSchema = new Schema({
 			type: Number,
 			default: 3,
 		},
-		inventory: {
-			["Small Healing Potion"]: {
-				type: Number,
-				default: 5,
-			},
-			["Large Healing Potion"]: {
-				type: Number,
-				default: 0,
-			},
-		},
+		inventory,
 		dungeonKeys:{
 			"CM Key":{
 				type: Number,
@@ -493,14 +446,16 @@ userSchema.methods.collectResource = async function(collectBuildings, now, resou
 				}
 
 				// Max 100 resources is collectable at a time
-				if(produced > 100) produced = 100;
+				if(produced > 100 + building.level * 10) produced = 100 + building.level * 10;
 
 				// Updates the building in this.empire
 				this.resources[producing] = this.resources[producing] ?
 					this.resources[producing] + produced : produced;
+
 				totalCollected[producing] = totalCollected[producing] ?
 					totalCollected[producing] + produced : produced;
 				building.lastCollected = now;
+
 				this.markModified(`empire.${i}.lastCollected`);
 
 				// Changes the resource produced
@@ -511,6 +466,7 @@ userSchema.methods.collectResource = async function(collectBuildings, now, resou
 			}
 		});
 	});
+
 
 	await this.save();
 
