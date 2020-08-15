@@ -559,7 +559,7 @@ userSchema.methods.unitLoss = function(lossPercentage, towerFight) {
 		});
 		this.hero.rank -= 1;
 		this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
-		this.hero.currentExp = this.hero.rank - 1 ? getNewCurrentExpAfterDeath(heroExpToNextLevel[this.hero.rank - 1], heroExpToNextLevel[this.hero.rank ]) : 50;
+		this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] ? getNewCurrentExpAfterDeath(heroExpToNextLevel[this.hero.rank - 1], heroExpToNextLevel[this.hero.rank ]) : 50;
 	}
 };
 
@@ -574,7 +574,7 @@ userSchema.methods.heroHpLoss = function(lossPercentage) {
 		});
 		this.hero.rank -= 1;
 		this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
-		this.hero.currentExp = this.hero.rank - 1 ? getNewCurrentExpAfterDeath(heroExpToNextLevel[this.hero.rank - 1], heroExpToNextLevel[this.hero.rank ]) : 50;
+		this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] ? getNewCurrentExpAfterDeath(heroExpToNextLevel[this.hero.rank - 1], heroExpToNextLevel[this.hero.rank ]) : 50;
 	}
 };
 
@@ -587,7 +587,7 @@ userSchema.methods.heroHpLossFixedAmount = function(damage) {
 		});
 		this.hero.rank -= 1;
 		this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
-		this.hero.currentExp = this.hero.rank - 1 ? getNewCurrentExpAfterDeath(heroExpToNextLevel[this.hero.rank - 1], heroExpToNextLevel[this.hero.rank ]) : 50;
+		this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] ? getNewCurrentExpAfterDeath(heroExpToNextLevel[this.hero.rank - 1], heroExpToNextLevel[this.hero.rank ]) : 50;
 	}
 	if (this.hero.currentHealth < 0) {
 		this.hero.currentHealth = 0;
@@ -656,11 +656,11 @@ userSchema.methods.buyItem = async function(item, amount = 1) {
 	this.markModified("hero.inventory");
 };
 
-userSchema.methods.handleConsecutive = function(resources, consecutive, cyclus) {
+userSchema.methods.handleConsecutive = function(resourcesReward, consecutive, cyclus) {
 	this.consecutivePrizes[cyclus] = consecutive;
 
-	Object.keys(resources).forEach(r=>{
-		this.resources[r] += resources[r];
+	Object.keys(resourcesReward).forEach(r=>{
+		this.resources[r] += resourcesReward[r];
 	});
 };
 
@@ -740,7 +740,8 @@ userSchema.methods.changeTowerLevel = function(towerCategory, newLevel) {
 // will return between 50% and 66% progress of level
 const getNewCurrentExpAfterDeath = (oneLevelDown, currentLevel)=>{
 	const difference = currentLevel - oneLevelDown;
-	return randomIntBetweenMinMax(oneLevelDown + (difference / 2), currentLevel - (difference / 3));
+	const result = randomIntBetweenMinMax(oneLevelDown + (difference / 2), currentLevel - (difference / 3));
+	return result;
 };
 
 
