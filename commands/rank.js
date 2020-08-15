@@ -3,7 +3,7 @@ const { handleRank } = require("../game/rank");
 
 module.exports = {
 	name: "rank",
-	description: "Shows the best players (top 10) based upon various ranking systems. !rank server will give you players from your server",
+	description: "Shows the best players (top 10) based upon various ranking systems. '!rank server' will give you players from your server",
 	usage: "!rank xp",
 
 	async execute(message, args, user) {
