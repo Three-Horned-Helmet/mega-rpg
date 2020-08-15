@@ -12,7 +12,6 @@ const prettifyUser = async (message, user, avatar) => {
 	const userElo = user.hero.elo || 1200;
 
 	const eloPosition = await getPlayerPosition(message.author.id, "hero.elo");
-	// const xpRank = await getPlayerPosition(message.author.id);
 
 	const username = `( ${eloPosition} ) ${user.account.username}'s profile `;
 

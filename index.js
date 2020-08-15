@@ -2,8 +2,8 @@ require("dotenv").config();
 const fs = require("fs");
 const Discord = require("discord.js");
 const User = require("./models/User");
-// const { handleCaptcha } = require("./game/_GLOBAL_HELPERS/captcha");
 const { welcomeMessage, createNewUser } = require("./index-helpers");
+const { handleCaptcha } = require("./game/_GLOBAL_HELPERS/captcha");
 
 const token = process.env.DISCORD_TOKEN;
 const prefix = process.env.DISCORD_PREFIX;
@@ -95,10 +95,9 @@ client.on("message", async (message) => {
 		return message.reply("You are banned from Mega-RPG. You can plead for an unban at our support servers");
 	}
 
-	// temporary out of order
-	/* if (Math.random() <= 0.03 && userProfile.account.testUser === false && ["hunt", "collect", "raid", "fish"].includes(command.name)) {
+	if (Math.random() <= 0.02 && userProfile.account.testUser === false && ["hunt", "collect", "raid", "fish"].includes(command.name)) {
 		return handleCaptcha(message, userProfile, 3);
-	} */
+	}
 
 	// adds command to statistics
 	if (Object.keys(userProfile.statistics).includes(command.name)) {
@@ -111,20 +110,19 @@ client.on("message", async (message) => {
 	}
 
 	// executes the command
-	{
-		try {
-			command.execute(message, updatedArgs, userProfile);
-		}
-		catch (error) {
-			console.error(error);
-			message.reply("there was an error trying to execute that command!");
-		}
+
+	try {
+		command.execute(message, updatedArgs, userProfile);
 	}
+	catch (error) {
+		console.error(error);
+		message.reply("there was an error trying to execute that command!");
+	}
+
 });
 
 client.login(token);
 
-// Move somewhere else?
 String.prototype.capitalize = function() {
 	return this.charAt(0).toUpperCase() + this.slice(1);
 };
