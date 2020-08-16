@@ -17,8 +17,12 @@ module.exports = {
 		lhs: "large healing salve",
 	},
 	async execute(message, args, user) {
+		console.log(args, "args");
 		const numberFromArgs = args.filter(Number);
+		console.log(numberFromArgs, "numberFromArgs");
+
 		const amount = numberFromArgs.length && numberFromArgs[0] !== 0 ? Math.abs(parseInt(numberFromArgs[0])) : 1;
+		console.log(amount, "amount");
 
 		const lottery = args.some(a=> a.toLowerCase() === "lottery");
 		if (lottery) {

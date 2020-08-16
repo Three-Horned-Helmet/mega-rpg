@@ -6,7 +6,7 @@ const { generateLotteryPurchaseEmbed, generateLotteryInformationEmbed } = requir
 /* Todo. Add carrots as consumable object */
 
 const handlePurchaseLottery = async (user, amountOfTickets = 1)=>{
-	const amount = amountOfTickets.length ? Math.abs(parseInt(amountOfTickets[0])) : 1;
+	const amount = amountOfTickets;
 	const prizeToPay = amount * PRIZE_FOR_LOTTERY_TICKET;
 	const { userId, username } = user.account;
 
