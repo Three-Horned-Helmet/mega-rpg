@@ -6,7 +6,7 @@ const createMinibossInvitation = (miniboss, user)=>{
 	const { username } = user.account;
 	const { currentLocation } = user.world;
 
-	const rules = `\`Army allowed: ${getIcon(miniboss.rules.allowArmy, "icon")}\`\n \`Miniboss deadly: ${getIcon(miniboss.rules.canKill, "icon")}\`\n \`Helpers allowed: ${getIcon(miniboss.rules.allowHelpers, "iconç")}\``;
+	const rules = `\`Army allowed: ${getIcon(miniboss.rules.allowArmy, "icon")}\`\n \`Miniboss deadly: ${getIcon(miniboss.rules.canKill, "icon")}\`\n \`Helpers allowed: ${getIcon(miniboss.rules.allowHelpers, "icon")}\``;
 	const rewards = `${getIcon("gold")} \`Gold: ${miniboss.rewards.gold}\`\n ${getIcon("xp")} \`XP: ${miniboss.rewards.xp}\` \n ${getIcon(miniboss.rewards.dungeonKey)} \` Key: ${miniboss.rewards.dungeonKey}\``;
 
 	const embedInvitation = new Discord.MessageEmbed()

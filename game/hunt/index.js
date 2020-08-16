@@ -13,7 +13,7 @@ const handleHunt = async (user, place = null) => {
 	}
 
 	// checks for too low hp
-	if (user.hero.currentHealth < user.hero.health * 0.05) {
+	if (user.hero.currentHealth < user.hero.health * 0.05 && user.hero.currentHealth < 50) {
 		let feedback = `Your hero's health is too low (**${user.hero.currentHealth}**)`;
 		if (user.hero.rank < 2) {
 			feedback += "\n You can `!buy` poitions (e.g. `!buy small healing potion`) and `!use` potions (e.g. `!use small healing potion`)";
@@ -89,7 +89,6 @@ const handleHunt = async (user, place = null) => {
 
 	// calculates result
 	const huntResult = calculatePveHero(user, placeInfo);
-
 	// saves to database
 	let questIntro;
 	const now = new Date();

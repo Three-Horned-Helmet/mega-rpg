@@ -9,8 +9,8 @@ const icons = {
 
 	"copper ore":{ name: ":orange_circle:", icon: "🟠" },
 	"iron ore":{ name: ":white_circle:", icon: "⚪️" },
-	"mithril ore":{ name: ":blue_circle:", icon: "" },
-	"burite ore":{ name: ":purple_circle:", icon: "" },
+	"mithril ore":{ name: ":blue_circle:", icon: "🔵" },
+	"burite ore":{ name: ":purple_circle:", icon: "🟣" },
 	"obsidian ore":{ name: ":black_circle:", icon: "⚫️" },
 
 	"bronze bar":{ name: ":orange_square:", icon: "🟧" },
@@ -47,15 +47,15 @@ const icons = {
 	"legging":{ name: ":jeans:", icon: "👖" },
 
 	// Shop
-	"Small Healing Potion": { name: ":thermometer:" },
-	"Large Healing Potion": { name: ":syringe:" },
-	"Enourmous Healing Potion": { name: ":scarf:" },
-	"Quality Healing Potion": { name: ":pill:" },
-	"Mega Healing Potion": { name: ":school_satchel:" },
-	"Ultra Healing Potion": { name: ":drop_of_blood:" },
-	"Small Healing Salve": { name: ":rose:" },
-	"Large Healing Salve": { name: ":maple_leaf:" },
-	"Quality Healing Salve": { name: ":bowl_with_spoon:" },
+	"Small Healing Potion": { name: ":thermometer:", icon:"🌡" },
+	"Large Healing Potion": { name: ":syringe:", icon:"💉" },
+	"Enourmous Healing Potion": { name: ":scarf:", icon:"🧣" },
+	"Quality Healing Potion": { name: ":pill:", icon:"💊" },
+	"Mega Healing Potion": { name: ":school_satchel:", icon:"🎒" },
+	"Ultra Healing Potion": { name: ":drop_of_blood:", icon:"🩸" },
+	"Small Healing Salve": { name: ":rose:", icon:"🌹" },
+	"Large Healing Salve": { name: ":maple_leaf:", icon:"🍁" },
+	"Quality Healing Salve": { name: ":bowl_with_spoon:", icon:"🥣" },
 
 
 	// Stats
@@ -93,8 +93,11 @@ const icons = {
 	"false":{ name: ":x:", icon: "❌" },
 	"true":{ name: ":white_check_mark:", icon: "✅" },
 	"quest": { name: ":boom:", icon:"💥" },
-	"weeklyPrizeStar":{ name:"star2", icon:"🌟" },
-	"dailyPrizeStar": { name:"star", icon: "⭐️" }
+	"weeklyPrizeStar":{ name:":star2:", icon:"🌟" },
+	"dailyPrizeStar": { name:":star:", icon: "⭐️" },
+	"Carrot": { name:":carrot:", icon:"🥕" },
+	"cooldown": { name: ":clock9:", icon:"🕘" },
+	"lottery": { name: ":money_with_wings:", icon:"💸" }
 };
 /**
  * Returns an emoji if configured in icons-object or a danger symbol if missing

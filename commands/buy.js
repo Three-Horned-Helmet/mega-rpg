@@ -1,4 +1,5 @@
 const { handleBuyCommand } = require("../game/buy/buy-item");
+const { handlePurchaseLottery } = require("../game/lottery");
 
 module.exports = {
 	name: "buy",
@@ -16,7 +17,16 @@ module.exports = {
 		lhs: "large healing salve",
 	},
 	async execute(message, args, user) {
-		const response = await handleBuyCommand(args, user);
+		const numberFromArgs = args.filter(Number);
+		const amount = numberFromArgs.length && numberFromArgs[0] !== 0 ? Math.abs(parseInt(numberFromArgs[0])) : 1;
+
+		const lottery = args.some(a=> a.toLowerCase() === "lottery");
+		if (lottery) {
+			const lotteryResponse = await handlePurchaseLottery(user, amount);
+			return message.channel.send(lotteryResponse);
+		}
+
+		const response = await handleBuyCommand(args, user, amount);
 
 		message.channel.send(`<@${message.author.id}>'s shop: \n ${response}`);
 	},

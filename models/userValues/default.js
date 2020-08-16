@@ -23,6 +23,10 @@ const cooldowns = {
 		type: Date,
 		default: 0,
 	},
+	miniboss:{
+		type:Date,
+		default: 0,
+	},
 	race: {
 		type: Date,
 		default: 0,

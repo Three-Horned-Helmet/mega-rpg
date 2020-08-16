@@ -109,4 +109,5 @@ const useHealingPotion = async (user, item) =>{
 	return `You drank a ${item.name} and your hero has ${updatedUser.hero.currentHealth}/${updatedUser.hero.health} hp left`;
 };
 
+
 module.exports = consumablesObject;

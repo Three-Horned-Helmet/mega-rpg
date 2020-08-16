@@ -56,5 +56,18 @@ const objectFilter = (obj, predicate) => {
 		.reduce((res, key) => (res[key] = obj[key], res), {});
 };
 
+const msToHumanTime = (ms)=>{
+	const oneDayInMs = 8.64e+7;
+	if (ms >= oneDayInMs) {
+		const days = Math.round(ms / oneDayInMs);
+		return `${days} days`;
+	}
+	const humanTime = new Date(ms).toISOString().slice(11, 19).split(":");
+	["h ", "m ", "s"].forEach((t, i)=>{
+		humanTime[i] += t;
+	});
+	return humanTime.join("");
+};
 
-module.exports = { asyncForEach, deepCopyFunction, eloCalculations, randomIntBetweenMinMax, objectFilter };
+
+module.exports = { asyncForEach, deepCopyFunction, eloCalculations, randomIntBetweenMinMax, objectFilter, msToHumanTime };

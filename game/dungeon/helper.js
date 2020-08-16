@@ -95,7 +95,7 @@ const dungeonStartAllowed = (user) => {
 		return response;
 	}
 
-	if (user.hero.currentHealth < user.hero.health * 0.05) {
+	if (user.hero.currentHealth < user.hero.health * 0.05 && user.hero.currentHealth < 50) {
 		let feedback = `Your hero's health is too low (**${user.hero.currentHealth}**)`;
 		if (user.hero.rank < 2) {
 			feedback += "\n You can `!build` a shop and `!buy` potions";

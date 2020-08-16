@@ -16,6 +16,7 @@ const { heroExpToNextLevel, heroStatIncreaseOnLevel } = require("../game/_CONSTS
 const { statistics, cooldowns } = require("./userValues/default");
 const { resources } = require("./userValues/resources");
 const { inventory } = require("./userValues/inventory");
+const { randomIntBetweenMinMax } = require("../game/_GLOBAL_HELPERS");
 
 
 const userSchema = new Schema({
@@ -314,11 +315,6 @@ userSchema.methods.refreshQuestPve = async function(questName, pveIndex = 0) {
 	this.markModified(`quests.${questIndex}.pve.${pveIndex}.completed`);
 };
 
-userSchema.methods.gainResource = function(resource, quantity) {
-	this.resources[resource] += quantity;
-	return this.save();
-};
-
 userSchema.methods.gainManyResources = function(obj) {
 	Object.keys(obj).forEach(r=>{
 		this.resources[r] += obj[r];
@@ -511,13 +507,6 @@ userSchema.methods.removeItem = function(item, hero, amount = 1) {
 	}
 };
 
-userSchema.methods.handleFishResult = function(goldresult, now) {
-	this.cooldowns.fish = now;
-	if(goldresult > 0) {
-		this.resources.gold += goldresult;
-	}
-};
-
 userSchema.methods.equipItem = function(item, currentItem) {
 	// Added hero equipment bonus (equipment is better worn by heroes)
 	const heroEquipmentBonus = 2;
@@ -570,9 +559,10 @@ userSchema.methods.unitLoss = function(lossPercentage, towerFight) {
 		});
 		this.hero.rank -= 1;
 		this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
-		this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] || 50;
+		this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] ? getNewCurrentExpAfterDeath(heroExpToNextLevel[this.hero.rank - 1], heroExpToNextLevel[this.hero.rank ]) : 50;
 	}
 };
+
 
 userSchema.methods.heroHpLoss = function(lossPercentage) {
 
@@ -584,7 +574,7 @@ userSchema.methods.heroHpLoss = function(lossPercentage) {
 		});
 		this.hero.rank -= 1;
 		this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
-		this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] || 50;
+		this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] ? getNewCurrentExpAfterDeath(heroExpToNextLevel[this.hero.rank - 1], heroExpToNextLevel[this.hero.rank ]) : 50;
 	}
 };
 
@@ -597,7 +587,7 @@ userSchema.methods.heroHpLossFixedAmount = function(damage) {
 		});
 		this.hero.rank -= 1;
 		this.hero.expToNextRank = heroExpToNextLevel[this.hero.rank];
-		this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] || 50;
+		this.hero.currentExp = heroExpToNextLevel[this.hero.rank - 1] ? getNewCurrentExpAfterDeath(heroExpToNextLevel[this.hero.rank - 1], heroExpToNextLevel[this.hero.rank ]) : 50;
 	}
 	if (this.hero.currentHealth < 0) {
 		this.hero.currentHealth = 0;
@@ -666,11 +656,11 @@ userSchema.methods.buyItem = async function(item, amount = 1) {
 	this.markModified("hero.inventory");
 };
 
-userSchema.methods.handleConsecutive = function(resources, consecutive, cyclus) {
+userSchema.methods.handleConsecutive = function(resourcesReward, consecutive, cyclus) {
 	this.consecutivePrizes[cyclus] = consecutive;
 
-	Object.keys(resources).forEach(r=>{
-		this.resources[r] += resources[r];
+	Object.keys(resourcesReward).forEach(r=>{
+		this.resources[r] += resourcesReward[r];
 	});
 };
 
@@ -746,5 +736,13 @@ userSchema.methods.changeTowerLevel = function(towerCategory, newLevel) {
 	}
 	this.tower[towerCategory].level = newLevel;
 };
+
+// will return between 50% and 66% progress of level
+const getNewCurrentExpAfterDeath = (oneLevelDown, currentLevel)=>{
+	const difference = currentLevel - oneLevelDown;
+	const result = randomIntBetweenMinMax(oneLevelDown + (difference / 2), currentLevel - (difference / 3));
+	return result;
+};
+
 
 module.exports = mongoose.model("User", userSchema);

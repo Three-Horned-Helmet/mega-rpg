@@ -24,7 +24,7 @@ const duelPlayer = async (user, opponent, msg) =>{
 
 	if(gainsModifier) {
 		await gainHeroExp(battleStats.win ? user : opponent, expGain, msg);
-		battleStats.win ? await user.gainResource("gold", goldGain) : await opponent.gainResource("gold", goldGain);
+		battleStats.win ? await user.gainManyResources({ gold: goldGain }) : await opponent.gainManyResources({ gold: goldGain });
 	}
 
 	return { embed: duelEmbed(user, opponent, battleStats, goldGain, expGain) };

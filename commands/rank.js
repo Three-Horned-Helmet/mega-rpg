@@ -3,7 +3,8 @@ const { handleRank } = require("../game/rank");
 
 module.exports = {
 	name: "rank",
-	description: "Shows best players based upon various ranking systems",
+	description: "Shows the best players (top 10) based upon various ranking systems. '!rank server' will give you players from your server",
+	usage: "!rank xp",
 
 	async execute(message, args, user) {
 		const allowedTypes = ["xp", "elo", "army", "quest", "sfa"];

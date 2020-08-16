@@ -2,20 +2,15 @@ const consumeObj = require("../use/consumables-object");
 const { getIcon } = require("../_CONSTS/icons");
 
 // Runs functions depending on the given args
-const handleBuyCommand = async (args, user) =>{
+const handleBuyCommand = async (args, user, amount) =>{
 	if(args.length === 0) {
 		const message = displayShop(user);
 		return message;
 	}
 
-	let amount = 1;
-	const amountInput = parseInt(args[args.length - 1]);
-	if(amountInput >= 0) {
-		amount = amountInput;
-		args.splice(args.length - 1, 1);
-	}
-
-	const joinedArg = args.map(a => a.charAt(0).toUpperCase() + a.slice(1).toLowerCase()).join(" ");
+	const joinedArg = args
+		.filter(a => typeof a === "string" && isNaN(a))
+		.map(a => a.charAt(0).toUpperCase() + a.slice(1).toLowerCase()).join(" ");
 	const item = consumeObj[joinedArg];
 
 	const message = await buyItem(user, item, amount);
