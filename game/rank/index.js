@@ -1,4 +1,5 @@
 const User = require("../../models/User");
+const calculateStats = require("../../combat/calculate-stats");
 
 const handleRank = async (rankType, currentServer, user)=> {
 	switch (rankType) {
@@ -27,14 +28,17 @@ const getTop10Army = async (user, currentServer = {})=>{
 		.limit(500)
 		.lean();
 	const sortedPlayers = allUsers.map(p=>{
-		return { name: p.account.username, userId: p.account.userId, total:  getAllSoldiers(p.army.units) } ;
+		return { name: p.account.username, userId: p.account.userId, total:  calculateStats(p).unitStats.attack } ;
 	});
+
+	sortedPlayers.sort((a, b)=>b.total - a.total);
+
 	const top10 = sortedPlayers.slice(0, 10);
 
 
 	const formatted = top10.map((p, i)=>{
 		const first = i === 0 ? "👮‍♀️" : "";
-		return `\`#${i + 1}: ${first}${p.name}${first} --- ${p.total} army power\``;
+		return `\`#${i + 1}: ${first}${p.name}${first} --- ${p.total} army strength\``;
 	});
 	if (!top10.some(player=> player.userId === user.account.userId)) {
 		let playerPosition;
@@ -43,7 +47,7 @@ const getTop10Army = async (user, currentServer = {})=>{
 				playerPosition = i + 1;
 			}
 		});
-		formatted.push(`\`#${playerPosition}: ${user.account.username} --- ${getAllSoldiers(user.army.units)} army power\``);
+		formatted.push(`\`#${playerPosition}: ${user.account.username} --- ${calculateStats(user).unitStats.attack} army strength\``);
 	}
 	return formatted;
 };
@@ -177,7 +181,7 @@ const getTop10Sfa = async (user, currentServer = {}) => {
 };
 
 
-const getAllSoldiers = (units) => {
+/* const getAllSoldiers = (units) => {
 	let result = 0;
 	Object.keys(units).forEach(b => {
 		Object.values(units[b]).forEach(n => {
@@ -187,7 +191,7 @@ const getAllSoldiers = (units) => {
 		});
 	});
 	return result;
-};
+}; */
 
 
 module.exports = { handleRank };

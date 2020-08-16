@@ -27,31 +27,33 @@ const calculateStats = (user) => {
 	});
 
 	// Add the stats from the items
-	for (const slot in armory.toJSON()) {
-		let slotsTaken = 0;
-		const allSlotItems = Object.keys(armory[slot]).map(item => allItems[item] || getTowerItem(item));
+	if (armoryExist(armory)) {
+		for (const slot in armory.toJSON()) {
+			let slotsTaken = 0;
+			const allSlotItems = Object.keys(armory[slot]).map(item => allItems[item] || getTowerItem(item));
 
-		// Sorts depending on what item that gives the most stats
-		const sortHelper = (a) => {
-			return Object.values(a.stats).reduce((acc, cur) => acc + cur);
-		};
+			// Sorts depending on what item that gives the most stats
+			const sortHelper = (a) => {
+				return Object.values(a.stats).reduce((acc, cur) => acc + cur);
+			};
 
-		allSlotItems.sort((a, b) => sortHelper(b) - sortHelper(a));
+			allSlotItems.sort((a, b) => sortHelper(b) - sortHelper(a));
 
-		// Add the stats of up to the amount of units that you have (e.g. 60 units can onlyuse 60 helmets)
-		allSlotItems.forEach((item) => {
-			if (slotsTaken >= totalUnits) return false;
+			// Add the stats of up to the amount of units that you have (e.g. 60 units can onlyuse 60 helmets)
+			allSlotItems.forEach((item) => {
+				if (slotsTaken >= totalUnits) return false;
 
-			const iQuantity = armory[slot][item.name];
-			const iToAdd = totalUnits - slotsTaken - iQuantity;
-			const itemAdded = iToAdd < 0 ? totalUnits - slotsTaken : iQuantity;
+				const iQuantity = armory[slot][item.name];
+				const iToAdd = totalUnits - slotsTaken - iQuantity;
+				const itemAdded = iToAdd < 0 ? totalUnits - slotsTaken : iQuantity;
 
-			for (const stat in item.stats) {
-				unitStats[stat] += item.stats[stat] * itemAdded;
-			}
+				for (const stat in item.stats) {
+					unitStats[stat] += item.stats[stat] * itemAdded;
+				}
 
-			slotsTaken += itemAdded;
-		});
+				slotsTaken += itemAdded;
+			});
+		}
 	}
 
 	// Add hero
@@ -70,6 +72,13 @@ const calculateStats = (user) => {
 		unitStats,
 		heroStats,
 	};
+};
+
+const armoryExist = armory => {
+	if (!armory) {
+		return false;
+	}
+	return Object.values(armory.chest).length !== 0 && Object.values(armory.helmet).length !== 0 && Object.values(armory.legging).length !== 0 && Object.values(armory.weapon).length !== 0;
 };
 
 module.exports = calculateStats;
