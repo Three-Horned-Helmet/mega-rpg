@@ -7,6 +7,7 @@
     "test": "export NODE_ENV=test && mocha --exit './test/**/*.test.js'",
     "dev": "nodemon index.js",
     "start": "node index.js",
+    "debug": "nodemon --inspect index.js",
     "postinstall": "sh postinstall.sh"
   },
   "author": "",

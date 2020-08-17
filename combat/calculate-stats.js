@@ -75,7 +75,8 @@ const calculateStats = (user) => {
 };
 
 const armoryExist = armory => {
-	if (!armory) {
+
+	if (armory === undefined || Object.values(armory).length !== 4) {
 		return false;
 	}
 	return Object.values(armory.chest).length !== 0 && Object.values(armory.helmet).length !== 0 && Object.values(armory.legging).length !== 0 && Object.values(armory.weapon).length !== 0;
