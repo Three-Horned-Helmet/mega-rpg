@@ -27,7 +27,7 @@ const calculateStats = (user) => {
 	});
 
 	// Add the stats from the items
-	if (armoryExist(armory)) {
+	if (armory) {
 		for (const slot in armory.toJSON()) {
 			let slotsTaken = 0;
 			const allSlotItems = Object.keys(armory[slot]).map(item => allItems[item] || getTowerItem(item));
@@ -72,13 +72,6 @@ const calculateStats = (user) => {
 		unitStats,
 		heroStats,
 	};
-};
-
-const armoryExist = armory => {
-	if (!armory || Object.values(armory).length !== 4) {
-		return false;
-	}
-	return Object.values(armory.chest).length !== 0 && Object.values(armory.helmet).length !== 0 && Object.values(armory.legging).length !== 0 && Object.values(armory.weapon).length !== 0;
 };
 
 module.exports = calculateStats;
