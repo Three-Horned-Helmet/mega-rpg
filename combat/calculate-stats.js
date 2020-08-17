@@ -10,7 +10,7 @@ const calculateStats = (user) => {
 	const totalStats = {};
 	const unitStats = {};
 	const heroStats = {};
-	let totalUnits = 0;
+	// let totalUnits = 0;
 
 	// Get stats from units
 	Object.values(units).forEach(unitType => {
@@ -21,14 +21,13 @@ const calculateStats = (user) => {
 					unitStats[stat] = unitStats[stat] && unitStats[stat] !== 0 ? (unitStats[stat] + stats[stat] * unitType[unit]) : stats[stat] * unitType[unit];
 				}
 
-				totalUnits += unitType[unit];
+				// totalUnits += unitType[unit];
 			}
 		});
 	});
 
 	// Add the stats from the items
-	if (armoryExist(armory)) {
-		for (const slot in armory.toJSON()) {
+	/* for (const slot in armory.toJSON()) {
 			let slotsTaken = 0;
 			const allSlotItems = Object.keys(armory[slot]).map(item => allItems[item] || getTowerItem(item));
 
@@ -53,8 +52,8 @@ const calculateStats = (user) => {
 
 				slotsTaken += itemAdded;
 			});
-		}
-	}
+		} */
+
 
 	// Add hero
 	const { currentHealth, health, attack } = user.hero;
@@ -72,14 +71,6 @@ const calculateStats = (user) => {
 		unitStats,
 		heroStats,
 	};
-};
-
-const armoryExist = armory => {
-
-	if (armory === undefined || Object.values(armory).length !== 4) {
-		return false;
-	}
-	return Object.values(armory.chest).length !== 0 && Object.values(armory.helmet).length !== 0 && Object.values(armory.legging).length !== 0 && Object.values(armory.weapon).length !== 0;
 };
 
 module.exports = calculateStats;
