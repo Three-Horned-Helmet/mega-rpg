@@ -85,14 +85,6 @@ const userSchema = new Schema({
 					type: Number,
 					default: 0,
 				},
-				survivalist: {
-					type: Number,
-					default: 0,
-				},
-				sharpshooter: {
-					type: Number,
-					default: 0,
-				},
 			},
 			barracks: {
 				peasant: {
@@ -104,18 +96,6 @@ const userSchema = new Schema({
 					default: 0,
 				},
 				guardsman: {
-					type: Number,
-					default: 0,
-				},
-				knight: {
-					type: Number,
-					default: 0,
-				},
-				berserker: {
-					type: Number,
-					default: 0,
-				},
-				justicar: {
 					type: Number,
 					default: 0,
 				},
