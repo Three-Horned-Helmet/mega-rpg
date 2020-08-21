@@ -7,7 +7,7 @@ module.exports = { "Bandit's Mansion": {
 		{
 			name: "Mansion's Courtyard",
 			description:
-							"You enter the mansion and a beautiful courtyard stands before your eyes. A couple of trees and a bush surrounds what seems to be a seating area. You must have lost your mind because you hear murmuring from the bushes",
+							"You enter the mansion and a beautiful courtyard stands before your eyes. A couple of trees and a bush surrounds what seems to be a sitting area. You must have lost your mind because you hear murmuring from the bushes",
 			type: "raid",
 			stats:{
 				attack: 1000,

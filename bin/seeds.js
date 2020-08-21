@@ -5,7 +5,7 @@ const User = require("../models/User");
 
 const uri = process.env.MONGODB_URI;
 mongoose
-	.connect(uri, { useNewUrlParser: true })
+	.connect(uri, {poolSize: 100, useNewUrlParser: true })
 	.then(db => {
 		console.log(`Seeding process started. Database name: "${db.connections[0].name}"`);
 	})

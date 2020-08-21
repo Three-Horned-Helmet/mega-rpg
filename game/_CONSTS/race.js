@@ -16,37 +16,37 @@ const raceData = {
 		icon : "🚣",
 		weight: 17,
 		dotsLength: DEFAULT_LENGTH,
-		jump: ()=> Math.floor(Math.random() * 2.25) + 2,
+		jump: ()=> Math.floor(Math.random() * 2.90) + 2,
 	},
 	"🦇": {
 		icon : "🦇",
 		weight: 15,
 		dotsLength: DEFAULT_LENGTH,
-		jump: ()=> Math.floor(Math.random() * 2.55) + 2,
+		jump: ()=> Math.floor(Math.random() * 3.05) + 2,
 	},
 	"🐪": {
 		icon : "🐪",
 		weight: 13,
 		dotsLength: DEFAULT_LENGTH,
-		jump: ()=> Math.floor(Math.random() * 2.8) + 2,
+		jump: ()=> Math.floor(Math.random() * 3.15) + 2,
 	},
 	"👩‍🦼": {
 		icon : "👩‍🦼",
 		weight: 12,
 		dotsLength: DEFAULT_LENGTH,
-		jump: ()=> Math.floor(Math.random() * 3) + 2,
+		jump: ()=> Math.floor(Math.random() * 3.20) + 2,
 	},
 	"🐢": {
 		icon : "🐢",
 		weight: 10,
 		dotsLength: DEFAULT_LENGTH,
-		jump: ()=> Math.floor(Math.random() * 5) - 3,
+		jump: ()=> Math.floor(Math.random() * 7) - 3,
 	},
 	"🦆": {
 		icon : "🦆",
 		weight: 5,
 		dotsLength: DEFAULT_LENGTH,
-		jump: ()=> Math.floor(Math.random() * 7) - 5,
+		jump: ()=> Math.floor(Math.random() * 10) - 5,
 	},
 };
 

@@ -7,6 +7,7 @@ module.exports = {
 	usage: "!rank xp",
 
 	async execute(message, args, user) {
+
 		const allowedTypes = ["xp", "elo", "army", "quest", "sfa"];
 		const serverKeyWords = ["s", "server", "this"];
 
@@ -15,7 +16,6 @@ module.exports = {
 		const onlyServerRanking = args.some(a=> serverKeyWords.includes(a)) ? { "account.servers":message.channel.id } : {};
 
 		const result = await handleRank(rankType, onlyServerRanking, user);
-
 
 		return message.channel.send(result);
 	},

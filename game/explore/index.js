@@ -3,7 +3,7 @@ const { objectFilter } = require("../_GLOBAL_HELPERS");
 const { worldLocations } = require("../_UNIVERSE");
 const { getIcon } = require("../_CONSTS/icons");
 
-const CHANCE_FOR_SUCCESS = 0.8;
+const CHANCE_FOR_SUCCESS = 0.95;
 
 const handleExplore = async (user) => {
 	const cd = onCooldown("explore", user);
