@@ -147,7 +147,7 @@ const startDungeonRooms = async (message, progress) => {
 		}
 		const { requiredQuest } = progress.dungeon.boss;
 		if (!!requiredQuest && !progress.initiativeTaker.completedQuests.includes(requiredQuest)) {
-			const username = progress.initiativeTaker.account;
+			const { username } = progress.initiativeTaker.account;
 			return message.channel.send(
 				`${username} has not completed the required quest to proceed`
 			);
