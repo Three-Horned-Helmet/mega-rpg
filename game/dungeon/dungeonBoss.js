@@ -4,6 +4,8 @@ const {
 } = require("./embedGenerator");
 const { getWeaponInfo } = require("./helper");
 const { asyncForEach, randomIntBetweenMinMax } = require("../_GLOBAL_HELPERS/");
+const { checkQuest } = require("../quest/quest-utils");
+
 
 const createDungeonBossRound = async (message, progress) => {
 	const { numOfAllowedWeapons } = progress.dungeon.boss;
@@ -246,6 +248,16 @@ const calculateDungeonResult = async (progress) => {
       progress.dungeon.boss.stats.currentHealth <= 0;
 		if (progress.win) {
 			const rewards = await calculateDungeonBossRewards(progress);
+			const questPromise = progress.players.map((player) => {
+				const { currentLocation } = player.world;
+				const { name } = progress.dungeon.boss;
+
+				return new Promise((resolve) => {
+					return resolve(checkQuest(player, name, currentLocation));
+				});
+			});
+			await Promise.all(questPromise);
+
 			progress.rewards = rewards;
 		}
 	}
