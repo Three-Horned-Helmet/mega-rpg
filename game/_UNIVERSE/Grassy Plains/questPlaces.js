@@ -7,9 +7,9 @@ module.exports = { "Moriths Mine": {
 		health: 400,
 	},
 	rewards:{
-		"copper ore": 4,
-		"iron ore": 3,
-		"obsidian ore": 2,
+		"copper ore": 20,
+		"iron ore": 15,
+		"obsidian ore": 13,
 	},
 },
 
