@@ -7,10 +7,28 @@ const equipmentEmbed = (user) => {
 	const title = `${user.account.username}'s available equipment (usage: \`!equip <itemName>\`):`;
 	const sideColor = "#45b6fe";
 
+	// Adds the different items and stats to the field
 	const fields = Object.keys(user.army.armory).filter(el => !el.startsWith("$")).map(iType => {
 		return addEquipmentField(user, iType);
 	});
 
+	// Adds current equipment
+	const currentEquipFields = Object.keys(user.hero.armor).filter(el => !el.startsWith("$")).map(iType => addCurrentEquipment(user, iType));
+
+	if(currentEquipFields.length > 0) {
+		const currentEquipHeader = {
+			name: "\u200B",
+			value: "**__Equipped Items:__**",
+		};
+		const inventoryItemsHeader = {
+			name: "\u200B",
+			value: "**__Inventory:__**",
+		};
+
+		fields.unshift(currentEquipHeader, ...currentEquipFields, inventoryItemsHeader);
+	}
+
+	// If the user has no equipment
 	if(fields.length === 0) {
 		fields.push({
 			name: "You dont have any equipment in your inventory. You can craft some if you have a blacksmith or armorer",
@@ -70,6 +88,25 @@ const objectMessage = (stats) => {
 const sortHelper = (a) => {
 	const item = allItems[a] || getTowerItem(a);
 	return Object.values(item.stats).reduce((acc, cur) => acc + cur);
+};
+
+const addCurrentEquipment = (user, iType) => {
+	const item = user.hero.armor[iType];
+
+	const itemObj = allItems[item] || getTowerItem(item);
+	let value;
+
+	if(itemObj) {
+		value = `${item.capitalize()}\n${objectMessage(itemObj.stats)}`;
+	}
+
+	const field = {
+		name: `${iType.capitalize()}s`,
+		value: value ? value : "[NONE]",
+		inline: true,
+	};
+
+	return field;
 };
 
 module.exports = equipmentEmbed;

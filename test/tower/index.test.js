@@ -2,11 +2,17 @@
 
 const { expect } = require("chai");
 const User = require("../../models/User");
+
 const towerCommand = require("../../commands/tower");
+const equipCommand = require("../../commands/destroy");
+
 const { getRandomPrefix, getPrefixMultiplier } = require("../../game/items/tower-items/tower-item-prefix");
 const { getNewTowerItem, getTowerItem, isTowerItem } = require("../../game/items/tower-items/tower-item-functions");
 const { getArmyTowerEnemies } = require("../../game/tower/army-tower/army-tower-enemies/army-tower-enemies");
-// const { createTestUser, generateDiscordMessage } = require("../helper");
+
+const allItems = require("../../game/items/all-items");
+
+const { createTestUser, generateDiscordMessage } = require("../helper");
 
 
 describe("tower functions and command", () => {
@@ -82,5 +88,55 @@ describe("tower functions and command", () => {
 
 		expect(hasStats).to.equal(true);
 		expect(hasName).to.equal(true);
+	});
+
+	it("equipping and unequipping Tower items should not alter the users base stats", async () => {
+		const testUser = await createTestUser();
+		const newItemOne = getTowerItem(getNewTowerItem(1));
+		const newItemTwo = getTowerItem(getNewTowerItem(100));
+		testUser.addItem(newItemOne, 1);
+		testUser.addItem(newItemTwo, 1);
+
+		const mockMessage = generateDiscordMessage(testUser);
+		await equipCommand.execute(mockMessage, [newItemOne.name], testUser);
+
+		const healthBefore = testUser.hero.health;
+		const attackBefore = testUser.hero.attack;
+
+		await equipCommand.execute(mockMessage, [newItemTwo.name], testUser);
+		await equipCommand.execute(mockMessage, [newItemOne.name], testUser);
+		await equipCommand.execute(mockMessage, [newItemTwo.name], testUser);
+		await equipCommand.execute(mockMessage, [newItemOne.name], testUser);
+
+		const healthAfter = testUser.hero.health;
+		const attackAfter = testUser.hero.attack;
+
+		expect(healthBefore).to.equal(healthAfter);
+		expect(attackBefore).to.equal(attackAfter);
+	});
+
+	it("equipping and unequipping Tower items and normal items should not alter the users base stats", async () => {
+		const testUser = await createTestUser();
+		const newItemOne = getTowerItem(getNewTowerItem(1));
+		const newItemTwo = Object.values(allItems).filter(item => item.typeSequence[item.typeSequence.length - 1] === newItemOne.typeSequence[newItemOne.typeSequence.length - 1])[0];
+		testUser.addItem(newItemOne, 1);
+		testUser.addItem(newItemTwo, 1);
+
+		const mockMessage = generateDiscordMessage(testUser);
+		await equipCommand.execute(mockMessage, [newItemOne.name], testUser);
+
+		const healthBefore = testUser.hero.health;
+		const attackBefore = testUser.hero.attack;
+
+		await equipCommand.execute(mockMessage, [newItemTwo.name], testUser);
+		await equipCommand.execute(mockMessage, [newItemOne.name], testUser);
+		await equipCommand.execute(mockMessage, [newItemTwo.name], testUser);
+		await equipCommand.execute(mockMessage, [newItemOne.name], testUser);
+
+		const healthAfter = testUser.hero.health;
+		const attackAfter = testUser.hero.attack;
+
+		expect(healthBefore).to.equal(healthAfter);
+		expect(attackBefore).to.equal(attackAfter);
 	});
 });
