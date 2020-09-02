@@ -109,7 +109,7 @@ module.exports = {
 					gold: 15800,
 					["yew wood"]: 9500,
 					["aspen wood"]: 5300,
-					["purite bar"]: 400,
+					["pyrite bar"]: 400,
 				},
 				level: 4,
 			},
