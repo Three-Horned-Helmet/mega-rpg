@@ -19,14 +19,14 @@ OR [invite](https://discordapp.com/oauth2/authorize?client_id=721024429345341560
 
 
 ## Intro
-In Mega-RPG you can build a city and explore the surroundings with your hero and army. You are able to do quests, kill minibosses and drop epic loot during your adventures! If you are brave enough you will also be able to raid a dungeon, but be warned you’ll need the help from other adventurers to take it down!
+In Mega-RPG you can build a city and explore the surroundings with your hero and army. You are able to do quests, kill minibosses and drop epic loot during your adventures! If you are brave enough you will also be able to raid dungeons, but be warned you may need the help from other adventurers to take it down!
 
-The Game is set in a fantasy-medieval universe and the journey begins in a kingdom tyrannized by a Bandit King and its Impling helpers. The citizens of the kingdom has lost hope, but some try their best to live their lives. You are a master of your own empire, but with an army and a hero you will be able to help the citizens and bring down the Bandit King!
+The Game is set in a fantasy-medieval universe and the journey begins in a kingdom tyrannized by a Bandit King and his Impling helpers. The citizens of the kingdom has lost all hope, but some try their best to live their lives. You are a master of your own empire, but with an army and a hero you may be able to help the citizens and bring down the Bandit King!
 
-The game is in early stage, but we are continuously expanding the game with more quests and features. If you see something you like (or don't like), please let us know by pinging us at Discord.
+The game is in an early development stage, but we are continuously expanding the game with more quests and features. If you see something you like (or dislike), please let us know by creating a post on our official Discord support server, or send us a message directly.
 Any feedback or bug-reports are highly appreciated!
 
-Thank you to everyone that has helped us with the early testing! 
+A big thanks to everyone that has helped us with the early testing! 
 
 ## How to run Mega-RPG locally
 
