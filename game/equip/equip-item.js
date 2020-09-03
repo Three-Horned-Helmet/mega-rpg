@@ -2,7 +2,14 @@ const allItems = require("../items/all-items");
 const { getTowerItem } = require("../items/tower-items/tower-item-functions");
 
 const equipItem = async (user, itemName) => {
-	const item = allItems[itemName] || getTowerItem(itemName);
+	let item = allItems[itemName] || getTowerItem(itemName);
+	if(!item) {
+		itemName = Object.values(user.army.armory).map(allItemsCat => {
+			return Object.keys(allItemsCat).find(i => i.includes(itemName)) || false;
+		}).filter(el => el)[0];
+
+		item = allItems[itemName] || getTowerItem(itemName);
+	}
 
 	const canBeEquiped = checkIfItemCanBeEquiped(user, item, itemName);
 	if(!canBeEquiped.response) return canBeEquiped.message;
