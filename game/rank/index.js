@@ -20,20 +20,22 @@ const handleRank = async (rankType, currentServer, user)=> {
 	}
 };
 
-const getTop10Army = async (user, currentServer = {})=>{
+const getTop10Army = async (user, currentServer)=>{
 	const allUsers = await User
-		.find(currentServer)
+		.find()
 		.select(["account", "army", "hero"])
 		.sort({ "hero.currentExp":-1 })
 		.limit(500)
 		.lean();
 	const sortedPlayers = allUsers.map(p=>{
-		return { name: p.account.username, userId: p.account.userId, total:  calculateStats(p).unitStats.attack } ;
+		return { account: p.account, name: p.account.username, userId: p.account.userId, total:  calculateStats(p).unitStats.attack } ;
 	});
 
 	sortedPlayers.sort((a, b)=>b.total - a.total);
 
-	const top10 = sortedPlayers.slice(0, 10);
+	const allUsersInServer = sortedPlayers.filter(player=> player.account.servers.includes(currentServer));
+
+	const top10 = allUsersInServer.slice(0, 10);
 
 
 	const formatted = top10.map((p, i)=>{
@@ -42,20 +44,22 @@ const getTop10Army = async (user, currentServer = {})=>{
 	});
 	if (!top10.some(player=> player.userId === user.account.userId)) {
 		let playerPosition;
-		sortedPlayers.forEach((p, i)=>{
+		allUsersInServer.forEach((p, i)=>{
 			if (p.userId === user.account.userId) {
 				playerPosition = i + 1;
 			}
 		});
 		formatted.push(`\`#${playerPosition}: ${user.account.username} --- ${calculateStats(user).unitStats.attack} army strength\``);
 	}
+	// global position
+	formatted.push(getGlobalPosition(sortedPlayers, user.account.userId));
+
 	return formatted;
 };
 
-const getTop10Quest = async (user, currentServer = {})=>{
+const getTop10Quest = async (user, currentServer)=>{
 
 	const allUsers = await User.aggregate([
-		{ $match: currentServer },
 		{
 			$addFields: {
 				completedQuestsLength: {
@@ -76,7 +80,9 @@ const getTop10Quest = async (user, currentServer = {})=>{
 		}
 	]);
 
-	const top10 = allUsers.slice(0, 10);
+	const allUsersInServer = allUsers.filter(player=> player.account.servers.includes(currentServer));
+
+	const top10 = allUsersInServer.slice(0, 10);
 
 	const formatted = top10.map((p, i)=>{
 		const first = i === 0 ? "🔥" : "";
@@ -84,25 +90,30 @@ const getTop10Quest = async (user, currentServer = {})=>{
 	});
 	if (!top10.some(player=> player.account.userId === user.account.userId)) {
 		let playerPosition;
-		allUsers.forEach((p, i)=>{
+		allUsersInServer.forEach((p, i)=>{
 			if (p.account.userId === user.account.userId) {
 				playerPosition = i + 1;
 			}
 		});
 		formatted.push(`\`#${playerPosition}: ${user.account.username} --- ${user.completedQuests.length} \``);
 	}
+	// global position
+	formatted.push(getGlobalPosition(allUsers, user.account.userId));
+
 	return formatted;
 };
 
-const getTop10Elo = async (user, currentServer = {})=> {
+const getTop10Elo = async (user, currentServer)=> {
 
 	const allUsers = await User
-		.find(currentServer)
+		.find()
 		.select(["account", "hero"])
 		.sort({ "hero.elo":-1 })
 		.lean();
 
-	const top10 = allUsers.slice(0, 10);
+	const allUsersInServer = allUsers.filter(player=> player.account.servers.includes(currentServer));
+
+	const top10 = allUsersInServer.slice(0, 10);
 
 	const formatted = top10.map((p, i)=>{
 		const first = i === 0 ? "🎖" : "";
@@ -111,25 +122,29 @@ const getTop10Elo = async (user, currentServer = {})=> {
 
 	if (!top10.some(player=> player.account.userId === user.account.userId)) {
 		let playerPosition;
-		allUsers.forEach((p, i)=>{
+		allUsersInServer.forEach((p, i)=>{
 			if (p.account.userId === user.account.userId) {
 				playerPosition = i + 1;
 			}
 		});
 		formatted.push(`\`#${playerPosition}: ${user.account.username} --- ${user.hero.elo} \``);
 	}
+	// global position
+	formatted.push(getGlobalPosition(allUsers, user.account.userId));
 
 	return formatted;
 };
 
-const getTop10Xp = async (user, currentServer = {}, help = false) => {
+const getTop10Xp = async (user, currentServer, help = false) => {
 	const allUsers = await User
-		.find(currentServer)
+		.find()
 		.select(["account", "hero"])
 		.sort({ "hero.currentExp":-1 })
 		.lean();
 
-	const top10 = allUsers.slice(0, 10);
+	const allUsersInServer = allUsers.filter(player=> player.account.servers.includes(currentServer));
+
+	const top10 = allUsersInServer.slice(0, 10);
 
 	const formatted = top10.map((p, i)=>{
 		const first = i === 0 ? "💎" : "";
@@ -138,29 +153,33 @@ const getTop10Xp = async (user, currentServer = {}, help = false) => {
 
 	if (!top10.some(player=> player.account.userId === user.account.userId)) {
 		let playerPosition;
-		allUsers.forEach((p, i)=>{
+		allUsersInServer.forEach((p, i)=>{
 			if (p.account.userId === user.account.userId) {
 				playerPosition = i + 1;
 			}
 		});
 		formatted.push(`\`#${playerPosition}: ${user.account.username} --- hero lvl: ${user.hero.rank} - ${user.hero.currentExp} XP\``);
 	}
+	// global position
+	formatted.push(getGlobalPosition(allUsers, user.account.userId));
 
-	if (help && Object.keys(currentServer).length === 0) {
+	if (help) {
 		formatted.push("\n Available rankings are:\n `!rank xp - !rank army - !rank sfa - !rank quest - !rank elo`\n `!rank server` for players on this server!");
 	}
 
 	return formatted;
 };
 
-const getTop10Sfa = async (user, currentServer = {}) => {
+const getTop10Sfa = async (user, currentServer) => {
 	const allUsers = await User
-		.find(currentServer)
+		.find()
 		.select(["account", "tower"])
 		.sort({ "tower.solo full-army.level":-1 })
 		.lean();
 
-	const top10 = allUsers.slice(0, 10);
+	const allUsersInServer = allUsers.filter(player=> player.account.servers.includes(currentServer));
+
+	const top10 = allUsersInServer.slice(0, 10);
 
 	const formatted = top10.map((p, i)=>{
 		const first = i === 0 ? "💎" : "";
@@ -169,17 +188,28 @@ const getTop10Sfa = async (user, currentServer = {}) => {
 
 	if (!top10.some(player=> player.account.userId === user.account.userId)) {
 		let playerPosition;
-		allUsers.forEach((p, i)=>{
+		allUsersInServer.forEach((p, i)=>{
 			if (p.account.userId === user.account.userId) {
 				playerPosition = i + 1;
 			}
 		});
 		formatted.push(`\`#${playerPosition}: ${user.account.username} --- tower lvl: ${user.tower["solo full-army"].level}\``);
 	}
+	// global position
+	formatted.push(getGlobalPosition(allUsers, user.account.userId));
 
 	return formatted;
 };
 
+const getGlobalPosition = (allUsers, userId)=>{
+	let globalPlayerPosition;
+	allUsers.forEach((p, i)=>{
+		if (p.account.userId === userId) {
+			globalPlayerPosition = i + 1;
+		}
+	});
+	return `\n\`Global position: #${globalPlayerPosition} \``;
+};
 
 /* const getAllSoldiers = (units) => {
 	let result = 0;

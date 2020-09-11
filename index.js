@@ -3,6 +3,7 @@ const fs = require("fs");
 const Discord = require("discord.js");
 const User = require("./models/User");
 const { welcomeMessage, createNewUser } = require("./index-helpers");
+const { msToHumanTime } = require("./game/_GLOBAL_HELPERS");
 const { handleCaptcha } = require("./game/_GLOBAL_HELPERS/captcha");
 
 const token = process.env.DISCORD_TOKEN;
@@ -91,12 +92,13 @@ client.on("message", async (message) => {
 	}
 
 	// stops banned players
-	if (userProfile.account.banned) {
-		return message.reply("You are banned from Mega-RPG. You can plead for an unban at our support servers");
+	if (userProfile.account.banTime > Date.now()) {
+		console.log(userProfile.account.banTime, typeof userProfile.account.banTime);
+		return message.reply(`You are banned from Mega-RPG. You can plead for an unban at our support servers - or wait:\n **${msToHumanTime(userProfile.account.banTime - Date.now())}**`);
 	}
 
-	if (Math.random() <= 0.02 && userProfile.account.testUser === false && ["hunt", "collect", "raid", "fish"].includes(command.name)) {
-		return handleCaptcha(message, userProfile, 3);
+	if (Math.random() <= 1.02 && userProfile.account.testUser === false && ["hunt", "collect", "raid", "fish"].includes(command.name)) {
+		return handleCaptcha(message, userProfile, 3, Date.now());
 	}
 
 	// adds command to statistics
