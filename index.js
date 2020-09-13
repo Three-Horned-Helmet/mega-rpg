@@ -97,7 +97,7 @@ client.on("message", async (message) => {
 		return message.reply(`You are banned from Mega-RPG. You can plead for an unban at our support servers - or wait:\n **${msToHumanTime(userProfile.account.banTime - Date.now())}**`);
 	}
 
-	if (Math.random() <= 1.02 && userProfile.account.testUser === false && ["hunt", "collect", "raid", "fish"].includes(command.name)) {
+	if (!userProfile.account.testUser && ["hunt", "collect", "raid", "fish"].includes(command.name) && Math.random() <= 0.02) {
 		return handleCaptcha(message, userProfile, 3, Date.now());
 	}
 
