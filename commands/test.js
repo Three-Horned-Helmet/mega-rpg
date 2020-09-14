@@ -48,6 +48,7 @@ module.exports = {
 
 		// templateProgress.teamRed.push(npc)
 
-		return await createCombatRound(message, templateProgress);
+		const answer = await createCombatRound(message, templateProgress);
+		console.log(answer, "ANSWER");
 	},
 };

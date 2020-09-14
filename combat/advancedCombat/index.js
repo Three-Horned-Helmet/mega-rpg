@@ -66,14 +66,18 @@ const createCombatRound = async (message, progress) => {
 			collector.stop();
 		}
 	});
-	collector.on("end", async () => {
-		const result = await calculateCombatResult(progress);
-		if (result.winner) {
-			return progress;
-		}
-		else {
-			return await createCombatRound(message, result);
-		}
+
+	// Needs to be improved to include a way to reject the Promise
+	return await new Promise ((resolve) => {
+		collector.on("end", async () => {
+			const result = await calculateCombatResult(progress);
+			if (result.winner) {
+				resolve(progress);
+			}
+			else {
+				resolve(await createCombatRound(message, result));
+			}
+		});
 	});
 };
 
