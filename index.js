@@ -93,7 +93,6 @@ client.on("message", async (message) => {
 
 	// stops banned players
 	if (userProfile.account.banTime > Date.now()) {
-		console.log(userProfile.account.banTime, typeof userProfile.account.banTime);
 		return message.reply(`You are banned from Mega-RPG. You can plead for an unban at our support servers - or wait:\n **${msToHumanTime(userProfile.account.banTime - Date.now())}**`);
 	}
 
