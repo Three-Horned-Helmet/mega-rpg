@@ -273,7 +273,7 @@ function generateRoomEmbed(user, placeInfo, results, questIntro = false) {
 			return `${getIcon(r)} ${r}: **${result.resourceReward[r]}**`;
 		});
 		rewards.push(`\n+ **${result.expReward}** xp`);
-		rewards.push(`Casulty: **${casualtiesPercentage}**% \n`);
+		rewards.push(`Casulty: **${1 - casualtiesPercentage}**% \n`);
 
 		let { username } = result;
 		if (result.levelUp) {

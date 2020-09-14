@@ -44,7 +44,7 @@ const cooldowns = {
 		default: 0,
 	},
 };
-// key must be equal to commands
+// key must be equal to commands and lowercase
 const statistics = {
 	army: {
 		type: Number,
@@ -70,7 +70,7 @@ const statistics = {
 		type: Number,
 		default: 0,
 	},
-	dailyPrize: {
+	dailyprize: {
 		type: Number,
 		default: 0,
 	},
@@ -166,7 +166,7 @@ const statistics = {
 		type: Number,
 		default: 0,
 	},
-	weeklyPrize: {
+	weeklyprize: {
 		type: Number,
 		default: 0,
 	},

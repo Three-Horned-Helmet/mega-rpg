@@ -24,6 +24,7 @@ for (let i = 0; i < 20; i++) {
 			username: Math.random().toString(36).substring(7),
 			userId: rndmId(),
 			testUser: true,
+			servers: [Math.random() > 0.3 ? "717462802272485516" : "8275918275289"]
 		},
 		resources : {
 			gold:Math.floor(Math.random() * 1000),

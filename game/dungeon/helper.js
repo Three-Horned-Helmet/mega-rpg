@@ -106,7 +106,7 @@ const dungeonStartAllowed = (user) => {
 };
 const validateHelper = async discordId => {
 	const user = await User.findOne({ "account.userId": discordId }).lean();
-	return user.hero.currentHealth > user.hero.health * 0.05;
+	return user.hero.currentHealth > user.hero.health * 0.05 && user.hero.currentHealth < 50;
 };
 
 module.exports = { getWeaponInfo, dungeonStartAllowed, validateHelper };

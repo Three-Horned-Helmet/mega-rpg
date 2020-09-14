@@ -23,10 +23,11 @@ const userSchema = new Schema({
 	account: {
 		username: String,
 		userId: String,
-		banned: {
-			type: Boolean,
-			default: false,
+		bans: {
+			type: Number,
+			default: 0
 		},
+		banTime: Number,
 		testUser:{
 			type: Boolean,
 			default: false,
