@@ -11,7 +11,7 @@ module.exports = {
 	shortcuts: {
 		sfa: "solo full-army"
 	},
-	execute(message, args, user) {
+	async execute(message, args, user) {
 		// const newItem = getNewTowerItem(5);
 		// getTowerItem(newItem);
 		// return;
@@ -24,8 +24,7 @@ module.exports = {
 			return message.channel.send(onCooldownInfo.embed);
 		}
 
-		towerHandler(user, args).then(response => {
-			message.channel.send(response);
-		});
+		await towerHandler(user, args, message);
+		console.log("execute done");
 	},
 };

@@ -1,9 +1,11 @@
 const { calculatePveFullArmyResult } = require("../../../combat/combat");
 const { getArmyTowerEnemies } = require("./army-tower-enemies/army-tower-enemies");
 const { getNewTowerItem, getTowerItem, removeTowerItemFromUser } = require("../../../game/items/tower-items/tower-item-functions");
+
+const { createCombatRound } = require("../../../combat/advancedCombat/index");
 // Takes an array of users and makes them fight together in the Tower
 // Category is "solo" or "trio" etc
-const armyTowerFight = async (users, category) => {
+const armyTowerFight = async (users, category, message) => {
 	// The results sent to the results embed after the combat
 	const allResults = {
 		users,
@@ -15,6 +17,7 @@ const armyTowerFight = async (users, category) => {
 		won: false,
 	};
 
+	// user with highest level
 	const highestLevel = users.reduce((acc, cur) => {
 		return cur.tower[`${category} full-army`].level > acc ? cur.tower[`${category} full-army`].level : acc;
 	}, 0);
@@ -30,7 +33,21 @@ const armyTowerFight = async (users, category) => {
 		enemy.stats[stat] = Math.floor(enemy.stats[stat] * enemyCombatModifier);
 	}
 
-	const combatResults = users.map(user => calculatePveFullArmyResult(user, enemy));
+	// console.log(users, "user");
+	const templateProgress = {
+		combatRules:{
+			armyAllowed: false,
+			maxRounds: 3
+		},
+		teamGreen:Array.isArray(users) ? [...users] : [users],
+		teamRed:Array.isArray(enemy) ? [...enemy] : [enemy],
+		embedInformation:{}
+	};
+
+	const combatResults = await createCombatRound(message, templateProgress);
+	console.log("done");
+
+	// const combatResults = users.map(user => calculatePveFullArmyResult(user, enemy));
 
 	// Make the users lose hero hp and units depending on lossPercentage and give exp
 	users.forEach(user => {

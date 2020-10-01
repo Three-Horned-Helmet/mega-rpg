@@ -4,17 +4,18 @@ const { getWeaponInfo } = require("./helper");
 const { asyncForEach, randomIntBetweenMinMax } = require("../../game/_GLOBAL_HELPERS");
 /*
 Todo:
-- Potential issue with object references and teamGreenIds
-- Issue with naming in embed. Team green / team red etc
-- Potential issue if not deepcopying npc before function call
+- 'decrypt' npc back to npc form after fight
 */
 
 
 const createCombatRound = async (message, progress) => {
-	if (!progress.teamGreenIds || !progress.teamGreenIds.length) {
+	if (!progress.started) {
 		validateProgress(progress);
-		populateProgress(progress);
+		combatSetup(progress);
 	}
+	/* if (!allPlayersAlive(progress)) {
+		return message.channel.send("Dead players can't join fight");
+	} */
 
 	// eslint-disable-next-line prefer-const
 	let { numOfAllowedWeapons, allowedWeapons, weaponAnswers } = progress.weaponInformation;
@@ -66,20 +67,22 @@ const createCombatRound = async (message, progress) => {
 			collector.stop();
 		}
 	});
-	collector.on("end", async () => {
-		const result = await calculateCombatResult(progress);
-		if (result.winner) {
-			return progress;
-		}
-		else {
-			return await createCombatRound(message, result);
-		}
+	return await new Promise ((resolve) => {
+		collector.on("end", async () => {
+			const result = await calculateCombatResult(progress);
+			if (result.winner) {
+				resolve(progress);
+			}
+			else {
+				resolve(await createCombatRound(message, result));
+			}
+		});
 	});
 };
 
 const calculateCombatResult = async (progress) => {
 	// eslint-disable-next-line prefer-const
-	let { teamGreen, teamRed, combatRules } = progress;
+	let { teamGreen, teamRed } = progress;
 	const { weaponAnswers } = progress.weaponInformation;
 
 	// cleans up roundResults from previous round
@@ -88,171 +91,52 @@ const calculateCombatResult = async (progress) => {
 	const awaitHealPlayerPromises = {};
 	const awaitDamagePlayerPromises = {};
 
-	const awaitDamageNPCPromises = {};
+	// adds weapon choice from npc
+	// clean this
+	[...teamRed, ...teamGreen]
+		.filter(player=>player.account.npc)
+		.forEach(player=>{
+			const weaponInformation = Object.values(progress.weaponInformation.allowedWeapons).find(
+				(weapon) => weapon.answer === "a"
+			);
+			weaponAnswers.set(player.account.userId, weaponInformation.name);
+		});
 
 
+	// loops through every weaponanswer and performs action
 	weaponAnswers.forEach((weapon, player) => {
-		const isTeamGreen = teamGreen.some(member=> member.account.userId === player);
+		// allows players with more attack to attack more than once
+		const allowedNumOfAttacks = player.allowedNumOfAttacks || 1;
+		for (let i = 0; i < allowedNumOfAttacks; i += 1) {
 
-		let playerInfo, randomVictim, teamMateWithLowestHp;
+			const isTeamGreen = teamGreen.some(member=> member.account.userId === player);
 
-		if (isTeamGreen) {
-			playerInfo = teamGreen.find((member) => member.account.userId === player);
-			randomVictim = teamRed[Math.floor(Math.random() * teamRed.length)];
-			teamMateWithLowestHp = teamGreen
-				.sort((a, b)=> a.hero.currentHealth - b.hero.currentHealth)
-				.filter((p)=> p.hero.currentHealth > 0)[0];
-		}
-		else {
-			playerInfo = teamRed.find((member) => member.account.userId === player);
-			randomVictim = teamGreen[Math.floor(Math.random() * teamGreen.length)];
-			teamMateWithLowestHp = teamRed
-				.sort((a, b)=> a.hero.currentHealth - b.hero.currentHealth)
-				.filter((p)=> p.hero.currentHealth > 0)[0];
-		}
-		// lower chance is better
-		const chance = Math.random();
+			// Figure out which team is friendly and which is opposing
+			const friendlyTeam = isTeamGreen ? teamGreen : teamRed;
+			const opposingTeam = isTeamGreen ? teamRed : teamGreen;
 
-		const weaponInfo = getWeaponInfo(weapon);
-		const playerName = playerInfo.account.username;
-		const victimName = randomVictim.name || randomVictim.account.username;
+			const playerInfo = friendlyTeam.find((member) => member.account.userId === player);
+			const randomVictimInfo = opposingTeam[Math.floor(Math.random() * teamRed.length)];
 
+			// lower chance is better
+			const chance = Math.random();
+			const weaponInfo = getWeaponInfo(weapon);
+			const playerName = playerInfo.account.username;
+			const victimName = randomVictimInfo.account.username;
 
-		if (weaponInfo.chanceforSuccess > chance) {
-			if (weaponInfo.type === "attack") {
-				const damageGiven = randomIntBetweenMinMax(
-					(playerInfo.hero.attack / 2) * weaponInfo.damage,
-					playerInfo.hero.attack * weaponInfo.damage
-				);
-				// playerResult.damageGiven = tempDamageGiven;
-
-				if (combatRules.mode === "PVP") {
-
-					if (awaitDamagePlayerPromises[victimName]) {
-						awaitDamagePlayerPromises[victimName].damage += damageGiven;
-					}
-
-					else {
-						awaitDamagePlayerPromises[victimName] = {
-							user: randomVictim,
-							damage: damageGiven,
-						};
-					}
-				}
-
-				if (combatRules.mode === "PVE") {
-
-					if (awaitDamageNPCPromises[victimName]) {
-						awaitDamageNPCPromises[victimName].damage += damageGiven;
-					}
-
-					else {
-						awaitDamageNPCPromises[victimName] = {
-							user: randomVictim,
-							damage: damageGiven,
-						};
-					}
-				}
-
-				progress.roundResults.push(
-					generateAttackString(
-						playerName,
-						weaponInfo,
-						damageGiven,
-						victimName
-					)
-				);
-			}
-			if (weaponInfo.type === "heal") {
-				const playerHealedName = teamMateWithLowestHp.account.username;
-				const healGiven = randomIntBetweenMinMax(
-					(playerInfo.hero.health * weaponInfo.damage) / 2,
-					playerInfo.hero.health * weaponInfo.damage
-				);
-				if (awaitHealPlayerPromises[victimName]) {
-					awaitHealPlayerPromises[victimName].healGiven += healGiven;
-				}
-				else {
-					awaitHealPlayerPromises[victimName] = {
-						user: teamMateWithLowestHp,
-						healGiven: healGiven,
-					};
-				}
-				progress.roundResults.push(
-					generateHealString(
-						playerName,
-						weaponInfo,
-						healGiven,
-						playerHealedName
-					)
-				);
-			}
-		}
-		else {
-			progress.roundResults.push(`\n${playerName} failed to use ${weaponInfo.name} on ${victimName === playerName ? "himself" : victimName}`);
-		}
-	});
-
-	if (combatRules.mode === "PVE") {
-		teamRed.forEach(npc=>{
-			const allowedNumOfAttacks = npc.allowedNumOfAttacks || 1;
-			const npcName = npc.name;
-
-			for (let i = 0; i < allowedNumOfAttacks; i += 1) {
-				const randomVictim = teamGreen[Math.floor(Math.random() * teamGreen.length)];
-
-				const weaponNames = Object.keys(progress.weaponInformation.allowedWeapons);
-				const randomWeaponName = weaponNames[Math.floor(Math.random() * weaponNames.length)];
-				const weaponInfo = getWeaponInfo(randomWeaponName);
-				const { stats } = npc;
-
-				if (randomVictim) {
-					if (weaponInfo.type === "attack") {
-						const tempDamageGiven = randomIntBetweenMinMax(
-							stats.attack * weaponInfo.damage,
-							(stats.attack / 2) * weaponInfo.damage
-						);
-
-						if (awaitDamagePlayerPromises[randomVictim.account.username]) {
-							awaitDamagePlayerPromises[randomVictim.account.username].damage += tempDamageGiven;
-						}
-						else {
-							awaitDamagePlayerPromises[randomVictim.account.username] = {
-								user: randomVictim,
-								damage: tempDamageGiven,
-							};
-						}
-						// removes user from helper array if dead
-						if (randomVictim.hero.currentHealth - tempDamageGiven <= 0) {
-							progress.dungeon.helperIds = progress.dungeon.helperIds.filter(
-								(h) => h !== randomVictim.account.userId
-							);
-						}
-						progress.roundResults.push(
-							generateAttackString(
-								npcName,
-								weaponInfo,
-								tempDamageGiven,
-								randomVictim.account.username
-							)
-						);
-					}
+			if (weaponInfo.chanceforSuccess > chance) {
+				if (weaponInfo.type === "attack") {
+					handleAdvancedCombatAttack(playerInfo, weaponInfo, awaitDamagePlayerPromises, randomVictimInfo, progress);
 				}
 				if (weaponInfo.type === "heal") {
-					const healGiven = randomIntBetweenMinMax(
-						stats.health * weaponInfo.damage,
-						(stats.health * weaponInfo.damage) / 2
-					);
-
-					npc.stats.health += healGiven;
-					progress.roundResults.push(
-						generateHealString(npcName, weaponInfo, healGiven)
-					);
+					handleAdvancedCombatHeal(playerInfo, friendlyTeam, weaponInfo, awaitHealPlayerPromises, progress);
 				}
 			}
-		});
-	}
-
+			else {
+				progress.roundResults.push(`\n${playerName} failed to use ${weaponInfo.name} on ${victimName === playerName ? "himself" : victimName}`);
+			}
+		}
+	});
 
 	// takes care of healing
 	Object.keys(awaitHealPlayerPromises).forEach(async (u) => awaitHealPlayerPromises[u].user.healHero(awaitHealPlayerPromises[u].healGiven));
@@ -260,26 +144,19 @@ const calculateCombatResult = async (progress) => {
 	// inflicts damage on user document
 	Object.keys(awaitDamagePlayerPromises).forEach(async (u) => awaitDamagePlayerPromises[u].user.heroHpLossFixedAmount(awaitDamagePlayerPromises[u].damage));
 
-	await asyncForEach(teamGreen, async (member)=>{
-		await member.save();
+
+	// performs database save
+	await asyncForEach([...teamGreen, ...teamRed].filter(player=>!player.account.npc), async (player) => {
+		await player.save();
 	});
-	if (combatRules.mode === "PVP") {
-		await asyncForEach(teamRed, async (member)=>{
-			await member.save();
-		});
-	}
 
 
 	// removes player from combat
 	teamGreen = teamGreen.filter(member=>member.hero.currentHealth > 0);
-	if (combatRules.mode === "PVP") {
-		teamRed = teamRed.filter(member=>member.hero.currentHealth > 0);
-	}
-	if (combatRules.mode === "PVE") {
-		teamRed = teamRed.filter(npc=>npc.health > 0);
-	}
-
+	teamRed = teamRed.filter(member=>member.hero.currentHealth > 0);
+	console.log(progress.currentRound);
 	progress.currentRound += 1;
+	console.log(progress.currentRound, "progress.currentRound");
 	progress.weaponInformation.weaponAnswers.clear();
 
 	// checks if fight is over
@@ -295,14 +172,65 @@ const generateHealString = (playerName, weaponInfo, healGiven, playerHealed) => 
 	return `\n${playerName} helead ${playerHealed === playerName ? "himself" : playerHealed}. +${healGiven} HP`;
 };
 
-const populateProgress = progress => {
+const combatSetup = progress => {
 	setupProgressKeys(progress);
+	convertNpcsToHuman(progress);
 	populateDiscordIds(progress);
 	populatePlayerNames(progress);
+	formatEmbedInformation(progress);
 };
+
+const formatEmbedInformation = (progress)=> {
+	const { embedInformation } = progress;
+	embedInformation.teamRedName = embedInformation.teamRedName || "Team Red";
+	embedInformation.teamGreenName = embedInformation.teamGreenName || "Team Green";
+	embedInformation.title = embedInformation.title || "BATTLE!";
+	embedInformation.description = embedInformation.description || "Here is description";
+	embedInformation.fields = embedInformation.fields || [];
+	embedInformation.footer = embedInformation.footer || "TIP: Write your weapon of choice in the chat. eg -> a or c";
+
+	return progress;
+
+};
+
+const convertNpcsToHuman = (progress) => {
+	progress.teamRed.map(member=> {
+		if (!member.account) return convertNpc(member);
+	});
+	progress.teamGreen.map(member=> {
+		if (!member.account) return convertNpc(member);
+	});
+};
+
+const convertNpc = (npc)=> {
+	npc.account = {
+		userId: Math.random().toString(36).substr(2, 10),
+		username: npc.name,
+		npc: true,
+	};
+	npc.hero = {
+		health: npc.stats.health,
+		currentHealth: npc.stats.health,
+		attack: npc.stats.attack
+	};
+
+	npc.heroHpLossFixedAmount = function(hp) {
+		this.currentHealth -= hp;
+	};
+	npc.healHero = function(hp) {
+		this.currentHealth += hp;
+	};
+
+	npc.stats = null;
+	npc.name = null;
+	return npc;
+
+};
+
 
 const setupProgressKeys = (progress)=>{
 	const setup = {
+		started: true,
 		winner: null,
 		roundResults: [],
 		currentRound: 0,
@@ -322,19 +250,12 @@ const setupProgressKeys = (progress)=>{
 
 const populateDiscordIds = (progress)=>{
 	progress.teamGreen.forEach(member=> progress.teamGreenIds.push(member.account.userId));
-	if (progress.combatRules.mode === "PVP") {
-		progress.teamRed.forEach(member=> progress.teamRedIds.push(member.account.userId));
-	}
+	progress.teamRed.forEach(member=> progress.teamRedIds.push(member.account.userId));
 };
 
 const populatePlayerNames = (progress)=>{
 	progress.teamGreen.forEach(member=> progress.teamGreenNames.push(member.account.username));
-	if (progress.combatRules.mode === "PVP") {
-		progress.teamRed.forEach(member=> progress.teamRedNames.push(member.account.username));
-	}
-	if (progress.combatRules.mode === "PVE") {
-		progress.teamRed.forEach(member=> progress.teamRedNames.push(member.name));
-	}
+	progress.teamRed.forEach(member=> progress.teamRedNames.push(member.account.username));
 };
 
 const checkWinner = progress=>{
@@ -357,10 +278,6 @@ const validateProgress = (progress)=>{
 	if (!progressKeys.some(key=> Object.keys(progress).includes(key))) {
 		throw new Error(`progress keys are missing\nExpected: ${progressKeys}\nGot: ${Object.keys(progress)}\n`);
 	}
-	const allowedModes = ["PVP", "PVE"];
-	if (!progress.combatRules.mode || progress.combatRules.mode.includes(allowedModes)) {
-		throw new Error(`progress.combatRules.mode must be set to ${allowedModes.split(" or ")}\n`);
-	}
 	if (!progress.combatRules.maxRounds || typeof progress.combatRules.maxRounds !== "number") {
 		throw new Error("progress.combatRules.maxRounds must be set to a number\n");
 	}
@@ -370,14 +287,65 @@ const validateProgress = (progress)=>{
 	if (progress.teamGreen.length === 0 || progress.teamRed.length === 0) {
 		throw new Error(`No players in the teams. \n teamGreen: ${progress.teamGreen.length} members \n teamRed: ${progress.teamRed.length} members\n`);
 	}
-	if (progress.combatRules.mode === "PVE") {
-		if (!progress.teamRed.every(member=> {
-			const keys = Object.keys(member);
-			return keys.includes("name") && keys.includes("stats");
-		})) {
-			throw new Error("Team red can only have npc in PVE mode. \n NAME or STATS missing from npc");
-		}
+};
+
+const handleAdvancedCombatAttack = (playerInfo, weaponInfo, awaitDamagePlayerPromises, randomVictimInfo, progress) =>{
+	const victimName = randomVictimInfo.account.username;
+	const playerName = playerInfo.account.username;
+	const damageGiven = randomIntBetweenMinMax(
+		(playerInfo.hero.attack / 2) * weaponInfo.damage,
+		playerInfo.hero.attack * weaponInfo.damage
+	);
+	if (awaitDamagePlayerPromises[victimName]) {
+		awaitDamagePlayerPromises[victimName].damage += damageGiven;
 	}
+	else {
+		awaitDamagePlayerPromises[victimName] = {
+			user: randomVictimInfo,
+			damage: damageGiven,
+		};
+	}
+	progress.roundResults.push(generateAttackString(playerName, weaponInfo, damageGiven, victimName)
+	);
+
+};
+
+const handleAdvancedCombatHeal = (playerInfo, friendlyTeam, weaponInfo, awaitHealPlayerPromises, progress)=>{
+	const playerName = playerInfo.account.username;
+	const teamMateWithLowestHp = friendlyTeam
+		.sort((a, b)=> a.hero.currentHealth - b.hero.currentHealth)
+		.filter((p)=> p.hero.currentHealth > 0)[0];
+	const teamMateName = teamMateWithLowestHp.account.username;
+
+	const playerHealedName = teamMateWithLowestHp.account.username;
+	const healGiven = randomIntBetweenMinMax(
+		(playerInfo.hero.health * weaponInfo.damage) / 2,
+		playerInfo.hero.health * weaponInfo.damage
+	);
+	if (awaitHealPlayerPromises[teamMateName]) {
+		awaitHealPlayerPromises[teamMateName].healGiven += healGiven;
+	}
+	else {
+		awaitHealPlayerPromises[teamMateName] = {
+			user: teamMateWithLowestHp,
+			healGiven: healGiven,
+		};
+	}
+	progress.roundResults.push(
+		generateHealString(
+			playerName,
+			weaponInfo,
+			healGiven,
+			playerHealedName
+		)
+	);
+};
+
+const allPlayersAlive = progress => {
+	const { teamGreen, teamRed } = progress;
+	return [...teamGreen, ...teamRed].every(player=>{
+		return player.hero.currentHealth > 0;
+	});
 };
 
 module.exports = { createCombatRound };

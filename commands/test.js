@@ -5,7 +5,6 @@ const User = require("../models/User");
 
 const templateProgress = {
 	combatRules:{
-		mode: "PVP", // ["PVP","PVE"]
 		armyAllowed: false,
 		maxRounds: 3 // combat will end after fight this many times
 	},

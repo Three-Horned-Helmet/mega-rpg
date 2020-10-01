@@ -4,18 +4,12 @@ const { getIcon } = require("../../game/_CONSTS/icons");
 
 const generateEmbedCombatRound = (progress) => {
 	const { allowedWeapons } = progress.weaponInformation;
-	const { teamRed, teamGreen, roundResults, teamGreenIds, teamRedIds, teamGreenNames, teamRedNames, combatRules } = progress;
-	const { title, description, fields, footer } = progress.embedInformation;
+	const { teamRed, teamGreen, roundResults, teamGreenIds, teamRedIds, teamGreenNames, teamRedNames, currentRound, combatRules } = progress;
+	const { title, description, fields, footer, teamRedName, teamGreenName } = progress.embedInformation;
 
 	const greenTeamsHp = getPlayersHp(teamGreen, teamGreenIds);
-	let redTeamsHp;
+	const redTeamsHp = getPlayersHp(teamRed, teamRedIds, true);
 
-	if (combatRules.mode === "PVP") {
-		redTeamsHp = getPlayersHp(teamRed, teamRedIds, true);
-	}
-	if (combatRules.mode === "PVE") {
-		redTeamsHp = getNpcHp(teamRed);
-	}
 	const teamGreenOverview = formatTeamOverview(teamGreen, teamGreenNames);
 	const teamRedOverview = formatTeamOverview(teamRed, teamRedNames);
 
@@ -24,9 +18,6 @@ const generateEmbedCombatRound = (progress) => {
 		const { answer, name, description } = allowedWeapons[w];
 		return `${getIcon(name)} ${answer}) **${name}** ${description}\n`;
 	});
-
-	const teamGreenName = progress.embedInformation.teamGreen ? progress.embedInformation.teamGreen : teamGreen.length !== 1 ? "Team Green" : teamGreen[0].account.username;
-	const teamRedName = progress.embedInformation.teamRed ? progress.embedInformation.teamRed : teamRed.length !== 1 ? "Team Red" : teamRed[0].name || teamRed[0].account.username;
 
 	const topLeft = {
 		name:  `${teamRedName} HP:`,
@@ -62,7 +53,7 @@ const generateEmbedCombatRound = (progress) => {
 
 	if (roundResults.length) {
 		bottomLeft.value.push("\n");
-		bottomLeft.value.push(`\`Results from round ${progress.currentRound}:\``);
+		bottomLeft.value.push(`\`Results from round ${currentRound}:\``);
 		bottomLeft.value.push(roundResults);
 	}
 	else {
@@ -88,18 +79,18 @@ const generateEmbedCombatRound = (progress) => {
 		bottomLeft,
 		bottomRight
 	];
-	if (fields.length) {
+	if (fields && fields.length) {
 		combatFields.concat(fields);
 	}
 
 	const embedResult = new Discord.MessageEmbed()
-		.setTitle(`${title || "BATTLE!"} \nround ${progress.currentRound + 1}`)
+		.setTitle(`${title} \nround ${currentRound + 1 === combatRules.maxRounds ? "LAST ROUND" : currentRound + 1}`)
 		.setDescription(description)
 		.setColor(sideColor)
 		.addFields(
 			...combatFields,
 		)
-		.setFooter(footer || "TIP: Write your weapon of choice in the chat. eg -> a or c");
+		.setFooter(footer);
 	return embedResult;
 };
 
@@ -119,18 +110,6 @@ const getPlayersHp = (players, currentDiscordIds, teamRed = false) => {
 		return `\`\`\`diff\n- ${"|".repeat(percentageHealth)}${" ".repeat(percentageMissingHealth)} \n \`\`\``;
 	}
 	return `\`\`\`diff\n+ ${"|".repeat(percentageHealth)}${" ".repeat(percentageMissingHealth)} \n \`\`\``;
-};
-
-const getNpcHp = (teamRed) => {
-	const MAX_REPEATING = 20;
-	const totalNpcHealth = teamRed
-		.reduce((acc, curr) => acc + curr.stats.maxHealth, 0);
-	const totalNpcCurrentHealth = teamRed
-		.reduce((acc, curr) => acc + curr.stats.health, 0);
-	const percentageHealth = (totalNpcCurrentHealth / totalNpcHealth * 100) * MAX_REPEATING / 100;
-	const percentageMissingHealth = MAX_REPEATING - percentageHealth;
-
-	return `\`\`\`diff\n- ${"|".repeat(percentageHealth)}${" ".repeat(percentageMissingHealth)} \n \`\`\``;
 };
 
 const formatTeamOverview = (team, allPlayers)=>{
