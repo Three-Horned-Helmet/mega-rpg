@@ -5,6 +5,7 @@ const { asyncForEach, randomIntBetweenMinMax } = require("../../game/_GLOBAL_HEL
 /*
 Todo:
 - 'decrypt' npc back to npc form after fight
+- add random weapon or npc weapon when npc fights.
 */
 
 
@@ -13,9 +14,9 @@ const createCombatRound = async (message, progress) => {
 		validateProgress(progress);
 		combatSetup(progress);
 	}
-	/* if (!allPlayersAlive(progress)) {
+	if (!allPlayersAlive(progress)) {
 		return message.channel.send("Dead players can't join fight");
-	} */
+	}
 
 	// eslint-disable-next-line prefer-const
 	let { numOfAllowedWeapons, allowedWeapons, weaponAnswers } = progress.weaponInformation;
