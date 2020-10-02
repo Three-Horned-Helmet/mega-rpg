@@ -19,6 +19,7 @@ Todo:
 
 
 const createCombatRound = async (message, progress) => {
+	console.log(progress);
 	// Adds all keys and values needed to do combat
 	if (!progress.started) {
 		validateProgress(progress);
@@ -139,7 +140,7 @@ const calculateCombatResult = async (progress) => {
 			const randomVictimInfo = opposingTeam[Math.floor(Math.random() * opposingTeam.length)];
 
 			// lower chance is better
-			const chance = 0.01; // Math.random()
+			const chance = Math.random();
 			const weaponInfo = getWeaponInfo(weapon);
 
 			if (weaponInfo.chanceforSuccess > chance) {

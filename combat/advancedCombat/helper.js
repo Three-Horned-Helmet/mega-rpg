@@ -54,11 +54,11 @@ const formatEmbedInformation = (progress)=> {
 };
 
 const convertNpcsToHuman = (progress) => {
-	progress.teamRed.map(member=> {
-		if (!member.account) return convertNpc(member);
+	progress.teamRed.map(player=> {
+		if (!player.account) return convertNpc(player);
 	});
-	progress.teamGreen.map(member=> {
-		if (!member.account) return convertNpc(member);
+	progress.teamGreen.map(player=> {
+		if (!player.account) return convertNpc(player);
 	});
 };
 
@@ -154,7 +154,7 @@ const validateProgress = (progress)=>{
 		throw new Error("progress.combatRules.armyAllowed must be set to a boolean\n");
 	}
 	if (progress.teamGreen.length === 0 || progress.teamRed.length === 0) {
-		throw new Error(`No players in the teams. \n teamGreen: ${progress.teamGreen.length} members \n teamRed: ${progress.teamRed.length} members\n`);
+		throw new Error(`No players in the teams. \n teamGreen: ${progress.teamGreen.length} players \n teamRed: ${progress.teamRed.length} players\n`);
 	}
 };
 
