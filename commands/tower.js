@@ -25,6 +25,6 @@ module.exports = {
 		}
 
 		await towerHandler(user, args, message);
-		console.log("execute done");
+
 	},
 };

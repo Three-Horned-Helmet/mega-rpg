@@ -13,9 +13,9 @@ const generateEmbedCombatRound = (progress) => {
 	const teamGreenOverview = formatTeamOverview(teamGreen, teamGreenNames);
 	const teamRedOverview = formatTeamOverview(teamRed, teamRedNames);
 
-	const weaponsOverview = Object.keys(allowedWeapons).map(w => {
+	const weaponsOverview = Object.keys(allowedWeapons).map(weapon => {
 		// eslint-disable-next-line no-shadow
-		const { answer, name, description } = allowedWeapons[w];
+		const { answer, name, description } = allowedWeapons[weapon];
 		return `${getIcon(name)} ${answer}) **${name}** ${description}\n`;
 	});
 
@@ -45,55 +45,65 @@ const generateEmbedCombatRound = (progress) => {
 		value: [],
 		inline: true,
 	};
+
 	const bottomRight = {
 		name: "Choose your weapon!",
 		value: weaponsOverview,
 		inline: true,
 	};
+	const newLineSpace = {
+		name: "\u200B",
+		value: "\u200B",
+		inline: false,
+	};
 
 	if (roundResults.length) {
-		bottomLeft.value.push("\n");
-		bottomLeft.value.push(`\`Results from round ${currentRound}:\``);
+		bottomLeft.value.push(`\n\`Results from round ${currentRound}:\``);
 		bottomLeft.value.push(roundResults);
 	}
 	else {
-		bottomLeft.value = "Get ready to fight";
+		bottomLeft.value = "Get ready to fight!";
 	}
 
 	const sideColor = "#45b6fe";
 	const combatFields = [
 		topLeft,
 		topRight,
-		{
-			name: "\u200B",
-			value: "\u200B",
-			inline: false,
-		},
+		newLineSpace,
 		midLeft,
 		midRight,
-		{
-			name: "\u200B",
-			value: "\u200B",
-			inline: false,
-		},
+		newLineSpace,
 		bottomLeft,
-		bottomRight
 	];
+	// If a winner has been decided, no need for choosing a new weapon
+	if (!progress.winner) {
+		combatFields.push(bottomRight);
+	}
+	// Adds customized fields if they exist
 	if (fields && fields.length) {
 		combatFields.concat(fields);
 	}
 
+	let currentRoundTitle = title;
+	if (currentRound >= combatRules.maxRounds || progress.winner) {
+		currentRoundTitle = "";
+	}
+	else if (currentRound + 1 === combatRules.maxRounds) {
+		currentRoundTitle += "\n Last Round";
+	}
+	else {
+		currentRoundTitle += `\n Round ${currentRound + 1 }`;
+	}
+
+
 	const embedResult = new Discord.MessageEmbed()
-		.setTitle(`${title} \nround ${currentRound + 1 === combatRules.maxRounds ? "LAST ROUND" : currentRound + 1}`)
+		.setTitle(currentRoundTitle)
 		.setDescription(description)
 		.setColor(sideColor)
-		.addFields(
-			...combatFields,
-		)
+		.addFields(...combatFields)
 		.setFooter(footer);
 	return embedResult;
 };
-
 
 const getPlayersHp = (players, currentDiscordIds, teamRed = false) => {
 	// embed get's messed up if hp bar is longer than 20
@@ -113,9 +123,6 @@ const getPlayersHp = (players, currentDiscordIds, teamRed = false) => {
 };
 
 const formatTeamOverview = (team, allPlayers)=>{
-	if (allPlayers.length === 1) {
-		return "1 man army";
-	}
 	const deadIcon = "☠️";
 	const teamOverview = Array
 		.from(allPlayers)
