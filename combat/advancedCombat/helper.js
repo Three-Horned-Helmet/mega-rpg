@@ -2,8 +2,8 @@ const { randomIntBetweenMinMax } = require("../../game/_GLOBAL_HELPERS");
 const { getIcon } = require("../../game/_CONSTS/icons");
 
 const generateAttackString = (playerName, weaponInfo, damageGiven, playerAttacked) => {
-	const attacker = playerName.length > 13 ? `${playerName.substring(0, 11)}..` : playerName;
-	const victim = playerAttacked.length > 13 ? `${playerAttacked.substring(0, 11)}..` : playerAttacked;
+	const attacker = playerName.length > 13 ? `${playerName.substring(0, 10)}..` : playerName;
+	const victim = playerAttacked.length > 13 ? `${playerAttacked.substring(0, 10)}..` : playerAttacked;
 	return `\n**${attacker}** ${getIcon(weaponInfo.name)} **${victim}** :boom: **${damageGiven}** dmg`;
 
 };
