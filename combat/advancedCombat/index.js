@@ -14,7 +14,7 @@ const {
 Todo:
 - 'decrypt' npc back to npc form after fight
 - Add army options
-- show last embed when fight is over ?
+- Fix teamIds / teammember. Max hp is being calculated wrongly
 */
 
 
@@ -40,9 +40,11 @@ const createCombatRound = async (message, progress) => {
 	const combatRound = generateEmbedCombatRound(progress);
 	await message.channel.send(combatRound);
 
+	const currentActiveIds = [...progress.teamGreen, ...progress.teamRed].map(player=> player.account.userId);
+
 	const filter = (response) => {
 		// checks if person included included in the fight
-		return [...progress.teamGreenIds, ...progress.teamRedIds].includes(response.author.id);
+		return currentActiveIds.includes(response.author.id);
 	};
 
 	const collector = await message.channel.createMessageCollector(filter, {
@@ -85,7 +87,6 @@ const createCombatRound = async (message, progress) => {
 				resolve(progress);
 			}
 			else {
-				// todo show last embed
 				resolve(await createCombatRound(message, result));
 			}
 		});
@@ -172,8 +173,6 @@ const calculateCombatResult = async (progress) => {
 	// removes player from combat
 	progress.teamGreen = progress.teamGreen.filter(player=>player.hero.currentHealth > 0);
 	progress.teamRed = progress.teamRed.filter(player=>player.hero.currentHealth > 0);
-
-	console.log(teamRed, "teamred");
 
 	progress.currentRound += 1;
 	progress.weaponInformation.weaponAnswers.clear();

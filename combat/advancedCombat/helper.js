@@ -11,15 +11,33 @@ const generateHealString = (playerName, weaponInfo, healGiven, playerHealed) => 
 	const healer = playerName.length > 13 ? `${playerName.substring(0, 11)}..` : playerName;
 	const victim = playerHealed.length > 13 ? `${playerHealed.substring(0, 11)}..` : playerHealed;
 	return `\n**${healer}** ${getIcon(weaponInfo.name)} **${victim}**. **+${healGiven}** HP`;
-	// return `\n**${playerName}** helead **${playerHealed === playerName ? "himself" : playerHealed}**. **+${healGiven}** HP`;
 };
 
 const combatSetup = progress => {
 	setupProgressKeys(progress);
 	convertNpcsToHuman(progress);
-	populateDiscordIds(progress);
-	populatePlayerNames(progress);
+	storeOriginalTeams(progress);
 	formatEmbedInformation(progress);
+};
+
+// To see the starting maxhp
+const storeOriginalTeams = (progress)=>{
+	const originalRedTeam = JSON.parse(JSON.stringify(progress.teamRed)).map(getPlayerEssentials);
+	const originalGreenTeam = JSON.parse(JSON.stringify(progress.teamGreen)).map(getPlayerEssentials);
+
+	progress.originalGreenTeam = originalGreenTeam;
+	progress.originalRedTeam = originalRedTeam;
+};
+const getPlayerEssentials = playerObj => {
+	return {
+		account: {
+			username: playerObj.account.username,
+			userId: playerObj.account.userId },
+		hero: {
+			currentHealth: playerObj.hero.currentHealth,
+			health: playerObj.hero.health
+		}
+	};
 };
 
 const formatEmbedInformation = (progress)=> {
@@ -64,9 +82,16 @@ const convertNpc = (npc)=> {
 			units: {
 				archery: {},
 				barracks: {}
+			},
+			armory : {
+				chest : {},
+				helmet : {},
+				legging : {},
+				weapon : {}
 			}
 		};
 	}
+
 
 	npc.heroHpLossFixedAmount = function(hp) {
 		this.hero.currentHealth -= hp;
@@ -84,7 +109,6 @@ const convertNpc = (npc)=> {
 	npc.stats = null;
 	npc.name = null;
 	return npc;
-
 };
 
 
@@ -99,23 +123,8 @@ const setupProgressKeys = (progress)=>{
 			allowedWeapons: null,
 			weaponAnswers: new Map,
 		},
-		teamGreenIds:[],
-		teamRedIds: [],
-		teamGreenNames: [],
-		teamRedNames: [],
 	};
 	Object.assign(progress, setup);
-};
-
-
-const populateDiscordIds = (progress)=>{
-	progress.teamGreen.forEach(member=> progress.teamGreenIds.push(member.account.userId));
-	progress.teamRed.forEach(member=> progress.teamRedIds.push(member.account.userId));
-};
-
-const populatePlayerNames = (progress)=>{
-	progress.teamGreen.forEach(member=> progress.teamGreenNames.push(member.account.username));
-	progress.teamRed.forEach(member=> progress.teamRedNames.push(member.account.username));
 };
 
 const checkWinner = progress=>{
