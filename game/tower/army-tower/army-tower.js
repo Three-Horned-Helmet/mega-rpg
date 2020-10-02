@@ -43,6 +43,7 @@ const armyTowerFight = async (users, category, message) => {
 		embedInformation:{}
 	};
 
+
 	const combatResults = await createCombatRound(message, templateProgress);
 
 	// const combatResults = users.map(user => calculatePveFullArmyResult(user, enemy));

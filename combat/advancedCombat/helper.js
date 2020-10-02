@@ -1,11 +1,17 @@
 const { randomIntBetweenMinMax } = require("../../game/_GLOBAL_HELPERS");
+const { getIcon } = require("../../game/_CONSTS/icons");
 
 const generateAttackString = (playerName, weaponInfo, damageGiven, playerAttacked) => {
-	return `\n- **${playerName}** used ${weaponInfo.name} attack causing **${damageGiven}** damage to **${playerAttacked}**`;
+	const attacker = playerName.length > 13 ? `${playerName.substring(0, 11)}..` : playerName;
+	const victim = playerAttacked.length > 13 ? `${playerAttacked.substring(0, 11)}..` : playerAttacked;
+	return `\n**${attacker}** ${getIcon(weaponInfo.name)} **${victim}** :boom: **${damageGiven}** dmg`;
 
 };
 const generateHealString = (playerName, weaponInfo, healGiven, playerHealed) => {
-	return `\n**${playerName}** helead **${playerHealed === playerName ? "himself" : playerHealed}**. **+${healGiven}** HP`;
+	const healer = playerName.length > 13 ? `${playerName.substring(0, 11)}..` : playerName;
+	const victim = playerHealed.length > 13 ? `${playerHealed.substring(0, 11)}..` : playerHealed;
+	return `\n**${healer}** ${getIcon(weaponInfo.name)} **${victim}**. **+${healGiven}** HP`;
+	// return `\n**${playerName}** helead **${playerHealed === playerName ? "himself" : playerHealed}**. **+${healGiven}** HP`;
 };
 
 const combatSetup = progress => {
@@ -63,10 +69,16 @@ const convertNpc = (npc)=> {
 	}
 
 	npc.heroHpLossFixedAmount = function(hp) {
-		this.currentHealth -= hp;
+		this.hero.currentHealth -= hp;
+		if (this.hero.currentHealth < 0) {
+			this.hero.currentHealth = 0;
+		}
 	};
 	npc.healHero = function(hp) {
-		this.currentHealth += hp;
+		this.hero.currentHealth += hp;
+		if (this.hero.currentHealth > this.hero.health) {
+			this.hero.currentHealth = this.hero.health;
+		}
 	};
 
 	npc.stats = null;
@@ -79,7 +91,7 @@ const convertNpc = (npc)=> {
 const setupProgressKeys = (progress)=>{
 	const setup = {
 		started: true,
-		winner: null,
+		winner: {},
 		roundResults: [],
 		currentRound: 0,
 		weaponInformation: {
@@ -109,15 +121,15 @@ const populatePlayerNames = (progress)=>{
 const checkWinner = progress=>{
 	const{ teamGreen, teamRed } = progress;
 	if (teamGreen.length === 0 && teamRed.length === 0) {
-		return "draw";
+		return { victory: "draw", msg: "draw!" };
 	}
 	if (teamGreen.length === 0 || teamRed.length === 0) {
-		return teamGreen.length === 0 ? "teamRed" : "teamGreen";
+		return teamGreen.length === 0 ? { victory: "red", msg: "Winner: Team Red!" } : { victory: "green", msg:"Winner: Team Green!" };
 	}
 	if (progress.currentRound >= progress.combatRules.maxRounds) {
-		return "No winners";
+		return { victory: "none", msg: "No Winners!" };
 	}
-	return null;
+	return {};
 };
 
 const validateProgress = (progress)=>{
@@ -189,12 +201,12 @@ const handleAdvancedCombatHeal = (playerInfo, friendlyTeam, weaponInfo, awaitHea
 	);
 };
 
-const allPlayersAlive = progress => {
+/* const allPlayersAlive = progress => {
 	const { teamGreen, teamRed } = progress;
 	return [...teamGreen, ...teamRed].every(player=>{
 		return player.hero.currentHealth > 0;
 	});
-};
+}; */
 
 module.exports = {
 	combatSetup,
@@ -203,5 +215,4 @@ module.exports = {
 	validateProgress,
 	handleAdvancedCombatAttack,
 	handleAdvancedCombatHeal,
-	allPlayersAlive
 };

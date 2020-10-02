@@ -31,7 +31,7 @@ const npc = {
 		health: 100, // REQUIRED <Number> health stats
 	},
 	allowedNumOfAttacks: 2, // not required <Number> number of times the NPC is allowed to attack each round -> Default is 1
-    weapons ["slash", "strike", "poke"] // not required <Array> list of weapons the npc carries. All weapons must be available in the weapon object -> Default is whatever the players have access to
+    weapons: ["slash", "strike", "poke"], // not required <Array> list of weapons the npc carries. All weapons must be available in the weapon object -> Default is whatever the players have access to
     army: { // not required <Object> the army the npc have
         units: { // not required <Object> units in army
 			archery: {}, // not required <Object> units from archery eg. {huntsman: 10} -> default 0

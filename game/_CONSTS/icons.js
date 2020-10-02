@@ -68,7 +68,7 @@ const icons = {
 	"armor":{ name: ":martial_arts_uniform:", icon: "🥋" },
 	"inventory":{ name: ":school_satchel:", icon: "🎒" },
 
-	// dungeon weapons
+	// weapons
 	"strike":{ name: ":knife:", icon: "🔪" },
 	"critical":{ name: ":bangbang:", icon: "‼️" },
 	"slash":{ name: ":dagger:", icon: "🗡" },

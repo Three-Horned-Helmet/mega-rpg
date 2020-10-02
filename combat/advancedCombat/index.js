@@ -8,7 +8,7 @@ const {
 	validateProgress,
 	handleAdvancedCombatAttack,
 	handleAdvancedCombatHeal,
-	allPlayersAlive } = require("./helper");
+} = require("./helper");
 
 /*
 Todo:
@@ -23,9 +23,6 @@ const createCombatRound = async (message, progress) => {
 	if (!progress.started) {
 		validateProgress(progress);
 		combatSetup(progress);
-	}
-	if (!allPlayersAlive(progress)) {
-		return message.channel.send("Dead players can't join fight");
 	}
 
 	// eslint-disable-next-line prefer-const
@@ -83,7 +80,8 @@ const createCombatRound = async (message, progress) => {
 	return await new Promise ((resolve) => {
 		collector.on("end", async () => {
 			const result = await calculateCombatResult(progress);
-			if (result.winner) {
+			if (Object.values(result.winner).length) {
+				await message.channel.send(generateEmbedCombatRound(progress));
 				resolve(progress);
 			}
 			else {
@@ -127,20 +125,20 @@ const calculateCombatResult = async (progress) => {
 	// loops through every weaponanswer and performs action
 	weaponAnswers.forEach((weapon, playerId) => {
 		// allows players with more attack to attack more than once
-		const isTeamGreen = teamGreen.some(member=> member.account.userId === playerId);
+		const isTeamGreen = teamGreen.some(player=> player.account.userId === playerId);
 
 		// Figure out which team is friendly and which is opposing
 		const friendlyTeam = isTeamGreen ? teamGreen : teamRed;
 		const opposingTeam = isTeamGreen ? teamRed : teamGreen;
 
-		const playerInfo = friendlyTeam.find((member) => member.account.userId === playerId);
+		const playerInfo = friendlyTeam.find((player) => player.account.userId === playerId);
 		// allows for multiple attack
 		const allowedNumOfAttacks = playerInfo.allowedNumOfAttacks || 1;
 		for (let i = 0; i < allowedNumOfAttacks; i += 1) {
 			const randomVictimInfo = opposingTeam[Math.floor(Math.random() * opposingTeam.length)];
 
 			// lower chance is better
-			const chance = Math.random();
+			const chance = 0.01; // Math.random()
 			const weaponInfo = getWeaponInfo(weapon);
 
 			if (weaponInfo.chanceforSuccess > chance) {
@@ -153,8 +151,7 @@ const calculateCombatResult = async (progress) => {
 			}
 			else {
 				const playerName = playerInfo.account.username;
-				const victimName = randomVictimInfo.account.username;
-				progress.roundResults.push(`\n**${playerName}** failed to use ${weaponInfo.name} on **${victimName === playerName ? "himself" : victimName}**`);
+				progress.roundResults.push(`\n**${playerName}** failed to use **${weaponInfo.name}**`);
 			}
 		}
 	});
@@ -173,8 +170,11 @@ const calculateCombatResult = async (progress) => {
 
 
 	// removes player from combat
-	teamGreen = teamGreen.filter(member=>member.hero.currentHealth > 0);
-	teamRed = teamRed.filter(member=>member.hero.currentHealth > 0);
+	progress.teamGreen = progress.teamGreen.filter(player=>player.hero.currentHealth > 0);
+	progress.teamRed = progress.teamRed.filter(player=>player.hero.currentHealth > 0);
+
+	console.log(teamRed, "teamred");
+
 	progress.currentRound += 1;
 	progress.weaponInformation.weaponAnswers.clear();
 

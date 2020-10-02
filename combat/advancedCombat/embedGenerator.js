@@ -76,7 +76,7 @@ const generateEmbedCombatRound = (progress) => {
 		bottomLeft,
 	];
 	// If a winner has been decided, no need for choosing a new weapon
-	if (!progress.winner) {
+	if (!Object.values(progress.winner).length) {
 		combatFields.push(bottomRight);
 	}
 	// Adds customized fields if they exist
@@ -85,14 +85,19 @@ const generateEmbedCombatRound = (progress) => {
 	}
 
 	let currentRoundTitle = title;
-	if (currentRound >= combatRules.maxRounds || progress.winner) {
-		currentRoundTitle = "";
-	}
-	else if (currentRound + 1 === combatRules.maxRounds) {
-		currentRoundTitle += "\n Last Round";
-	}
-	else {
-		currentRoundTitle += `\n Round ${currentRound + 1 }`;
+	switch (true) {
+		case Object.values(progress.winner).length:
+			currentRoundTitle = progress.winner.msg;
+			break;
+		case currentRound >= combatRules.maxRounds:
+			currentRoundTitle = "";
+			break;
+		case currentRound + 1 === combatRules.maxRounds:
+			currentRoundTitle += "\n Last Round";
+			break;
+		default:
+			currentRoundTitle += `\n Round ${currentRound + 1 }`;
+			break;
 	}
 
 
@@ -101,7 +106,7 @@ const generateEmbedCombatRound = (progress) => {
 		.setDescription(description)
 		.setColor(sideColor)
 		.addFields(...combatFields)
-		.setFooter(footer);
+		.setFooter(Object.values(progress.winner).length ? progress.winner.msg : footer);
 	return embedResult;
 };
 
@@ -111,7 +116,7 @@ const getPlayersHp = (players, currentDiscordIds, teamRed = false) => {
 	const totalPlayerHealth = players
 		.reduce((acc, curr) => acc + curr.hero.health, 0);
 	const totalPlayerCurrentHealth = players
-		.filter(p => currentDiscordIds.includes(p.account.userId))
+		.filter(player => currentDiscordIds.includes(player.account.userId))
 		.reduce((acc, curr) => acc + curr.hero.currentHealth, 0);
 	const percentageHealth = (totalPlayerCurrentHealth / totalPlayerHealth * 100) * MAX_REPEATING / 100;
 	const percentageMissingHealth = MAX_REPEATING - percentageHealth;
