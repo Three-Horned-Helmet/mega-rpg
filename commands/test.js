@@ -29,7 +29,9 @@ module.exports = {
 			},
 			teamGreen:[m, npc, npc2],
 			teamRed:[t, npc3, npc4],
-			embedInformation:{}
+			embedInformation:{
+				minimal: true
+			}
 		};
 
 		return await createCombatRound(message, progress);

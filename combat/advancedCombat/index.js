@@ -19,7 +19,6 @@ Todo:
 
 
 const createCombatRound = async (message, progress) => {
-	console.log(progress);
 	// Adds all keys and values needed to do combat
 	if (!progress.started) {
 		validateProgress(progress);
@@ -106,6 +105,19 @@ const calculateCombatResult = async (progress) => {
 	const awaitHealPlayerPromises = {};
 	const awaitDamagePlayerPromises = {};
 
+	// needed for minimal embed view
+	const totalRoundInflicted = {
+		teamRed: {
+			damage: 0,
+			heal: 0
+		},
+		teamGreen: {
+			damage: 0,
+			heal: 0
+		}
+	};
+	progress.totalRoundInflicted = totalRoundInflicted;
+
 	// adds weapon choice from npc
 	[...teamRed, ...teamGreen]
 		.filter(player=>player.account.npc)
@@ -145,10 +157,10 @@ const calculateCombatResult = async (progress) => {
 
 			if (weaponInfo.chanceforSuccess > chance) {
 				if (weaponInfo.type === "attack") {
-					handleAdvancedCombatAttack(playerInfo, weaponInfo, awaitDamagePlayerPromises, randomVictimInfo, progress);
+					handleAdvancedCombatAttack(playerInfo, weaponInfo, awaitDamagePlayerPromises, randomVictimInfo, progress, isTeamGreen);
 				}
 				if (weaponInfo.type === "heal") {
-					handleAdvancedCombatHeal(playerInfo, friendlyTeam, weaponInfo, awaitHealPlayerPromises, progress);
+					handleAdvancedCombatHeal(playerInfo, friendlyTeam, weaponInfo, awaitHealPlayerPromises, progress, isTeamGreen);
 				}
 			}
 			else {

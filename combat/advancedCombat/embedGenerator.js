@@ -1,12 +1,60 @@
 const Discord = require("discord.js");
 const { getIcon } = require("../../game/_CONSTS/icons");
 
+const sideColor = "#45b6fe";
+
+/* BATTLE
+...names, choose your weapons
+char icon
+char icon
+char icon
+
+Participants needs to answer A/B/C
+ */
+
+const generateMinimalEmbed = (progress) => {
+	const { allowedWeapons } = progress.weaponInformation;
+	const { teamRed, teamGreen, currentRound, winner, totalRoundInflicted } = progress;
+	const { title, teamRedName, teamGreenName } = progress.embedInformation;
+	const playerNames = [...teamRed, ...teamGreen].map(player=>{
+		return ` **${player.account.username}**`;
+	});
+	const weaponFormatted = Object.values(allowedWeapons).map(weapon=>{
+		return `\`${weapon.answer.toUpperCase()}\` - ${getIcon(weapon.name)} \n`;
+	}).join(" ");
+	let description = `${playerNames} \n choose your weapon!\n ${weaponFormatted}`;
+
+	// Shows result from previous round
+	if (currentRound > 0) {
+		const previousResult = `${teamGreenName}: :boom: ${totalRoundInflicted.teamGreen.damage} :test_tube: ${totalRoundInflicted.teamGreen.heal}\n 
+		${teamRedName}: :boom: ${totalRoundInflicted.teamRed.damage} :test_tube: ${totalRoundInflicted.teamRed.heal}\n`;
+		if (Object.values(winner).length) {
+			description = previousResult;
+		}
+		else {
+			description = description + previousResult;
+		}
+	}
+	const footer = Object.values(winner).length ? winner.msg : `Round: ${currentRound + 1}`;
+
+	const minimalEmbed = new Discord.MessageEmbed()
+		.setColor(sideColor)
+		.setTitle(title)
+		.setDescription(description)
+		.setFooter(footer);
+
+	return minimalEmbed;
+};
+
 
 const generateEmbedCombatRound = (progress) => {
-	const { allowedWeapons } = progress.weaponInformation;
-	const { teamRed, teamGreen, roundResults, currentRound, combatRules, originalGreenTeam, originalRedTeam } = progress;
+	// shows minimal info
+	if (progress.embedInformation.minimal) {
+		return generateMinimalEmbed(progress);
+	}
 	const { title, description, fields, footer, teamRedName, teamGreenName } = progress.embedInformation;
-
+	const { allowedWeapons } = progress.weaponInformation;
+	const { teamRed, teamGreen, roundResults, currentRound, combatRules, originalGreenTeam, originalRedTeam, winner } = progress;
 
 	const greenTeamsHp = getPlayersHp(teamGreen, originalGreenTeam);
 	const redTeamsHp = getPlayersHp(teamRed, originalRedTeam, true);
@@ -67,7 +115,6 @@ const generateEmbedCombatRound = (progress) => {
 		bottomLeft.value = "Get ready to fight!";
 	}
 
-	const sideColor = "#45b6fe";
 	const combatFields = [
 		topLeft,
 		topRight,
@@ -78,7 +125,7 @@ const generateEmbedCombatRound = (progress) => {
 		bottomLeft,
 	];
 	// If a winner has been decided, no need for choosing a new weapon
-	if (!Object.values(progress.winner).length) {
+	if (!Object.values(winner).length) {
 		combatFields.push(bottomRight);
 	}
 	// Adds customized fields if they exist
@@ -88,8 +135,8 @@ const generateEmbedCombatRound = (progress) => {
 
 	let currentRoundTitle = title;
 	switch (true) {
-		case !!Object.values(progress.winner).length:
-			currentRoundTitle = progress.winner.msg;
+		case !!Object.values(winner).length:
+			currentRoundTitle = winner.msg;
 			break;
 		case currentRound >= combatRules.maxRounds:
 			currentRoundTitle = "";
@@ -108,7 +155,7 @@ const generateEmbedCombatRound = (progress) => {
 		.setDescription(description)
 		.setColor(sideColor)
 		.addFields(...combatFields)
-		.setFooter(Object.values(progress.winner).length ? progress.winner.msg : footer);
+		.setFooter(Object.values(winner).length ? winner.msg : footer);
 	return embedResult;
 };
 

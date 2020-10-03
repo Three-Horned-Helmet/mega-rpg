@@ -42,9 +42,10 @@ const getPlayerEssentials = playerObj => {
 
 const formatEmbedInformation = (progress)=> {
 	const { embedInformation } = progress;
+	embedInformation.minimal = embedInformation.minimal || false;
 	embedInformation.teamRedName = embedInformation.teamRedName || "Team Red";
 	embedInformation.teamGreenName = embedInformation.teamGreenName || "Team Green";
-	embedInformation.title = embedInformation.title || "BATTLE!";
+	embedInformation.title = embedInformation.title || `BATTLE! - ${embedInformation.teamRedName} VS ${embedInformation.teamGreenName}`;
 	embedInformation.description = embedInformation.description || "";
 	embedInformation.fields = embedInformation.fields || [];
 	embedInformation.footer = embedInformation.footer || "TIP: Write your weapon of choice in the chat. eg -> a or c";
@@ -158,7 +159,7 @@ const validateProgress = (progress)=>{
 	}
 };
 
-const handleAdvancedCombatAttack = (playerInfo, weaponInfo, awaitDamagePlayerPromises, randomVictimInfo, progress) =>{
+const handleAdvancedCombatAttack = (playerInfo, weaponInfo, awaitDamagePlayerPromises, randomVictimInfo, progress, isTeamGreen) =>{
 	const victimName = randomVictimInfo.account.username;
 	const playerName = playerInfo.account.username;
 	const damageGiven = randomIntBetweenMinMax(
@@ -174,12 +175,18 @@ const handleAdvancedCombatAttack = (playerInfo, weaponInfo, awaitDamagePlayerPro
 			damage: damageGiven,
 		};
 	}
+	if (isTeamGreen) {
+		progress.totalRoundInflicted.teamGreen.damage += damageGiven;
+	}
+	else {
+		progress.totalRoundInflicted.teamRed.damage += damageGiven;
+	}
 	progress.roundResults.push(generateAttackString(playerName, weaponInfo, damageGiven, victimName)
 	);
 
 };
 
-const handleAdvancedCombatHeal = (playerInfo, friendlyTeam, weaponInfo, awaitHealPlayerPromises, progress)=>{
+const handleAdvancedCombatHeal = (playerInfo, friendlyTeam, weaponInfo, awaitHealPlayerPromises, progress, isTeamGreen)=>{
 	const playerName = playerInfo.account.username;
 	const teamMateWithLowestHp = friendlyTeam
 		.sort((a, b)=> a.hero.currentHealth - b.hero.currentHealth)
@@ -199,6 +206,12 @@ const handleAdvancedCombatHeal = (playerInfo, friendlyTeam, weaponInfo, awaitHea
 			user: teamMateWithLowestHp,
 			healGiven: healGiven,
 		};
+	}
+	if (isTeamGreen) {
+		progress.totalRoundInflicted.teamGreen.damage += healGiven;
+	}
+	else {
+		progress.totalRoundInflicted.teamRed.damage += healGiven;
 	}
 	progress.roundResults.push(
 		generateHealString(
