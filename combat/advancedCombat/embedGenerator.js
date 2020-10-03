@@ -3,21 +3,12 @@ const { getIcon } = require("../../game/_CONSTS/icons");
 
 const sideColor = "#45b6fe";
 
-/* BATTLE
-...names, choose your weapons
-char icon
-char icon
-char icon
-
-Participants needs to answer A/B/C
- */
-
 const generateMinimalEmbed = (progress) => {
 	const { allowedWeapons } = progress.weaponInformation;
 	const { teamRed, teamGreen, currentRound, winner, totalRoundInflicted } = progress;
 	const { title, teamRedName, teamGreenName } = progress.embedInformation;
-	const playerNames = [...teamRed, ...teamGreen].map(player=>{
-		return ` **${player.account.username}**`;
+	const playerNames = [...teamRed, ...teamGreen].map((player, i)=>{
+		return ` **${i < teamRed.length ? ":red_square:" : ":green_square:"}${player.account.username}**`;
 	});
 	const weaponFormatted = Object.values(allowedWeapons).map(weapon=>{
 		return `\`${weapon.answer.toUpperCase()}\` - ${getIcon(weapon.name)} \n`;
