@@ -1,37 +1,50 @@
 const sleep = require("util").promisify(setTimeout);
 const { generateEmbedCombatRound } = require("./embedGenerator");
-const { getWeaponInfo } = require("./helper");
-const { asyncForEach, randomIntBetweenMinMax } = require("../../game/_GLOBAL_HELPERS");
+const { getWeaponInfo, getRandomWeapons } = require("../../game/_GLOBAL_HELPERS/weapons");
+const { asyncForEach } = require("../../game/_GLOBAL_HELPERS");
+const {
+	combatSetup,
+	checkWinner,
+	validateProgress,
+	handleAdvancedCombatAttack,
+	handleAdvancedCombatHeal,
+} = require("./helper");
+
 /*
 Todo:
-- Potential issue with object references and teamGreenIds
-- Issue with naming in embed. Team green / team red etc
-- Potential issue if not deepcopying npc before function call
+- 'decrypt' npc back to npc form after fight
+- Add army options
+- Fix teamIds / teammember. Max hp is being calculated wrongly
 */
 
 
 const createCombatRound = async (message, progress) => {
-	if (!progress.teamGreenIds || !progress.teamGreenIds.length) {
+	// Adds all keys and values needed to do combat
+	if (!progress.started) {
 		validateProgress(progress);
-		populateProgress(progress);
+		combatSetup(progress);
 	}
 
 	// eslint-disable-next-line prefer-const
-	let { numOfAllowedWeapons, allowedWeapons, weaponAnswers } = progress.weaponInformation;
+	let { numOfAllowedWeapons, weaponAnswers } = progress.weaponInformation;
 
-	allowedWeapons = getWeaponInfo(null, numOfAllowedWeapons);
+	// Gets x random weapons
+	const allowedWeapons = getRandomWeapons(numOfAllowedWeapons);
 	progress.weaponInformation.allowedWeapons = allowedWeapons;
 
 	const weaponAnswerFilter = Object.keys(allowedWeapons)
 		.map((w) => [allowedWeapons[w].answer, allowedWeapons[w].name])
 		.flat();
 
+
 	const combatRound = generateEmbedCombatRound(progress);
 	await message.channel.send(combatRound);
 
+	const currentActiveIds = [...progress.teamGreen, ...progress.teamRed].map(player=> player.account.userId);
+
 	const filter = (response) => {
-		// checks if included in the fight
-		return progress.teamGreenIds.includes(response.author.id) || progress.teamRedIds.includes(response.author.id);
+		// checks if person included included in the fight
+		return currentActiveIds.includes(response.author.id);
 	};
 
 	const collector = await message.channel.createMessageCollector(filter, {
@@ -50,7 +63,7 @@ const createCombatRound = async (message, progress) => {
 		}
 		const answer = result.content.toLowerCase();
 
-		// adds answer to progress object
+		// Allows user to type in a,b,c OR name of the weapon eg 'slash'
 		if (Object.keys(allowedWeapons).includes(answer)) {
 			weaponAnswers.set(result.author.id, answer);
 		}
@@ -60,199 +73,102 @@ const createCombatRound = async (message, progress) => {
 			);
 			weaponAnswers.set(result.author.id, weaponInformation.name);
 		}
-		// stops collecting if all users have answered
-		if (weaponAnswers.size >= progress.teamRedIds.length + progress.teamGreenIds.length) {
+		// stops collecting if all humans have answered
+		if (weaponAnswers.size >= [...progress.teamGreen, ...progress.teamRed].filter(player=> !player.account.npc).length) {
 			await sleep(1500);
 			collector.stop();
 		}
 	});
-	collector.on("end", async () => {
-		const result = await calculateCombatResult(progress);
-		if (result.winner) {
-			return progress;
-		}
-		else {
-			return await createCombatRound(message, result);
-		}
+	return await new Promise ((resolve) => {
+		collector.on("end", async () => {
+			const result = await calculateCombatResult(progress);
+			if (Object.values(result.winner).length) {
+				await message.channel.send(generateEmbedCombatRound(progress));
+				resolve(progress);
+			}
+			else {
+				resolve(await createCombatRound(message, result));
+			}
+		});
 	});
 };
 
 const calculateCombatResult = async (progress) => {
 	// eslint-disable-next-line prefer-const
-	let { teamGreen, teamRed, combatRules } = progress;
+	let { teamGreen, teamRed } = progress;
 	const { weaponAnswers } = progress.weaponInformation;
 
 	// cleans up roundResults from previous round
 	progress.roundResults = [];
 
+	// Stores all actions in the variables before saving to database or npc-object
 	const awaitHealPlayerPromises = {};
 	const awaitDamagePlayerPromises = {};
 
-	const awaitDamageNPCPromises = {};
-
-
-	weaponAnswers.forEach((weapon, player) => {
-		const isTeamGreen = teamGreen.some(member=> member.account.userId === player);
-
-		let playerInfo, randomVictim, teamMateWithLowestHp;
-
-		if (isTeamGreen) {
-			playerInfo = teamGreen.find((member) => member.account.userId === player);
-			randomVictim = teamRed[Math.floor(Math.random() * teamRed.length)];
-			teamMateWithLowestHp = teamGreen
-				.sort((a, b)=> a.hero.currentHealth - b.hero.currentHealth)
-				.filter((p)=> p.hero.currentHealth > 0)[0];
+	// needed for minimal embed view
+	const totalRoundInflicted = {
+		teamRed: {
+			damage: 0,
+			heal: 0
+		},
+		teamGreen: {
+			damage: 0,
+			heal: 0
 		}
-		else {
-			playerInfo = teamRed.find((member) => member.account.userId === player);
-			randomVictim = teamGreen[Math.floor(Math.random() * teamGreen.length)];
-			teamMateWithLowestHp = teamRed
-				.sort((a, b)=> a.hero.currentHealth - b.hero.currentHealth)
-				.filter((p)=> p.hero.currentHealth > 0)[0];
-		}
-		// lower chance is better
-		const chance = Math.random();
+	};
+	progress.totalRoundInflicted = totalRoundInflicted;
 
-		const weaponInfo = getWeaponInfo(weapon);
-		const playerName = playerInfo.account.username;
-		const victimName = randomVictim.name || randomVictim.account.username;
-
-
-		if (weaponInfo.chanceforSuccess > chance) {
-			if (weaponInfo.type === "attack") {
-				const damageGiven = randomIntBetweenMinMax(
-					(playerInfo.hero.attack / 2) * weaponInfo.damage,
-					playerInfo.hero.attack * weaponInfo.damage
-				);
-				// playerResult.damageGiven = tempDamageGiven;
-
-				if (combatRules.mode === "PVP") {
-
-					if (awaitDamagePlayerPromises[victimName]) {
-						awaitDamagePlayerPromises[victimName].damage += damageGiven;
-					}
-
-					else {
-						awaitDamagePlayerPromises[victimName] = {
-							user: randomVictim,
-							damage: damageGiven,
-						};
-					}
-				}
-
-				if (combatRules.mode === "PVE") {
-
-					if (awaitDamageNPCPromises[victimName]) {
-						awaitDamageNPCPromises[victimName].damage += damageGiven;
-					}
-
-					else {
-						awaitDamageNPCPromises[victimName] = {
-							user: randomVictim,
-							damage: damageGiven,
-						};
-					}
-				}
-
-				progress.roundResults.push(
-					generateAttackString(
-						playerName,
-						weaponInfo,
-						damageGiven,
-						victimName
-					)
-				);
+	// adds weapon choice from npc
+	[...teamRed, ...teamGreen]
+		.filter(player=>player.account.npc)
+		.forEach(player=>{
+			let weaponName;
+			// chooses a random weapon from npc personal arsenal if it exists
+			if (player.weapons && player.weapons.length) {
+				weaponName = player.weapons[Math.floor(Math.random() * player.weapons.length)];
 			}
-			if (weaponInfo.type === "heal") {
-				const playerHealedName = teamMateWithLowestHp.account.username;
-				const healGiven = randomIntBetweenMinMax(
-					(playerInfo.hero.health * weaponInfo.damage) / 2,
-					playerInfo.hero.health * weaponInfo.damage
-				);
-				if (awaitHealPlayerPromises[victimName]) {
-					awaitHealPlayerPromises[victimName].healGiven += healGiven;
-				}
-				else {
-					awaitHealPlayerPromises[victimName] = {
-						user: teamMateWithLowestHp,
-						healGiven: healGiven,
-					};
-				}
-				progress.roundResults.push(
-					generateHealString(
-						playerName,
-						weaponInfo,
-						healGiven,
-						playerHealedName
-					)
-				);
+			// OR chooses a random weapon from the current allowed weapons
+			else {
+				weaponName = Object.keys(progress.weaponInformation.allowedWeapons)[Math.floor(Math.random() * Object.keys(progress.weaponInformation.allowedWeapons).length)];
 			}
-		}
-		else {
-			progress.roundResults.push(`\n${playerName} failed to use ${weaponInfo.name} on ${victimName === playerName ? "himself" : victimName}`);
-		}
-	});
+			// Saves the answer to the weaponanswer
+			weaponAnswers.set(player.account.userId, weaponName);
+		});
 
-	if (combatRules.mode === "PVE") {
-		teamRed.forEach(npc=>{
-			const allowedNumOfAttacks = npc.allowedNumOfAttacks || 1;
-			const npcName = npc.name;
 
-			for (let i = 0; i < allowedNumOfAttacks; i += 1) {
-				const randomVictim = teamGreen[Math.floor(Math.random() * teamGreen.length)];
+	// loops through every weaponanswer and performs action
+	weaponAnswers.forEach((weapon, playerId) => {
+		// allows players with more attack to attack more than once
+		const isTeamGreen = teamGreen.some(player=> player.account.userId === playerId);
 
-				const weaponNames = Object.keys(progress.weaponInformation.allowedWeapons);
-				const randomWeaponName = weaponNames[Math.floor(Math.random() * weaponNames.length)];
-				const weaponInfo = getWeaponInfo(randomWeaponName);
-				const { stats } = npc;
+		// Figure out which team is friendly and which is opposing
+		const friendlyTeam = isTeamGreen ? teamGreen : teamRed;
+		const opposingTeam = isTeamGreen ? teamRed : teamGreen;
 
-				if (randomVictim) {
-					if (weaponInfo.type === "attack") {
-						const tempDamageGiven = randomIntBetweenMinMax(
-							stats.attack * weaponInfo.damage,
-							(stats.attack / 2) * weaponInfo.damage
-						);
+		const playerInfo = friendlyTeam.find((player) => player.account.userId === playerId);
+		// allows for multiple attack
+		const allowedNumOfAttacks = playerInfo.allowedNumOfAttacks || 1;
+		for (let i = 0; i < allowedNumOfAttacks; i += 1) {
+			const randomVictimInfo = opposingTeam[Math.floor(Math.random() * opposingTeam.length)];
 
-						if (awaitDamagePlayerPromises[randomVictim.account.username]) {
-							awaitDamagePlayerPromises[randomVictim.account.username].damage += tempDamageGiven;
-						}
-						else {
-							awaitDamagePlayerPromises[randomVictim.account.username] = {
-								user: randomVictim,
-								damage: tempDamageGiven,
-							};
-						}
-						// removes user from helper array if dead
-						if (randomVictim.hero.currentHealth - tempDamageGiven <= 0) {
-							progress.dungeon.helperIds = progress.dungeon.helperIds.filter(
-								(h) => h !== randomVictim.account.userId
-							);
-						}
-						progress.roundResults.push(
-							generateAttackString(
-								npcName,
-								weaponInfo,
-								tempDamageGiven,
-								randomVictim.account.username
-							)
-						);
-					}
+			// lower chance is better
+			const chance = Math.random();
+			const weaponInfo = getWeaponInfo(weapon);
+
+			if (weaponInfo.chanceforSuccess > chance) {
+				if (weaponInfo.type === "attack") {
+					handleAdvancedCombatAttack(playerInfo, weaponInfo, awaitDamagePlayerPromises, randomVictimInfo, progress, isTeamGreen);
 				}
 				if (weaponInfo.type === "heal") {
-					const healGiven = randomIntBetweenMinMax(
-						stats.health * weaponInfo.damage,
-						(stats.health * weaponInfo.damage) / 2
-					);
-
-					npc.stats.health += healGiven;
-					progress.roundResults.push(
-						generateHealString(npcName, weaponInfo, healGiven)
-					);
+					handleAdvancedCombatHeal(playerInfo, friendlyTeam, weaponInfo, awaitHealPlayerPromises, progress, isTeamGreen);
 				}
 			}
-		});
-	}
-
+			else {
+				const playerName = playerInfo.account.username;
+				progress.roundResults.push(`\n**${playerName}** failed to use **${weaponInfo.name}**`);
+			}
+		}
+	});
 
 	// takes care of healing
 	Object.keys(awaitHealPlayerPromises).forEach(async (u) => awaitHealPlayerPromises[u].user.healHero(awaitHealPlayerPromises[u].healGiven));
@@ -260,24 +176,16 @@ const calculateCombatResult = async (progress) => {
 	// inflicts damage on user document
 	Object.keys(awaitDamagePlayerPromises).forEach(async (u) => awaitDamagePlayerPromises[u].user.heroHpLossFixedAmount(awaitDamagePlayerPromises[u].damage));
 
-	await asyncForEach(teamGreen, async (member)=>{
-		await member.save();
+
+	// performs database save
+	await asyncForEach([...teamGreen, ...teamRed].filter(player=>!player.account.npc), async (player) => {
+		await player.save();
 	});
-	if (combatRules.mode === "PVP") {
-		await asyncForEach(teamRed, async (member)=>{
-			await member.save();
-		});
-	}
 
 
 	// removes player from combat
-	teamGreen = teamGreen.filter(member=>member.hero.currentHealth > 0);
-	if (combatRules.mode === "PVP") {
-		teamRed = teamRed.filter(member=>member.hero.currentHealth > 0);
-	}
-	if (combatRules.mode === "PVE") {
-		teamRed = teamRed.filter(npc=>npc.health > 0);
-	}
+	progress.teamGreen = progress.teamGreen.filter(player=>player.hero.currentHealth > 0);
+	progress.teamRed = progress.teamRed.filter(player=>player.hero.currentHealth > 0);
 
 	progress.currentRound += 1;
 	progress.weaponInformation.weaponAnswers.clear();
@@ -287,97 +195,5 @@ const calculateCombatResult = async (progress) => {
 	return progress;
 };
 
-const generateAttackString = (playerName, weaponInfo, damageGiven, playerAttacked) => {
-	return `\n- **${playerName}** used ${weaponInfo.name} attack causing **${damageGiven}** damage to **${playerAttacked}**`;
-
-};
-const generateHealString = (playerName, weaponInfo, healGiven, playerHealed) => {
-	return `\n${playerName} helead ${playerHealed === playerName ? "himself" : playerHealed}. +${healGiven} HP`;
-};
-
-const populateProgress = progress => {
-	setupProgressKeys(progress);
-	populateDiscordIds(progress);
-	populatePlayerNames(progress);
-};
-
-const setupProgressKeys = (progress)=>{
-	const setup = {
-		winner: null,
-		roundResults: [],
-		currentRound: 0,
-		weaponInformation: {
-			numOfAllowedWeapons: 3,
-			allowedWeapons: null,
-			weaponAnswers: new Map,
-		},
-		teamGreenIds:[],
-		teamRedIds: [],
-		teamGreenNames: [],
-		teamRedNames: [],
-	};
-	Object.assign(progress, setup);
-};
-
-
-const populateDiscordIds = (progress)=>{
-	progress.teamGreen.forEach(member=> progress.teamGreenIds.push(member.account.userId));
-	if (progress.combatRules.mode === "PVP") {
-		progress.teamRed.forEach(member=> progress.teamRedIds.push(member.account.userId));
-	}
-};
-
-const populatePlayerNames = (progress)=>{
-	progress.teamGreen.forEach(member=> progress.teamGreenNames.push(member.account.username));
-	if (progress.combatRules.mode === "PVP") {
-		progress.teamRed.forEach(member=> progress.teamRedNames.push(member.account.username));
-	}
-	if (progress.combatRules.mode === "PVE") {
-		progress.teamRed.forEach(member=> progress.teamRedNames.push(member.name));
-	}
-};
-
-const checkWinner = progress=>{
-	const{ teamGreen, teamRed } = progress;
-	if (teamGreen.length === 0 && teamRed.length === 0) {
-		return "draw";
-	}
-	if (teamGreen.length === 0 || teamRed.length === 0) {
-		return teamGreen.length === 0 ? "teamRed" : "teamGreen";
-	}
-	if (progress.currentRound > progress.combatRules.maxRounds) {
-		return "No winners";
-	}
-	return null;
-};
-
-const validateProgress = (progress)=>{
-
-	const progressKeys = ["combatRules", "teamGreen", "teamRed", "embedInformation"];
-	if (!progressKeys.some(key=> Object.keys(progress).includes(key))) {
-		throw new Error(`progress keys are missing\nExpected: ${progressKeys}\nGot: ${Object.keys(progress)}\n`);
-	}
-	const allowedModes = ["PVP", "PVE"];
-	if (!progress.combatRules.mode || progress.combatRules.mode.includes(allowedModes)) {
-		throw new Error(`progress.combatRules.mode must be set to ${allowedModes.split(" or ")}\n`);
-	}
-	if (!progress.combatRules.maxRounds || typeof progress.combatRules.maxRounds !== "number") {
-		throw new Error("progress.combatRules.maxRounds must be set to a number\n");
-	}
-	if (progress.combatRules.armyAllowed === undefined) {
-		throw new Error("progress.combatRules.armyAllowed must be set to a boolean\n");
-	}
-	if (progress.teamGreen.length === 0 || progress.teamRed.length === 0) {
-		throw new Error(`No players in the teams. \n teamGreen: ${progress.teamGreen.length} members \n teamRed: ${progress.teamRed.length} members\n`);
-	}
-	if (progress.combatRules.mode === "PVE") {
-		if (!progress.teamRed.every(member=> {
-			const keys = Object.keys(member);
-			return keys.includes("name") && keys.includes("stats");
-		})) {
-			throw new Error("Team red can only have npc in PVE mode. \n NAME or STATS missing from npc");
-		}
-	}
-};
 
 module.exports = { createCombatRound };

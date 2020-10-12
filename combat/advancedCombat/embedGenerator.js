@@ -1,32 +1,64 @@
 const Discord = require("discord.js");
 const { getIcon } = require("../../game/_CONSTS/icons");
 
+const sideColor = "#45b6fe";
+
+const generateMinimalEmbed = (progress) => {
+	const { allowedWeapons } = progress.weaponInformation;
+	const { teamRed, teamGreen, currentRound, winner, totalRoundInflicted } = progress;
+	const { title, teamRedName, teamGreenName } = progress.embedInformation;
+	const playerNames = [...teamRed, ...teamGreen].map((player, i)=>{
+		return ` **${i < teamRed.length ? ":red_square:" : ":green_square:"}${player.account.username}**`;
+	});
+	const weaponFormatted = Object.values(allowedWeapons).map(weapon=>{
+		return `\`${weapon.answer.toUpperCase()}\` - ${getIcon(weapon.name)} \n`;
+	}).join(" ");
+	let description = `${playerNames} \n choose your weapon!\n ${weaponFormatted}`;
+
+	// Shows result from previous round
+	if (currentRound > 0) {
+		const previousResult = `${teamGreenName}: :boom: ${totalRoundInflicted.teamGreen.damage} :test_tube: ${totalRoundInflicted.teamGreen.heal}\n 
+		${teamRedName}: :boom: ${totalRoundInflicted.teamRed.damage} :test_tube: ${totalRoundInflicted.teamRed.heal}\n`;
+		if (Object.values(winner).length) {
+			description = previousResult;
+		}
+		else {
+			description = description + previousResult;
+		}
+	}
+	const footer = Object.values(winner).length ? winner.msg : `Round: ${currentRound + 1}`;
+
+	const minimalEmbed = new Discord.MessageEmbed()
+		.setColor(sideColor)
+		.setTitle(title)
+		.setDescription(description)
+		.setFooter(footer);
+
+	return minimalEmbed;
+};
+
 
 const generateEmbedCombatRound = (progress) => {
+	// shows minimal info
+	if (progress.embedInformation.minimal) {
+		return generateMinimalEmbed(progress);
+	}
+	const { title, description, fields, footer, teamRedName, teamGreenName } = progress.embedInformation;
 	const { allowedWeapons } = progress.weaponInformation;
-	const { teamRed, teamGreen, roundResults, teamGreenIds, teamRedIds, teamGreenNames, teamRedNames, combatRules } = progress;
-	const { title, description, fields, footer } = progress.embedInformation;
+	const { teamRed, teamGreen, roundResults, currentRound, combatRules, originalGreenTeam, originalRedTeam, winner } = progress;
 
-	const greenTeamsHp = getPlayersHp(teamGreen, teamGreenIds);
-	let redTeamsHp;
+	const greenTeamsHp = getPlayersHp(teamGreen, originalGreenTeam);
+	const redTeamsHp = getPlayersHp(teamRed, originalRedTeam, true);
 
-	if (combatRules.mode === "PVP") {
-		redTeamsHp = getPlayersHp(teamRed, teamRedIds, true);
-	}
-	if (combatRules.mode === "PVE") {
-		redTeamsHp = getNpcHp(teamRed);
-	}
-	const teamGreenOverview = formatTeamOverview(teamGreen, teamGreenNames);
-	const teamRedOverview = formatTeamOverview(teamRed, teamRedNames);
 
-	const weaponsOverview = Object.keys(allowedWeapons).map(w => {
+	const teamGreenOverview = formatTeamOverview(teamGreen, originalGreenTeam);
+	const teamRedOverview = formatTeamOverview(teamRed, originalRedTeam);
+
+	const weaponsOverview = Object.keys(allowedWeapons).map(weapon => {
 		// eslint-disable-next-line no-shadow
-		const { answer, name, description } = allowedWeapons[w];
+		const { answer, name, description } = allowedWeapons[weapon];
 		return `${getIcon(name)} ${answer}) **${name}** ${description}\n`;
 	});
-
-	const teamGreenName = progress.embedInformation.teamGreen ? progress.embedInformation.teamGreen : teamGreen.length !== 1 ? "Team Green" : teamGreen[0].account.username;
-	const teamRedName = progress.embedInformation.teamRed ? progress.embedInformation.teamRed : teamRed.length !== 1 ? "Team Red" : teamRed[0].name || teamRed[0].account.username;
 
 	const topLeft = {
 		name:  `${teamRedName} HP:`,
@@ -54,63 +86,76 @@ const generateEmbedCombatRound = (progress) => {
 		value: [],
 		inline: true,
 	};
+
 	const bottomRight = {
 		name: "Choose your weapon!",
 		value: weaponsOverview,
 		inline: true,
 	};
+	const newLineSpace = {
+		name: "\u200B",
+		value: "\u200B",
+		inline: false,
+	};
 
 	if (roundResults.length) {
-		bottomLeft.value.push("\n");
-		bottomLeft.value.push(`\`Results from round ${progress.currentRound}:\``);
+		bottomLeft.value.push(`\n\`Results from round ${currentRound}:\``);
 		bottomLeft.value.push(roundResults);
 	}
 	else {
-		bottomLeft.value = "Get ready to fight";
+		bottomLeft.value = "Get ready to fight!";
 	}
 
-	const sideColor = "#45b6fe";
 	const combatFields = [
 		topLeft,
 		topRight,
-		{
-			name: "\u200B",
-			value: "\u200B",
-			inline: false,
-		},
+		newLineSpace,
 		midLeft,
 		midRight,
-		{
-			name: "\u200B",
-			value: "\u200B",
-			inline: false,
-		},
+		newLineSpace,
 		bottomLeft,
-		bottomRight
 	];
-	if (fields.length) {
+	// If a winner has been decided, no need for choosing a new weapon
+	if (!Object.values(winner).length) {
+		combatFields.push(bottomRight);
+	}
+	// Adds customized fields if they exist
+	if (fields && fields.length) {
 		combatFields.concat(fields);
 	}
 
+	let currentRoundTitle = title;
+	switch (true) {
+		case !!Object.values(winner).length:
+			currentRoundTitle = winner.msg;
+			break;
+		case currentRound >= combatRules.maxRounds:
+			currentRoundTitle = "";
+			break;
+		case currentRound + 1 === combatRules.maxRounds:
+			currentRoundTitle += "\n Last Round";
+			break;
+		default:
+			currentRoundTitle += `\n Round ${currentRound + 1 }`;
+			break;
+	}
+
+
 	const embedResult = new Discord.MessageEmbed()
-		.setTitle(`${title || "BATTLE!"} \nround ${progress.currentRound + 1}`)
+		.setTitle(currentRoundTitle)
 		.setDescription(description)
 		.setColor(sideColor)
-		.addFields(
-			...combatFields,
-		)
-		.setFooter(footer || "TIP: Write your weapon of choice in the chat. eg -> a or c");
+		.addFields(...combatFields)
+		.setFooter(Object.values(winner).length ? winner.msg : footer);
 	return embedResult;
 };
 
-
-const getPlayersHp = (players, currentDiscordIds, teamRed = false) => {
+const getPlayersHp = (players, originalPlayers, teamRed = false) => {
 	// embed get's messed up if hp bar is longer than 20
 	const MAX_REPEATING = 20;
-	const totalPlayerHealth = players
+	const totalPlayerHealth = originalPlayers
 		.reduce((acc, curr) => acc + curr.hero.health, 0);
 	const totalPlayerCurrentHealth = players
-		.filter(p => currentDiscordIds.includes(p.account.userId))
 		.reduce((acc, curr) => acc + curr.hero.currentHealth, 0);
 	const percentageHealth = (totalPlayerCurrentHealth / totalPlayerHealth * 100) * MAX_REPEATING / 100;
 	const percentageMissingHealth = MAX_REPEATING - percentageHealth;
@@ -121,31 +166,15 @@ const getPlayersHp = (players, currentDiscordIds, teamRed = false) => {
 	return `\`\`\`diff\n+ ${"|".repeat(percentageHealth)}${" ".repeat(percentageMissingHealth)} \n \`\`\``;
 };
 
-const getNpcHp = (teamRed) => {
-	const MAX_REPEATING = 20;
-	const totalNpcHealth = teamRed
-		.reduce((acc, curr) => acc + curr.stats.maxHealth, 0);
-	const totalNpcCurrentHealth = teamRed
-		.reduce((acc, curr) => acc + curr.stats.health, 0);
-	const percentageHealth = (totalNpcCurrentHealth / totalNpcHealth * 100) * MAX_REPEATING / 100;
-	const percentageMissingHealth = MAX_REPEATING - percentageHealth;
-
-	return `\`\`\`diff\n- ${"|".repeat(percentageHealth)}${" ".repeat(percentageMissingHealth)} \n \`\`\``;
-};
-
-const formatTeamOverview = (team, allPlayers)=>{
-	if (allPlayers.length === 1) {
-		return "1 man army";
-	}
+const formatTeamOverview = (team, originalTeam)=>{
 	const deadIcon = "☠️";
-	const teamOverview = Array
-		.from(allPlayers)
+	const teamOverview = originalTeam
 		.map(member=> {
-			if (team.some(player=> player.account.username === member)) {
-				return member;
+			if (team.some(player=> player.account.username === member.account.username)) {
+				return member.account.username;
 			}
 			else {
-				return `${member} ${deadIcon}`;
+				return `${member.account.username} ${deadIcon}`;
 			}
 		});
 	return teamOverview;

@@ -1,6 +1,7 @@
 const { calculatePveFullArmyResult } = require("../../../combat/combat");
 const { getArmyTowerEnemies } = require("./army-tower-enemies/army-tower-enemies");
 const { getNewTowerItem, getTowerItem, removeTowerItemFromUser } = require("../../../game/items/tower-items/tower-item-functions");
+
 // Takes an array of users and makes them fight together in the Tower
 // Category is "solo" or "trio" etc
 const armyTowerFight = async (users, category) => {
@@ -15,6 +16,7 @@ const armyTowerFight = async (users, category) => {
 		won: false,
 	};
 
+	// user with highest level
 	const highestLevel = users.reduce((acc, cur) => {
 		return cur.tower[`${category} full-army`].level > acc ? cur.tower[`${category} full-army`].level : acc;
 	}, 0);
@@ -29,6 +31,7 @@ const armyTowerFight = async (users, category) => {
 	for(const stat in enemy.stats) {
 		enemy.stats[stat] = Math.floor(enemy.stats[stat] * enemyCombatModifier);
 	}
+
 
 	const combatResults = users.map(user => calculatePveFullArmyResult(user, enemy));
 
@@ -144,9 +147,7 @@ const armyTowerFight = async (users, category) => {
 // Takes the user and returns true if it still has health left on some units
 const healthLeftOnArmy = (user) => {
 	const totalUnitsArray = Object.values(user.army.units).map(unitBuild => Object.values(unitBuild)).flat();
-
 	const totalUnits = totalUnitsArray.filter(unitNumbers => typeof unitNumbers === "number").reduce((acc, cur) => acc + cur);
-
 	return totalUnits > 0 || user.hero.currentHealth > 0;
 };
 
