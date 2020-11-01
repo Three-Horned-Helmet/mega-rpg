@@ -34,6 +34,7 @@ const getPlayerEssentials = playerObj => {
 			username: playerObj.account.username,
 			userId: playerObj.account.userId },
 		hero: {
+			rank: playerObj.hero.rank,
 			currentHealth: playerObj.hero.currentHealth,
 			health: playerObj.hero.health
 		}

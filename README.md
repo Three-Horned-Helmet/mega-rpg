@@ -10,6 +10,8 @@ OR [invite](https://discordapp.com/oauth2/authorize?client_id=721024429345341560
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/4d263688effd49c2b04dae98b985e1db)](https://www.codacy.com/gh/Three-Horned-Helmet/mega-rpg?utm_source=github.com&utm_medium=referral&utm_content=Three-Horned-Helmet/mega-rpg&utm_campaign=Badge_Grade)
 
+[![codecov](https://codecov.io/gh/Three-Horned-Helmet/mega-rpg/branch/master/graph/badge.svg?token=8NDDTB1GYY)](undefined)
+
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ---

@@ -12,11 +12,11 @@ module.exports = { "Kraken": {
 		xp: 999,
 	},
 	rules: {
+		maxRounds: 2,
 		canKill:true,
 		allowArmy:false,
 		allowHelpers:true,
 		minRankToGetKey: 22,
 	},
-	helperIds:[],
 },
 };

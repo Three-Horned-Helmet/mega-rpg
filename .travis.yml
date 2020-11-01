@@ -3,12 +3,14 @@ before_script:
 services:
     - mongodb
 language: node_js
-node_js: 
+node_js:
     - lts/*
 cache: npm
 install:
     - npm ci
     - mongod --dbpath=data/db &
-    - sleep 3
+    - sleep 20
 script:
+    - istanbul cover ./node_modules/mocha/bin/_mocha --reporter lcovonly -- -R spec
+    - npm run report-coverage
     - npm test

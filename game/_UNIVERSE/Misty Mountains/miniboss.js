@@ -12,10 +12,10 @@ module.exports = { "Graveward": {
 		xp: 999,
 	},
 	rules: {
+		maxRounds: 2,
 		canKill:true,
 		allowArmy:false,
 		allowHelpers:true,
 		minRankToGetKey: 12,
 	},
-	helperIds:[],
 }, };

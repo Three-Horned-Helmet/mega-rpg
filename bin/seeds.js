@@ -1,4 +1,5 @@
 require("dotenv").config();
+const { randomIntBetweenMinMax } = require("../game/_GLOBAL_HELPERS");
 
 const mongoose = require("mongoose");
 const User = require("../models/User");
@@ -16,64 +17,76 @@ mongoose
 const rndmId = () => {
 	return Math.floor(Math.random() * 1000000) + "";
 };
-const users = [];
 
-for (let i = 0; i < 20; i++) {
-	users.push({
-		account: {
-			username: Math.random().toString(36).substring(7),
-			userId: rndmId(),
-			testUser: true,
-			servers: [Math.random() > 0.3 ? "717462802272485516" : "8275918275289"]
+
+const createTestUser = ({
+	account = {
+		username: Math.random().toString(36).substring(7),
+		userId: rndmId(),
+		testUser: true,
+		servers: [Math.random() > 0.3 ? "717462802272485516" : "8275918275289"]
+	},
+	resources = {
+		"gold": randomIntBetweenMinMax(0, 1000),
+		"oak wood":randomIntBetweenMinMax(0, 1000),
+		"yew wood":randomIntBetweenMinMax(0, 1000),
+		"copper ore":randomIntBetweenMinMax(0, 1000),
+	},
+	world = {
+		currentLocation:"Grassy Plains",
+		locations:{
+			"Grassy Plains":{
+				available:true,
+				explored:[] },
 		},
-		resources : {
-			gold:Math.floor(Math.random() * 1000),
-			"oak wood":Math.floor(Math.random() * 1000),
-			"yew wood":Math.floor(Math.random() * 1000),
-			"copper ore":Math.floor(Math.random() * 1000),
-		},
-		world : {
-			currentLocation:"Grassy Plains",
-			locations:{
-				"Grassy Plains":{
-					available:true,
-					explored:[] },
+	},
+	hero = {
+		elo:randomIntBetweenMinMax(500, 2000),
+		currentExp: randomIntBetweenMinMax(0, 1000),
+		rank:randomIntBetweenMinMax(1, 10),
+	},
+	maxPop = randomIntBetweenMinMax(0, 1000),
+	completedQuests = Array.from({ length:randomIntBetweenMinMax(0, 12) }, (n, j)=> `myFakeQuest${j}`),
+	army = {
+		units:{
+			archery:{
+				huntsman:randomIntBetweenMinMax(0, 1000),
+				archer:randomIntBetweenMinMax(0, 1000),
+				ranger:randomIntBetweenMinMax(0, 1000),
+			},
+			barracks:{
+				peasant:randomIntBetweenMinMax(0, 1000),
+				militia:randomIntBetweenMinMax(0, 1000),
+				guardsman:randomIntBetweenMinMax(0, 1000),
 			},
 		},
-		hero: {
-			elo:Math.floor(Math.random() * 2000) + 500,
-			currentExp: Math.floor(Math.random() * 1000),
-			rank:Math.floor(Math.random() * 10),
-		},
-		maxPop : Math.floor(Math.random() * 1000),
-		army : {
-			units:{
-				archery:{
-					huntsman:Math.floor(Math.random() * 1000),
-					archer:Math.floor(Math.random() * 1000),
-					ranger:Math.floor(Math.random() * 1000),
-				},
-				barracks:{
-					peasant:Math.floor(Math.random() * 1000),
-					militia:Math.floor(Math.random() * 1000),
-					guardsman:Math.floor(Math.random() * 1000),
-				},
-			},
-		},
-		completedQuests: Array.from({ length:Math.floor(Math.random() * 12) }, (n, j)=> `myFakeQuest${j}`)
+	},
+	...otherParams
+} = {}) => {
+
+	const user = new User({
+		account,
+		resources,
+		world,
+		hero,
+		maxPop,
+		completedQuests,
+		army,
+		...otherParams,
 	});
-}
+	return user.save();
+};
 
-User.deleteMany()
-	.then(() => {
-		return User.create(users);
-	})
+User.deleteMany({ "account.testUser":true })
+	// eslint-disable-next-line no-unused-vars
+	.then(() => Promise.all(Array.from({ length: 20 }, async _ => createTestUser())))
 	.then(usersCreated => {
 		console.log(`${usersCreated.length} users created with the following id:`);
 		console.log(usersCreated.map(u => u._id));
 	})
 	.then(() => {
 		mongoose.disconnect();
+		process.exit(0);
 	})
 	.catch(err => {
 		mongoose.disconnect();

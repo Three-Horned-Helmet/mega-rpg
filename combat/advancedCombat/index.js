@@ -172,8 +172,7 @@ const calculateCombatResult = async (progress) => {
 
 	// takes care of healing
 	Object.keys(awaitHealPlayerPromises).forEach(async (u) => awaitHealPlayerPromises[u].user.healHero(awaitHealPlayerPromises[u].healGiven));
-
-	// inflicts damage on user document
+	// takes care of damage infliction
 	Object.keys(awaitDamagePlayerPromises).forEach(async (u) => awaitDamagePlayerPromises[u].user.heroHpLossFixedAmount(awaitDamagePlayerPromises[u].damage));
 
 
