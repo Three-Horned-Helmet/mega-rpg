@@ -130,6 +130,7 @@ const setupProgressKeys = (progress)=>{
 };
 
 const checkWinner = progress=>{
+	console.log(progress, "progress");
 	const{ teamGreen, teamRed } = progress;
 	if (teamGreen.length === 0 && teamRed.length === 0) {
 		return { victory: "draw", msg: "draw!" };

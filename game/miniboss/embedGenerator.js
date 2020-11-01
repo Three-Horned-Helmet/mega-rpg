@@ -8,7 +8,7 @@ const createMinibossInvitation = (miniboss, user)=>{
 	const { currentLocation } = user.world;
 
 	const rules = `\`Army allowed: ${getIcon(miniboss.combatRules.armyAllowed, "icon")}\`\n \`Helpers allowed: ${getIcon(miniboss.combatRules.helpersAllowed, "icon")}\`\n \`Max rounds: ${miniboss.combatRules.maxRounds}\`\n \`Attacks each round: ${miniboss.allowedNumOfAttacks}\``;
-	const rewards = `${getIcon("gold")} \`Gold: ${miniboss.rewards.gold}\`\n ${getIcon("xp")} \`XP: ${miniboss.rewards.xp}\` \n ${getIcon(miniboss.rewards.dungeonKey)} \` Key: ${miniboss.rewards.dungeonKey}\``;
+	const rewards = `${getIcon("gold")} \`Gold: ${miniboss.rewards.gold}\`\n ${getIcon("xp")} \`XP: ${miniboss.rewards.xp}\` \n ${getIcon(miniboss.rewards.dungeonKey)} \`Key: ${miniboss.rewards.dungeonKey}\``;
 
 	const embedInvitation = new Discord.MessageEmbed()
 		.setTitle(`A Miniboss has been triggered by ${username}!`)
@@ -29,13 +29,6 @@ const createMinibossInvitation = (miniboss, user)=>{
 		.setFooter(`React with a ${getIcon("miniboss", "icon")} within 20 seconds to participate! (max 10!)`);
 
 	return embedInvitation;
-};
-
-const createMinibossResult = (rewards, combatResult)=>{
-	if (combatResult.winner.victory === "green") {
-		return createMiniBossResultWin(rewards, combatResult);
-	}
-	// return createMiniBossResultLoss(rewards, combatResult);
 };
 
 /* const createMiniBossResultLoss = (rewards, combatResult) =>{
@@ -72,7 +65,7 @@ const createMinibossResult = (rewards, combatResult)=>{
 }; */
 
 
-const createMiniBossResultWin = (rewards, combatResult) => {
+const createMinibossResult = (rewards, combatResult) => {
 	const initiativeTaker = combatResult.originalGreenTeam[0];
 	const initiativeTakerName = initiativeTaker.account.username;
 	const miniboss = combatResult.originalRedTeam[0];

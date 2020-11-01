@@ -10,7 +10,7 @@ module.exports = { "C'Thun": {
 		armyAllowed: false,
 		helpersAllowed: true,
 	},
-	allowedNumOfAttacks: 1,
+	allowedNumOfAttacks: 2,
 	weapons: ["slash", "strike", "poke"],
 	minRankToGetKey: 2,
 	rewards:{
