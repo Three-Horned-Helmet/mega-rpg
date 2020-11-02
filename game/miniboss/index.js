@@ -25,8 +25,11 @@ const handleMiniboss = async (message, user) => {
 
 	const collector = await invitation.createReactionCollector(reactionFilter, { max: 10, time: 1000 * 20, errors: ["time"] });
 	collector.on("collect", async (result, rUser) => {
-		if (rUser.bot || progress.teamGreen.length > 9) {
+		if (rUser.bot) {
 			return;
+		}
+		if (progress.teamGreen.length > 9) {
+			return collector.stop();
 		}
 		const helper = await User.findOne({ "account.userId": rUser.id });
 

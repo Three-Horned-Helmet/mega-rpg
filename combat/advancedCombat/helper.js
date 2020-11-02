@@ -130,13 +130,12 @@ const setupProgressKeys = (progress)=>{
 };
 
 const checkWinner = progress=>{
-	console.log(progress, "progress");
 	const{ teamGreen, teamRed } = progress;
 	if (teamGreen.length === 0 && teamRed.length === 0) {
 		return { victory: "draw", msg: "draw!" };
 	}
 	if (teamGreen.length === 0 || teamRed.length === 0) {
-		return teamGreen.length === 0 ? { victory: "red", msg: "Winner: Team Red!" } : { victory: "green", msg:"Winner: Team Green!" };
+		return teamGreen.length === 0 ? { victory: "red", msg: `Winner: ${progress.embedInformation.teamRedName}!` } : { victory: "green", msg:`Winner: ${progress.embedInformation.teamGreenName}!` };
 	}
 	if (progress.currentRound >= progress.combatRules.maxRounds) {
 		return { victory: "none", msg: "No Winners!" };

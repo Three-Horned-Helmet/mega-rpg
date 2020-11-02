@@ -85,7 +85,7 @@ const createMinibossResult = (rewards, combatResult) => {
 	if (rewards.helpers.length) {
 		fields.push({
 			name: "Helpers rewards",
-			value: rewards.helpers.map(helper=> `${helper.helperName}${helper.helperLeveledUp ? " 💪" : ""} ${getIcon("gold")} ${helper.randomHelperGold} | ${getIcon("xp")} ${helper.randomHelperXp}`),
+			value: rewards.helpers.map(helper=> `${helper.helperName}${helper.leveledUp ? " 💪" : ""} ${getIcon("gold")} ${helper.randomHelperGold} | ${getIcon("xp")} ${helper.randomHelperXp}`),
 			inline: true,
 		});
 	}
