@@ -9,8 +9,9 @@ cache: npm
 install:
     - npm ci
     - mongod --dbpath=data/db &
+    - npm install -g codecov
     - sleep 20
 script:
-    - istanbul cover ./node_modules/mocha/bin/_mocha --reporter lcovonly -- -R spec
-    - npm run report-coverage
     - npm test
+    - istanbul cover ./node_modules/mocha/bin/_mocha --reporter lcovonly -- -R spec
+    - codecov
