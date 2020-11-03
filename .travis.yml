@@ -1,19 +1,15 @@
+before_script:
+    - sleep 15
 services:
     - mongodb
 language: node_js
-node_js:
+node_js: 
     - lts/*
-stages:
-    - name: test
-jobs:
-    include:
-        - stage: test
-        script:
-            - npm test
-            - npm run coverage-codecov
-        name: test:mocha
-        cache: npm
-        install:
-        - npm install -g
-        - mongod --dbpath=data/db &
-        - sleep 20
+cache: npm
+install:
+    - npm ci
+    - mongod --dbpath=data/db &
+    - sleep 3
+script:
+    - npm test
+    - npm run coverage-codecov
