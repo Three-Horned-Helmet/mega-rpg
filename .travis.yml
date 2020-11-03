@@ -10,3 +10,4 @@ install:
     - sleep 20
 script:
     - npm test
+    - npm run coverage-codecov

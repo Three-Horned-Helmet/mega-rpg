@@ -4,12 +4,13 @@
   "description": "rpg game for the discord platform",
   "main": "index.js",
   "scripts": {
+    "coverage": "export NODE_ENV=test && nyc --reporter=text-summary mocha --exit './test/**/*.test.js'",
+    "coverage-codecov": "export NODE_ENV=test nyc report --reporter=text-lcov | codecov --pipe",
     "debug": "nodemon --inspect index.js",
     "dev": "nodemon index.js",
     "postinstall": "sh postinstall.sh",
-    "report-coverage": "nyc report --reporter=text-lcov | codecov --pipe",
     "start": "node index.js",
-    "test": "export NODE_ENV=test && mocha --exit './test/**/*.test.js'"
+    "test": "export NODE_ENV=test && npm run coverage"
   },
   "author": "",
   "license": "ISC",
