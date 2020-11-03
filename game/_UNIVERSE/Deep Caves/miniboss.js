@@ -16,6 +16,6 @@ module.exports = { "Kraken": {
 	rewards:{
 		dungeonKey: "The One Shell",
 		gold: 8888,
-		xp: 999,
+		xp: 9999,
 	},
 }, };

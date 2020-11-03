@@ -30,7 +30,7 @@ const generateVoteEmbed = ()=>{
 
 		.setColor("#0099ff")
 		.setTitle("Vote for Mega RPG and get rewards!")
-		.setDescription(`**1 ${healIcon} Heal potion** \n ${minibossIcon} ** Miniboss cooldown reset** \n ${dungeonIcon} ${dungeonInfo}  `)
+		.setDescription(`**${healIcon} Heal potion** \n ${minibossIcon} ** Miniboss cooldown reset** \n ${dungeonIcon} ${dungeonInfo}  `)
 		.setURL("https://top.gg/bot/721024429345341560/vote")
 		.setFooter("You can vote every 12 hour");
 	return voteEmbed;

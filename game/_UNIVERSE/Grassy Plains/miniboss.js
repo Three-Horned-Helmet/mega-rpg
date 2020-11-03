@@ -2,8 +2,8 @@ module.exports = { "C'Thun": {
 	name: "C'Thun",
 	type: "miniboss",
 	stats:{
-		attack: 90,
-		health: 100,
+		attack: 110,
+		health: 200,
 	},
 	combatRules:{
 		maxRounds: 2,
@@ -15,7 +15,7 @@ module.exports = { "C'Thun": {
 	minRankToGetKey: 2,
 	rewards:{
 		dungeonKey: "CM Key",
-		gold: 120,
+		gold: 500,
 		xp: 500,
 	},
 }, };

@@ -2,8 +2,8 @@ module.exports = { "Graveward": {
 	name: "Graveward",
 	type: "miniboss",
 	stats:{
-		attack: 600,
-		health: 600,
+		attack: 400,
+		health: 400,
 	},
 	allowedNumOfAttacks: 2,
 	weapons: ["slash", "strike"],

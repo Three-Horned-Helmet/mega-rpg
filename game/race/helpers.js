@@ -12,6 +12,15 @@ const createChanceArray = (raceDataCopy)=> {
 	return result;
 };
 
+const generateResult = (event) =>{
+	const mover = event.weightedChance[Math.floor(Math.random() * event.weightedChance.length)];
+	event.raceDataCopy[mover].dotsLength -= event.raceDataCopy[mover].jump();
+	if (event.raceDataCopy[mover].dotsLength <= 0) {
+		event.winner = mover;
+	}
+	return event;
+};
+
 const racePayOut = async (event) =>{
 	const winnersDiscordId = [];
 	event.participants.forEach((betInfo)=>{
@@ -40,4 +49,4 @@ const validateUser = async (user) =>{
 };
 
 
-module.exports = { createChanceArray, racePayOut, validateUser };
+module.exports = { createChanceArray, racePayOut, validateUser, generateResult };
