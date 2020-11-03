@@ -213,8 +213,9 @@ describe.only("miniboss ", () => {
 			expect(result.name).to.be.equal("Kraken");
 		});
 	});
+
 	describe("Setup progress", () => {
-		it("Should return something", async ()=>{
+		it("Should return setup object", async ()=>{
 			const miniboss = createMinibossEvent({ world:{ currentLocation:"Deep Caves" } });
 			const testUser = await createTestUser();
 			const result = setupProgress(miniboss, testUser);

@@ -1,17 +1,13 @@
-before_script:
-    - sleep 15
-services:
-    - mongodb
-language: node_js
-node_js:
-    - lts/*
-cache: npm
-install:
-    - npm ci
-    - mongod --dbpath=data/db &
-    - npm install -g codecov
+services:	services:
+    - mongodb	    - mongodb
+language: node_js	language: node_js
+node_js: 	node_js:
+    - lts/*	    - lts/*
+cache: npm	cache: npm
+install:	install:
+    - npm ci	    - npm ci
+    - mongod --dbpath=data/db &	    - mongod --dbpath=data/db &
+    - sleep 3	    - npm install -g codecov
     - sleep 20
-script:
+script:	script:
     - npm test
-    - istanbul cover ./node_modules/mocha/bin/_mocha --reporter lcovonly -- -R spec
-    - codecov
