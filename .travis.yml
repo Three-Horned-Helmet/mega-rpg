@@ -1,15 +1,22 @@
+language: node_js
+node_js:
+    - lts/*
 before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+install:
+    - npm install
+    - mongod --dbpath=data/db &
     - sleep 15
 services:
     - mongodb
-language: node_js
-node_js: 
-    - lts/*
-cache: npm
-install:
-    - npm ci
-    - mongod --dbpath=data/db &
-    - sleep 3
 script:
-    - npm test
-    - npm run coverage-codecov
+    - npm run test
+after_script:  
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+after_success:
+    - npm run coverage
+    - npm run coveralls
+notifications:
+    email: false
