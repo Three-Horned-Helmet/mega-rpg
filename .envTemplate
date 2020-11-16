@@ -2,3 +2,4 @@ DISCORD_TOKEN=YOUR_SECRET_TOKEN_HERE
 MONGODB_URI=mongodb://localhost/megarpg
 TEST_MONGODB_URI=mongodb://localhost/megarpg-test
 DISCORD_PREFIX=YOUR_PREFIX_HERE
+cyberhackerEnergyUrl="URL_HERE"
