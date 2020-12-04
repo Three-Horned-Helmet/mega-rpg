@@ -11,7 +11,7 @@ module.exports = {
 		if (!code)return;
 		const result = await redeemCode(code);
 		if (result) {
-			return message.channel.send("10100111001");
+			return message.channel.send("`01101000 01100011 01101011 01110010`");
 		}
 	},
 };
@@ -19,9 +19,9 @@ module.exports = {
 
 const redeemCode = async (code = "")=>{
 	const data = qs.stringify({
-		"code": code
+		"code": code,
+		"secret": process.env.cyberhackerSecret
 	});
-	/* process.env the url */
 	const config = {
 		method: "post",
 		url: process.env.cyberhackerEnergyUrl,
@@ -40,5 +40,6 @@ const redeemCode = async (code = "")=>{
 		console.info(err.response);
 		return false;
 	}
+	console.log(response, "response");
 	return response.data;
 };
