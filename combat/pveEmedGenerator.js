@@ -147,12 +147,12 @@ function generateEmbedPveHeroWin(user, placeInfo, pveResult, questIntro) {
 		{
 			name: "Resources",
 			value: resourceReward,
-			inline: false,
+			inline: true,
 		},
 		{
 			name: "Experience",
 			value: expReward,
-			inline: false,
+			inline: true,
 		},
 		{
 			name: "Casualties",

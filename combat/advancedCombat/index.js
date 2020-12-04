@@ -147,6 +147,7 @@ const calculateCombatResult = async (progress) => {
 
 		const playerInfo = friendlyTeam.find((player) => player.account.userId === playerId);
 		// allows for multiple attack
+		console.log(playerInfo, "playerinfo");
 		const allowedNumOfAttacks = playerInfo.allowedNumOfAttacks || 1;
 		for (let i = 0; i < allowedNumOfAttacks; i += 1) {
 			const randomVictimInfo = opposingTeam[Math.floor(Math.random() * opposingTeam.length)];
@@ -172,8 +173,7 @@ const calculateCombatResult = async (progress) => {
 
 	// takes care of healing
 	Object.keys(awaitHealPlayerPromises).forEach(async (u) => awaitHealPlayerPromises[u].user.healHero(awaitHealPlayerPromises[u].healGiven));
-
-	// inflicts damage on user document
+	// takes care of damage infliction
 	Object.keys(awaitDamagePlayerPromises).forEach(async (u) => awaitDamagePlayerPromises[u].user.heroHpLossFixedAmount(awaitDamagePlayerPromises[u].damage));
 
 

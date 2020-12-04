@@ -1,7 +1,7 @@
 const { onCooldown } = require("../_CONSTS/cooldowns");
 const { worldLocations } = require("../_UNIVERSE");
 const { getIcon } = require("../_CONSTS/icons");
-const { calculateFishResult } = require("./fishvalue");
+const { calculateFishResult } = require("./helper");
 
 const handleFish = async (user) => {
 	const { currentLocation } = user.world;
@@ -20,12 +20,11 @@ const handleFish = async (user) => {
 		return `You haven't found any place to ${placeIcon} fish in ${locationIcon} ${currentLocation}`;
 	}
 
-	const now = new Date();
-
 	const { fish } = fishingPlaceInformation;
 
 	const result = calculateFishResult(fish);
 
+	const now = new Date();
 	user.setNewCooldown("fish", now);
 	user.gainManyResources({ gold: result.gold });
 	await user.save();

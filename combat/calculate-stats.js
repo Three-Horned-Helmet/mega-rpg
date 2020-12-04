@@ -20,7 +20,6 @@ const calculateStats = (user) => {
 				for (const stat in stats) {
 					unitStats[stat] = unitStats[stat] && unitStats[stat] !== 0 ? (unitStats[stat] + stats[stat] * unitType[unit]) : stats[stat] * unitType[unit];
 				}
-
 				totalUnits += unitType[unit];
 			}
 		});

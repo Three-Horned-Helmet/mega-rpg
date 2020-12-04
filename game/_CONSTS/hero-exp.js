@@ -23,6 +23,16 @@ const heroExpToNextLevel = [
 	300000,
 	350000,
 	425000,
+	500000,
+	590000,
+	650000,
+	800000,
+	980000,
+	1200000,
+	1500000,
+	1800000,
+	2200000,
+	2500000
 ];
 
 const heroStatIncreaseOnLevel = [
@@ -49,6 +59,16 @@ const heroStatIncreaseOnLevel = [
 	{ health: 300, attack: 250 },
 	{ health: 305, attack: 250 },
 	{ health: 305, attack: 255 },
+	{ health: 310, attack: 260 },
+	{ health: 320, attack: 275 },
+	{ health: 335, attack: 290 },
+	{ health: 350, attack: 310 },
+	{ health: 375, attack: 320 },
+	{ health: 390, attack: 335 },
+	{ health: 405, attack: 350 },
+	{ health: 520, attack: 370 },
+	{ health: 530, attack: 385 },
+	{ health: 550, attack: 400 },
 ];
 
 // A function that adds the exp to the hero and checks if he gains a new level

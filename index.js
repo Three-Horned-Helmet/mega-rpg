@@ -25,9 +25,8 @@ for (const file of commandFiles) {
 }
 
 client.once("ready", () => {
-	console.log("Ready!");
+	console.info("Ready!");
 });
-
 client.on("message", async (message) => {
 	const { author } = message;
 	// doesn't have correct prefix or is bot

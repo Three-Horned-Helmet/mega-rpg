@@ -10,17 +10,21 @@ OR [invite](https://discordapp.com/oauth2/authorize?client_id=721024429345341560
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/4d263688effd49c2b04dae98b985e1db)](https://www.codacy.com/gh/Three-Horned-Helmet/mega-rpg?utm_source=github.com&utm_medium=referral&utm_content=Three-Horned-Helmet/mega-rpg&utm_campaign=Badge_Grade)
 
+[![Coverage Status](https://coveralls.io/repos/github/Three-Horned-Helmet/mega-rpg/badge.svg?branch=master)](https://coveralls.io/github/Three-Horned-Helmet/mega-rpg?branch=master)
+
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ---
 
 ## Get started
+
 1. [Join](https://discord.gg/DZXZzC3) a discord server that has the bot or [invite](https://discord.gg/DZXZzC3) the bot to your own server.
 2. There's over 30 commands available, try typeing `!help` or `!quest` to get you started.
 3. If you get stuck, you can always type `!info` to get a DM about the commands!
 
 
 ## Intro
+
 In Mega-RPG you can build a city and explore the surroundings with your hero and army. You are able to do quests, kill minibosses and drop epic loot during your adventures! If you are brave enough you will also be able to raid dungeons, but be warned you may need the help from other adventurers to take it down!
 
 The Game is set in a fantasy-medieval universe and the journey begins in a kingdom tyrannized by a Bandit King and his Impling helpers. The citizens of the kingdom has lost all hope, but some try their best to live their lives. You are a master of your own empire, but with an army and a hero you may be able to help the citizens and bring down the Bandit King!

@@ -1,13 +1,14 @@
 const Discord = require("discord.js");
 const { getIcon } = require("../_CONSTS/icons");
 
+const sideColor = "#45b6fe";
+
 const createMinibossInvitation = (miniboss, user)=>{
-	const sideColor = "#45b6fe";
 	const { username } = user.account;
 	const { currentLocation } = user.world;
 
-	const rules = `\`Army allowed: ${getIcon(miniboss.rules.allowArmy, "icon")}\`\n \`Miniboss deadly: ${getIcon(miniboss.rules.canKill, "icon")}\`\n \`Helpers allowed: ${getIcon(miniboss.rules.allowHelpers, "icon")}\``;
-	const rewards = `${getIcon("gold")} \`Gold: ${miniboss.rewards.gold}\`\n ${getIcon("xp")} \`XP: ${miniboss.rewards.xp}\` \n ${getIcon(miniboss.rewards.dungeonKey)} \` Key: ${miniboss.rewards.dungeonKey}\``;
+	const rules = `\`Army allowed: ${getIcon(miniboss.combatRules.armyAllowed, "icon")}\`\n \`Helpers allowed: ${getIcon(miniboss.combatRules.helpersAllowed, "icon")}\`\n \`Max rounds: ${miniboss.combatRules.maxRounds}\`\n \`Attacks each round: ${miniboss.allowedNumOfAttacks}\``;
+	const rewards = `${getIcon("gold")} \`Gold: ${miniboss.rewards.gold}\`\n ${getIcon("xp")} \`XP: ${miniboss.rewards.xp}\` \n ${getIcon(miniboss.rewards.dungeonKey)} \`Key: ${miniboss.rewards.dungeonKey}\``;
 
 	const embedInvitation = new Discord.MessageEmbed()
 		.setTitle(`A Miniboss has been triggered by ${username}!`)
@@ -17,12 +18,12 @@ const createMinibossInvitation = (miniboss, user)=>{
 			{
 				name: "Rules",
 				value: rules,
-				inline: false,
+				inline: true,
 			},
 			{
 				name: `${miniboss.name}'s reward:`,
 				value: rewards,
-				inline: false,
+				inline: true,
 			},
 		)
 		.setFooter(`React with a ${getIcon("miniboss", "icon")} within 20 seconds to participate! (max 10!)`);
@@ -30,18 +31,9 @@ const createMinibossInvitation = (miniboss, user)=>{
 	return embedInvitation;
 };
 
-const createMinibossResult = (result, minibossEvent)=>{
-	if (result.win) {
-		return createMiniBossResultWin(result, minibossEvent);
-	}
-	return createMiniBossResultLoss(result, minibossEvent);
-};
-
-const createMiniBossResultLoss = (result, minibossEvent) =>{
-	const sideColor = "#45b6fe";
-	const initiativeTaker = result.initiativeTaker.account.username;
-
-	const initiativeTakerDamage = `-${result.damageDealt.initiativeTaker} HP`;
+/* const createMiniBossResultLoss = (rewards, combatResult) =>{
+	const initiativeTaker = combatResult.originalGreenTeam[0];
+	const initiativeTakerDamage = `-${rewards.damageDealt.initiativeTaker} HP`;
 
 	const minibossIcon = getIcon("miniboss");
 	const fields = [
@@ -51,8 +43,8 @@ const createMiniBossResultLoss = (result, minibossEvent) =>{
 			inline: false,
 		},
 	];
-	if (result.helpers.length) {
-		const helpersValue = result.helpers.map((h, i)=>`${h.account.username}:\n - ${result.rewards.helpers[i].randomHelperDamage}hp ${result.rewards.helpers[i].helperDead ? "💀" : ""}\n\n`);
+	if (rewards.helpers.length) {
+		const helpersValue = rewards.helpers.map((h, i)=>`${h.account.username} - ${rewards.rewards.helpers[i].randomHelperDamage}hp ${rewards.rewards.helpers[i].helperDead ? "💀" : ""}\n\n`);
 		fields.push({
 			name: "Helpers damage",
 			value: helpersValue,
@@ -61,7 +53,7 @@ const createMiniBossResultLoss = (result, minibossEvent) =>{
 	}
 
 	const embedResult = new Discord.MessageEmbed()
-		.setTitle(`${initiativeTaker} ${result.helpers.length ? "and his helpers" : ""} failed to defeat ${minibossIcon} ${minibossEvent.name} `)
+		.setTitle(`${initiativeTaker} ${rewrads.helpers.length ? "and his helpers" : ""} failed to defeat ${minibossIcon} ${"minibossEvent.name"} `)
 		.setDescription("Damage taken: ")
 		.setColor(sideColor)
 		.addFields(
@@ -70,36 +62,36 @@ const createMiniBossResultLoss = (result, minibossEvent) =>{
 
 	return embedResult;
 
-};
+}; */
 
 
-const createMiniBossResultWin = (result, minibossEvent) =>{
+const createMinibossResult = (rewards, combatResult) => {
+	const initiativeTaker = combatResult.originalGreenTeam[0];
+	const initiativeTakerName = initiativeTaker.account.username;
+	const miniboss = combatResult.originalRedTeam[0];
 
-	const sideColor = "#45b6fe";
-	const initiativeTaker = result.initiativeTaker.account.username;
-
-	let initiativeTakerRewards = `${getIcon("gold")} Gold: ${result.rewards.initiativeTaker.gold} \n ${getIcon("xp")} XP: ${result.rewards.initiativeTaker.xp}`;
-	if (result.rewards.initiativeTaker.dungeonKey) {
-		initiativeTakerRewards += `\n ${getIcon(result.rewards.initiativeTaker.dungeonKey)} ${result.rewards.initiativeTaker.dungeonKey} !`;
+	let initiativeTakerRewards = `${getIcon("gold")} ${rewards.initiativeTaker.gold} | ${getIcon("xp")} ${rewards.initiativeTaker.xp}`;
+	if (rewards.initiativeTaker.dungeonKey) {
+		initiativeTakerRewards += `\n ${getIcon(rewards.initiativeTaker.dungeonKey)} ${rewards.initiativeTaker.dungeonKey} !`;
 	}
 	const minibossIcon = getIcon("miniboss");
 	const fields = [
 		{
-			name: `${initiativeTaker} rewards`,
+			name: `${initiativeTakerName} rewards`,
 			value: initiativeTakerRewards,
 			inline: true,
 		},
 	];
-	if (result.helpers.length) {
+	if (rewards.helpers.length) {
 		fields.push({
 			name: "Helpers rewards",
-			value: result.helpers.map((h, i)=> `${result.rewards.helpers[i].helperName}:\n${getIcon("gold")} Gold: ${result.rewards.helpers[i].randomHelperGold} \n ${getIcon("xp")} XP: ${result.rewards.helpers[i].randomHelperXp}${result.rewards.helpers[i].helperLeveledUp ? " 💪" : ""}\n\n`),
+			value: rewards.helpers.map(helper=> `${helper.helperName}${helper.leveledUp ? " 💪" : ""} ${getIcon("gold")} ${helper.randomHelperGold} | ${getIcon("xp")} ${helper.randomHelperXp}`),
 			inline: true,
 		});
 	}
 
 	const embedResult = new Discord.MessageEmbed()
-		.setTitle(`${initiativeTaker} ${result.helpers.length ? "and his helpers" : ""} successfuly defeated ${minibossIcon} ${minibossEvent.name} `)
+		.setTitle(`${initiativeTakerName} ${rewards.helpers.length ? "and his helpers" : ""} successfuly defeated ${minibossIcon} ${miniboss.account.username} `)
 		.setDescription("Rewards will be distributed: ")
 		.setColor(sideColor)
 		.addFields(

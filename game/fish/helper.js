@@ -1,14 +1,6 @@
-const fishPrices = {
-	"Cod":5,
-	"Eel":10,
-	"Trout":15,
-	"Macrel":25,
-	"Bass":30,
-	"Salmon":40,
-	"Swordfish":80,
-};
+const { fishPrices } = require("../_CONSTS/fish");
 
-const calculateFishResult = (fish, chance = (1 / 3)) => {
+const calculateFishResult = (fish, chance = (1 / 4)) => {
 	const result = {
 		response: "",
 		gold: 0,
@@ -33,6 +25,7 @@ const generateFailFishSentence = () => {
 		"You caught an old boot",
 		"You put your fishing rod down and took a swim instead",
 		"A mermaid spotted you while fishing, distracting you with a suggestive sea shell bikini",
+		"You spot a siren in the shoreline. Her songs makes you forget about time and space",
 		"After fishing for hours, your rod broke while swinging it",
 	];
 	return sentences[Math.floor(Math.random() * sentences.length)];
@@ -41,7 +34,8 @@ const generateFailFishSentence = () => {
 const generateSucceedFishSentence = (gold, fishCaught) => {
 	const sentences = [
 		`You caught a **${fishCaught}** and sold it for **${gold}** gold`,
-		`A small **${fishCaught}** jumped into your bucket! Gold + **${gold}**`,
+		`A magical **${fishCaught}** swims to your bait and gazes at you: "Hello adventurer, I have somet---" \n You quickly grab the magic fish and put it in your bucket. You care not about talking fish, only about sweet cash. Gold +**${gold}**!`,
+		`A small **${fishCaught}** jumped into your bucket! Gold +**${gold}**`,
 		`A strange man approaches you and offer you a **${fishCaught}** for the price of your soul. You gladly accept and sell it back to him for **${gold}** gold`,
 		`Your bait is too over powered and within minutes you caught a **${fishCaught}** and sold it for **${gold}** gold`,
 		`You decide to change things up and used the fishing rod as a spear with huge success! A **${fishCaught}** was caught and sold for **${gold}** gold`,

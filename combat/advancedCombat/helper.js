@@ -34,6 +34,7 @@ const getPlayerEssentials = playerObj => {
 			username: playerObj.account.username,
 			userId: playerObj.account.userId },
 		hero: {
+			rank: playerObj.hero.rank,
 			currentHealth: playerObj.hero.currentHealth,
 			health: playerObj.hero.health
 		}
@@ -134,7 +135,7 @@ const checkWinner = progress=>{
 		return { victory: "draw", msg: "draw!" };
 	}
 	if (teamGreen.length === 0 || teamRed.length === 0) {
-		return teamGreen.length === 0 ? { victory: "red", msg: "Winner: Team Red!" } : { victory: "green", msg:"Winner: Team Green!" };
+		return teamGreen.length === 0 ? { victory: "red", msg: `Winner: ${progress.embedInformation.teamRedName}!` } : { victory: "green", msg:`Winner: ${progress.embedInformation.teamGreenName}!` };
 	}
 	if (progress.currentRound >= progress.combatRules.maxRounds) {
 		return { victory: "none", msg: "No Winners!" };

@@ -2,20 +2,20 @@ module.exports = { "Graveward": {
 	name: "Graveward",
 	type: "miniboss",
 	stats:{
-		attack: 600,
-		health: 600,
-		difficulty: 35,
+		attack: 400,
+		health: 400,
 	},
+	allowedNumOfAttacks: 2,
+	weapons: ["slash", "strike"],
 	rewards:{
 		dungeonKey: "Eridian Vase",
 		gold: 8888,
 		xp: 999,
 	},
-	rules: {
-		canKill:true,
-		allowArmy:false,
-		allowHelpers:true,
-		minRankToGetKey: 12,
+	minRankToGetKey: 12,
+	combatRules: {
+		maxRounds: 3,
+		armyAllowed: false,
+		helpersAllowed: true,
 	},
-	helperIds:[],
 }, };

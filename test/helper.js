@@ -76,6 +76,12 @@ const generateDiscordMessage = (user = isRequired())=>{
 		},
 		channel:{
 			send:function(result) {
+				result.react = function(icon) {
+					return icon;
+				};
+				result.createReactionCollector = function(icon) {
+					return icon;
+				};
 				return result;
 			},
 		},

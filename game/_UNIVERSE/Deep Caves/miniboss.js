@@ -4,19 +4,18 @@ module.exports = { "Kraken": {
 	stats:{
 		attack: 1800,
 		health: 1800,
-		difficulty: 90,
 	},
+	combatRules: {
+		maxRounds: 3,
+		armyAllowed:false,
+		helpersAllowed:true,
+	},
+	allowedNumOfAttacks: 3,
+	weapons: ["slash", "strike", "critical"],
+	minRankToGetKey: 22,
 	rewards:{
 		dungeonKey: "The One Shell",
 		gold: 8888,
-		xp: 999,
+		xp: 9999,
 	},
-	rules: {
-		canKill:true,
-		allowArmy:false,
-		allowHelpers:true,
-		minRankToGetKey: 22,
-	},
-	helperIds:[],
-},
-};
+}, };

@@ -45,7 +45,7 @@ const handleExecuteQuest = async (user, userQuest, choice) => {
 const showQuestDescription = (user, quest, userQuest) => {
 	let msg = "";
 	if(quest.author) msg += `*Guest Author: ${quest.author}*`;
-	msg += `\n\n**__${quest.name}:__**\n\n__Description:__\n${replaceHandler(user, userQuest, quest.description)}`;
+	msg += `\n**__${quest.name}:__**\n${replaceHandler(user, userQuest, quest.description)}`;
 	if(quest.objective) msg += `\n\n__Objective:__\n${replaceHandler(user, userQuest, quest.objective)}`;
 	if(quest.reward) msg += `\n\n__Rewards__:\n${quest.reward}`;
 	return msg;

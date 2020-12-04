@@ -14,8 +14,8 @@ const progress = {
 	teamRed:[user3, npc, npc], // REQUIRED <Array> Array of objects. Either NPC object or user object from db
 	embedInformation:{ // REQUIRED <Object> Sets the embed to be shown during combat
 		minimalEmbed: false, // not required <Boolean> Toggle this to slim down the embed
-		teamRed:"", // not required <String> Name of the red Team -> Default is "Team Red"
-		teamGreen:"", // not required <String> Name of the green Team -> Default is "Team Green"
+		teamRedName:"", // not required <String> Name of the red Team -> Default is "Team Red"
+		teamGreenName:"", // not required <String> Name of the green Team -> Default is "Team Green"
 		title:"", // not required <String> Title of the battle -> Default is "BATTLE!"
 		description:"", // not required <String> Description of battle -> Default is ""
 		fields:[], // not required <Array> Aditional fields to the embed -> Default is []

@@ -5,6 +5,7 @@ const { createChanceArray, racePayOut, validateUser } = require("./helpers");
 const { asyncForEach, deepCopyFunction } = require("../_GLOBAL_HELPERS");
 const { onCooldown } = require("../_CONSTS/cooldowns");
 const { getIcon } = require("../_CONSTS/icons");
+const { generateResult } = require("./helpers");
 const sleep = require("util").promisify(setTimeout);
 
 const GOLDPRICE = 40;
@@ -94,15 +95,6 @@ const startRace = async (message, event, raceInProgress)=>{
 	await sleep(1000);
 	return await startRace(message, newResults, progress);
 
-};
-
-const generateResult = (event) =>{
-	const mover = event.weightedChance[Math.floor(Math.random() * event.weightedChance.length)];
-	event.raceDataCopy[mover].dotsLength -= event.raceDataCopy[mover].jump();
-	if (event.raceDataCopy[mover].dotsLength <= 0) {
-		event.winner = mover;
-	}
-	return event;
 };
 
 
