@@ -37,9 +37,7 @@ const redeemCode = async (code = "")=>{
 	}
 	catch(err) {
 		// fail silently
-		console.info(err.response);
 		return false;
 	}
-	console.log(response, "response");
 	return response.data;
 };
