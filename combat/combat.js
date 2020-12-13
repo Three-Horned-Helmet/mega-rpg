@@ -61,7 +61,6 @@ const calculatePveHero = (user, npc) => {
 // Returns win (bolean), lossPercentage (1 = 100% loss of units), and the combat modifier
 const calculatePveFullArmyResult = (user, npc) => {
 	const { totalStats } = calculateStats(user);
-	console.log(totalStats, "totalStats");
 	const combatModifier = 1 - Math.random() / 2;
 	const userHp = totalStats.health * combatModifier;
 	const userAt = totalStats.attack * combatModifier;

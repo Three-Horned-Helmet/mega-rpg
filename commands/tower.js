@@ -24,7 +24,8 @@ module.exports = {
 			return message.channel.send(onCooldownInfo.embed);
 		}
 
-		await towerHandler(user, args, message);
+		const result = await towerHandler(user, args, message);
+		return message.channel.send(result);
 
 	},
 };

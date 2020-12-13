@@ -12,7 +12,6 @@ const towerHandler = async (user, args) => {
 			// Coming soon
 		}
 	}
-
 	if(allResults) {
 		const { embedTowerInfo } = towerInfoEmbed(allResults);
 		return embedTowerInfo;
