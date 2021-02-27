@@ -736,10 +736,8 @@ userSchema.methods.locationTravel = async function(location) {
 };
 
 
-userSchema.methods.giveDungeonKey = async function(key = "CM Key") {
-	if (this.hero.dungeonKeys[key]) {
-		return;
-	}
+userSchema.methods.giveDungeonKey = async function(key) {
+
 	this.hero.dungeonKeys[key] += 1;
 };
 userSchema.methods.changeElo = async function(newElo) {

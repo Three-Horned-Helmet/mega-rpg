@@ -69,6 +69,10 @@ const giveRewards = async (rewards, combatResult) => {
 	await asyncForEach(helpers, async (helper) => {
 		await helper.save();
 	});
+
+	if (rewards.initiativeTaker.dungeonKey) {
+		initiativeTaker.giveDungeonKey(rewards.initiativeTaker.dungeonKey);
+	}
 	initiativeTaker.alternativeGainXp(rewards.initiativeTaker.xp);
 	initiativeTaker.gainManyResources({ gold: rewards.initiativeTaker.gold });
 
