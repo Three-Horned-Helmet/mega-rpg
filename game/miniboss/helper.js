@@ -27,7 +27,7 @@ const minibossStartAllowed = (user) => {
 const generateRewards = (result) => {
 	const initiativeTaker = result.originalGreenTeam[0];
 	const helpers = [...result.originalGreenTeam.filter(player => player.account.userId !== initiativeTaker.account.userId)];
-	const userHasMinibossKey = initiativeTaker.hero.dungeonKeys[result.rewards.dungeonKey] > 0;
+	const userHasMinibossKey = initiativeTaker.hero.dungeonKeys && initiativeTaker.hero.dungeonKeys[result.rewards.dungeonKey] > 0;
 
 	const dungeonKey = initiativeTaker.hero.rank >= result.minRankToGetKey && !userHasMinibossKey ? result.rewards.dungeonKey : null;
 	const gold = Math.round(result.rewards.gold / 2);
