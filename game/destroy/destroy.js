@@ -22,17 +22,17 @@ const destroyHandler = async (user, arg) => {
 
 const checkIfDestroyIsPossible = (user, arg) => {
   // Check if the user has the building with the specified coordinates or name
-  const building = arg.match(/\d+.|,\d+/)
-    ? user.empire
-        .sort((a, b) => b.level - a.level)
-        .find(
-          (b) =>
-            b.position[0] === parseInt(arg.split(".")[0]) &&
-            b.position[1] === parseInt(arg.split(".")[1])
-        )
-    : user.empire.find((b) => {
-        return b.name.toLowerCase() === arg;
-      });
+  const building = arg.match(/\d+\.\d+/)
+    ? user.empire.find(
+        (b) =>
+          b.position[0] === parseInt(arg.split(".")[0]) &&
+          b.position[1] === parseInt(arg.split(".")[1])
+      )
+    : user.empire
+        .filter((b) => {
+          return b.name.toLowerCase() === arg;
+        })
+        .sort((a, b) => a.level - b.level)[0];
 
   if (!building) {
     return {
