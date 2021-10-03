@@ -22,7 +22,7 @@ const findOrSetupLottery = async ()=>{
 	// creates a lottery if the previous one has been claimed or time have run out
 	if (latestLotteryRaffle.nextDrawing.getTime() <= now) {
 		const previousLotteryResult = await latestLotteryRaffle.determineWinner();
-		if (previousLotteryResult.previousWinner.userId) {
+		if (previousLotteryResult && previousLotteryResult.previousWinner.userId) {
 			const previousWinner = await User.findOne({ "account.userId": previousLotteryResult.previousWinner.userId });
 			await previousWinner.gainManyResources(previousLotteryResult.prizePool);
 		}
@@ -102,7 +102,8 @@ const getCurrentLotteryInformation = lottery =>{
 
 const validatePurchase = (user, prizeToPay, amount) => {
 	if (user.resources.gold <= prizeToPay) {
-		return `Insufficent funds! \n You need ${getIcon("gold")} ${prizeToPay} gold when buying ${amount} tickets!`;
+		const plural = amount === 1 ? "" : "s";
+		return `Insufficent funds! \n You need ${getIcon("gold")} ${prizeToPay} gold when buying ${amount} ticket${plural}!`;
 	}
 
 	// User has high enough shop level?

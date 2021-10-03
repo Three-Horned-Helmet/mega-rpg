@@ -21,8 +21,9 @@ module.exports = {
 	execute(message, args, user) {
 		if(args.length === 0) return message.channel.send(showRecruitsEmbed(user));
 
-		const unit = Math.floor(args[args.length - 1]) ? args.slice(0, args.length - 1).join(" ") : args.slice(0, args.length).join(" ");
-		const amount = Math.floor(args[args.length - 1]) || 1;
+		const onlyWords = new RegExp(/[a-zA-Z]/);
+		const unit = args.filter(arg => onlyWords.test(arg))[0];
+		const amount = args.filter(Number)[0] || 1;
 
 		recruitUnits(user, unit, amount).then((response) => {
 			message.channel.send(`<@${message.author.id}>: ${response}`);

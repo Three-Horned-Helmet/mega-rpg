@@ -67,7 +67,7 @@ module.exports = {
 		description: "The footprints lead away from the Lumbermill, and you decide to follow them alone to make sure the lumberjacks were telling the truth and they had nothing to do with destruction. You bring your equipment and set out into the forest.",
 		winDescription: "You turn to the noise, quickly drawing your weapon! Walking a step toward the source of the sound you feel a sharp pain at the back of the head. The world turns black as you lose consciousness.\n**A new quest is available**",
 		objective: "Follow the footsteps into the **Forest**",
-		// reward: "Oak wood: 40\n",
+		reward: "Oak wood: 40\n",
 		questKeySequence: ["Building Quests", "findingSaboteurs"],
 
 		// Returns false if the quest description is shown, or true if the quest is being completed
@@ -263,7 +263,7 @@ module.exports = {
 		description: "You gather your men and set off into the woods as day breaks in search of those nasty elves. After a couple of hours a wild elf appears. You, still feeling the nick at your honor from being knocked unconscious by the elves pick up a rock and throw it at the elf. The wild elf disappears.\n\nYou lead the men further into the forest and discover the elven village",
 		winDescription: "They fight valiantly yet are utterly crushed by the might of your force.\nThe elves lord is brought to you alive. \n\nThe elven lord: 'How could you do this, I thought we had an agreem...'\n\nYou cut him off. Literally. By the head. \n\nSeeing his silvery hair now painted in red, your pride saved for now, you head back to the village to take a good long sip of a well-deserved beer while staring down the poor bartender. An honest day of work, and now the lumbermill is once again safe from nasty silver haired elves trying to feed you information apart from how to hit on a hot bartender.\n\n*\\*Your Lumbermill is still in ruins and is set back to level 0\\**",
 		objective: "Defeat the Wood Elves (`!raid wood elves`)",
-		// reward: "Oak wood: 70\nYew wood: 70\n",
+		reward: "Oak wood: 70\nYew wood: 70\n",
 		questKeySequence: ["Building Quests", "battleForWood"],
 
 		// Returns false if the quest description is shown, or true if the quest is being completed
