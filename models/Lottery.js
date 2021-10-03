@@ -52,20 +52,19 @@ lotterySchema.methods.addContestor = function(username, userId, ticketAmount, ti
 };
 
 lotterySchema.methods.determineWinner = function() {
-	if (!this.currentContestors || Object.keys(this.currentContestors).length === 0) {
+	if (!this.currentContestors || this.currentContestors.length === 0) {
 		return;
 	}
 	const chanceArray = [];
-	for (const contestor of Object.keys(this.currentContestors)) {
-		for (let i = 0; i < this.currentContestors[contestor].ticketAmount; i += 1) {
+	for (const contestor of this.currentContestors) {
+		for (let i = 0; i < contestor.ticketAmount; i += 1) {
 			chanceArray.push(contestor);
 		}
 	}
 	const winnerId = chanceArray[Math.floor(Math.random() * chanceArray.length)];
-
 	this.previousWinner = {
-		username: this.currentContestors[winnerId].username,
-		userId: this.currentContestors[winnerId].userId,
+		username: winnerId.username,
+		userId: winnerId.userId,
 	};
 
 	return this.save();

@@ -19,7 +19,7 @@ module.exports = {
 		intro: "You go through C'Thuns pockets to find any valuables and a glimmer of gold catches your eyes",
 		description: "You pick up a beautiful solid gold key from the Ogre's pocket. You can't believe your eyes, how can an Ogre be in possession of such a valuable item? The Ogre's Cave does not even have any items with a lock on it! Bewildred about the key you put it in the pocket and think to yourself:\n\n'I wonder what the engravings on the key stands for... hmmm... **C.M.**?'",
 		objective: "Find out what the key is meant for",
-		// reward: "Gold: 200\n",
+		reward: "Gold: 200\n",
 		winDescription: "\n**A new quest is available**",
 		questKeySequence: ["Grassy Plains", "strangeKey"],
 

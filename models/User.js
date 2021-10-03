@@ -6,8 +6,9 @@ if (process.env.NODE_ENV === "test") {
 	mongoose.connect(process.env.TEST_MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true });
 }
 else {
-	mongoose.connect(process.env.MONGODB_URI, { poolSize: 100, useUnifiedTopology: true, useNewUrlParser: true });
+	mongoose.connect(process.env.MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true });
 }
+// poolSize: 100, deprecated in new mongoose verison
 
 const { Schema } = mongoose;
 
