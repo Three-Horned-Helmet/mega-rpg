@@ -16,7 +16,7 @@ const handleRank = async (rankType, currentServer, user)=> {
 		case "sfa":
 			return await getTop10Sfa(user, currentServer);
 		default:
-			return await getTop10Xp(user, currentServer, "help");
+			return await getTop10Xp(user, currentServer);
 	}
 };
 

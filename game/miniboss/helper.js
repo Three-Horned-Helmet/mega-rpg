@@ -104,7 +104,7 @@ const createMinibossEvent = (user) => {
 };
 
 const setupProgress = (miniboss, user) => {
-	const progress = {
+	return {
 		combatRules:{
 			armyAllowed: miniboss.combatRules.armyAllowed,
 			maxRounds: miniboss.combatRules.maxRounds,
@@ -113,7 +113,7 @@ const setupProgress = (miniboss, user) => {
 		teamGreen:[user],
 		teamRed:[miniboss],
 		minRankToGetKey: 2,
-		rewards: { dungeonKey: "CM Key", gold: 120, xp: 500 },
+		rewards: miniboss.rewards,
 		embedInformation: {
 			minimal: false,
 			teamRedName: miniboss.name,
@@ -121,7 +121,6 @@ const setupProgress = (miniboss, user) => {
 			title: `${miniboss.name} vs ${user.account.username}`
 		}
 	};
-	return progress;
 };
 
 module.exports = { giveRewards, minibossStartAllowed, validateHelper, createMinibossEvent, generateRewards, setupProgress };

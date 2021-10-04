@@ -6,13 +6,13 @@ const { msToHumanTime } = require("../_GLOBAL_HELPERS/index");
 const cooldowns = {
 	dailyPrize: (1000 * 60 * 60 * 24),
 	duel: (1000 * 60 * 2),
-	dungeon: (1000 * 60 * 60 * 12),
+	dungeon: (1000 * 60 * 3),
 	explore: (1000 * 30),
 	fish: (1000 * 15),
 	hunt: (1000 * 20),
 	miniboss: (1000 * 60 * 60 * 3),
 	race: (1000 * 60 * 60 * 24),
-	raid: (1000 * 60 * 4),
+	raid: (1000 * 60 * 2),
 	tower: (1000 * 60 * 2),
 	weeklyPrize: (1000 * 60 * 60 * 24 * 7),
 };
