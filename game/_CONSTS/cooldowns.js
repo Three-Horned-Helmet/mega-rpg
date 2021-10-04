@@ -10,8 +10,8 @@ const cooldowns = {
 	explore: (1000 * 30),
 	fish: (1000 * 15),
 	hunt: (1000 * 20),
-	miniboss: (1000 * 60 * 60 * 3),
-	race: (1000 * 60 * 60 * 24),
+	miniboss: (1000 * 60 * 5),
+	race: (1000 * 60 * 60 * 12),
 	raid: (1000 * 60 * 2),
 	tower: (1000 * 60 * 2),
 	weeklyPrize: (1000 * 60 * 60 * 24 * 7),
@@ -22,17 +22,16 @@ const cooldowns = {
 * function that could and should be used where ever there is need for cooldown
 * @param {string} actionType - eg: "explore" or "miniboss"
 * @param {Object} user - usermodel from mongodb
-*/
-
-/* returns:
- {
+* @returns {Object} {
 	response: BOOL,
 	timeLeftInSec, STRING eg: "42"
 	timeLeftInMs, STRING eg: "42069"
 	timeLeftFormatted, STRING eg: "12h 49m 02s"
 	message: STRING eg: "hunt is on cooldown! 42 seconds remaining until you can perform hunt",
 	embed: OBJECT Discord formatted response (pretty af)
-} */
+}
+*/
+
 const onCooldown = (actionType, user) => {
 	if (!actionType || !user) {
 		console.error("Missing arguments ");
