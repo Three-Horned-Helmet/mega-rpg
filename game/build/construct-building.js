@@ -11,7 +11,7 @@ const constructBuilding = async (user, building, coordinates) => {
 		if(!coordinates) return "There's no available spots in your empire" ;
 	}
 	// Only allowed to have one of certain buildings
-	if (onlyOneBuildnings.includes(building.name) && userHasBuilding(user, building)) {
+	if (onlyOneBuildnings.includes(building.name) && userHasBuilding(user, building) && !coordinates) {
 		return `You can only have one ${building.name}`;
 	}
 
