@@ -14,7 +14,7 @@ const displayResources = (user) => {
 
 	const fields = [
 		{
-			name: "Gold (raid/hunt/fish/duel)",
+			name: "Gold (raid/hunt/fish/duel/)",
 			value:
               `:moneybag: ${user.resources.gold}`,
 		},

@@ -51,13 +51,12 @@ const getTop10Army = async (user, currentServer)=>{
 		});
 		formatted.push(`\`#${playerPosition}: ${user.account.username} --- ${calculateStats(user).unitStats.attack} army strength\``);
 	}
-	// global position
 	formatted.push(getGlobalPosition(sortedPlayers, user.account.userId));
 
 	return formatted;
 };
 
-const getTop10Quest = async (user, currentServer)=>{
+const getTop10Quest = async (user, currentServer) => {
 
 	const allUsers = await User.aggregate([
 		{
@@ -97,7 +96,6 @@ const getTop10Quest = async (user, currentServer)=>{
 		});
 		formatted.push(`\`#${playerPosition}: ${user.account.username} --- ${user.completedQuests.length} \``);
 	}
-	// global position
 	formatted.push(getGlobalPosition(allUsers, user.account.userId));
 
 	return formatted;
@@ -129,7 +127,6 @@ const getTop10Elo = async (user, currentServer)=> {
 		});
 		formatted.push(`\`#${playerPosition}: ${user.account.username} --- ${user.hero.elo} \``);
 	}
-	// global position
 	formatted.push(getGlobalPosition(allUsers, user.account.userId));
 
 	return formatted;
@@ -160,7 +157,6 @@ const getTop10Xp = async (user, currentServer, help = false) => {
 		});
 		formatted.push(`\`#${playerPosition}: ${user.account.username} --- hero lvl: ${user.hero.rank} - ${user.hero.currentExp} XP\``);
 	}
-	// global position
 	formatted.push(getGlobalPosition(allUsers, user.account.userId));
 
 	if (help) {
@@ -195,7 +191,6 @@ const getTop10Sfa = async (user, currentServer) => {
 		});
 		formatted.push(`\`#${playerPosition}: ${user.account.username} --- tower lvl: ${user.tower["solo full-army"].level}\``);
 	}
-	// global position
 	formatted.push(getGlobalPosition(allUsers, user.account.userId));
 
 	return formatted;
@@ -210,18 +205,5 @@ const getGlobalPosition = (allUsers, userId)=>{
 	});
 	return `\n\`Global position: #${globalPlayerPosition} \``;
 };
-
-/* const getAllSoldiers = (units) => {
-	let result = 0;
-	Object.keys(units).forEach(b => {
-		Object.values(units[b]).forEach(n => {
-			if (typeof n === "number") {
-				result += n;
-			}
-		});
-	});
-	return result;
-}; */
-
 
 module.exports = { handleRank };

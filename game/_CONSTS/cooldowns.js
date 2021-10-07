@@ -2,7 +2,6 @@ const Discord = require("discord.js");
 const { msToHumanTime } = require("../_GLOBAL_HELPERS/index");
 
 // in miliseconds
-// alphabetical
 const cooldowns = {
 	dailyPrize: (1000 * 60 * 60 * 24),
 	duel: (1000 * 60 * 2),
@@ -23,12 +22,12 @@ const cooldowns = {
 * @param {string} actionType - eg: "explore" or "miniboss"
 * @param {Object} user - usermodel from mongodb
 * @returns {Object} {
-	response: BOOL,
-	timeLeftInSec, STRING eg: "42"
-	timeLeftInMs, STRING eg: "42069"
-	timeLeftFormatted, STRING eg: "12h 49m 02s"
-	message: STRING eg: "hunt is on cooldown! 42 seconds remaining until you can perform hunt",
-	embed: OBJECT Discord formatted response (pretty af)
+	response, Boolean,
+	timeLeftInSec, String eg: "42"
+	timeLeftInMs, String eg: "42069"
+	timeLeftFormatted, String eg: "12h 49m 02s"
+	message: String eg: "hunt is on cooldown! 42 seconds remaining until you can perform hunt",
+	embed: Object Discord formatted response (pretty af)
 }
 */
 

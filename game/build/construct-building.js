@@ -1,11 +1,18 @@
 const { checkBuildQuests } = require("../quest/quest-utils");
 
+const onlyOneBuildnings = ["tax office", "senate"];
+const userHasBuilding = (user, building) => user.empire.find(b => b.name === building.name);
+
 // Takes a user, a building and coordinates and pushes the building to the users Empire array
 const constructBuilding = async (user, building, coordinates) => {
-	// Get random coordinates if none are given
+	// Finds next available spot if no coordinates are given
 	if(!coordinates[0] && coordinates[0] !== 0) {
 		coordinates = findAvailableSpot(user);
 		if(!coordinates) return "There's no available spots in your empire" ;
+	}
+	// Only allowed to have one of certain buildings
+	if (onlyOneBuildnings.includes(building.name) && userHasBuilding(user, building)) {
+		return `You can only have one ${building.name}`;
 	}
 
 	const { response, message, buildingCost } = checkIfBuildIsPossible(user, building, coordinates);
@@ -101,7 +108,6 @@ const checkIfBuildIsPossible = (user, building, coordinates) => {
 			};
 		}
 	}
-
 	return { response: true, buildingCost };
 };
 

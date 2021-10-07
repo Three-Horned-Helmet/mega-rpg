@@ -416,7 +416,7 @@ module.exports = {
 			},
 		],
 	},
-	["armorer"]: {
+	armorer: {
 		name: "armorer",
 		levels: [
 			{
@@ -486,6 +486,42 @@ module.exports = {
 					["obsidian ore"]: 350,
 				},
 				level: 3,
+			},
+			{
+				cost: {
+					gold: 50000,
+					["yew wood"]: 5000,
+					["barlind wood"]: 5000,
+					["aspen wood"]: 5000,
+					["mithril bar"]: 4000,
+					["pyrite bar"]: 3200,
+					["obsidian ore"]: 700,
+				},
+				level: 4,
+			},
+			{
+				cost: {
+					gold: 75000,
+					["yew wood"]: 10000,
+					["barlind wood"]: 10000,
+					["aspen wood"]: 10000,
+					["mithril bar"]: 6000,
+					["pyrite bar"]: 4000,
+					["obsidian ore"]: 1500,
+				},
+				level: 5,
+			},
+			{
+				cost: {
+					gold: 100000,
+					["yew wood"]: 25000,
+					["barlind wood"]: 25000,
+					["aspen wood"]: 25000,
+					["mithril bar"]: 15000,
+					["pyrite bar"]: 10000,
+					["obsidian ore"]: 5000,
+				},
+				level: 6,
 			},
 		],
 		execute: function(user) {
@@ -560,5 +596,77 @@ module.exports = {
 				level: 7,
 			},
 		],
+	},
+	["tax office"]: {
+		name: "tax office",
+		levels: [
+			{
+				cost: {
+					gold: 50,
+					["copper ore"]: 3,
+				},
+				level: 0,
+
+			},
+			{
+				cost: {
+					gold: 1000,
+					["yew wood"]: 180,
+					["iron bar"]: 180,
+				},
+				level: 1,
+			},
+			{
+				cost: {
+					gold: 10000,
+					["yew wood"]: 280,
+					["iron bar"]: 280,
+				},
+				level: 2,
+			},
+			{
+				cost: {
+					gold: 100000,
+					["yew wood"]: 350,
+					["iron bar"]: 350,
+				},
+				level: 3,
+			},
+			{
+				cost: {
+					gold: 1000000,
+					["yew wood"]: 440,
+					["iron bar"]: 440,
+				},
+				level: 4,
+			},
+			{
+				cost: {
+					gold: 10000000,
+					["yew wood"]: 550,
+					["iron bar"]: 550,
+				},
+				level: 5,
+			},
+			{
+				cost: {
+					gold: 100000000,
+					["yew wood"]: 690,
+					["iron bar"]: 690,
+				},
+				level: 6,
+			},
+			{
+				cost: {
+					gold: 1000000000,
+					["yew wood"]: 750,
+					["iron bar"]: 750,
+				},
+				level: 7,
+			},
+		],
+		execute: async (user) => {
+			return await user.updateNewProduction("tax office", new Date(new Date() - 1000 * 60 * 5), "gold");
+		},
 	},
 };

@@ -55,7 +55,7 @@ const objectMessage = (costs) => {
 	let message = "";
 
 	for(const cost in costs) {
-		message += `${getIcon[cost] || ""} ${cost.capitalize()}: ${costs[cost]} \n`;
+		message += `${getIcon(cost) || ""} ${cost.capitalize()}: ${costs[cost]} \n`;
 	}
 
 	return message;

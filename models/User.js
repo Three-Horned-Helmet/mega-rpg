@@ -303,11 +303,11 @@ const userSchema = new Schema({
 });
 
 userSchema.methods.startQuest = async function(questName) {
-	const foundIndex = this.quests.indexOf(this.quests.find(q => {
+	const buildingIndex = this.quests.indexOf(this.quests.find(q => {
 		return q.name === questName;
 	}));
-	this.quests[foundIndex].started = true;
-	this.markModified(`quests.${foundIndex}.started`);
+	this.quests[buildingIndex].started = true;
+	this.markModified(`quests.${buildingIndex}.started`);
 };
 
 userSchema.methods.addNewQuest = async function(quest) {
@@ -339,7 +339,7 @@ userSchema.methods.refreshQuestPve = async function(questName, pveIndex = 0) {
 
 userSchema.methods.gainManyResources = function(obj) {
 	Object.keys(obj).forEach(r=>{
-		this.resources[r] += obj[r];
+		this.resources[r] += Math.round(obj[r]);
 	});
 };
 
@@ -410,7 +410,6 @@ userSchema.methods.updateHousePop = function(newPop) {
 
 userSchema.methods.updateMaxBuildings = function() {
 	const senate = this.empire.find(building => building.name === "senate");
-
 	this.maxBuildings = 9 + senate.level + 1;
 };
 
@@ -427,16 +426,16 @@ userSchema.methods.addOrRemoveUnits = function(unit, amount, free) {
 };
 
 userSchema.methods.updateNewProduction = function(productionName, now, producing) {
-	const foundIndex = this.empire.findIndex(building => building.name === productionName && !building.lastCollected);
-	if (foundIndex === -1) {
+	const buildingIndex = this.empire.findIndex(building => building.name === productionName && !building.lastCollected);
+	if (buildingIndex === -1) {
 		return;
 	}
-	this.empire[foundIndex].lastCollected = now;
+	this.empire[buildingIndex].lastCollected = now;
 
-	if(!this.empire[foundIndex].producing) this.empire[foundIndex].producing = producing;
+	if(!this.empire[buildingIndex].producing) this.empire[buildingIndex].producing = producing;
 
-	this.markModified(`empire.${foundIndex}.lastCollected`);
-	this.markModified(`empire.${foundIndex}.producing`);
+	this.markModified(`empire.${buildingIndex}.lastCollected`);
+	this.markModified(`empire.${buildingIndex}.producing`);
 
 	return this.save();
 };
@@ -489,6 +488,13 @@ userSchema.methods.collectResource = async function(collectBuildings, now, resou
 	await this.save();
 
 	return totalCollected;
+};
+
+userSchema.methods.setLastCollected = function(buildingName, now) {
+	this.empire.forEach((b, i)=> {
+		if (b.name === buildingName) b.lastCollected = now;
+		this.markModified(`empire.${i}.lastCollected`);
+	});
 };
 
 userSchema.methods.addItem = function(item, amount = 1, craft) {

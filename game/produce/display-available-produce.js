@@ -33,9 +33,10 @@ const produceEmbed = (user) => {
 		});
 	}
 
-	const availableProduces = prodBuildings.map(b => {
-		return buildingsObj[b.name].levels.filter(lvl => lvl.level <= b.level);
-	}).flat();
+	const availableProduces = prodBuildings
+		.map(b => buildingsObj[b.name].levels
+			.filter(lvl => lvl.level <= b.level))
+		.flat();
 
 	const availableProdFields = {
 		name: "Available productions:",
