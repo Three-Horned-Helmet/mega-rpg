@@ -56,8 +56,9 @@ const produceEmbed = (user) => {
 
 const resourceMessage = (buildObj) => {
 	let message = "";
-
-	message += `${getIcon(buildObj.producing)} ${buildObj.producing.capitalize()}\n`;
+	if (buildObj.producing) {
+		message += `${getIcon(buildObj.producing)} ${buildObj.producing.capitalize()}\n`;
+	}
 
 	return message;
 };
@@ -66,6 +67,7 @@ const produceMessage = (prod) => {
 	let message = "";
 
 	prod.forEach(p => {
+		console.log(p);
 		message += ` ${getIcon(p.produce)} ${p.produce.capitalize()}\n`;
 	});
 
