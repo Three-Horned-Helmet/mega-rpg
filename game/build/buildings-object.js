@@ -666,7 +666,7 @@ module.exports = {
 			},
 		],
 		execute: async (user) => {
-			return await user.updateNewProduction("tax office", new Date(new Date() - 1000 * 60 * 5), "gold");
+			return await user.setLastCollected("tax office", new Date(new Date() - 1000 * 60 * 5));
 		},
 	},
 };
