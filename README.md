@@ -1,4 +1,4 @@
-Come play with us for free at our [support server](https://discord.gg/DZXZzC3)
+Come play with us for free at our [support server](https://discord.gg/BHrHQfs6Mm)
 
 OR [invite](https://discordapp.com/oauth2/authorize?client_id=721024429345341560&scope=bot&permissions=1074121792) the bot to your own server!
 
