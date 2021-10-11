@@ -7,8 +7,8 @@ module.exports = {
 	async execute(message, args, user) {
 		const taxOfficeBuilding = user.empire.find(building => building.name === "tax office");
 		if (!taxOfficeBuilding) return message.channel.send(`<@${message.author.id}>: You're not collecting taxes at the moment. Try building a tax office!`);
-		const goldPerMinute = calculateGoldGained(user, taxOfficeBuilding, new Date());
-		return message.channel.send(`<@${message.author.id}>: You're making ${getIcon("gold")}${goldPerMinute.gold} gold per minute through taxes. Type \`!collect\` to collect!`);
+		const { goldPerMinute } = calculateGoldGained(user, taxOfficeBuilding, new Date());
+		return message.channel.send(`<@${message.author.id}>: You're making ${getIcon("gold")} ${goldPerMinute} gold per minute through taxes. Type \`!collect\` to collect!`);
 
 	},
 };

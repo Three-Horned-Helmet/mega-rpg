@@ -80,8 +80,9 @@ const calculateGoldGained = (user, taxOfficeBuilding, now) => {
 	const totalLevels = user.empire.reduce((acc, building) => acc + building.level + 1, 0);
 	const totalCompletedQuests = user.completedQuests.length;
 	const multiplier = level === 0 ? 0 : level / 4;
-	const goldIncome = (totalLevels + totalCompletedQuests) / 10 * (1 + multiplier) * minutesSinceLastCollect;
-	return { gold: Math.floor(goldIncome) };
+	const goldPerMinute = Math.round((totalLevels + totalCompletedQuests) / 10 * (1 + multiplier));
+	const goldIncome = Math.round(goldPerMinute * minutesSinceLastCollect);
+	return { gold: goldIncome, goldPerMinute };
 };
 
 
