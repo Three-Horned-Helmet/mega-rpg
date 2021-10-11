@@ -16,7 +16,7 @@ OR [invite](https://discordapp.com/oauth2/authorize?client_id=721024429345341560
 
 ## Get started
 
-1. [Join](https://discord.gg/DZXZzC3) a discord server that has the bot or [invite](https://discord.gg/DZXZzC3) the bot to your own server.
+1. [Join](https://discord.gg/BHrHQfs6Mm) a discord server that has the bot or [invite](https://discordapp.com/oauth2/authorize?client_id=721024429345341560&scope=bot&permissions=1074121792) the bot to your own server.
 2. There's over 30 commands available, try typeing `!help` or `!quest` to get you started.
 3. If you get stuck, you can always type `!info` to get a DM about the commands!
 
@@ -30,7 +30,7 @@ The Game is set in a fantasy-medieval universe and the journey begins in a kingd
 The game is in an early development stage, but we are continuously expanding the game with more quests and features. If you see something you like (or dislike), please let us know by creating a post on our official Discord support server, or send us a message directly.
 Any feedback or bug-reports are highly appreciated!
 
-A big thanks to everyone that has helped us with the early testing! 
+A big thanks to everyone that has helped us with the early testing!
 
 ## How to run Mega-RPG locally
 
