@@ -40,8 +40,8 @@ const generateCommandEmbed = ()=> {
 	const allWorkingCommands = ["collect", "craft", "destroy", "equip", "explore", "look", "produce", "recruit", "travel"];
 	const allMiscCommands = ["fish", "race", "quest", "vote"];
 
-	const inviteUrl = "https://discordapp.com/oauth2/authorize?client_id=721024429345341560&scope=bot&permissions=1074121792/";
-	const supportServerUrl = "https://discord.gg/DZXZzC3/";
+	const inviteUrl = "https://discordapp.com/oauth2/authorize?client_id=721024429345341560&scope=bot&permissions=1074121792";
+	const supportServerUrl = "https://discord.gg/BHrHQfs6Mm";
 	const patreonUrl = "https://www.patreon.com/megarpg/";
 
 	const links = `[Invite](${inviteUrl} "Invite Mega RPG to your server") | [Support Server](${supportServerUrl} "Join our support server") | [Donate](${patreonUrl} "Patreon")`;
