@@ -25,7 +25,7 @@ module.exports = {
 		const unit = args.filter(arg => onlyWords.test(arg))[0];
 		const amount = args.filter(Number)[0] || 1;
 
-		recruitUnits(user, unit, amount).then((response) => {
+		recruitUnits(user, unit, parseInt(amount, 10)).then((response) => {
 			message.channel.send(`<@${message.author.id}>: ${response}`);
 		});
 	},

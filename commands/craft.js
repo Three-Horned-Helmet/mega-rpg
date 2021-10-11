@@ -13,7 +13,7 @@ module.exports = {
 		const item = args.filter(arg => onlyWords.test(arg)).join(" ");
 		const amount = args.filter(Number)[0] || 1;
 
-		craftItem(user, item, amount).then((response) => {
+		craftItem(user, item, parseInt(amount, 10)).then((response) => {
 			message.channel.send(`<@${message.author.id}>: ${response}`);
 		});
 	},
