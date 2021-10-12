@@ -1,4 +1,5 @@
 const { getIcon } = require("../_CONSTS/icons");
+const { calculateGoldGained } = require("../_GLOBAL_HELPERS");
 
 // except tax office
 const allCollectable = ["mine", "lumbermill"];
@@ -9,11 +10,12 @@ const collectResources = async (user) => {
 	if(!canBeCollected.response) return canBeCollected.message;
 	const now = new Date();
 
-	let goldGained = {};
+	const goldGained = {};
 	if(taxOfficeBuilding) {
-		goldGained = calculateGoldGained(user, taxOfficeBuilding, now);
+		const { availableGoldToCollect } = calculateGoldGained(user, taxOfficeBuilding, now);
+		goldGained.gold = availableGoldToCollect;
 		user.gainManyResources(goldGained);
-		if (goldGained.gold) {user.setLastCollected("tax office", now);}
+		if (availableGoldToCollect) {user.setLastCollected("tax office", now);}
 	}
 
 	// Adds it to db
@@ -46,17 +48,3 @@ const checkIfPossibleToCollect = (user, taxOfficeBuilding) => {
 };
 
 module.exports = collectResources;
-
-const calculateGoldGained = (user, taxOfficeBuilding, now) => {
-	// (all buildings level + total completed quests) / 10 * (1 tax office.level / 4) * minutesSinceLastCollect
-
-	const { lastCollected, level } = taxOfficeBuilding;
-	let minutesSinceLastCollect = (now - lastCollected) / 60000;
-	const fourHoursInMinutes = 240;
-	if (minutesSinceLastCollect > fourHoursInMinutes) minutesSinceLastCollect = fourHoursInMinutes;
-	const totalLevels = user.empire.reduce((acc, building) => acc + building.level + 1, 0);
-	const totalCompletedQuests = user.completedQuests.length;
-	const multiplier = level === 0 ? 0 : level / 4;
-	const goldIncome = (totalLevels + totalCompletedQuests) / 10 * (1 + multiplier) * minutesSinceLastCollect;
-	return { gold: Math.floor(goldIncome) };
-};

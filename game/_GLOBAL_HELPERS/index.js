@@ -69,5 +69,21 @@ const msToHumanTime = (ms)=>{
 	return humanTime.join("");
 };
 
+// calculates gold per minute through taxes
+const calculateGoldGained = (user, taxOfficeBuilding, now) => {
+	// (all buildings level + total completed quests) / 10 * (1 tax office.level / 4) * minutesSinceLastCollect
 
-module.exports = { asyncForEach, deepCopyFunction, eloCalculations, randomIntBetweenMinMax, objectFilter, msToHumanTime };
+	const { lastCollected, level } = taxOfficeBuilding;
+	let minutesSinceLastCollect = (now - lastCollected) / 60000;
+	const fourHoursInMinutes = 240;
+	if (minutesSinceLastCollect > fourHoursInMinutes) minutesSinceLastCollect = fourHoursInMinutes;
+	const totalBuildingLevels = user.empire.reduce((acc, building) => acc + building.level + 1, 0);
+	const totalCompletedQuests = user.completedQuests.length;
+	const taxOfficeMultiplier = level === 0 ? 0 : level / 4;
+	const goldPerMinute = Math.round((totalBuildingLevels + totalCompletedQuests) / 10 * (1 + taxOfficeMultiplier));
+	const availableGoldToCollect = Math.round(goldPerMinute * minutesSinceLastCollect);
+	return { availableGoldToCollect, goldPerMinute, totalBuildingLevels, totalCompletedQuests, taxOfficeMultiplier, taxOfficeLevel:level };
+};
+
+
+module.exports = { asyncForEach, deepCopyFunction, eloCalculations, randomIntBetweenMinMax, objectFilter, msToHumanTime, calculateGoldGained };

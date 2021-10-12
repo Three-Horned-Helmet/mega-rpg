@@ -97,7 +97,8 @@ const icons = {
 	"dailyPrizeStar": { name:":star:", icon: "⭐️" },
 	"Carrot": { name:":carrot:", icon:"🥕" },
 	"cooldown": { name: ":clock9:", icon:"🕘" },
-	"lottery": { name: ":money_with_wings:", icon:"💸" }
+	"lottery": { name: ":money_with_wings:", icon:"💸" },
+	"citizens": { name: ":family_mwgb:", icon:"👨‍👩‍👧‍👦" }
 };
 /**
  * Returns an emoji if configured in icons-object or a danger symbol if missing
