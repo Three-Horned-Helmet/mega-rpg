@@ -77,12 +77,12 @@ const calculateGoldGained = (user, taxOfficeBuilding, now) => {
 	let minutesSinceLastCollect = (now - lastCollected) / 60000;
 	const fourHoursInMinutes = 240;
 	if (minutesSinceLastCollect > fourHoursInMinutes) minutesSinceLastCollect = fourHoursInMinutes;
-	const totalLevels = user.empire.reduce((acc, building) => acc + building.level + 1, 0);
+	const totalBuildingLevels = user.empire.reduce((acc, building) => acc + building.level + 1, 0);
 	const totalCompletedQuests = user.completedQuests.length;
-	const multiplier = level === 0 ? 0 : level / 4;
-	const goldPerMinute = Math.round((totalLevels + totalCompletedQuests) / 10 * (1 + multiplier));
-	const goldIncome = Math.round(goldPerMinute * minutesSinceLastCollect);
-	return { gold: goldIncome, goldPerMinute };
+	const taxOfficeMultiplier = level === 0 ? 0 : level / 4;
+	const goldPerMinute = Math.round((totalBuildingLevels + totalCompletedQuests) / 10 * (1 + taxOfficeMultiplier));
+	const availableGoldToCollect = Math.round(goldPerMinute * minutesSinceLastCollect);
+	return { availableGoldToCollect, goldPerMinute, totalBuildingLevels, totalCompletedQuests, taxOfficeMultiplier, taxOfficeLevel:level };
 };
 
 

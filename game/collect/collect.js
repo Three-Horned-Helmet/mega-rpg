@@ -12,10 +12,10 @@ const collectResources = async (user) => {
 
 	const goldGained = {};
 	if(taxOfficeBuilding) {
-		const { gold } = calculateGoldGained(user, taxOfficeBuilding, now);
-		goldGained.gold = gold;
+		const { availableGoldToCollect } = calculateGoldGained(user, taxOfficeBuilding, now);
+		goldGained.gold = availableGoldToCollect;
 		user.gainManyResources(goldGained);
-		if (gold) {user.setLastCollected("tax office", now);}
+		if (availableGoldToCollect) {user.setLastCollected("tax office", now);}
 	}
 
 	// Adds it to db
