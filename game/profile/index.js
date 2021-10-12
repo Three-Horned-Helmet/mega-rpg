@@ -11,9 +11,13 @@ const prettifyUser = async (message, user, avatar) => {
 	const patreonUrl = "https://www.patreon.com/megarpg";
 	const userElo = user.hero.elo || 1200;
 
-	const eloPosition = await getPlayerPosition(message.author.id, "hero.elo");
+	const expPosition = await getPlayerPosition(user.account.userId);
+	let username = `( ${expPosition} ) ${user.account.username}'s profile `;
 
-	const username = `( ${eloPosition} ) ${user.account.username}'s profile `;
+	if (expPosition < 4) {
+		const medals = ["🥇", "🥈", "🥉"];
+		username += medals[expPosition - 1];
+	}
 
 	const { hero } = user;
 	const heroRank = hero.rank;
