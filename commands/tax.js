@@ -30,32 +30,38 @@ const generateTaxEmbed = (user, taxOfficeInformation) => {
 
 	const fields = [
 		{
-			name: `${getIcon("quest")} Quests Completed`,
-			value: totalCompletedQuests,
-			inline: true,
-		},
-		{
-			name: "Buildings + upgrades",
-			value: totalBuildingLevels,
+			name: `${getIcon("citizens")} Total citizens`,
+			value: totalCompletedQuests + totalBuildingLevels,
 			inline: true,
 		},
 		{
 			name: "Gold Per Minute",
 			value: `${getIcon("gold", "icon")} **${goldPerMinute}**`,
-			inline: false,
+			inline: true,
 		},
 	];
 	const attachment = new Discord.MessageAttachment("./assets/building-images/tax-office-level-0.png", "tax-office-level-0.png");
-	const embedUser = new Discord.MessageEmbed()
+	const taxEmbed = new Discord.MessageEmbed()
 		.attachFiles(attachment)
 		.setTitle(title)
 		.setDescription(`Tax Office Level: ${taxOfficeLevel}`)
 		.setColor(sideColor)
 		.setThumbnail("attachment://tax-office-level-0.png")
-		.setFooter(`${getIcon("gold", "icon")} ${availableGoldToCollect} gold is available for collecting`)
 		.addFields(...fields);
-	/* .setThumbnail("attachment://assets/no-image.png") */
 
+	// Additional info to players who are new to the game
+	const collectableGoldField = {
+		name: "Ready to be collected",
+		value: `${getIcon("gold", "icon")} ${availableGoldToCollect} gold`,
+		inline: false,
+	};
+	// UNCOMMENT TO ACTIVIATE NOOB HELPER
+	// const shouldBeHelped = user.statistics.collect < 25;
+	// if (shouldBeHelped) {
+	collectableGoldField.value = "Type `!collect` to collect " + collectableGoldField.value;
+	taxEmbed.setFooter("!help tax for more info");
+	// }
+	taxEmbed.addFields(collectableGoldField);
 
-	return embedUser;
+	return taxEmbed;
 };
