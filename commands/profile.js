@@ -1,4 +1,5 @@
 const { prettifyUser } = require("../game/profile");
+const { getPlayerPosition } = require("../game/profile/helper");
 const User = require("../models/User");
 
 module.exports = {
@@ -8,6 +9,7 @@ module.exports = {
 	async execute(message, args, user) {
 		let dbUser;
 		let avatar;
+
 
 		const userFromMention = message.mentions.members.first();
 		if (userFromMention) {
@@ -25,8 +27,10 @@ module.exports = {
 		}
 		if (!dbUser) {
 			dbUser = user;
+			avatar = message.author.displayAvatarURL({ format: "png", dynamic: true, size: 1024 });
 		}
-		const prettifiedUser = await prettifyUser(message, dbUser, avatar);
+		const expPosition = await getPlayerPosition(dbUser.account.userId);
+		const prettifiedUser = prettifyUser(expPosition, dbUser, avatar);
 		message.channel.send(prettifiedUser);
 	},
 };

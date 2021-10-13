@@ -1,22 +1,21 @@
 const Discord = require("discord.js");
-const { generateTip, determineSupporterTitle, getAllSoldiers, getPlayerPosition } = require("./helper");
+const { generateTip, getSupporterTitle, getAllSoldiers } = require("./helper");
 const { getIcon } = require("../_CONSTS/icons");
 const calculateStats = require("../../combat/calculate-stats");
 
-const prettifyUser = async (message, user, avatar) => {
+const prettifyUser = (position, user, avatar) => {
 
 	const sideColor = "#45b6fe";
-	const patreonSupporter = determineSupporterTitle(user.account.patreon);
+	const patreonSupporter = getSupporterTitle(user.account.patreon);
 
 	const patreonUrl = "https://www.patreon.com/megarpg";
 	const userElo = user.hero.elo || 1200;
 
-	const expPosition = await getPlayerPosition(user.account.userId);
-	let username = `( ${expPosition} ) ${user.account.username}'s profile `;
+	let username = `( ${position} ) ${user.account.username}'s profile `;
 
-	if (expPosition < 4) {
+	if (position < 4) {
 		const medals = ["🥇", "🥈", "🥉"];
-		username += medals[expPosition - 1];
+		username += medals[position - 1];
 	}
 
 	const { hero } = user;
