@@ -16,7 +16,7 @@ const handleHunt = async (user, place = null) => {
 	if (user.hero.currentHealth < user.hero.health * 0.05 && user.hero.currentHealth < 50) {
 		let feedback = `Your hero's health is too low (**${user.hero.currentHealth}**)`;
 		if (user.hero.rank < 2) {
-			feedback += "\n You can `!buy` poitions (e.g. `!buy small healing potion`) and `!use` potions (e.g. `!use small healing potion`)";
+			feedback += "\n You can `!buy` poitions (e.g. `!buy small healing potion`) and `!use` x (e.g. `!use small healing potion`)";
 		}
 		return feedback;
 	}

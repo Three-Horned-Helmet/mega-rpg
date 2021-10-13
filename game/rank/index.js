@@ -160,7 +160,7 @@ const getTop10Xp = async (user, currentServer, help = false) => {
 	formatted.push(getGlobalPosition(allUsers, user.account.userId));
 
 	if (help) {
-		formatted.push("\n Available rankings are:\n `!rank xp - !rank army - !rank sfa - !rank quest - !rank elo`\n `!rank server` for players on this server!");
+		formatted.push("\n Available rankings are:\n `!rank xp - !rank army - !rank sfa - !rank quest - !rank elo`");
 	}
 
 	return formatted;
@@ -203,7 +203,7 @@ const getGlobalPosition = (allUsers, userId)=>{
 			globalPlayerPosition = i + 1;
 		}
 	});
-	return `\n\`Global position: #${globalPlayerPosition} \``;
+	return `\n\`Your Global position: #${globalPlayerPosition} \``;
 };
 
 module.exports = { handleRank };

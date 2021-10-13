@@ -13,7 +13,7 @@ const getAllSoldiers = (units) => {
 	return result;
 };
 
-const determineSupporterTitle = (subscription) => {
+const getSupporterTitle = (subscription) => {
 
 	const titles = {
 		Bronze: `${getIcon("bronzeSupporter")} Supporter ${getIcon("bronzeSupporter")}`,
@@ -62,4 +62,4 @@ const generateTip = ()=> {
 };
 
 
-module.exports = { getAllSoldiers, determineSupporterTitle, getPlayerPosition, generateTip };
+module.exports = { getAllSoldiers, getSupporterTitle, getPlayerPosition, generateTip };

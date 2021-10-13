@@ -14,6 +14,14 @@ OR [invite](https://discordapp.com/oauth2/authorize?client_id=721024429345341560
 
 ---
 
+## Donations and Support
+
+Support our bot on [Patreon](https://www.patreon.com/megarpg) and receive in-game benefits, 
+
+or donate to our [PayPal](https://www.paypal.com/paypalme/megarpg) account and help us keeping the servers alive.
+
+---
+
 ## Get started
 
 1. [Join](https://discord.gg/BHrHQfs6Mm) a discord server that has the bot or [invite](https://discordapp.com/oauth2/authorize?client_id=721024429345341560&scope=bot&permissions=1074121792) the bot to your own server.
@@ -50,7 +58,3 @@ A big thanks to everyone that has helped us with the early testing!
 2. `$ npm test`
 
 ---
-
-### Support
-
-Support our bot on [Patreon](https://www.patreon.com/megarpg) and receive ingame benefits.
