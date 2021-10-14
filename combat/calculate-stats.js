@@ -25,47 +25,40 @@ const calculateStats = (user) => {
 		});
 	});
 
+	// Sorts depending on what item that gives the most stats
+	const sortHelper = (a) => {
+		return Object.values(a.stats).reduce((acc, cur) => acc + cur);
+	};
+
 	// Add the stats from the items
-	if (armory) {
-		for (const slot in armory.toJSON()) {
-			let slotsTaken = 0;
-			const allSlotItems = Object.keys(armory[slot]).map(item => allItems[item] || getTowerItem(item));
+	Object.entries(armory).forEach(([slot, value]) => {
+		let slotsTaken = 0;
+		const allSlotItems = Object.keys(value).map(item => {
+			return allItems[item] || getTowerItem(item);
+		});
+		allSlotItems.sort((a, b) => sortHelper(b) - sortHelper(a));
 
-			// Sorts depending on what item that gives the most stats
-			const sortHelper = (a) => {
-				return Object.values(a.stats).reduce((acc, cur) => acc + cur);
-			};
-
-			allSlotItems.sort((a, b) => sortHelper(b) - sortHelper(a));
-
-			// Add the stats of up to the amount of units that you have (e.g. 60 units can onlyuse 60 helmets)
-			allSlotItems.forEach((item) => {
-				if (slotsTaken >= totalUnits) return false;
-
-				const iQuantity = armory[slot][item.name];
-				const iToAdd = totalUnits - slotsTaken - iQuantity;
-				const itemAdded = iToAdd < 0 ? totalUnits - slotsTaken : iQuantity;
-
-				for (const stat in item.stats) {
-					unitStats[stat] += item.stats[stat] * itemAdded;
-				}
-
-				slotsTaken += itemAdded;
-			});
+		// Add the stats of up to the amount of units that you have (e.g. 60 units can onlyuse 60 helmets)
+		for (let i = 0; i < allSlotItems.length && slotsTaken < totalUnits; i++) {
+			const item = allSlotItems[i];
+			const iQuantity = armory[slot][item.name];
+			const iToAdd = totalUnits - slotsTaken - iQuantity;
+			const itemAdded = iToAdd < 0 ? totalUnits - slotsTaken : iQuantity;
+			Object.keys(item.stats).forEach(stat => unitStats[stat] += item.stats[stat] * itemAdded);
+			slotsTaken += itemAdded;
 		}
-	}
+	});
 
 	// Add hero
 	const { currentHealth, health, attack } = user.hero;
 
-	heroStats["health"] = heroStats["health"] ? heroStats["health"] + health : health;
-	heroStats["currentHealth"] = heroStats["currentHealth"] ? heroStats["currentHealth"] + currentHealth : currentHealth;
-	heroStats["attack"] = Math.floor((heroStats["attack"] ? heroStats["attack"] + attack : attack) * (currentHealth / health));
+	heroStats.health = heroStats.health ? heroStats.health + health : health;
+	heroStats.currentHealth = heroStats.currentHealth ? heroStats.currentHealth + currentHealth : currentHealth;
+	heroStats.attack = Math.floor((heroStats.attack ? heroStats.attack + attack : attack) * (currentHealth / health));
 
 	// Add Total Stats
-	totalStats["health"] = unitStats["health"] + heroStats["currentHealth"];
-	totalStats["attack"] = unitStats["attack"] + heroStats["attack"];
-
+	totalStats.health = unitStats.health + heroStats.currentHealth;
+	totalStats.attack = unitStats.attack + heroStats.attack;
 	return {
 		totalStats,
 		unitStats,

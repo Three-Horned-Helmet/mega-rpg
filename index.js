@@ -2,7 +2,7 @@ require("dotenv").config();
 const fs = require("fs");
 const Discord = require("discord.js");
 const User = require("./models/User");
-const { welcomeMessage, createNewUser } = require("./index-helpers");
+const { getWelcomeMessage, createNewUser } = require("./game/_GLOBAL_HELPERS");
 const { msToHumanTime } = require("./game/_GLOBAL_HELPERS");
 const { handleCaptcha } = require("./game/_GLOBAL_HELPERS/captcha");
 
@@ -83,7 +83,7 @@ client.on("message", async (message) => {
 	// creates new user if not exist
 	if (!userProfile) {
 		userProfile = await createNewUser(author, message.channel.id);
-		message.channel.send(welcomeMessage(userProfile));
+		message.channel.send(getWelcomeMessage(userProfile));
 
 		if(!(command.name === "help" || command.name === "info")) {
 			return;
