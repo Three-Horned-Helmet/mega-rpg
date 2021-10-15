@@ -11,7 +11,7 @@ module.exports = {
 };
 
 
-const generateVoteEmbed = ()=>{
+const generateVoteEmbed = () => {
 
 	const healIcon = getIcon("Large Healing Potion");
 	const minibossIcon = getIcon("miniboss");

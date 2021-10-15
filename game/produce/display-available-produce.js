@@ -32,7 +32,6 @@ const produceEmbed = (user) => {
 			inline: true,
 		});
 	}
-
 	const availableProduces = prodBuildings
 		.map(b => buildingsObj[b.name].levels
 			.filter(lvl => lvl.level <= b.level))
@@ -67,7 +66,7 @@ const produceMessage = (prod) => {
 	let message = "";
 
 	prod.forEach(p => {
-		if (p.producing) {
+		if (p.produce) {
 			message += ` ${getIcon(p.produce)} ${p.produce.capitalize()}\n`;
 		}
 	});
