@@ -1,36 +1,31 @@
-# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+name: Run tests
 
-name: Node.js CI
+on: [push]
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
 jobs:
   build:
-    steps:
-      - name: Git checkout
-      - uses: actions/checkout@v2
-      - name: Create mongo Docker container
-        id: build_mongo_docker
-        uses: DigiPie/mongo-action@v1.0.1
-        with:
-          image-version: latest
-          port: 27017
-      - name: Test mongo connection
-        id: test_mongo_connection
-        run: "sudo mongo localhost:27017"
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run build --if-present
-      - run: npm test
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [14.x]
+        mongodb-version: ['4.0', '4.2', '4.4']
+
+    steps:
+    - name: Git checkout
+      uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.6.0
+      with:
+        mongodb-version: ${{ matrix.mongodb-version }}
+
+    - run: npm install
+
+    - run: npm test
+      env:
+        CI: true
