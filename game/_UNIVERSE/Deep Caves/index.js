@@ -6,7 +6,8 @@ const questPlaces = require("./questPlaces");
 const raid = require("./raid");
 
 const deepCaves = {
-	description: "You've entered a hostile environment where rewards are equally big as the threats",
+	description: "Wecome to the deep caves. You won't make it out of here alive.",
+	shortcuts: ["caves", "deep", "cave"],
 	places:{ ...dungeon, ...fish, ...hunt, ...miniboss, ...questPlaces, ...raid }
 };
 

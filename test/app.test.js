@@ -11,14 +11,13 @@ const { expect } = chai;
 const mongodbUri = process.env.TEST_MONGODB_URI;
 
 describe("test suite", () => {
-	before("connect", (done)=> {
+	before("connect", async ()=> {
 		mongoose.connect(mongodbUri, { useUnifiedTopology: true, useNewUrlParser: true });
 		mongoose.connection
 			.once("open", () => {
-				User.deleteMany().then((result)=>{
-					console.log("Database connected and cleaned!");
+				return User.deleteMany().then((result)=>{
 					console.log(result.deletedCount, " users deleted");
-					done();
+					console.log("Database connected and cleaned!");
 				});
 			})
 			.on("error", (error) => {
