@@ -7,6 +7,7 @@ const raid = require("./raid");
 
 const grassyPlains = {
 	description: "Here you can find all the noobs, such as yourself",
+	shortcuts: ["grassy", "plains", "plain", "grass"],
 	places:{ ...dungeon, ...fish, ...hunt, ...miniboss, ...questPlaces, ...raid }
 };
 

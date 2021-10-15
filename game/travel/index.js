@@ -4,24 +4,28 @@ const handleTravel = async (user, travelDestination) => {
 	const { currentLocation } = user.world;
 
 	const playerUnlockedLocations = Object.keys(user.world.locations)
-		.filter(location => user.world.locations[location].available)
-		.map(location => location.split(" ").join("").toLowerCase("").substring(0, 4));
+		.filter(location => user.world.locations[location].available);
 
-	if (playerUnlockedLocations.length < 2) {
+	// Player has not unlocked other locations than started location
+	if (playerUnlockedLocations.length <= 1) {
 		return `You haven't unlocked anything but ${getIcon(currentLocation)} ${currentLocation}`;
 	}
-	const shortAnswer = travelDestination.substring(0, 4);
-	// allows the player to not type out the ful name
-	if (playerUnlockedLocations.includes(shortAnswer)) {
-		const newDestination = Object.keys(worldLocations).filter(location => {
-			return location.split(" ").join("").toLowerCase("").substring(0, 4) === shortAnswer;
-		});
-		const worldDescription = worldLocations[newDestination[0]].description;
-		await user.locationTravel(newDestination[0]);
-		return `You traveled to ${getIcon(newDestination)} ${newDestination[0]}\n${worldDescription}`;
-	}
 
-	return "You can't travel there. Try ` !look ` to see your available locations - if any..";
+	// Find location from shortcut if shortcut is used
+	const newLocation = playerUnlockedLocations
+		.filter(location => {
+			return worldLocations[location].shortcuts.includes(travelDestination) || travelDestination === location.toLowerCase();
+		})
+		.map(location => location)[0];
+
+	if (!newLocation) return "You can't travel there. Try `!look` to see your available locations - if any..";
+	if (newLocation === currentLocation) return "You're already there!";
+
+	const { description } = worldLocations[newLocation];
+	await user.locationTravel(newLocation);
+	return `You traveled to ${getIcon(newLocation)} ${newLocation}\n${description}`;
+
+
 };
 
 
