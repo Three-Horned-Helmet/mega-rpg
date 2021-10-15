@@ -10,7 +10,7 @@ const { expect } = chai;
 
 const mongodbUri = process.env.TEST_MONGODB_URI;
 
-describe.only("test suite", () => {
+describe("test suite", () => {
 	before("connect", async ()=> {
 		mongoose.connect(mongodbUri, { useUnifiedTopology: true, useNewUrlParser: true });
 		mongoose.connection
