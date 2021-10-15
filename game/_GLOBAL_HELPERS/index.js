@@ -1,3 +1,5 @@
+const User = require("../../models/User");
+
 // foreach that respects async
 async function asyncForEach(array, callback) {
 	for (let index = 0; index < array.length; index += 1) {
@@ -85,5 +87,23 @@ const calculateGoldGained = (user, taxOfficeBuilding, now) => {
 	return { availableGoldToCollect, goldPerMinute, totalBuildingLevels, totalCompletedQuests, taxOfficeMultiplier, taxOfficeLevel:level };
 };
 
+const getWelcomeMessage = (user) => {
+	return `Welcome to Mega-RPG, ${user.account.username}!\n\nIt's recommended to start by completing the tutorial quest line.\nYou can start it by typing \`!quest\` in the chat. To see all available commands you can type \`!help\` or to get a more detailed version of what the commands do type \`!info\`!\n\nGood luck adventurer!`;
+};
 
-module.exports = { asyncForEach, deepCopyFunction, eloCalculations, randomIntBetweenMinMax, objectFilter, msToHumanTime, calculateGoldGained };
+const createNewUser = (user, channelId) => {
+	if (user.bot) {
+		console.error("No bots allowed");
+		return;
+	}
+	const account = {
+		username: user.username,
+		userId: user.id,
+		servers:[channelId]
+	};
+	const newUser = new User({ account });
+	return newUser.save();
+};
+
+
+module.exports = { asyncForEach, deepCopyFunction, eloCalculations, randomIntBetweenMinMax, objectFilter, msToHumanTime, calculateGoldGained, getWelcomeMessage, createNewUser };

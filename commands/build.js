@@ -21,10 +21,10 @@ module.exports = {
 		to: "tax office",
 	},
 	execute(message, args, user) {
-		if (args.length === 0) return message.channel.send(availableBuilds(user));
 		const building = Object.values(buildingsObject).find((b) =>
 			args.includes(b.name) || args.join(" ").includes(b.name)
 		);
+		if (args.length === 0 || !building) return message.channel.send(availableBuilds(user));
 
 		// Remove the user.empire.find stuff to make it possible to build several of the same building
 		// || (building && user.empire.find(b => b.name === building.name))

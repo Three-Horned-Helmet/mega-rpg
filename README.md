@@ -45,10 +45,12 @@ A big thanks to everyone that has helped us with the early testing!
 1. Install [NodeJS](https://nodejs.org/en/download/).
 2. Install [MongoDB Community](https://docs.mongodb.com/manual/installation/#mongodb-community-edition-installation-tutorials).
 3. [Clone](https://github.com/Three-Horned-Helmet/mega-rpg.git) the project from github OR run: `$ git clone https://github.com/Three-Horned-Helmet/mega-rpg.git`
+4. `$ cd mega-rpg`
+5. `$ touch .env`
 4. `$ npm install`
-5. Modify the `.env` file according to your needs. This file should be held secret and not shared on Github or any other platform. A personal Discord Token can be obtained from [Discord Developer](https://discord.com/developers/applications). The `DISCORD_PREFIX` value represent what your bot should listen to. Eg `DISCORD_PREFIX=!` will listen to any commands that starts with `!` ==> `!profile` will return the profile of whoever wrote the command.
-6. `$ mongod`
-7. `$ npm start`
+6. Modify the `.env` file according to your needs. This file should be held secret and not shared on Github or any other platform. A personal Discord Token can be obtained from [Discord Developer](https://discord.com/developers/applications). The `DISCORD_PREFIX` value represent what your bot should listen to. Eg `DISCORD_PREFIX=!` will listen to any commands that starts with `!` ==> `!profile` will return the profile of whoever wrote the command.
+7. `$ mongod` run the mongodb deamon
+8. `$ npm start` start the project. A 'Ready!' will be logged to the terminal upon success
 
 ---
 
