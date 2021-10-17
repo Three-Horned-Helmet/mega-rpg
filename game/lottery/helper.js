@@ -80,7 +80,7 @@ const getPreviousLotteryInformation = lottery => {
 	// const carrot = prizePool.Carrot ? `\n${getIcon("Carrot")} ${prizePool.Carrot}` : "";
 
 	const probability = getWinnerPercentage(previousWinner.userId, lottery);
-	const result = [`${previousWinner.username} (${probability} chance)`, `${goldPrize}`];
+	const result = [`${previousWinner.username} (${probability} chance)\n ${goldPrize}`];
 	/* if (carrot) {
 		result[1] += carrot;
 	} */

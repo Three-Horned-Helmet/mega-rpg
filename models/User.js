@@ -270,7 +270,7 @@ userSchema.methods.gainManyResources = function(obj) {
 
 userSchema.methods.removeManyResources = function(obj) {
 	Object.keys(obj).forEach(r=>{
-		this.resources[r] -= obj[r];
+		this.resources[r] -= Math.round(obj[r]);
 		if(this.resources[r] < 0) this.resources[r] = 0;
 	});
 };
@@ -297,10 +297,7 @@ userSchema.methods.removeExploredArea = function(currentLocation, place) {
 };
 
 userSchema.methods.buyBuilding = function(building, buildingCost) {
-	for (const resource in buildingCost.cost) {
-		this.resources[resource] -= buildingCost.cost[resource];
-	}
-
+	this.removeManyResources(buildingCost.cost);
 	this.empire = this.empire.filter(structure => !(structure.position[0] === building.position[0] && structure.position[1] === building.position[1]));
 	this.empire.push(building);
 	return this.save();
@@ -369,7 +366,7 @@ userSchema.methods.updateNewProduction = function(productionName, now, producing
 // new Date() and collects the resources from these buildings
 // Optional: agrument "resource", if it is true, it will also set the resource to be produced
 // by the building to resource
-userSchema.methods.collectResource = async function(collectBuildings, now, resource) {
+userSchema.methods.collectResource = function(collectBuildings, now, resource) {
 	const totalCollected = {};
 
 	collectBuildings.forEach(collect => {
@@ -408,9 +405,6 @@ userSchema.methods.collectResource = async function(collectBuildings, now, resou
 			}
 		});
 	});
-
-
-	await this.save();
 
 	return totalCollected;
 };
@@ -600,7 +594,7 @@ userSchema.methods.removeExp = async function(exp, newExpToNextRank, statRemoval
 
 userSchema.methods.buyItem = async function(item, amount = 1) {
 	if(item.price) {
-		this.resources.gold -= item.price * amount;
+		this.removeManyResources({ gold: item.price * amount });
 	}
 
 	if(!this.hero.inventory[item.name]) this.hero.inventory[item.name] = amount;
@@ -611,10 +605,7 @@ userSchema.methods.buyItem = async function(item, amount = 1) {
 
 userSchema.methods.handleConsecutive = function(resourcesReward, consecutive, cyclus) {
 	this.consecutivePrizes[cyclus] = consecutive;
-
-	Object.keys(resourcesReward).forEach(r=>{
-		this.resources[r] += resourcesReward[r];
-	});
+	this.gainManyResources(resourcesReward);
 };
 
 

@@ -21,13 +21,9 @@ const handlePurchaseLottery = async (user, amountOfTickets = 1)=>{
 	if (cantBeBought) return cantBeBought;
 
 	// removes gold from user and add user to lottery
-	try{
-		await user.removeManyResources({ gold:prizeToPay });
-		await latestLotteryRaffle.addContestor(username, userId, amount, PRIZE_FOR_LOTTERY_TICKET);
-	}
-	catch (err) {
-		console.error("Error: ", err);
-	}
+
+	user.removeManyResources({ gold:prizeToPay });
+	latestLotteryRaffle.addContestor(username, userId, amount, PRIZE_FOR_LOTTERY_TICKET);
 
 	await user.save();
 	await latestLotteryRaffle.save();

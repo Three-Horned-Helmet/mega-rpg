@@ -10,7 +10,7 @@ const { createTestUser, generateDiscordMessage } = require("../helper");
 const empire = [{ name : "shop", level : 2 }];
 
 
-describe.only("lottery command", () => {
+describe("lottery command", () => {
 	beforeEach("beforeEach, cleaning db", async () => {
 		await User.deleteMany();
 		await Lottery.deleteMany();
@@ -108,6 +108,6 @@ describe.only("lottery command", () => {
 		lotteryBefore.nextDrawing = new Date("2020-01-01T10:00:00.208+0000");
 		await lotteryBefore.save();
 		const result = await lotteryCommand.execute(mockMessage, null, testUser);
-		expect(result.fields[0].value).to.have.string(`${testUser.account.username}(100.0% chance)\n:moneybag: 380`);
+		expect(result.fields[0].value).to.have.string(`${testUser.account.username} (100.0% chance)\n :moneybag: 380`);
 	});
 });

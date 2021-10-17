@@ -51,7 +51,7 @@ module.exports = {
 			user.addNewQuest(newQuest);
 			user.removeQuest(this.name);
 
-			user.save();
+			await user.save();
 
 			return true;
 		},
@@ -130,7 +130,7 @@ module.exports = {
 			user.addItem(allItems["kings platemail"], 1);
 			user.removeQuest(this.name);
 
-			user.save();
+			await user.save();
 
 			return true;
 		},

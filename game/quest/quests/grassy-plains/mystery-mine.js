@@ -48,7 +48,7 @@ module.exports = {
 			user.addNewQuest(newQuest);
 			user.removeQuest(this.name);
 
-			user.save();
+			await user.save();
 
 			return true;
 		},
@@ -83,7 +83,7 @@ module.exports = {
 			user.addNewQuest(newQuest);
 			user.removeQuest(this.name);
 
-			user.save();
+			await user.save();
 
 			return true;
 		},
@@ -110,7 +110,7 @@ module.exports = {
 
 			user.removeQuest(this.name);
 
-			user.save();
+			await user.save();
 
 			return true;
 		},
