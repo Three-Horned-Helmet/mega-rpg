@@ -44,9 +44,7 @@ const racePayOut = async (event) =>{
 	return;
 };
 
-const validateUser = async (user) =>{
-	return user.resources.gold >= GOLDPRICE;
-};
+const validateUser = (user) => user.resources.gold >= GOLDPRICE;
 
 
 module.exports = { createChanceArray, racePayOut, validateUser, generateResult };
