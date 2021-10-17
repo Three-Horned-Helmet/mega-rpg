@@ -319,10 +319,10 @@ const calculateDungeonBossRewards = async (progress) => {
 		initiativeTaker.gainManyResources({
 			gold: rewards.initiativeTaker.gold,
 		});
-		await initiativeTaker.unlockNewLocation(
+		initiativeTaker.unlockNewLocation(
 			rewards.initiativeTaker.locationUnlocked
 		);
-		// await give drop
+		await initiativeTaker.save();
 	}
 
 	await asyncForEach(alivePlayers, async (p) => {

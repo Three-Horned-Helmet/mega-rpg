@@ -243,8 +243,6 @@ userSchema.methods.removeQuest = async function(questName) {
 	const questIndex = this.quests.indexOf(this.quests.find(q => q.name === questName));
 	this.quests.splice(questIndex, 1);
 	this.completedQuests.push(questName);
-
-	return;
 };
 
 userSchema.methods.updateQuestObjective = async function(quest) {
@@ -258,7 +256,6 @@ userSchema.methods.updateQuestObjective = async function(quest) {
 userSchema.methods.refreshQuestPve = async function(questName, pveIndex = 0) {
 	const questIndex = this.quests.indexOf(this.quests.find(q => q.name === questName));
 	this.quests[questIndex].pve[pveIndex].completed = false;
-
 	this.markModified(`quests.${questIndex}.pve.${pveIndex}.completed`);
 };
 
@@ -321,13 +318,10 @@ userSchema.methods.changeBuildingLevel = function(buildingName, buildingLevel, l
 
 		this.markModified(`empire.${buildingIndex}.level`);
 	}
-
-	return;
 };
 
 userSchema.methods.updateHousePop = function(newPop) {
 	this.maxPop = newPop;
-	return this.save();
 };
 
 userSchema.methods.updateMaxBuildings = function() {
@@ -550,8 +544,6 @@ userSchema.methods.healHero = function(heal, item) {
 		this.hero.inventory[item] -= 1;
 		this.markModified("hero.inventory");
 	}
-
-	return;
 };
 
 // NB: I think I can remove the markModified (or atleast only have it for hero?)
@@ -568,10 +560,7 @@ userSchema.methods.gainExp = async function(exp, newExpToNextRank, statGains) {
 		}
 		this.markModified("hero.expToNextRank");
 	}
-
 	this.markModified("hero.currentExp");
-
-	return this.save();
 };
 
 userSchema.methods.removeExp = async function(exp, newExpToNextRank, statRemoval) {
@@ -588,8 +577,6 @@ userSchema.methods.removeExp = async function(exp, newExpToNextRank, statRemoval
 		}
 
 	}
-
-	return this.save();
 };
 
 userSchema.methods.buyItem = async function(item, amount = 1) {
@@ -649,18 +636,14 @@ userSchema.methods.alternativeGainXp = function(xp = 0) {
 
 userSchema.methods.unlockNewLocation = async function(location) {
 	this.world.locations[location].available = true;
-
-	return this.save();
 };
 
-userSchema.methods.locationTravel = async function(location) {
+userSchema.methods.travelToLocation = async function(location) {
 	this.world.currentLocation = location;
-	return this.save();
 };
 
 
 userSchema.methods.giveDungeonKey = async function(key) {
-
 	this.hero.dungeonKeys[key] += 1;
 };
 userSchema.methods.changeElo = async function(newElo) {
