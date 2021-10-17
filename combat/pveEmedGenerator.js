@@ -1,24 +1,25 @@
 const Discord = require("discord.js");
 const { getIcon } = require("../game/_CONSTS/icons");
+const { embedColors } = require("../game/_CONSTS/embedColors");
 
-function generateEmbedPveFullArmy(user, placeInfo, pveResult, questIntro = false) {
+const generateEmbedPveFullArmy = (user, placeInfo, pveResult, questIntro = false) => {
 	if (pveResult.win) {
 		return generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro);
 	}
 	return generateEmbedPveFullArmyLoss(user, placeInfo, pveResult);
-}
+};
 
 
-function generateEmbedPveHero(user, placeInfo, pveResult, questIntro = false) {
+const generateEmbedPveHero = (user, placeInfo, pveResult, questIntro = false) => {
 	if (pveResult.win) {
 		return generateEmbedPveHeroWin(user, placeInfo, pveResult, questIntro);
 	}
 	return generateEmbedPveHeroLoss(user, placeInfo, pveResult);
 
-}
+};
 
-function generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro) {
-	const sideColor = "#45b6fe";
+const generateEmbedPveFullArmyWin = (user, placeInfo, pveResult, questIntro) => {
+	const sideColor = embedColors.info;
 	const placeName = placeInfo.name;
 	const placeIcon = getIcon(placeInfo.type);
 
@@ -72,11 +73,11 @@ function generateEmbedPveFullArmyWin(user, placeInfo, pveResult, questIntro) {
 			...fields,
 		);
 	return embedWin;
-}
+};
 
 // raid
-function generateEmbedPveFullArmyLoss(user, placeInfo, pveResult) {
-	const sideColor = "#45b6fe";
+const generateEmbedPveFullArmyLoss = (user, placeInfo, pveResult) => {
+	const sideColor = embedColors.info;
 	const placeName = placeInfo.name;
 	const placeIcon = getIcon(placeInfo.type);
 
@@ -119,10 +120,10 @@ function generateEmbedPveFullArmyLoss(user, placeInfo, pveResult) {
 		.setFooter("Tip: You can buy healing potions in the shop");
 
 	return embedLoss;
-}
+};
 
-function generateEmbedPveHeroWin(user, placeInfo, pveResult, questIntro) {
-	const sideColor = "#45b6fe";
+const generateEmbedPveHeroWin = (user, placeInfo, pveResult, questIntro) => {
+	const sideColor = embedColors.info;
 	const placeName = placeInfo.name;
 	const placeIcon = getIcon(placeInfo.type);
 
@@ -175,11 +176,11 @@ function generateEmbedPveHeroWin(user, placeInfo, pveResult, questIntro) {
 			...fields,
 		);
 	return embedWin;
-}
+};
 
 // hunt
-function generateEmbedPveHeroLoss(user, placeInfo, pveResult) {
-	const sideColor = "#45b6fe";
+const generateEmbedPveHeroLoss = (user, placeInfo, pveResult) => {
+	const sideColor = embedColors.info;
 	const placeName = placeInfo.name;
 	const placeIcon = getIcon(placeInfo.type);
 
@@ -222,9 +223,9 @@ function generateEmbedPveHeroLoss(user, placeInfo, pveResult) {
 		.setFooter("Tip: You can buy healing potions in the shop");
 
 	return embedLoss;
-}
+};
 
-function generateArmyCasultyString(percentage = "All") {
+const generateArmyCasultyString = (percentage = "All") => {
 	let casultyResult = `**${percentage}**% of your men `;
 	const strings = [
 		"died horribly",
@@ -236,9 +237,9 @@ function generateArmyCasultyString(percentage = "All") {
 	];
 	casultyResult += strings[Math.floor(Math.random() * strings.length)];
 	return casultyResult;
-}
+};
 
-function generateHeroCasulty(hp, placeName) {
+const generateHeroCasulty = (hp, placeName) => {
 	const strings = [
 		`Your hero fell and twisted his ankle while running into battle losing **${hp}**hp`,
 		`Your hero fell off your horse losing **${hp}**hp`,
@@ -250,10 +251,10 @@ function generateHeroCasulty(hp, placeName) {
 		`**${placeName}** took a toll on your hero. Hp -**${hp}**`,
 	];
 	return strings[Math.floor(Math.random() * strings.length)];
-}
+};
 
 
-function generateArmyLossStatus(placeName) {
+const generateArmyLossStatus = (placeName) => {
 	const strings = [
 		`Your hero and the whole army all died in **${placeName}** `,
 		`Your lost all your men in **${placeName}** - somehow your hero died too`,
@@ -265,9 +266,9 @@ function generateArmyLossStatus(placeName) {
 		`Your army was no match for **${placeName}** - how awkward!`,
 	];
 	return strings[Math.floor(Math.random() * strings.length)];
-}
+};
 
-function generatePveHeroLoss(placeName) {
+const generatePveHeroLoss = (placeName) => {
 	const strings = [
 		`**${placeName}** proved to be too challenging for your hero`,
 		`Your somehow managed to die in **${placeName}**`,
@@ -279,9 +280,9 @@ function generatePveHeroLoss(placeName) {
 		`Your hero went on a simple hunt in **${placeName}** - and died..`,
 	];
 	return strings[Math.floor(Math.random() * strings.length)];
-}
+};
 
-function generateHeroRankLoss() {
+const generateHeroRankLoss = () => {
 	const strings = [
 		"Your actions lead to your hero losing a rank",
 		"You hero suffered a loss of rank",
@@ -290,7 +291,7 @@ function generateHeroRankLoss() {
 		"Your hero is punished with a demotion",
 	];
 	return strings[Math.floor(Math.random() * strings.length)];
-}
+};
 
 
 module.exports = { generateEmbedPveFullArmy, generateEmbedPveHero, generateArmyLossStatus, generateHeroRankLoss, generateHeroCasulty, generateArmyCasultyString };

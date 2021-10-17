@@ -1,7 +1,8 @@
 const Discord = require("discord.js");
 const { getIcon } = require("../../game/_CONSTS/icons");
+const { embedColors } = require("../../game/_CONSTS/embedColors");
 
-const sideColor = "#45b6fe";
+const sideColor = embedColors.info;
 
 const generateMinimalEmbed = (progress) => {
 	const { allowedWeapons } = progress.weaponInformation;
