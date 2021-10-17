@@ -1,7 +1,8 @@
 const { getIcon } = require("../_CONSTS/icons");
 const Lottery = require("../../models/Lottery");
 const User = require("../../models/User");
-const { DEFAULT_GOLD_AWARD } = require("./CONTS");
+const { DEFAULT_GOLD_AWARD, MAX_ALLOWED_TICKETS } = require("./CONTS");
+
 
 const findOrSetupLottery = async ()=>{
 	const now = Date.now();
@@ -24,7 +25,8 @@ const findOrSetupLottery = async ()=>{
 		const previousLotteryResult = await latestLotteryRaffle.determineWinner();
 		if (previousLotteryResult && previousLotteryResult.previousWinner.userId) {
 			const previousWinner = await User.findOne({ "account.userId": previousLotteryResult.previousWinner.userId });
-			await previousWinner.gainManyResources(previousLotteryResult.prizePool);
+			previousWinner.gainManyResources(previousLotteryResult.prizePool);
+			await previousWinner.save();
 		}
 
 		latestLotteryRaffle = await createNewLottery();
@@ -100,10 +102,18 @@ const getCurrentLotteryInformation = lottery =>{
 	return contestors;
 };
 
-const validatePurchase = (user, prizeToPay, amount) => {
+const validateLotteryPurchase = (user, prizeToPay, amount, latestLotteryRaffle) => {
+	// checks if the player have more tickets than allowed
+	const amountOfTickets = parseInt(amount, 10);
+	const contestor = latestLotteryRaffle.currentContestors.find(c=> c.userId === user.account.userId);
+	if ((!!contestor && contestor.ticketAmount + amountOfTickets > MAX_ALLOWED_TICKETS) || amountOfTickets > MAX_ALLOWED_TICKETS) {
+		return `Max ${MAX_ALLOWED_TICKETS} tickets can be purchased for each lottery raffle\nYou currently have ${contestor ? contestor.ticketAmount : 0} `;
+	}
+
+
 	if (user.resources.gold <= prizeToPay) {
-		const plural = amount === 1 ? "" : "s";
-		return `Insufficent funds! \n You need ${getIcon("gold")} ${prizeToPay} gold when buying ${amount} ticket${plural}!`;
+		const plural = amountOfTickets === 1 ? "" : "s";
+		return `Insufficent funds! \n You need ${getIcon("gold")} ${prizeToPay} gold when buying ${amountOfTickets} ticket${plural}!`;
 	}
 
 	// User has high enough shop level?
@@ -114,4 +124,4 @@ const validatePurchase = (user, prizeToPay, amount) => {
 };
 
 
-module.exports = { findOrSetupLottery, getWinnerPercentage, getLotteryPrizePool, getPreviousLotteryInformation, getCurrentLotteryInformation, validatePurchase };
+module.exports = { findOrSetupLottery, getWinnerPercentage, getLotteryPrizePool, getPreviousLotteryInformation, getCurrentLotteryInformation, validateLotteryPurchase };

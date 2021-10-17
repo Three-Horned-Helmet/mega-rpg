@@ -32,7 +32,7 @@ module.exports = {
 			user.addOrRemoveUnits(allUnits["peasant"], -10, true);
 
 			// Get reward
-			await user.gainManyResources({
+			user.gainManyResources({
 				gold: 230,
 			});
 			user.buyItem({ name: "Large Healing Potion" }, 5);

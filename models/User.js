@@ -14,9 +14,8 @@ const { Schema } = mongoose;
 
 const buildingsObject = require("../game/build/buildings-object");
 const { heroExpToNextLevel, heroStatIncreaseOnLevel } = require("../game/_CONSTS/hero-exp");
-const { statistics, cooldowns } = require("./userValues/default");
-const { resources } = require("./userValues/resources");
-const { inventory } = require("./userValues/inventory");
+const { army, statistics, cooldowns, resources, inventory } = require("./userValues");
+
 const { randomIntBetweenMinMax } = require("../game/_GLOBAL_HELPERS");
 
 
@@ -48,83 +47,9 @@ const userSchema = new Schema({
 		type: Number,
 		default: 9
 	},
-	// object too big, moved to ./uservalues/default
 	cooldowns,
-
-	// object too big, moved to ./uservalues/resources
 	resources,
-
-	army: {
-		armory: {
-			helmet: {
-				type: Object,
-				default: {},
-			},
-			chest: {
-				type: Object,
-				default: {},
-			},
-			legging: {
-				type: Object,
-				default: {},
-			},
-			weapon: {
-				type: Object,
-				default: {},
-			},
-		},
-		units: {
-			archery: {
-				huntsman: {
-					type: Number,
-					default: 0,
-				},
-				archer: {
-					type: Number,
-					default: 0,
-				},
-				ranger: {
-					type: Number,
-					default: 0,
-				},
-				survivalist: {
-					type: Number,
-					default: 0,
-				},
-				sharpshooter: {
-					type: Number,
-					default: 0,
-				},
-			},
-			barracks: {
-				peasant: {
-					type: Number,
-					default: 5,
-				},
-				militia: {
-					type: Number,
-					default: 0,
-				},
-				guardsman: {
-					type: Number,
-					default: 0,
-				},
-				knight: {
-					type: Number,
-					default: 0,
-				},
-				berserker: {
-					type: Number,
-					default: 0,
-				},
-				justicar: {
-					type: Number,
-					default: 0,
-				},
-			},
-		},
-	},
-
+	army,
 	world:{
 		currentLocation: {
 			type: String,
@@ -716,7 +641,7 @@ userSchema.methods.pvpHandler = async function(cdType, now, loot) {
 };
 
 //
-userSchema.methods.alternativeGainXp = async function(xp = 0) {
+userSchema.methods.alternativeGainXp = function(xp = 0) {
 	if (xp) {
 		this.hero.currentExp += xp;
 	}

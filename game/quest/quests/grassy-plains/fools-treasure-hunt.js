@@ -76,7 +76,7 @@ module.exports = {
 			if(userQuest.pve.find(raid => !raid.completed)) return false;
 
 			// Get reward
-			await user.gainManyResources({
+			user.gainManyResources({
 				["oak wood"]: 40,
 				["yew wood"]: 40,
 			});
@@ -126,7 +126,7 @@ module.exports = {
 			if(userQuest.pve.find(raid => !raid.completed)) return false;
 
 			// Get reward
-			await user.gainManyResources({
+			user.gainManyResources({
 				gold: 250,
 			});
 
@@ -168,7 +168,7 @@ module.exports = {
 			});
 
 			// Get reward
-			await user.gainManyResources({
+			user.gainManyResources({
 				gold: 320,
 			});
 

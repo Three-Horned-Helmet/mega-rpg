@@ -23,7 +23,7 @@ module.exports = {
 			if(!(user.resources["copper ore"] >= 5)) return false;
 
 			// Get reward
-			await user.gainManyResources({
+			user.gainManyResources({
 				gold: 30,
 				["copper ore"]: 5,
 			});
@@ -63,7 +63,7 @@ module.exports = {
 			if(!(user.resources["oak wood"] >= 5)) return false;
 
 			// Get reward
-			await user.gainManyResources({
+			user.gainManyResources({
 				gold: 35,
 				["oak wood"]: 10,
 			});
@@ -100,7 +100,7 @@ module.exports = {
 			if(!user.world.locations["Grassy Plains"].explored.find(area => area === "River")) return false;
 
 			// Get reward
-			await user.gainManyResources({
+			user.gainManyResources({
 				gold: 25,
 				["copper ore"]: 5,
 			});
@@ -137,7 +137,7 @@ module.exports = {
 			if(!user.empire.find(b => b.name === "shop")) return false;
 
 			// Get reward
-			await user.gainManyResources({
+			user.gainManyResources({
 				gold: 20,
 			});
 
@@ -247,7 +247,7 @@ module.exports = {
 			if(!user.empire.find(b => b.name === "mine" && b.level === 1)) return false;
 
 			// Get reward
-			await user.gainManyResources({
+			user.gainManyResources({
 				gold: 90,
 				"iron ore": 20
 			});

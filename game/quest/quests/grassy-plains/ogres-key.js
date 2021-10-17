@@ -33,7 +33,7 @@ module.exports = {
 			if(userQuest.pve.find(raid => !raid.completed)) return false;
 
 			// Get reward
-			await user.gainManyResources({
+			user.gainManyResources({
 				gold: 200,
 			});
 
