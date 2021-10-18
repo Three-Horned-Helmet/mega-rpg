@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const { getIcon } = require("../game/_CONSTS/icons");
-const { embedColors } = require("../game/_CONSTS/embedColors");
+const embedColors = require("../game/_CONSTS/embedColors");
 
 const generateEmbedPveFullArmy = (user, placeInfo, pveResult, questIntro = false) => {
 	if (pveResult.win) {
