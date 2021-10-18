@@ -19,7 +19,8 @@ const collectResources = async (user) => {
 	}
 
 	// Adds it to db
-	const collectedResources = await user.collectResource(allCollectable, now);
+	const collectedResources = user.collectResource(allCollectable, now);
+	await user.save();
 	const totalCollected = { ...collectedResources, ...goldGained };
 
 	// Creates a return message

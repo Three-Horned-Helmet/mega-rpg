@@ -176,7 +176,9 @@ module.exports = {
 				return acc + this.levels[cur.level].popIncrease * 0.1;
 			}, 0);
 
-			return await user.updateHousePop(newPop);
+			user.updateHousePop(newPop);
+			const updatedUser = await user.save();
+			return updatedUser;
 		},
 	},
 	mine: {

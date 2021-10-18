@@ -46,7 +46,7 @@ module.exports = {
 			user.addNewQuest(newQuest);
 			user.removeQuest(this.name);
 
-			user.save();
+			await user.save();
 
 			return true;
 		},
@@ -76,7 +76,7 @@ module.exports = {
 			if(userQuest.pve.find(raid => !raid.completed)) return false;
 
 			// Get reward
-			await user.gainManyResources({
+			user.gainManyResources({
 				["oak wood"]: 40,
 				["yew wood"]: 40,
 			});
@@ -96,7 +96,7 @@ module.exports = {
 			user.addNewQuest(newQuest);
 			user.removeQuest(this.name);
 
-			user.save();
+			await user.save();
 
 			return true;
 		},
@@ -126,7 +126,7 @@ module.exports = {
 			if(userQuest.pve.find(raid => !raid.completed)) return false;
 
 			// Get reward
-			await user.gainManyResources({
+			user.gainManyResources({
 				gold: 250,
 			});
 
@@ -139,7 +139,7 @@ module.exports = {
 			user.addNewQuest(newQuest);
 			user.removeQuest(this.name);
 
-			user.save();
+			await user.save();
 
 			return true;
 		},
@@ -168,13 +168,13 @@ module.exports = {
 			});
 
 			// Get reward
-			await user.gainManyResources({
+			user.gainManyResources({
 				gold: 320,
 			});
 
 			user.removeQuest(this.name);
 
-			user.save();
+			await user.save();
 
 			return true;
 		},

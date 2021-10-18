@@ -14,9 +14,8 @@ const { Schema } = mongoose;
 
 const buildingsObject = require("../game/build/buildings-object");
 const { heroExpToNextLevel, heroStatIncreaseOnLevel } = require("../game/_CONSTS/hero-exp");
-const { statistics, cooldowns } = require("./userValues/default");
-const { resources } = require("./userValues/resources");
-const { inventory } = require("./userValues/inventory");
+const { army, statistics, cooldowns, resources, inventory } = require("./userValues");
+
 const { randomIntBetweenMinMax } = require("../game/_GLOBAL_HELPERS");
 
 
@@ -48,83 +47,9 @@ const userSchema = new Schema({
 		type: Number,
 		default: 9
 	},
-	// object too big, moved to ./uservalues/default
 	cooldowns,
-
-	// object too big, moved to ./uservalues/resources
 	resources,
-
-	army: {
-		armory: {
-			helmet: {
-				type: Object,
-				default: {},
-			},
-			chest: {
-				type: Object,
-				default: {},
-			},
-			legging: {
-				type: Object,
-				default: {},
-			},
-			weapon: {
-				type: Object,
-				default: {},
-			},
-		},
-		units: {
-			archery: {
-				huntsman: {
-					type: Number,
-					default: 0,
-				},
-				archer: {
-					type: Number,
-					default: 0,
-				},
-				ranger: {
-					type: Number,
-					default: 0,
-				},
-				survivalist: {
-					type: Number,
-					default: 0,
-				},
-				sharpshooter: {
-					type: Number,
-					default: 0,
-				},
-			},
-			barracks: {
-				peasant: {
-					type: Number,
-					default: 5,
-				},
-				militia: {
-					type: Number,
-					default: 0,
-				},
-				guardsman: {
-					type: Number,
-					default: 0,
-				},
-				knight: {
-					type: Number,
-					default: 0,
-				},
-				berserker: {
-					type: Number,
-					default: 0,
-				},
-				justicar: {
-					type: Number,
-					default: 0,
-				},
-			},
-		},
-	},
-
+	army,
 	world:{
 		currentLocation: {
 			type: String,
@@ -318,8 +243,6 @@ userSchema.methods.removeQuest = async function(questName) {
 	const questIndex = this.quests.indexOf(this.quests.find(q => q.name === questName));
 	this.quests.splice(questIndex, 1);
 	this.completedQuests.push(questName);
-
-	return;
 };
 
 userSchema.methods.updateQuestObjective = async function(quest) {
@@ -333,7 +256,6 @@ userSchema.methods.updateQuestObjective = async function(quest) {
 userSchema.methods.refreshQuestPve = async function(questName, pveIndex = 0) {
 	const questIndex = this.quests.indexOf(this.quests.find(q => q.name === questName));
 	this.quests[questIndex].pve[pveIndex].completed = false;
-
 	this.markModified(`quests.${questIndex}.pve.${pveIndex}.completed`);
 };
 
@@ -345,7 +267,7 @@ userSchema.methods.gainManyResources = function(obj) {
 
 userSchema.methods.removeManyResources = function(obj) {
 	Object.keys(obj).forEach(r=>{
-		this.resources[r] -= obj[r];
+		this.resources[r] -= Math.round(obj[r]);
 		if(this.resources[r] < 0) this.resources[r] = 0;
 	});
 };
@@ -372,10 +294,7 @@ userSchema.methods.removeExploredArea = function(currentLocation, place) {
 };
 
 userSchema.methods.buyBuilding = function(building, buildingCost) {
-	for (const resource in buildingCost.cost) {
-		this.resources[resource] -= buildingCost.cost[resource];
-	}
-
+	this.removeManyResources(buildingCost.cost);
 	this.empire = this.empire.filter(structure => !(structure.position[0] === building.position[0] && structure.position[1] === building.position[1]));
 	this.empire.push(building);
 	return this.save();
@@ -399,13 +318,10 @@ userSchema.methods.changeBuildingLevel = function(buildingName, buildingLevel, l
 
 		this.markModified(`empire.${buildingIndex}.level`);
 	}
-
-	return;
 };
 
 userSchema.methods.updateHousePop = function(newPop) {
 	this.maxPop = newPop;
-	return this.save();
 };
 
 userSchema.methods.updateMaxBuildings = function() {
@@ -444,7 +360,7 @@ userSchema.methods.updateNewProduction = function(productionName, now, producing
 // new Date() and collects the resources from these buildings
 // Optional: agrument "resource", if it is true, it will also set the resource to be produced
 // by the building to resource
-userSchema.methods.collectResource = async function(collectBuildings, now, resource) {
+userSchema.methods.collectResource = function(collectBuildings, now, resource) {
 	const totalCollected = {};
 
 	collectBuildings.forEach(collect => {
@@ -483,9 +399,6 @@ userSchema.methods.collectResource = async function(collectBuildings, now, resou
 			}
 		});
 	});
-
-
-	await this.save();
 
 	return totalCollected;
 };
@@ -631,8 +544,6 @@ userSchema.methods.healHero = function(heal, item) {
 		this.hero.inventory[item] -= 1;
 		this.markModified("hero.inventory");
 	}
-
-	return;
 };
 
 // NB: I think I can remove the markModified (or atleast only have it for hero?)
@@ -649,10 +560,7 @@ userSchema.methods.gainExp = async function(exp, newExpToNextRank, statGains) {
 		}
 		this.markModified("hero.expToNextRank");
 	}
-
 	this.markModified("hero.currentExp");
-
-	return this.save();
 };
 
 userSchema.methods.removeExp = async function(exp, newExpToNextRank, statRemoval) {
@@ -669,13 +577,11 @@ userSchema.methods.removeExp = async function(exp, newExpToNextRank, statRemoval
 		}
 
 	}
-
-	return this.save();
 };
 
 userSchema.methods.buyItem = async function(item, amount = 1) {
 	if(item.price) {
-		this.resources.gold -= item.price * amount;
+		this.removeManyResources({ gold: item.price * amount });
 	}
 
 	if(!this.hero.inventory[item.name]) this.hero.inventory[item.name] = amount;
@@ -686,10 +592,7 @@ userSchema.methods.buyItem = async function(item, amount = 1) {
 
 userSchema.methods.handleConsecutive = function(resourcesReward, consecutive, cyclus) {
 	this.consecutivePrizes[cyclus] = consecutive;
-
-	Object.keys(resourcesReward).forEach(r=>{
-		this.resources[r] += resourcesReward[r];
-	});
+	this.gainManyResources(resourcesReward);
 };
 
 
@@ -716,7 +619,7 @@ userSchema.methods.pvpHandler = async function(cdType, now, loot) {
 };
 
 //
-userSchema.methods.alternativeGainXp = async function(xp = 0) {
+userSchema.methods.alternativeGainXp = function(xp = 0) {
 	if (xp) {
 		this.hero.currentExp += xp;
 	}
@@ -733,18 +636,14 @@ userSchema.methods.alternativeGainXp = async function(xp = 0) {
 
 userSchema.methods.unlockNewLocation = async function(location) {
 	this.world.locations[location].available = true;
-
-	return this.save();
 };
 
-userSchema.methods.locationTravel = async function(location) {
+userSchema.methods.travelToLocation = async function(location) {
 	this.world.currentLocation = location;
-	return this.save();
 };
 
 
 userSchema.methods.giveDungeonKey = async function(key) {
-
 	this.hero.dungeonKeys[key] += 1;
 };
 userSchema.methods.changeElo = async function(newElo) {

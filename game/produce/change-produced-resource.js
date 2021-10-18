@@ -18,7 +18,8 @@ const changeProducedResource = async (user, resource) => {
 	if (!canBeProduced.response) return canBeProduced.message;
 
 	// Collects the resouce and changes the buildings production
-	const totalCollected = await user.collectResource([buildingReq], new Date(), resource);
+	const totalCollected = user.collectResource([buildingReq], new Date(), resource);
+	await user.save();
 
 	// Creates a return message
 	let message = "";
