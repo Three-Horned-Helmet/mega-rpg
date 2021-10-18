@@ -17,7 +17,7 @@ const world = {
 };
 
 
-describe.only("miniboss ", () => {
+describe("miniboss ", () => {
 	beforeEach("beforeEach, cleaning db", async ()=>{
 		await User.deleteMany();
 	});
