@@ -22,7 +22,8 @@ const handleTravel = async (user, travelDestination) => {
 	if (newLocation === currentLocation) return "You're already there!";
 
 	const { description } = worldLocations[newLocation];
-	await user.locationTravel(newLocation);
+	user.travelToLocation(newLocation);
+	await user.save();
 	return `You traveled to ${getIcon(newLocation)} ${newLocation}\n${description}`;
 
 

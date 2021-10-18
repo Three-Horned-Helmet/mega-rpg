@@ -316,13 +316,13 @@ const calculateDungeonBossRewards = async (progress) => {
 		rewards.initiativeTaker.locationUnlocked = progress.dungeon.boss.unlocks;
 
 		await initiativeTaker.alternativeGainXp(rewards.initiativeTaker.xp);
-		await initiativeTaker.gainManyResources({
+		initiativeTaker.gainManyResources({
 			gold: rewards.initiativeTaker.gold,
 		});
-		await initiativeTaker.unlockNewLocation(
+		initiativeTaker.unlockNewLocation(
 			rewards.initiativeTaker.locationUnlocked
 		);
-		// await give drop
+		await initiativeTaker.save();
 	}
 
 	await asyncForEach(alivePlayers, async (p) => {
@@ -333,10 +333,11 @@ const calculateDungeonBossRewards = async (progress) => {
 			drop:
         staticRewards.drop[Math.floor(Math.random() * staticRewards.drop.length)],
 		};
-		await p.alternativeGainXp(helperReward.xp);
-		await p.gainManyResources({ gold: helperReward.gold });
+		p.alternativeGainXp(helperReward.xp);
+		p.gainManyResources({ gold: helperReward.gold });
 		// await give drop
 		rewards.helperIds.push(helperReward);
+		await p.save();
 	});
 	return rewards;
 };

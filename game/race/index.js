@@ -50,7 +50,7 @@ const handleRace = async (message, user)=>{
 			return message.channel.send(`<@${rUser.id}>: You can only do one bet!`);
 		}
 		const participater = await User.findOne({ "account.userId": rUser.id });
-		const allowedParticipater = await validateUser(participater);
+		const allowedParticipater = validateUser(participater);
 		if (!allowedParticipater) {
 			return message.channel.send(`<@${rUser.id}>: Insufficent gold!`);
 		}

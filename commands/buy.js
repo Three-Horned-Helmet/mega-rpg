@@ -20,8 +20,8 @@ module.exports = {
 		const numberFromArgs = args.filter(Number);
 		const amount = numberFromArgs.length && numberFromArgs[0] !== 0 ? Math.abs(parseInt(numberFromArgs[0])) : 1;
 
-		const lottery = args.some(a=> a.toLowerCase() === "lottery");
-		if (lottery) {
+		const isLottery = args.some(a=> a.toLowerCase() === "lottery");
+		if (isLottery) {
 			const lotteryResponse = await handlePurchaseLottery(user, amount);
 			return message.channel.send(lotteryResponse);
 		}

@@ -63,6 +63,7 @@ const icons = {
 	"health":{ name: ":heart:", icon: "❤️" },
 	"attack":{ name: ":crossed_swords:", icon: "⚔️" },
 	"defense":{ name: ":shield:", icon: "🛡" },
+	"difficulty":{ name: ":skull_crossbones:", icon: "☠️" },
 
 	// Hero
 	"armor":{ name: ":martial_arts_uniform:", icon: "🥋" },

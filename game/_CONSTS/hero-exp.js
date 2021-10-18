@@ -104,7 +104,8 @@ const gainHeroExp = async (user, exp, message) => {
 		statGains = heroStatIncreaseOnLevel[level + 1];
 	}
 
-	const updatedUser = await user.gainExp(exp, levelUp, statGains);
+	user.gainExp(exp, levelUp, statGains);
+	const updatedUser = await user.save();
 
 	// Send a congrats level up message
 	if(levelUp) {
@@ -148,7 +149,8 @@ const removeHeroExp = async (user, exp, message) => {
 		statRemoved = heroStatIncreaseOnLevel[level];
 	}
 
-	const updatedUser = await user.removeExp(exp, levelDown, statRemoved);
+	user.removeExp(exp, levelDown, statRemoved);
+	const updatedUser = await user.save();
 
 	// Send a level down message
 	if(levelDown) {

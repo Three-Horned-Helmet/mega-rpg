@@ -34,7 +34,7 @@ module.exports = {
 			if(userQuest.pve.find(raid => !raid.completed)) return false;
 
 			// Get reward
-			await user.gainManyResources({
+			user.gainManyResources({
 				gold: 440,
 			});
 
@@ -48,7 +48,7 @@ module.exports = {
 			user.addNewQuest(newQuest);
 			user.removeQuest(this.name);
 
-			user.save();
+			await user.save();
 
 			return true;
 		},
@@ -69,7 +69,7 @@ module.exports = {
 			if(!user.completedQuests.includes("Digging for Treasure")) return false;
 
 			// Get reward
-			await user.gainManyResources({
+			user.gainManyResources({
 				"iron ore": 50,
 			});
 
@@ -83,7 +83,7 @@ module.exports = {
 			user.addNewQuest(newQuest);
 			user.removeQuest(this.name);
 
-			user.save();
+			await user.save();
 
 			return true;
 		},
@@ -102,7 +102,7 @@ module.exports = {
 			if(!questResponse) return false;
 
 			// Get reward
-			await user.gainManyResources({
+			user.gainManyResources({
 				"gold": 1300,
 			});
 			user.addItem(allItems["bauxite daggers"], 1);
@@ -110,7 +110,7 @@ module.exports = {
 
 			user.removeQuest(this.name);
 
-			user.save();
+			await user.save();
 
 			return true;
 		},
