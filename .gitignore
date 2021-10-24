@@ -3,3 +3,4 @@ node_modules
 .vscode
 .vs/**
 .nyc_*
+commands/test.js
