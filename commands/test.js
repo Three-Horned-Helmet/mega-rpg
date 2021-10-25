@@ -1,6 +1,8 @@
 /* eslint-disable no-inline-comments */
 
 const { createCombatRound } = require("../combat/advancedCombat");
+const { handleMiniboss } = require("../game/miniboss")
+const { preGameHandler } = require("../combat/advancedClassesCombat")
 const { getArmyTowerEnemies } = require("../game/tower/army-tower/army-tower-enemies/army-tower-enemies");
 const User = require("../models/User");
 
@@ -14,10 +16,26 @@ module.exports = {
 			return;
 		}
 
-		const t = await User.findOne({ "account.username":"SpinningSiri" });
+		// const t = await User.findOne({ "account.username":"SpinningSiri" });
 		const m = await User.findOne({ "account.username":"Ignore" });
+		m.hero.className = "Warrior"
+		const npc = {
+			_id: "p-4",
+			npc: true,
+			account: {
+				username: "Player Four"
+			},
+			hero: {
+				rank: 3,
+				health: 180,
+				currentHealth: 180,
+				attack: 30,
+				defense: 30,
+				className: "Mage"
+			}
+		}
+		return preGameHandler(message, [m], [npc])
 
-		const npc = getArmyTowerEnemies(Math.floor(Math.random() * 100));
 		const npc2 = getArmyTowerEnemies(Math.floor(Math.random() * 100));
 		const npc3 = getArmyTowerEnemies(Math.floor(Math.random() * 100));
 		const npc4 = getArmyTowerEnemies(Math.floor(Math.random() * 100));
@@ -28,7 +46,7 @@ module.exports = {
 				maxRounds: 3
 			},
 			teamGreen:[m, npc, npc2],
-			teamRed:[t, npc3, npc4],
+			teamRed:[npc3, npc4],
 			embedInformation:{
 				minimal: true
 			}

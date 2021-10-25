@@ -1,0 +1,5 @@
+{
+    "messageAPI": {
+        "defaultCombatReactTime": 10000
+    }
+}
