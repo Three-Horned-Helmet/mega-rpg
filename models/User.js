@@ -16,7 +16,7 @@ const buildingsObject = require("../game/build/buildings-object");
 const { heroExpToNextLevel, heroStatIncreaseOnLevel } = require("../game/_CONSTS/hero-exp");
 const { army, statistics, cooldowns, resources, inventory } = require("./userValues");
 
-const { randomIntBetweenMinMax } = require("../game/_GLOBAL_HELPERS");
+// const { randomIntBetweenMinMax } = require("../game/_GLOBAL_HELPERS");
 
 
 const userSchema = new Schema({
@@ -664,6 +664,9 @@ userSchema.methods.changeTowerLevel = function(towerCategory, newLevel) {
 
 // will return between 50% and 66% progress of level
 const getNewCurrentExpAfterDeath = (oneLevelDown, currentLevel)=>{
+	const randomIntBetweenMinMax = (min, max) => {
+		return Math.floor(Math.random() * (max - min + 1) + min);
+	};
 	const difference = currentLevel - oneLevelDown;
 	const result = randomIntBetweenMinMax(oneLevelDown + (difference / 2), currentLevel - (difference / 3));
 	return result;
