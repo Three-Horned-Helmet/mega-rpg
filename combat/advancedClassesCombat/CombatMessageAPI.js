@@ -131,7 +131,11 @@ class CombatMessageAPI {
     }
 
     endGameMessage = async (winningTeam) => {
-        console.log("END GAME! Winner is " + winningTeam ? winningTeam.map(u => u.name).join(" ") : "none")
+        const extraFields = (fields) => {
+            this._endGameExtraFieldsEmbed(winningTeam, fields)
+        }
+        const lastCombatTurnEmbed = this._abilityPickerEmbed(winningTeam[0], null, extraFields)
+        await this.message.channel.send(lastCombatTurnEmbed)
         // return process.exit()
     }
 
@@ -174,8 +178,10 @@ class CombatMessageAPI {
         // embed get's messed up if hp bar is longer than 20
         const MAX_REPEATING = 20;
         const { health, currentHealth } = player;
-        const percentageHealth = (currentHealth / health * 100) * MAX_REPEATING / 100;
-        const percentageMissingHealth = MAX_REPEATING - percentageHealth;
+        let percentageHealth = Math.floor((currentHealth / health * 100) * MAX_REPEATING / 100);
+        let percentageMissingHealth = Math.floor(MAX_REPEATING - percentageHealth);
+        if(percentageHealth < 0) percentageHealth = 0
+        if(percentageMissingHealth < 0) percentageMissingHealth = 0
         
         if (player.team === 2) {
             return `\`\`\`diff\n- ${"|".repeat(percentageHealth)}${" ".repeat(percentageMissingHealth)} \n \`\`\``;
@@ -215,12 +221,12 @@ class CombatMessageAPI {
         return fightDetailsEmbed
     }
 
-    _abilityPickerEmbed = (player, abilitiesString) => {
+    _abilityPickerEmbed = (player, abilitiesString, extraFields = (fields) => {}) => {
         const { sideColor } = this.options
 
         const displayHealth = player => {
             return {
-                name:  `${this._getName(player)} HP:`,
+                name: `${this._getName(player)} HP:`,
                 value: this._displayPlayerHp(player),
                 inline: true,
             }
@@ -234,11 +240,6 @@ class CombatMessageAPI {
         //     value: teamGreenOverview,
         //     inline: true,
         // };
-        const bottomLeft = {
-            name: `Choose your ability ${this._getName(player)}!`,
-            value: abilitiesString,
-            inline: true,
-        };
     
         // const bottomRight = {
         //     name: `Choose your ability ${this._getName(user)}!`,
@@ -259,17 +260,28 @@ class CombatMessageAPI {
             // midLeft,
             // midRight,
             // newLineSpace,
-            bottomLeft,
+            // bottomLeft,
         ];
-        
+
         if(this.previousAbilityResponse.length){
             const midLeft = {
                 name: "Previous turn's",
                 value: this.previousAbilityResponse.join("\n \n"),
                 inline: true,
             };
-            combatFields.splice(3, 0, midLeft)
+            // combatFields.splice(3, 0, midLeft)
+            combatFields.push(midLeft)
             this.previousAbilityResponse = []
+        }
+
+        if(player && abilitiesString){
+            const bottomLeft = {
+                name: `Choose your ability ${this._getName(player)}!`,
+                value: abilitiesString,
+                inline: true,
+            };
+            combatFields.push(bottomLeft)
+            combatFields.push(newLineSpace)
         }
 
         if(this.deathMessages.length || this.effectMessages.length){
@@ -285,6 +297,8 @@ class CombatMessageAPI {
             this.effectMessages = []
         }
 
+        extraFields(combatFields)
+
         const title = `${this._getName(player)}'s turn!`
         const attachment = new Discord.MessageAttachment(`./assets/classes/${player.className}.png`, `${player.className}.png`);
         const embedResult = new Discord.MessageEmbed()
@@ -298,6 +312,16 @@ class CombatMessageAPI {
             // .setFooter(Object.values(winner).length ? winner.msg : footer);
         return embedResult;
     };
+
+    _endGameExtraFieldsEmbed = (winningTeam, fields) => {
+        const bottomField = {
+            name: `The combat has ended and the winner${winningTeam.length > 1 ? "'s are" : "is"}:`,
+            value: winningTeam.map(u => this._getName(u)).join(", ").replace(/$/),
+            inline: true
+        }
+
+        fields.push(bottomField)
+    }
 }
 
 module.exports = { CombatMessageAPI }
