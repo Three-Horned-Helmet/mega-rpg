@@ -90,6 +90,10 @@ const userSchema = new Schema({
 			type: Number,
 			default: 1200,
 		},
+		className: {
+			type: String,
+			default: "Warrior"
+		},
 		health: {
 			type: Number,
 			default: 100,

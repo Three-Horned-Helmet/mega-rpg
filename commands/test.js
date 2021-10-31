@@ -21,14 +21,15 @@ module.exports = {
 		m.hero.className = "Warrior"
 		const npc = {
 			_id: "p-4",
-			npc: true,
+			isNpc: true,
 			account: {
 				username: "Player Four"
 			},
 			hero: {
 				rank: 3,
 				health: 180,
-				currentHealth: 180,
+				health: 180,
+				currentHealth: 10,
 				attack: 30,
 				defense: 30,
 				className: "Mage"

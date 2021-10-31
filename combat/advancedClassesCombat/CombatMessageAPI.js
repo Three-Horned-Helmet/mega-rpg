@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const combatConstants = require("../../game/_CONSTS/combat.json")
+const fs = require('fs'); 
 
 class CombatMessageAPI {
     constructor(message, options = {}) {
@@ -71,7 +72,7 @@ class CombatMessageAPI {
           }
         const abilitiesString = `__${playerName}:__ Can pick from abilities: \n ${abilities.map((a, i) => `${allLetters[i]}) ${capitalizeFirstLetter(a.constants.name)} \n ${a.constants.description}`).join("\n \n")}`
 
-        const abilityPickerEmbed = this._abilityPickerEmbed(player, abilitiesString)
+        const abilityPickerEmbed = await this._abilityPickerEmbed(player, abilitiesString)
         await this.message.channel.send(abilityPickerEmbed)
 
         const filter = (response) => {
@@ -110,33 +111,26 @@ class CombatMessageAPI {
 
     deathMessage = async (players = []) => {
         this.deathMessages = this.deathMessages.concat(players)
-        // players.forEach((player) => {
-        //     this.deathMessages.push(player)
-        // })
     }
 
     effectMessage = async (message) => {
         this.effectMessages.push(message)
-        // return console.log(message)
     }
 
     abilityMessage = async (abilityResponse) => {
         this.previousAbilityResponse.push(abilityResponse)
-        // return console.log(abilityResponse)
     }
 
     newRoundMessage = async (round) => {
         this.round = round
-        // return console.log("New round: " + round)
     }
 
     endGameMessage = async (winningTeam) => {
         const extraFields = (fields) => {
             this._endGameExtraFieldsEmbed(winningTeam, fields)
         }
-        const lastCombatTurnEmbed = this._abilityPickerEmbed(winningTeam[0], null, extraFields)
+        const lastCombatTurnEmbed = await this._abilityPickerEmbed(winningTeam[0], null, extraFields)
         await this.message.channel.send(lastCombatTurnEmbed)
-        // return process.exit()
     }
 
 
@@ -221,7 +215,7 @@ class CombatMessageAPI {
         return fightDetailsEmbed
     }
 
-    _abilityPickerEmbed = (player, abilitiesString, extraFields = (fields) => {}) => {
+    _abilityPickerEmbed = async (player, abilitiesString, extraFields = (fields) => {}) => {
         const { sideColor } = this.options
 
         const displayHealth = player => {
@@ -235,17 +229,6 @@ class CombatMessageAPI {
         const topLeft = this.game.teamOne.map(displayHealth);
         const topRight = this.game.teamTwo.map(displayHealth);
     
-        // const midRight = {
-        //     name: teamGreenName,
-        //     value: teamGreenOverview,
-        //     inline: true,
-        // };
-    
-        // const bottomRight = {
-        //     name: `Choose your ability ${this._getName(user)}!`,
-        //     value: abilitiesString,
-        //     inline: true,
-        // };
         const newLineSpace = {
             name: "\u200B",
             value: "\u200B",
@@ -257,10 +240,6 @@ class CombatMessageAPI {
             topLeft,
             topRight,
             newLineSpace,
-            // midLeft,
-            // midRight,
-            // newLineSpace,
-            // bottomLeft,
         ];
 
         if(this.previousAbilityResponse.length){
@@ -287,10 +266,13 @@ class CombatMessageAPI {
         if(this.deathMessages.length || this.effectMessages.length){
             const midRight = {
                 name: "Effects",
-                value: this.effectMessages.join("\n \n") + this.deathMessages.join("\n"),
+                value: this.effectMessages.join("\n \n") + this.deathMessages.map(p => this._getName(p) + " has died").join("\n"),
                 inline: true
             }
 
+            if(combatFields.length % 2 !== 0){
+                combatFields.push(newLineSpace)
+            }
             combatFields.push(midRight)
 
             this.deathMessages = []
@@ -300,7 +282,24 @@ class CombatMessageAPI {
         extraFields(combatFields)
 
         const title = `${this._getName(player)}'s turn!`
-        const attachment = new Discord.MessageAttachment(`./assets/classes/${player.className}.png`, `${player.className}.png`);
+
+        // const attachment = await new Promise ((resolve, reject) => {
+        //     fs.stat(`./assets/classes/${player.className}.png`, function(err, stat) {
+        //         if(err == null) {
+        //             console.log("EXISTS")
+        //             resolve(new Discord.MessageAttachment(`./assets/classes/${player.className}.png`, `${player.className}.png`));
+        //         } else if(err.code === 'ENOENT') {
+        //             console.log("NOT EXISTS")
+        //             resolve(new Discord.MessageAttachment(`./assets/classes/warrior.png`, `warrior.png`));
+        //         } else {
+        //             console.log('Some other error: ', err.code);
+        //             reject()
+        //         }
+        //     });
+        // }) 
+        const className = player.className || player?.hero.className || "no-image"
+        const attachment = new Discord.MessageAttachment(`./assets/classes/${className}.png`, `${className}.png`);
+        
         const embedResult = new Discord.MessageEmbed()
 		    .attachFiles(attachment)
             .setTitle(title)
@@ -315,11 +314,20 @@ class CombatMessageAPI {
 
     _endGameExtraFieldsEmbed = (winningTeam, fields) => {
         const bottomField = {
-            name: `The combat has ended and the winner${winningTeam.length > 1 ? "'s are" : "is"}:`,
-            value: winningTeam.map(u => this._getName(u)).join(", ").replace(/$/),
+            name: `The combat has ended and the winner${winningTeam.length > 1 ? "'s are" : " is"}:`,
+            value: winningTeam.map(u => this._getName(u)).join(", ").replace(/,$/),
             inline: true
         }
 
+        const newLineSpace = {
+            name: "\u200B",
+            value: "\u200B",
+            inline: false,
+        };
+
+        if(fields.length % 2 !== 0){
+            fields.push(newLineSpace)
+        }
         fields.push(bottomField)
     }
 }
