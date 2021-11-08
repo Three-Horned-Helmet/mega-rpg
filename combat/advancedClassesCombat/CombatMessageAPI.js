@@ -2,6 +2,14 @@ const Discord = require("discord.js");
 const combatConstants = require("../../game/_CONSTS/combat.json")
 const fs = require('fs'); 
 
+/* 
+options: {
+    additionalRewards: {
+        exp: 300,
+        gold: 200
+    }
+}
+*/
 class CombatMessageAPI {
     constructor(message, options = {}) {
         this.message = message
@@ -313,11 +321,7 @@ class CombatMessageAPI {
     };
 
     _endGameExtraFieldsEmbed = (winningTeam, fields) => {
-        const bottomField = {
-            name: `The combat has ended and the winner${winningTeam.length > 1 ? "'s are" : " is"}:`,
-            value: winningTeam.map(u => this._getName(u)).join(", ").replace(/,$/),
-            inline: true
-        }
+        const {additionalRewards} = this.options
 
         const newLineSpace = {
             name: "\u200B",
@@ -325,10 +329,73 @@ class CombatMessageAPI {
             inline: false,
         };
 
+        if(!winningTeam) {
+            const bottomLeftField = {
+                name: "The combat has ended and the were no winners:",
+                value: this.game.combatEndedReason || "For unfortunate reasons",
+                inline: true
+            }
+    
+            if(fields.length % 2 !== 0){
+                fields.push(newLineSpace)
+            }
+            
+            return fields.push(bottomLeftField)
+        }
+
+
+        const bottomLeftField = {
+            name: `The combat has ended and the winner${winningTeam.length > 1 ? "'s are" : " is"}:`,
+            value: winningTeam.map(u => this._getName(u)).join(", ").replace(/,$/),
+            inline: true
+        }
+
         if(fields.length % 2 !== 0){
             fields.push(newLineSpace)
         }
-        fields.push(bottomField)
+
+        fields.push(bottomLeftField)
+
+        if(winningTeam.find(player => !player.isNpc)){
+            const rewards = this.handleRewards()
+            if(Object.keys(rewards).length){
+                const bottomRightField = {
+                    name: `Rewards:`,
+                    value: Object.entries(rewards).map(reward => `${reward[0]}: ${reward[1]}`).join("\n").replace(/\\n$/),
+                    inline: true
+                }
+
+                fields.push(bottomRightField)
+            }
+        }
+    }
+
+    handleRewards = () => {
+        const { additionalRewards } = this.options
+        const allRewards = {}
+        const winningUsers = this.game.winningTeam.filter(player => !player.isNpc && player.account?.userId)
+
+        const summarizeRewards = (rewards) => {
+            Object.entries(rewards).forEach(reward => {
+                allRewards[reward[0]] ? allRewards[reward[0]] += reward[1] : allRewards[reward[0]] = reward[1]
+            })
+        }
+
+        if(additionalRewards){
+            summarizeRewards(additionalRewards)
+        }
+        
+        const usersWithRewards = this.game.losingTeam.filter(player => player.rewards)
+        usersWithRewards.forEach(user => {
+            summarizeRewards(user.rewards)
+        })
+
+        winningUsers.forEach(user => {
+            user.gainManyResources(allRewards)
+            user.save()
+        })
+
+        return allRewards
     }
 }
 

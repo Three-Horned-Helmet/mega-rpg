@@ -35,7 +35,11 @@ module.exports = {
 				className: "Mage"
 			}
 		}
-		return preGameHandler(message, [m], [npc])
+		const additionalRewards = {
+			exp: 400,
+			gold: 200
+		}
+		return preGameHandler(message, [m], [npc], {additionalRewards})
 
 		const npc2 = getArmyTowerEnemies(Math.floor(Math.random() * 100));
 		const npc3 = getArmyTowerEnemies(Math.floor(Math.random() * 100));
