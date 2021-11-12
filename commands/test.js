@@ -28,7 +28,6 @@ module.exports = {
 			hero: {
 				rank: 3,
 				health: 180,
-				health: 180,
 				currentHealth: 10,
 				attack: 30,
 				defense: 30,

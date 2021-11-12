@@ -137,7 +137,8 @@ class CombatMessageAPI {
         const extraFields = (fields) => {
             this._endGameExtraFieldsEmbed(winningTeam, fields)
         }
-        const lastCombatTurnEmbed = await this._abilityPickerEmbed(winningTeam[0], null, extraFields)
+        // Winning team kan være null
+        const lastCombatTurnEmbed = await this._abilityPickerEmbed(winningTeam ? winningTeam[0] : this.game.teamOne[0], null, extraFields)
         await this.message.channel.send(lastCombatTurnEmbed)
     }
 
