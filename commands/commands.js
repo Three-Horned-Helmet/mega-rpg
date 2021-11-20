@@ -34,7 +34,7 @@ module.exports = {
 };
 
 const generateCommandEmbed = ()=> {
-	const allStatisticsCommands = ["army", "cooldowns", "grid", "rank", "resources", "tax"];
+	const allStatisticsCommands = ["army", "cooldowns", "grid", "rank", "resources", "tax", "hero"];
 	const allFightingCommands = ["duel [@player]", "dungeon", "hunt", "miniboss", "raid", "stake [@player]", "tower"];
 	const allEconomyCommands = ["build", "buy", "dailyPrize", "lottery", "use", "weeklyPrize"];
 	const allWorkingCommands = ["collect", "craft", "destroy", "equip", "explore", "look", "produce", "recruit", "travel"];

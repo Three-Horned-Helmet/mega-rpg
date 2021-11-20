@@ -307,7 +307,7 @@ class CombatMessageAPI {
         //     });
         // }) 
         const className = player.className || player?.hero.className || "no-image"
-        const attachment = new Discord.MessageAttachment(`./assets/classes/${className}.png`, `${className}.png`);
+        const attachment = new Discord.MessageAttachment(`./assets/classes/full-image/${className}.png`, `${className}.png`);
         
         const embedResult = new Discord.MessageEmbed()
 		    .attachFiles(attachment)
