@@ -24,7 +24,7 @@ const checkRaidAndHuntQuest = async (user, place, currentLocation) => {
 			return pve;
 		});
 
-		if(unique) await user.removeExploredArea(currentLocation, place);
+		if(unique) user.removeExploredArea(currentLocation, place);
 
 		// Find the quest in the quest object
 		// const questObj = Object.values(allQuests[currentLocation]).find(q => q.name === currentQuest.name);
@@ -35,9 +35,9 @@ const checkRaidAndHuntQuest = async (user, place, currentLocation) => {
 		});
 
 		if(objectiveFound) {
-			await user.updateQuestObjective(currentQuest);
+			user.updateQuestObjective(currentQuest);
 
-			if(questObj.foundNewQuest) await questObj.foundNewQuest(user);
+			if(questObj.foundNewQuest) questObj.foundNewQuest(user);
 
 			return questObj.found;
 		}

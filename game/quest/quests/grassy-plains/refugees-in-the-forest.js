@@ -61,7 +61,7 @@ module.exports = {
 		name: "Dealing with Wolves",
 		found: "You found some fresh Wolf Tracks\n**A new quest is available!**",
 		notFound: "You found no signs of the Wolf Pack. Keep looking!",
-		foundNewQuest: async (user) => {
+		foundNewQuest: (user) => {
 			// If you have not found The Wolf Pack already
 			if(!user.completedQuests.includes("The Wolf Pack") && !user.quests.find(startedQuests => startedQuests.name === "The Wolf Pack")) {
 				// Add next quest
@@ -78,7 +78,6 @@ module.exports = {
 				};
 				user.addNewQuest(newQuest);
 
-				await user.save();
 				return;
 			}
 
@@ -98,7 +97,7 @@ module.exports = {
 				};
 				user.addNewQuest(newQuest);
 
-				await user.save();
+				user.save();
 
 				return;
 			}

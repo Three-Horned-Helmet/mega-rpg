@@ -1,5 +1,6 @@
 const { getIcon } = require("../game/_CONSTS/icons");
-const { handleRaid } = require("../game/raid");
+/* const { handleRaid } = require("../game/raid"); */
+const Raid = require("../combat/advancedClassesCombat/Raid");
 
 module.exports = {
 	name: "raid",
@@ -13,9 +14,8 @@ module.exports = {
 		bv: "Bandit Vault",
 	},
 	async execute(message, args, user) {
-		// trigger captcha 1% of time
-		const place = args.join("").toLowerCase();
-		const result = await handleRaid(user, place);
-		return message.channel.send(result);
+		const location = args.join("").toLowerCase();
+		const raid = new Raid({ message, user, location });
+		await raid.startCombat();
 	},
 };
