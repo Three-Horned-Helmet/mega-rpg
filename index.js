@@ -96,7 +96,7 @@ client.on("message", async (message) => {
 		return message.reply(`You are banned from Mega-RPG. You can plead for an unban at our support servers - or wait:\n **${msToHumanTime(userProfile.account.banTime - Date.now())}**`);
 	}
 
-	if(!userProfile.hero.className){
+	if(!userProfile.hero.className && !(command.name === "help" || command.name === "info" || command.name === "hero")){ 
 		await pickClassHandler(message, userProfile)
 		return
 	}
