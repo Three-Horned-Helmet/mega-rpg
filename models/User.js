@@ -92,6 +92,7 @@ const userSchema = new Schema({
 		},
 		className: {
 			type: String,
+			enum: ["Warrior", "Mage", "Ranger", "Shaman"],
 			default: "Warrior"
 		},
 		health: {
@@ -661,6 +662,10 @@ userSchema.methods.changeTowerLevel = function(towerCategory, newLevel) {
 		return;
 	}
 	this.tower[towerCategory].level = newLevel;
+};
+
+userSchema.methods.pickClass = async function(className) {
+	this.hero.className = className
 };
 
 // will return between 50% and 66% progress of level

@@ -97,7 +97,8 @@ class CombatMessageAPI {
         const extraFields = (fields) => {
             this._endGameExtraFieldsEmbed(winningTeam, fields)
         }
-        const lastCombatTurnEmbed = await this._abilityPickerEmbed(winningTeam[0], null, extraFields)
+        // Winning team kan være null
+        const lastCombatTurnEmbed = await this._abilityPickerEmbed(winningTeam ? winningTeam[0] : this.game.teamOne[0], null, extraFields)
         await this.message.channel.send(lastCombatTurnEmbed)
     }
 
@@ -155,7 +156,7 @@ class CombatMessageAPI {
         return fightDetailsEmbed
     }
 
-    _abilityPickerEmbed = (player, abilitiesString) = () => {
+    _abilityPickerEmbed = (player, abilitiesString) => {
         console.log("_abilityPickerEmbed")
         const { sideColor } = this.options
 
@@ -225,7 +226,7 @@ class CombatMessageAPI {
         const title = `${this._getName(player)}'s turn!`
 
         const className = player.className || player?.hero.className || "no-image"
-        const attachment = new Discord.MessageAttachment(`./assets/classes/${className}.png`, `${className}.png`);
+        const attachment = new Discord.MessageAttachment(`./assets/classes/full-image/${className}.png`, `${className}.png`);
         
         const embedResult = new Discord.MessageEmbed()
 		    .attachFiles(attachment)
