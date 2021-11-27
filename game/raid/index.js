@@ -8,15 +8,15 @@ const { checkQuest } = require("../quest/quest-utils");
 const handleRaid = async (user, place = null) => {
 
 	// checks for cooldown
-	const cooldownInfo = onCooldown("raid", user);
+	/* const cooldownInfo = onCooldown("raid", user);
 	if (cooldownInfo.response) {
 		return cooldownInfo.embed;
-	}
+	} */
 
 	// checks for too low hp
-	if (user.hero.currentHealth < user.hero.health * 0.05 && user.hero.currentHealth < 50) {
+	/* if (user.hero.currentHealth < user.hero.health * 0.05 && user.hero.currentHealth < 50) {
 		return `Your hero's health is too low (**${user.hero.currentHealth}**)`;
-	}
+	} */
 
 	const { currentLocation } = user.world;
 	const placesInCurrentWorld = worldLocations[currentLocation].places;
@@ -26,7 +26,6 @@ const handleRaid = async (user, place = null) => {
 	const userExploredRaidPlaces = userExploredPlaces
 		.filter(p => placesInCurrentWorld[p].type === "raid")
 		.map(p => p.replace(/\s/g, "").toLowerCase());
-
 	// checks if user has explored any raidable place in current location
 	if (!userExploredRaidPlaces.length) {
 		return `You have not explored any place to raid in ${locationIcon} ${currentLocation}, try \`!explore\` to find a place to raid`;

@@ -240,7 +240,7 @@ userSchema.methods.startQuest = async function(questName) {
 	this.markModified(`quests.${buildingIndex}.started`);
 };
 
-userSchema.methods.addNewQuest = async function(quest) {
+userSchema.methods.addNewQuest = function(quest) {
 	this.quests.push(quest);
 };
 
@@ -250,12 +250,13 @@ userSchema.methods.removeQuest = async function(questName) {
 	this.completedQuests.push(questName);
 };
 
-userSchema.methods.updateQuestObjective = async function(quest) {
-	const questIndex = this.quests.indexOf(this.quests.find(q => q.name === quest.name));
-	this.quests[questIndex].pve = quest.pve;
-
-	this.markModified(`quests.${questIndex}.pve`);
-	return this.save();
+userSchema.methods.updateQuestObjective = function(quest) {
+	this.quests = this.quests.map(q => {
+		if (q.name === quest.name) {
+			q.pve = quest.pve;
+		}
+		return q;
+	});
 };
 
 userSchema.methods.refreshQuestPve = async function(questName, pveIndex = 0) {
@@ -290,12 +291,8 @@ userSchema.methods.handleExplore = function(currentLocation, place) {
 };
 
 userSchema.methods.removeExploredArea = function(currentLocation, place) {
-	const locationIndex = this.world.locations[currentLocation].explored.indexOf(place);
-	this.world.locations[currentLocation].explored.splice(locationIndex, 1);
-
-	this.markModified(`world.locations.${currentLocation}.explored`);
-
-	return this.save();
+	const newLocations = this.world.locations[currentLocation].explored.filter(p => p !== place);
+	this.world.locations[currentLocation].explored = newLocations;
 };
 
 userSchema.methods.buyBuilding = function(building, buildingCost) {

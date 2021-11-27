@@ -1,15 +1,6 @@
 const Discord = require("discord.js");
 const combatConstants = require("../../game/_CONSTS/combat.json")
-const fs = require('fs'); 
 
-/* 
-options: {
-    additionalRewards: {
-        exp: 300,
-        gold: 200
-    }
-}
-*/
 class CombatMessageAPI {
     constructor(message, options = {}) {
         this.message = message
@@ -23,64 +14,27 @@ class CombatMessageAPI {
         this.round = 1
     }
 
-    // Options: { withTeam: Boolean }. 
-    genericPrefightRuleGenerator = async () => {
-        const { withTeam } = this.options
-        // const disallowed = minibossStartAllowed(user);
-        // if (disallowed) {
-        //     return message.channel.send(disallowed);
-        // }
-        // const now = new Date();
-        // user.setNewCooldown("miniboss", now);
-        // await user.save();
+    sendMessage(message){
+        return this.message.channel.send(message)
+    }
 
-        if(withTeam){
-            // // Handle invitations here
-            // const invitationEmbed = _invitationEmbed(teamOne, teamTwo);
-            // const invitation = await message.channel.send(invitationEmbed);
-            // await invitation.react(minibossIcon);
-            // const reactionFilter = (reaction) => reaction.emoji.name === minibossIcon;
-            // const collector = await invitation.createReactionCollector(reactionFilter, { max: 10, time: 1000 * 20, errors: ["time"] });
-            // collector.on("collect", async (result, rUser) => {
-            //     if (rUser.bot) {
-            //         return;
-            //     }
-            //     if (progress.teamGreen.length > 9) {
-            //         return collector.stop();
-            //     }
-            //     const helper = await User.findOne({ "account.userId": rUser.id });
-        
-            //     const disallowedHelper = validateHelper(progress, helper, rUser.id);
-            //     if (disallowedHelper) {
-            //         return message.channel.send(`<@${message.author.id}>: ${disallowedHelper}`);
-            //     }
-            //     progress.teamGreen.push(helper);
-            // });
-        
-            // collector.on("end", async () => {
-            //     const combatResult = await createCombatRound(message, progress);
-            //     if (combatResult.winner.victory === "green") {
-            //         const rewards = generateRewards(combatResult);
-            //         await giveRewards(rewards, combatResult);
-            //         const embed = createMinibossResult(rewards, combatResult);
-            //         message.channel.send(embed);
-            //     }
-            // });
-        }
+    genericPrefightRuleGenerator = async () => {
+        console.log("genericPrefightRuleGenerator")
         const rulesEmbed = this._fightDetailsEmbed()
-        const invitation = await this.message.channel.send(rulesEmbed);
+        await this.message.channel.send(rulesEmbed);
 
     }
 
     pickAbilityMessage = async (player, abilities) => {
-        const playerName = player.name
+        console.log("pickAbilityMessage")
+        const { name } = player;
         const allLetters = "abcefghijklmnopqrstuvwxyz".split("")
         const capitalizeFirstLetter = (string) => {
             return string.charAt(0).toUpperCase() + string.slice(1);
           }
-        const abilitiesString = `__${playerName}:__ Can pick from abilities: \n ${abilities.map((a, i) => `${allLetters[i]}) ${capitalizeFirstLetter(a.constants.name)} \n ${a.constants.description}`).join("\n \n")}`
+        const abilitiesString = `__${name}:__ Can pick from abilities: \n ${abilities.map((a, i) => `${allLetters[i]}) ${capitalizeFirstLetter(a.constants.name)} \n ${a.constants.description}`).join("\n \n")}`
 
-        const abilityPickerEmbed = await this._abilityPickerEmbed(player, abilitiesString)
+        const abilityPickerEmbed = this._abilityPickerEmbed(player, abilitiesString)
         await this.message.channel.send(abilityPickerEmbed)
 
         const filter = (response) => {
@@ -95,6 +49,7 @@ class CombatMessageAPI {
 
         let pickedAbility;
         collector.on("collect", async (result) => {
+            console.log("result.content", result.content)
             if (result.author.bot) {
                 return;
             }
@@ -118,22 +73,27 @@ class CombatMessageAPI {
     }
 
     deathMessage = async (players = []) => {
+        console.log("deathMessage")
         this.deathMessages = this.deathMessages.concat(players)
     }
 
     effectMessage = async (message) => {
+        console.log("effectMessage")
         this.effectMessages.push(message)
     }
 
     abilityMessage = async (abilityResponse) => {
+        console.log("abilityMessage")
         this.previousAbilityResponse.push(abilityResponse)
     }
 
     newRoundMessage = async (round) => {
+        console.log("newRoundMessage")
         this.round = round
     }
 
     endGameMessage = async (winningTeam) => {
+        console.log("endGameMessage")
         const extraFields = (fields) => {
             this._endGameExtraFieldsEmbed(winningTeam, fields)
         }
@@ -142,42 +102,13 @@ class CombatMessageAPI {
         await this.message.channel.send(lastCombatTurnEmbed)
     }
 
-
-
-
-    _invitationEmbed = (miniboss, user) => {
-        // const { username } = user.account;
-        // const { currentLocation } = user.world;
-
-        // const rules = `\`Army allowed: ${getIcon(options.allowFriends, "icon")}\`\n \`Helpers allowed: ${getIcon(miniboss.combatRules.helpersAllowed, "icon")}\`\n \`Max rounds: ${miniboss.combatRules.maxRounds}\`\n \`Attacks each round: ${miniboss.allowedNumOfAttacks}\``;
-        // const rewards = `${getIcon("gold")} \`Gold: ${miniboss.rewards.gold}\`\n ${getIcon("xp")} \`XP: ${miniboss.rewards.xp}\` \n ${getIcon(miniboss.rewards.dungeonKey)} \`Key: ${miniboss.rewards.dungeonKey}\``;
-
-        // const embedInvitation = new Discord.MessageEmbed()
-        //     .setTitle(`A Miniboss has been triggered by ${username}!`)
-        //     .setDescription(`Help to defeat ${getIcon("miniboss")} ${miniboss.name} from ${getIcon(currentLocation)} ${currentLocation} `)
-        //     .setColor(sideColor)
-        //     .addFields(
-        //         {
-        //             name: "Rules",
-        //             value: rules,
-        //             inline: true,
-        //         },
-        //         {
-        //             name: `${miniboss.name}'s reward:`,
-        //             value: rewards,
-        //             inline: true,
-        //         },
-        //     )
-        //     .setFooter(`React with a ${getIcon("miniboss", "icon")} within 20 seconds to participate! (max 10!)`);
-
-        // return embedInvitation;
-    }
-
     _getName = player => {
+        console.log("_getName")
         return player.name || player?.account.username || "npc"
     }
 
     _displayPlayerHp = (player) => {
+        console.log("_displayPlayerHp")
         // embed get's messed up if hp bar is longer than 20
         const MAX_REPEATING = 20;
         const { health, currentHealth } = player;
@@ -193,6 +124,7 @@ class CombatMessageAPI {
     };
 
     _fightDetailsEmbed = () => {
+        console.log("_fightDetailsEmbed")
         const { title, description, sideColor, rewards } = this.options
         const namesTeamOne = this.game.originalTeamOne.map(this._getName)
         const namesTeamTwo = this.game.originalTeamTwo.map(this._getName)
@@ -224,7 +156,8 @@ class CombatMessageAPI {
         return fightDetailsEmbed
     }
 
-    _abilityPickerEmbed = async (player, abilitiesString, extraFields = (fields) => {}) => {
+    _abilityPickerEmbed = (player, abilitiesString, extraFields = () => {}) => {
+        console.log("_abilityPickerEmbed")
         const { sideColor } = this.options
 
         const displayHealth = player => {
@@ -253,7 +186,7 @@ class CombatMessageAPI {
 
         if(this.previousAbilityResponse.length){
             const midLeft = {
-                name: "Previous turn's",
+                name: "Previous turn",
                 value: this.previousAbilityResponse.join("\n \n"),
                 inline: true,
             };
@@ -264,7 +197,7 @@ class CombatMessageAPI {
 
         if(player && abilitiesString){
             const bottomLeft = {
-                name: `Choose your ability ${this._getName(player)}!`,
+                name: `Choose your ability, ${this._getName(player)}!`,
                 value: abilitiesString,
                 inline: true,
             };
@@ -292,36 +225,20 @@ class CombatMessageAPI {
 
         const title = `${this._getName(player)}'s turn!`
 
-        // const attachment = await new Promise ((resolve, reject) => {
-        //     fs.stat(`./assets/classes/${player.className}.png`, function(err, stat) {
-        //         if(err == null) {
-        //             console.log("EXISTS")
-        //             resolve(new Discord.MessageAttachment(`./assets/classes/${player.className}.png`, `${player.className}.png`));
-        //         } else if(err.code === 'ENOENT') {
-        //             console.log("NOT EXISTS")
-        //             resolve(new Discord.MessageAttachment(`./assets/classes/warrior.png`, `warrior.png`));
-        //         } else {
-        //             console.log('Some other error: ', err.code);
-        //             reject()
-        //         }
-        //     });
-        // }) 
         const className = player.className || player?.hero.className || "no-image"
         const attachment = new Discord.MessageAttachment(`./assets/classes/full-image/${className}.png`, `${className}.png`);
         
         const embedResult = new Discord.MessageEmbed()
 		    .attachFiles(attachment)
             .setTitle(title)
-            // .setDescription(description)
             .setColor(sideColor || this.defaultSideColor)
             .addFields(...combatFields)
-            // .setImage(`../../assets/classes/${player.className}.png`)
 		    .setThumbnail(`attachment://${player.className}.png`)
-            // .setFooter(Object.values(winner).length ? winner.msg : footer);
         return embedResult;
     };
 
     _endGameExtraFieldsEmbed = (winningTeam, fields) => {
+        console.log("_endGameExtraFieldsEmbed")
         const {additionalRewards} = this.options
 
         const newLineSpace = {
@@ -372,6 +289,7 @@ class CombatMessageAPI {
     }
 
     handleRewards = () => {
+        console.log("handleRewards")
         const { additionalRewards } = this.options
         const allRewards = {}
         const winningUsers = this.game.winningTeam.filter(player => !player.isNpc && player.account?.userId)

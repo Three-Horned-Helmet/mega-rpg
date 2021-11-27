@@ -20,7 +20,7 @@ const cooldowns = {
 /**
 * function that could and should be used where ever there is need for cooldown
 * @param {string} actionType - eg: "explore" or "miniboss"
-* @param {Object} user - usermodel from mongodb
+* @param {Object} user - usermodel from db
 * @returns {Object} {
 	response, Boolean,
 	timeLeftInSec, String eg: "42"
@@ -61,7 +61,7 @@ const onCooldown = (actionType, user) => {
 			timeLeftInMs,
 			timeLeftFormatted,
 			message: `${actionType} is on cooldown! ${timeLeftInSec} seconds remaining until you can perform ${actionType}`,
-			embed: generateSingleCdEmbed(timeLeftInMs, user),
+			embed: generateSingleCdEmbed(user, timeLeftInMs),
 		};
 	}
 	return {
@@ -70,8 +70,38 @@ const onCooldown = (actionType, user) => {
 
 };
 
+/**
+* function that could and should be used where ever there is need for cooldown
+* @param {string} actionType - eg: "explore" or "miniboss"
+* @param {Object} user - usermodel from db
+* @returns {Boolean} true if cooldown is over, false if not
+}
+*/
+const userIsOnCooldown = (actionType, user) => {
+	if (!actionType || !user) {
+		console.error("Missing arguments ");
+		return null;
+	}
+	if (!Object.keys(cooldowns).includes(actionType)) {
+		console.error(`Cooldown for ${actionType} has not been configured`);
+		return null;
+	}
+	const previousTime = user.cooldowns[actionType];
+	const now = new Date();
+	let cooldown = cooldowns[actionType];
+
+	const patreonType = user.account.patreon;
+	const patreonBonus = patreonType ? (cooldown * 0.15) : 0;
+
+	cooldown -= patreonBonus;
+	const timePassed = Math.abs(previousTime - now);
+
+	return timePassed < cooldown;
+};
+
 // generates a discord embed for when the user tries to perform an action that is in cooldown
-const generateSingleCdEmbed = (timeLeftInMs, user) => {
+const generateSingleCdEmbed = (user, timeLeftInMs) => {
+	if (!timeLeftInMs) timeLeftInMs;
 	const timeLeftSentence = timeLeftInMs > 60000 ?
 		`You can't use this command. Cooldown is ${msToHumanTime(timeLeftInMs)}`
 		: `You can't use this command for ${Math.ceil(timeLeftInMs / 1000)} seconds`;
@@ -127,4 +157,4 @@ const generateAllCdEmbed = (user) => {
 };
 
 
-module.exports = { onCooldown, generateSingleCdEmbed, generateAllCdEmbed };
+module.exports = { userIsOnCooldown, onCooldown, generateSingleCdEmbed, generateAllCdEmbed };
