@@ -18,7 +18,6 @@ module.exports = {
 
 		// const t = await User.findOne({ "account.username":"SpinningSiri" });
 		const m = await User.findOne({ "account.username":"Ignore" });
-		m.hero.className = "Warrior"
 		const npc = {
 			_id: "p-4",
 			isNpc: true,

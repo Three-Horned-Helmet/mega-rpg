@@ -9,7 +9,7 @@ module.exports = {
 
         const capitalizeFirstLetter = (string) => {
             return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-          }
+        }
         const convertFromCamelcase = (string) => {
             return capitalizeFirstLetter(string.replace(/([A-Z])/g, " $1"));
         }
