@@ -32,7 +32,7 @@ class CombatMessageAPI {
         const capitalizeFirstLetter = (string) => {
             return string.charAt(0).toUpperCase() + string.slice(1);
           }
-        const abilitiesString = `__${name}:__ Can pick from abilities: \n ${abilities.map((a, i) => `${allLetters[i]}) ${capitalizeFirstLetter(a.constants.name)} \n ${a.constants.description}`).join("\n \n")}`
+        const abilitiesString = `__${name}:__ Can pick from abilities: \n ${abilities.map((a, i) => `${allLetters[i]}) ${capitalizeFirstLetter(a.constants.name)}`).join("\n")}`
 
         const abilityPickerEmbed = this._abilityPickerEmbed(player, abilitiesString)
         await this.message.channel.send(abilityPickerEmbed)
@@ -110,17 +110,17 @@ class CombatMessageAPI {
     _displayPlayerHp = (player) => {
         console.log("_displayPlayerHp")
         // embed get's messed up if hp bar is longer than 20
-        const MAX_REPEATING = 20;
+        const HEALTH_BARS_COUNT = 19;
         const { health, currentHealth } = player;
-        let percentageHealth = Math.floor((currentHealth / health * 100) * MAX_REPEATING / 100);
-        let percentageMissingHealth = Math.floor(MAX_REPEATING - percentageHealth);
-        if(percentageHealth < 0) percentageHealth = 0
-        if(percentageMissingHealth < 0) percentageMissingHealth = 0
+        let missingHealthBars = Math.floor(((currentHealth * 100) / health) / (100 / HEALTH_BARS_COUNT))
+
+
+        if(missingHealthBars < 0) missingHealthBars = 0
         
         if (player.team === 2) {
-            return `\`\`\`diff\n- ${"|".repeat(percentageHealth)}${" ".repeat(percentageMissingHealth)} \n \`\`\``;
+            return `\`\`\`diff\n- ${"|".repeat(missingHealthBars)}${" ".repeat(HEALTH_BARS_COUNT - missingHealthBars)} \n \`\`\``;
         }
-        return `\`\`\`diff\n+ ${"|".repeat(percentageHealth)}${" ".repeat(percentageMissingHealth)} \n \`\`\``;
+        return `\`\`\`diff\n+ ${"|".repeat(missingHealthBars)}${" ".repeat(HEALTH_BARS_COUNT - missingHealthBars)} \n \`\`\``;
     };
 
     _fightDetailsEmbed = () => {
@@ -160,53 +160,54 @@ class CombatMessageAPI {
         console.log("_abilityPickerEmbed")
         const { sideColor } = this.options
 
-        const displayHealth = player => {
+        const newLineSpace = {
+            name: "\u200B",
+            value: "\u200B",
+            inline: false,
+        };
+
+        const displayHealth = (player, index) => {
             return {
                 name: `${this._getName(player)} HP:`,
                 value: this._displayPlayerHp(player),
                 inline: true,
             }
         }
-    
-        const topLeft = this.game.teamOne.map(displayHealth);
-        const topRight = this.game.teamTwo.map(displayHealth);
-    
-        const newLineSpace = {
-            name: "\u200B",
-            value: "\u200B",
-            inline: false,
-        };
-    
-    
+        
+        // TODO: Add newLineSpace to make it align perfectly when several players are present in the fight  
+        const teamOneHealthField = this.game.teamOne.map(displayHealth);
+        const teamTwoHealthField = this.game.teamTwo.map(displayHealth);
+
+        
         const combatFields = [
-            topLeft,
-            topRight,
+            ...teamOneHealthField,
+            ...teamTwoHealthField,
             newLineSpace,
         ];
-
+        
         if(this.previousAbilityResponse.length){
-            const midLeft = {
+            const previousAbilitiesField = {
                 name: "Previous turn",
                 value: this.previousAbilityResponse.join("\n \n"),
                 inline: true,
             };
-            // combatFields.splice(3, 0, midLeft)
-            combatFields.push(midLeft)
+            // combatFields.splice(3, 0, previousAbilitiesField)
+            combatFields.push(previousAbilitiesField)
             this.previousAbilityResponse = []
         }
 
         if(player && abilitiesString){
-            const bottomLeft = {
+            const pickAbilitiesField = {
                 name: `Choose your ability, ${this._getName(player)}!`,
                 value: abilitiesString,
                 inline: true,
             };
-            combatFields.push(bottomLeft)
+            combatFields.push(pickAbilitiesField)
             combatFields.push(newLineSpace)
         }
 
         if(this.deathMessages.length || this.effectMessages.length){
-            const midRight = {
+            const effectsField = {
                 name: "Effects",
                 value: this.effectMessages.join("\n \n") + this.deathMessages.map(p => this._getName(p) + " has died").join("\n"),
                 inline: true
@@ -215,7 +216,7 @@ class CombatMessageAPI {
             if(combatFields.length % 2 !== 0){
                 combatFields.push(newLineSpace)
             }
-            combatFields.push(midRight)
+            combatFields.push(effectsField)
 
             this.deathMessages = []
             this.effectMessages = []
