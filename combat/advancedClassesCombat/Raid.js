@@ -14,8 +14,8 @@ const options = {
 };
 
 class Raid extends WorldCombat {
-	constructor(data = { options }) {
-		super({ ...data, nameOfClass: NAME_OF_CLASS });
+	constructor(data) {
+		super({ ...data, nameOfClass: NAME_OF_CLASS, options });
 		this.setupRaid();
 	}
 	static getNameOfClass() {

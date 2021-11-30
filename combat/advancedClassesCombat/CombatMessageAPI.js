@@ -29,10 +29,8 @@ class CombatMessageAPI {
         console.log("pickAbilityMessage")
         const { name } = player;
         const allLetters = "abcefghijklmnopqrstuvwxyz".split("")
-        const capitalizeFirstLetter = (string) => {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-          }
-        const abilitiesString = `__${name}:__ Can pick from abilities: \n ${abilities.map((a, i) => `${allLetters[i]}) ${capitalizeFirstLetter(a.constants.name)} \n ${a.constants.description}`).join("\n \n")}`
+        const capitalizeFirstLetter = (str) => str.charAt(0).toUpperCase() + str.slice(1)
+        const abilitiesString = `__${name}:__ Can pick from abilities: \n ${abilities.map((a, i) => `**${allLetters[i]}**) ${capitalizeFirstLetter(a.constants.name)} \n`).join("")}`
 
         const abilityPickerEmbed = this._abilityPickerEmbed(player, abilitiesString)
         await this.message.channel.send(abilityPickerEmbed)
@@ -129,12 +127,6 @@ class CombatMessageAPI {
         const namesTeamOne = this.game.originalTeamOne.map(this._getName)
         const namesTeamTwo = this.game.originalTeamTwo.map(this._getName)
 
-        // const extraFields = []
-
-        // if(rewards) {
-
-        // }
-
         const fightDetailsEmbed = new Discord.MessageEmbed()
             .setTitle(title || "A fight has been initiated!")
             .setDescription(description || "Prepare for fight!")
@@ -156,7 +148,7 @@ class CombatMessageAPI {
         return fightDetailsEmbed
     }
 
-    _abilityPickerEmbed = (player, abilitiesString) => {
+    _abilityPickerEmbed = (player, abilitiesString, extraFields = () => {}) => {
         console.log("_abilityPickerEmbed")
         const { sideColor } = this.options
 
@@ -190,7 +182,6 @@ class CombatMessageAPI {
                 value: this.previousAbilityResponse.join("\n \n"),
                 inline: true,
             };
-            // combatFields.splice(3, 0, midLeft)
             combatFields.push(midLeft)
             this.previousAbilityResponse = []
         }
@@ -239,7 +230,6 @@ class CombatMessageAPI {
 
     _endGameExtraFieldsEmbed = (winningTeam, fields) => {
         console.log("_endGameExtraFieldsEmbed")
-        const {additionalRewards} = this.options
 
         const newLineSpace = {
             name: "\u200B",
@@ -249,7 +239,7 @@ class CombatMessageAPI {
 
         if(!winningTeam) {
             const bottomLeftField = {
-                name: "The combat has ended and the were no winners:",
+                name: "The combat has ended and there were no winners:",
                 value: this.game.combatEndedReason || "For unfortunate reasons",
                 inline: true
             }

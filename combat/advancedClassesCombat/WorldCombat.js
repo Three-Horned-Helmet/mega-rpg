@@ -7,8 +7,7 @@ const { userIsOnCooldown } = require("../../game/_CONSTS/cooldowns");
 
 
 class WorldCombat extends CombatWrapper {
-	
-	constructor(data = {}) {
+	constructor(data) {
 		super(data);
 		this.place = data.place = "";
 		this.worldIcon = getIcon(this.user.world.currentLocation);

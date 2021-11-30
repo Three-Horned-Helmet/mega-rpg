@@ -18,22 +18,22 @@ const prettifyUser = (position, user, avatar) => {
 		username += medals[position - 1];
 	}
 
-	const { hero } = user;
-	const heroRank = hero.rank;
-	const heroValue = `❤️ HP: ${hero.currentHealth}/${hero.health}\n\n⚔ AT: ${hero.attack}\n\n🛡 DEF: ${hero.defense}\n\n🔅 XP: ${hero.currentExp}/${hero.expToNextRank}`;
+	const { hero, resources } = user;
+	const { rank, currentHealth, health, attack, defense, currentExp, expToNextRank, armor, inventory } = hero;
+	const heroValue = `❤️ HP: ${currentHealth}/${health}\n\n⚔ AT: ${attack}\n\n🛡 DEF: ${defense}\n\n🔅 XP: ${currentExp}/${expToNextRank}`;
 
-	const heroEquipment = `🧢 Helmet: ${hero.armor.helmet.capitalize()}\n\n⚜️ Chest: ${hero.armor.chest.capitalize()}\n\n🦵 Leggings: ${hero.armor.legging.capitalize()}\n\n🗡 Weapon: ${hero.armor.weapon.capitalize()}`;
+	const heroEquipment = `🧢 Helmet: ${hero.armor.helmet.capitalize()}\n\n⚜️ Chest: ${armor.chest.capitalize()}\n\n🦵 Leggings: ${armor.legging.capitalize()}\n\n🗡 Weapon: ${armor.weapon.capitalize()}`;
 
 	const totalSoldiers = getAllSoldiers(user.army.units);
 	const armyStats = calculateStats(user);
 
 	const armyValue = `👮‍♀️ Soldiers: ${totalSoldiers}\n\n⚔ AT: ${armyStats.unitStats.attack}\n\n❤️ HP: ${armyStats.unitStats.health}`;
 
-	const inventoryValue = `💰 Gold: ${user.resources.gold}\n\n${Object.keys(hero.inventory).map(item => typeof hero.inventory[item] === "number" ? addInventoryValueToProfile(item, hero) : false).filter(i => i).join(" ")}`;
+	const inventoryValue = `💰 Gold: ${Math.floor(resources.gold)}\n\n${Object.keys(inventory).map(item => typeof inventory[item] === "number" ? addInventoryValueToProfile(item, hero) : false).filter(i => i).join(" ")}`;
 
 	const fields = [
 		{
-			name: `Hero (${heroRank})`,
+			name: `Hero (${rank})`,
 			value: heroValue,
 			inline: true,
 		},

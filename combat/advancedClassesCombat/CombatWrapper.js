@@ -36,7 +36,9 @@ class CombatWrapper {
 		if (!this.combatCanStart) {
 			return;
 		}
-		await this.game.startGame();
+		const res = await this.game.startGame();
+		console.log({ res });
+		console.log(this.game, "this.game");
 	}
 	async setupCombat() {
 		if (this.combatInvitationsAllowed) {
@@ -97,7 +99,7 @@ class CombatWrapper {
 				currentHealth: 200,
 				attack: 30,
 				defense: 30,
-				className: "Mage"
+				className: "UserArmy"
 			}
 		};
 	}
@@ -123,9 +125,7 @@ class CombatWrapper {
 
 		const reactionFilter = (reaction) => icons.includes(reaction.emoji.name);
 
-		await asyncForEach((icons), async (r)=>{
-			raceInvitation.react(r);
-		});
+		await asyncForEach((icons), async (r)=> invitation.react(r));
 
 		const collector = await invitation.createReactionCollector(reactionFilter, { time: 1000 * 20, errors: ["time"] });
 

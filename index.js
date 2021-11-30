@@ -5,7 +5,7 @@ const User = require("./models/User");
 const { getWelcomeMessage, createNewUser } = require("./game/_GLOBAL_HELPERS");
 const { msToHumanTime } = require("./game/_GLOBAL_HELPERS");
 const { handleCaptcha } = require("./game/_GLOBAL_HELPERS/captcha");
-const { pickClassHandler } = require("./game/hero/pick-class/pick-class-handler")
+const { pickClassHandler } = require("./game/hero/pick-class/pick-class-handler");
 
 const token = process.env.DISCORD_TOKEN;
 const prefix = process.env.DISCORD_PREFIX;
@@ -96,9 +96,9 @@ client.on("message", async (message) => {
 		return message.reply(`You are banned from Mega-RPG. You can plead for an unban at our support servers - or wait:\n **${msToHumanTime(userProfile.account.banTime - Date.now())}**`);
 	}
 
-	if(!userProfile.hero.className && !(command.name === "help" || command.name === "info" || command.name === "hero")){ 
-		await pickClassHandler(message, userProfile)
-		return
+	if(!userProfile.hero.className && !["help", "info", "hero"].includes(command.name)) {
+		await pickClassHandler(message, userProfile);
+		return;
 	}
 
 	if (!userProfile.account.testUser && ["hunt", "collect", "raid", "fish"].includes(command.name) && Math.random() <= 0.01) {
