@@ -23,7 +23,7 @@ class Raid extends WorldCombat {
 	}
 	checkRaidAllowed() {
 		if (this.user.hero.currentHealth < this.user.hero.health * config.minHealthPercentage && this.user.hero.currentHealth < config.minHealthPoints) {
-			return this.errorHandler(`Your'e too weak to raid (**${this.user.hero.currentHealth} hp**)`);
+			return this.errorHandler(`You're too weak to raid (**${this.user.hero.currentHealth} hp**)`);
 		}
 	}
 	setupRaid() {

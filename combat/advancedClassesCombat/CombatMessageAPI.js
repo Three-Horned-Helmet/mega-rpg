@@ -6,7 +6,6 @@ class CombatMessageAPI {
     this.message = message;
     this.options = options;
     this.game = null;
-
     this.defaultSideColor = "#45b6fe";
     this.previousAbilityResponse = [];
     this.effectMessages = [];
@@ -108,7 +107,7 @@ class CombatMessageAPI {
       extraFields
     );
     await this.message.channel.send(lastCombatTurnEmbed);
-    this.endGame(this.game.winningTeam, this.game.losingTeam);
+    this.endGame(this.game.winningTeam, this.game.losingTeam, this.options.rewards);
   };
 
   _getName = (player) => {
@@ -287,20 +286,18 @@ class CombatMessageAPI {
 
     fields.push(bottomLeftField);
     if (winningTeam.some((player) => !player.isNpc)) {
-      const {rewards} = this.options
-        const bottomRightField = {
-          name: `Rewards:`,
-          value: Object.entries(rewards)
-            .map((reward) => `${reward[0]}: ${reward[1]}`)
-            .join("\n")
-            .replace(/\\n$/),
-          inline: true,
-        };
-        fields.push(bottomRightField);
-      }
+      const { rewards } = this.options;
+      const bottomRightField = {
+        name: `Rewards:`,
+        value: Object.entries(rewards)
+          .map((reward) => `${reward[0]}: ${reward[1]}`)
+          .join("\n")
+          .replace(/\\n$/),
+        inline: true,
+      };
+      fields.push(bottomRightField);
+    }
   };
-
-  
 }
 
 module.exports = { CombatMessageAPI };

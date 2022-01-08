@@ -7,7 +7,7 @@ const { userIsOnCooldown } = require("../../game/_CONSTS/cooldowns");
 
 class WorldCombat extends CombatWrapper {
   constructor(data) {
-    super({...data});
+    super({...data });
     this.place = data.place = "";
     this.worldIcon = getIcon(this.user.world.currentLocation);
     this.placeInfo = this.getPlaceInfo();
@@ -24,6 +24,7 @@ class WorldCombat extends CombatWrapper {
     return this.placeInfo.rewards
   }
   checkWorldCombatAllowed() {
+    // todo, cooldown
     // cooldown
     if (!this.placeInfo) {
       return this.errorHandler("Missing placeinfo");

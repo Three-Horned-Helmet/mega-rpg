@@ -5,8 +5,7 @@ const { CombatMessageAPI } = require("./CombatMessageAPI");
 const { asyncForEach } = require("../../game/_GLOBAL_HELPERS");
 const { getIcon } = require("../../game/_CONSTS/icons");
 
-/*
-const options = {
+/* const options = {
 	maxRounds: Number,
 	armyAllowed: Boolean,
 	helpersAllowed: Boolean,
@@ -17,16 +16,14 @@ const options = {
 
 class CombatWrapper {
 	constructor(data) {
-		console.log("data START", data, "data");
-		if (!data.user || !data.nameOfClass || !data.message || !data.options) {
-			throw new Error(
-				"Cannot create an instance without user, nameOfClass, message or options"
-			);
+		const { user, nameOfClass, message, options } = data;
+		if ([user, nameOfClass, message, options].includes(undefined)) {
+			throw new Error("Cannot create an instance without user, nameOfClass, message and options");
 		}
-		this.user = data.user;
-		this.nameOfClass = data.nameOfClass;
-		this.options = { ...data.options, rewards: this.rewards },
-		this.message = data.message;
+		this.user = user;
+		this.nameOfClass = nameOfClass;
+		this.options = options;
+		this.message = message;
 		this.game;
 		this.messageAPI;
 
@@ -40,7 +37,6 @@ class CombatWrapper {
 		if (!this.combatCanStart) {
 			return;
 		}
-		console.log("this START", this, "This");
 		await this.game.startGame();
 	}
 	async setupCombat() {
@@ -48,16 +44,18 @@ class CombatWrapper {
 			await this.handleCombatInvitation();
 		}
 		this.checkCombatAllowed();
+		const options = { ...this.options, rewards: this.rewards };
+
 		this.messageAPI = new CombatMessageAPI(
 			this.message,
-			this.options,
+			options,
 			this.endGame
 		);
 		this.game = new GameEngine(
 			this.messageAPI,
 			this.greenTeam,
 			this.redTeam,
-			this.options
+			options
 		);
 	}
 	checkCombatAllowed() {
@@ -81,7 +79,6 @@ class CombatWrapper {
 	}
 	convertWorldUnitToNpc(worldUnit) {
 		// todo
-		// classname?
 		// defense?
 		const { name, stats } = worldUnit;
 		return {
@@ -119,19 +116,23 @@ class CombatWrapper {
 		};
 	}
 	convertNpcToArmy(npc) {
-		// TODO calculate loss of health and remove percentage of units
-		return npc;
-	}
+    // TODO
+    // - calculate loss of health and remove percentage of units
+	// - convert back to army unit
+	// - update user army in another method
+    return npc;
+  }
 	errorHandler(error) {
 		console.error("ERROR: ", error);
 		this.combatCanStart = false;
 		this.messageAPI.sendMessage(error);
+		throw new Error(error);
 	}
-	async endGame(winningTeam, losingTeam) {
-		// TODO give penalty to losing team if real players
-		const realPlayers = winningTeam.filter(player => !player.isNpc);
-		realPlayers.forEach(player => player.gainManyResources(this.rewards));
-		await Promise.all(realPlayers.map(player => player.save()));
+	async endGame(winningTeam, losingTeam, rewards) {
+		// TODO give penalty to losing team if real players. eg health loss or whatever
+		const realPlayersWinners = winningTeam.filter(player => !player.isNpc);
+		realPlayersWinners.forEach(player => player.gainManyResources(rewards));
+		await Promise.all(realPlayersWinners.map(player => player.save()));
 	}
 
 	async handleCombatInvitation() {
@@ -172,7 +173,6 @@ class CombatWrapper {
 module.exports = CombatWrapper;
 
 const createEmbedInvitation = (place, user) => {
-	console.log("NOOOOOOOOOO");
 	const sideColor = "#45b6fe";
 	const { username } = user.account;
 	const placeIcon = getIcon("place");
