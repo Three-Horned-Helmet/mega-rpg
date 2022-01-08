@@ -2,13 +2,14 @@
 const WorldCombat = require("./WorldCombat");
 
 const NAME_OF_CLASS = "raid";
+
 const config = {
 	minHealthPercentage: 0.05, // 5%
 	minHealthPoints: 50,
 };
 
 const options = {
-	maxRounds: 3,
+	maxRounds: 10,
 	combatInvitationsAllowed: false,
 	armyAllowed: true,
 };

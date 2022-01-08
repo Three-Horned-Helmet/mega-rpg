@@ -14,8 +14,8 @@ module.exports = {
 		bv: "Bandit Vault",
 	},
 	async execute(message, args, user) {
-		const location = args.join("").toLowerCase();
-		const raid = new Raid({ message, user, location });
+		const place = args.join("").toLowerCase();
+		const raid = new Raid({ message, user, place });
 		await raid.startCombat();
 	},
 };

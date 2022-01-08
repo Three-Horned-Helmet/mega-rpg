@@ -98,30 +98,32 @@ class CombatWrapper {
 		};
 	}
 	convertArmyToNpc(user) {
-		// todo balance this unit (with armory)
-		return {
-			_id: Math.random().toString(),
-			isNpc: true,
-			account: {
-				username: `${user.account.username}'s army'`,
-			},
-			hero: {
-				rank: 3,
-				health: 200,
-				currentHealth: 200,
-				attack: 30,
-				defense: 30,
-				className: "UserArmy",
-			},
-		};
-	}
+    // todo
+    // - balance this unit (with armory)
+	// - create an actual function and not this mock up
+    return {
+	_id: Math.random().toString(),
+      isNpc: true,
+      account: {
+        username: `${user.account.username}'s army'`,
+      },
+      hero: {
+        rank: 3,
+        health: 200,
+        currentHealth: 200,
+        attack: 1,
+        defense: 1,
+        className: "UserArmy",
+      },
+    };
+  }
 	convertNpcToArmy(npc) {
-    // TODO
-    // - calculate loss of health and remove percentage of units
+	// TODO
+	// - calculate loss of health and remove percentage of units
 	// - convert back to army unit
 	// - update user army in another method
-    return npc;
-  }
+		return npc;
+	}
 	errorHandler(error) {
 		console.error("ERROR: ", error);
 		this.combatCanStart = false;
@@ -129,6 +131,11 @@ class CombatWrapper {
 		throw new Error(error);
 	}
 	async endGame(winningTeam, losingTeam, rewards) {
+		console.log({
+      winningTeam: JSON.stringify(winningTeam),
+      losingTeam: JSON.stringify(losingTeam),
+      rewards,
+    });
 		// TODO give penalty to losing team if real players. eg health loss or whatever
 		const realPlayersWinners = winningTeam.filter(player => !player.isNpc);
 		realPlayersWinners.forEach(player => player.gainManyResources(rewards));
@@ -136,11 +143,11 @@ class CombatWrapper {
 	}
 
 	async handleCombatInvitation() {
-		const getCombatIcons = () => ["🟢", "🔴"]; // should be 3
+		const getCombatIcons = () => ["🟢", "🔴"];
 
 		const icons = getCombatIcons();
 
-		const invitation = await message.channel.send(createEmbedInvitation(this));
+		const invitation = await this.message.channel.send(createEmbedInvitation(this));
 		const reactionIcon = getIcon("place", "icon");
 
 		const reactionFilter = (reaction) => icons.includes(reaction.emoji.name);

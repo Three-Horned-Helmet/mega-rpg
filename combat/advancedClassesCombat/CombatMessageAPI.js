@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const combatConstants = require("../../game/_CONSTS/combat.json");
-
+const { getIcon } = require("../../game/_CONSTS/icons");
 class CombatMessageAPI {
   constructor(message, options = {}, cb) {
     this.message = message;
@@ -107,6 +107,8 @@ class CombatMessageAPI {
       extraFields
     );
     await this.message.channel.send(lastCombatTurnEmbed);
+    console.log("End game message sent");
+    console.log("THIS:GAME", this.game);
     this.endGame(this.game.winningTeam, this.game.losingTeam, this.options.rewards);
   };
 
@@ -216,6 +218,7 @@ class CombatMessageAPI {
           this.effectMessages.join("\n \n") +
           this.deathMessages
             .map((p) => this._getName(p) + " has died")
+            .filter(onlyUnique)
             .join("\n"),
         inline: true,
       };
@@ -290,7 +293,10 @@ class CombatMessageAPI {
       const bottomRightField = {
         name: `Rewards:`,
         value: Object.entries(rewards)
-          .map((reward) => `${reward[0]}: ${reward[1]}`)
+          .map(
+            ([reward, rewardAmount]) =>
+              `${getIcon(reward)} ${makeFirstLetterUpperCase(reward)}: ${rewardAmount}`
+          )
           .join("\n")
           .replace(/\\n$/),
         inline: true,
@@ -298,6 +304,14 @@ class CombatMessageAPI {
       fields.push(bottomRightField);
     }
   };
+}
+
+// https://stackoverflow.com/questions/1960473/get-all-unique-values-in-a-javascript-array-remove-duplicates
+const onlyUnique = (value, index, self) => {
+  return self.indexOf(value) === index;
+}
+const makeFirstLetterUpperCase = (str) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 module.exports = { CombatMessageAPI };
